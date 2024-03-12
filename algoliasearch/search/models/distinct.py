@@ -13,13 +13,19 @@ from pydantic import BaseModel, Field, StrictBool, ValidationError, model_serial
 
 class Distinct(BaseModel):
     """
-    Enables [deduplication or grouping of results (Algolia's _distinct_ feature](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature)).
+    Determines how many records of a group are included in the search results.  Records with the same value for the `attributeForDistinct` attribute are considered a group. The `distinct` setting controls how many members of the group are returned. This is useful for [deduplication and grouping](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).  The `distinct` setting is ignored if `attributeForDistinct` is not set.
     """
 
-    oneof_schema_1_validator: Optional[StrictBool] = None
+    oneof_schema_1_validator: Optional[StrictBool] = Field(
+        default=None,
+        description="Whether deduplication is turned on. If true, only one member of a group is shown in the search results.",
+    )
     oneof_schema_2_validator: Optional[
         Annotated[int, Field(le=4, strict=True, ge=0)]
-    ] = 0
+    ] = Field(
+        default=0,
+        description="Number of members of a group of records to include in the search results.  - Don't use `distinct > 1` for records that might be [promoted by rules](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/promote-hits/).   The number of hits won't be correct and faceting won't work as expected. - With `distinct > 1`, the `hitsPerPage` parameter controls the number of returned groups.   For example, with `hitsPerPage: 10` and `distinct: 2`, up to 20 records are returned.   Likewise, the `nbHits` response attribute contains the number of returned groups. ",
+    )
     actual_instance: Optional[Union[bool, int]] = None
 
     def __init__(self, *args, **kwargs) -> None:

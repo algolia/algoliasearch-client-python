@@ -17,14 +17,15 @@ class SaveObjectResponse(BaseModel):
     """
 
     created_at: StrictStr = Field(
-        description="Date of creation (ISO-8601 format).", alias="createdAt"
+        description="Timestamp when the record was added, in ISO 8601 format.",
+        alias="createdAt",
     )
     task_id: StrictInt = Field(
-        description="Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`. ",
+        description="Unique identifier of a task.  A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the [`task` operation](#tag/Indices/operation/getTask) and this `taskID`. ",
         alias="taskID",
     )
     object_id: Optional[StrictStr] = Field(
-        default=None, description="Unique object identifier.", alias="objectID"
+        default=None, description="Unique record identifier.", alias="objectID"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

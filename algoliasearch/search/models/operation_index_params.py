@@ -20,10 +20,10 @@ class OperationIndexParams(BaseModel):
     """
 
     operation: OperationType
-    destination: StrictStr = Field(description="Algolia index name.")
+    destination: StrictStr = Field(description="Index name.")
     scope: Optional[List[ScopeType]] = Field(
         default=None,
-        description="**This only applies to the _copy_ operation.**  If you omit `scope`, the copy command copies all records, settings, synonyms, and rules.  If you specify `scope`, only the specified scopes are copied.",
+        description="**Only for copying.**  If you specify a scope, only the selected scopes are copied. Records and the other scopes are left unchanged. If you omit the `scope` parameter, everything is copied: records, settings, synonyms, and rules. ",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

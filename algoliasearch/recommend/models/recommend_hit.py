@@ -21,16 +21,16 @@ class RecommendHit(BaseModel):
     """
 
     object_id: StrictStr = Field(
-        description="Unique object identifier.", alias="objectID"
+        description="Unique record identifier.", alias="objectID"
     )
     highlight_result: Optional[Dict[str, HighlightResult]] = Field(
         default=None,
-        description="Show highlighted section and words matched on a query.",
+        description="Surround words that match the query with HTML tags for highlighting.",
         alias="_highlightResult",
     )
     snippet_result: Optional[Dict[str, SnippetResult]] = Field(
         default=None,
-        description="Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.",
+        description="Snippets that show the context around a matching search query.",
         alias="_snippetResult",
     )
     ranking_info: Optional[RankingInfo] = Field(default=None, alias="_rankingInfo")

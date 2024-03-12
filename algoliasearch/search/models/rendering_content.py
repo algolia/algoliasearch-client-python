@@ -15,7 +15,7 @@ from algoliasearch.search.models.facet_ordering import FacetOrdering
 
 class RenderingContent(BaseModel):
     """
-    Extra content for the search UI, for example, to control the [ordering and display of facets](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/merchandising-facets/#merchandise-facets-and-their-values-in-the-manual-editor). You can set a default value and dynamically override it with [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/).
+    Extra data that can be used in the search UI.  You can use this to control aspects of your search UI, such as, the order of facet names and values without changing your frontend code.
     """
 
     facet_ordering: Optional[FacetOrdering] = Field(default=None, alias="facetOrdering")

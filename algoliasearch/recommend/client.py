@@ -454,7 +454,8 @@ class RecommendClient:
     async def delete_recommend_rule_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         model: Annotated[
             RecommendModels,
@@ -462,9 +463,7 @@ class RecommendClient:
                 description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -473,11 +472,11 @@ class RecommendClient:
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -514,7 +513,8 @@ class RecommendClient:
     async def delete_recommend_rule(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         model: Annotated[
             RecommendModels,
@@ -522,9 +522,7 @@ class RecommendClient:
                 description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeletedAtResponse:
         """
@@ -533,11 +531,11 @@ class RecommendClient:
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
@@ -551,7 +549,8 @@ class RecommendClient:
     async def get_recommend_rule_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         model: Annotated[
             RecommendModels,
@@ -559,9 +558,7 @@ class RecommendClient:
                 description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -570,11 +567,11 @@ class RecommendClient:
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -611,7 +608,8 @@ class RecommendClient:
     async def get_recommend_rule(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         model: Annotated[
             RecommendModels,
@@ -619,9 +617,7 @@ class RecommendClient:
                 description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RuleResponse:
         """
@@ -630,11 +626,11 @@ class RecommendClient:
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RuleResponse' result object.
@@ -648,7 +644,8 @@ class RecommendClient:
     async def get_recommend_status_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         model: Annotated[
             RecommendModels,
@@ -670,7 +667,7 @@ class RecommendClient:
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
@@ -711,7 +708,8 @@ class RecommendClient:
     async def get_recommend_status(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         model: Annotated[
             RecommendModels,
@@ -733,7 +731,7 @@ class RecommendClient:
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
@@ -809,7 +807,8 @@ class RecommendClient:
     async def search_recommend_rules_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         model: Annotated[
             RecommendModels,
@@ -826,7 +825,7 @@ class RecommendClient:
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
@@ -865,7 +864,8 @@ class RecommendClient:
     async def search_recommend_rules(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         model: Annotated[
             RecommendModels,
@@ -882,7 +882,7 @@ class RecommendClient:
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels

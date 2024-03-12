@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, Optional, Self
 
-from pydantic import BaseModel, Field, StrictInt, StrictStr
+from pydantic import BaseModel, Field, StrictStr
 
 from algoliasearch.search.models.synonym_type import SynonymType
 
@@ -18,12 +18,10 @@ class SearchSynonymsParams(BaseModel):
     SearchSynonymsParams
     """
 
-    query: Optional[StrictStr] = Field(
-        default="", description="Text to search for in an index."
-    )
+    query: Optional[StrictStr] = Field(default="", description="Search query.")
     type: Optional[SynonymType] = None
-    page: Optional[StrictInt] = Field(
-        default=0, description="Page to retrieve (the first page is `0`, not `1`)."
+    page: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
+        default=0, description="Page of search results to retrieve."
     )
     hits_per_page: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
         default=20, description="Number of hits per page.", alias="hitsPerPage"

@@ -19,7 +19,8 @@ class Value(BaseModel):
     """
 
     order: Optional[List[StrictStr]] = Field(
-        default=None, description="Pinned order of facet lists."
+        default=None,
+        description="Explicit order of facets or facet values.  This setting lets you always show specific facets or facet values at the top of the list. ",
     )
     sort_remaining_by: Optional[SortRemainingBy] = Field(
         default=None, alias="sortRemainingBy"

@@ -18,8 +18,10 @@ class SearchRulesResponse(BaseModel):
     SearchRulesResponse
     """
 
-    hits: List[Rule] = Field(description="Fetched rules.")
-    nb_hits: StrictInt = Field(description="Number of fetched rules.", alias="nbHits")
+    hits: List[Rule] = Field(description="Rules that matched the search criteria.")
+    nb_hits: StrictInt = Field(
+        description="Number of rules that matched the search criteria.", alias="nbHits"
+    )
     page: StrictInt = Field(description="Current page.")
     nb_pages: StrictInt = Field(description="Number of pages.", alias="nbPages")
 

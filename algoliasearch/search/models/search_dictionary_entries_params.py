@@ -8,24 +8,24 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, Optional, Self
 
-from pydantic import BaseModel, Field, StrictInt, StrictStr
+from pydantic import BaseModel, Field, StrictStr
 
 
 class SearchDictionaryEntriesParams(BaseModel):
     """
-    `searchDictionaryEntries` parameters.
+    Search parameter.
     """
 
-    query: StrictStr = Field(description="Text to search for in an index.")
-    page: Optional[StrictInt] = Field(
-        default=0, description="Page to retrieve (the first page is `0`, not `1`)."
+    query: StrictStr = Field(description="Search query.")
+    page: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
+        default=0, description="Page of search results to retrieve."
     )
     hits_per_page: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
         default=20, description="Number of hits per page.", alias="hitsPerPage"
     )
     language: Optional[StrictStr] = Field(
         default=None,
-        description="[Supported language ISO code](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/). ",
+        description="ISO code of a [supported language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

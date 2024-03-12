@@ -8,17 +8,20 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, Optional, Self, Union
 
-from pydantic import BaseModel, StrictBool, ValidationError, model_serializer
+from pydantic import BaseModel, Field, StrictBool, ValidationError, model_serializer
 
 from algoliasearch.recommend.models.typo_tolerance_enum import TypoToleranceEnum
 
 
 class TypoTolerance(BaseModel):
     """
-    Controls whether [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) is enabled and how it is applied.
+    Whether [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) is enabled and how it is applied.  If typo tolerance is true, `min`, or `strict`, [word splitting and concetenation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/splitting-and-concatenation/) is also active.
     """
 
-    oneof_schema_1_validator: Optional[StrictBool] = True
+    oneof_schema_1_validator: Optional[StrictBool] = Field(
+        default=True,
+        description="Whether typo tolerance is active. If true, matches with typos are included in the search results and rank after exact matches.",
+    )
     oneof_schema_2_validator: Optional[TypoToleranceEnum] = None
     actual_instance: Optional[Union[TypoToleranceEnum, bool]] = None
 

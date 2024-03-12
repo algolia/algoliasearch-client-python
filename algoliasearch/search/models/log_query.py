@@ -20,7 +20,7 @@ class LogQuery(BaseModel):
         default=None, description="Index targeted by the query."
     )
     user_token: Optional[StrictStr] = Field(
-        default=None, description="User identifier."
+        default=None, description="A user identifier."
     )
     query_id: Optional[StrictStr] = Field(
         default=None, description="Unique query identifier."

@@ -82,6 +82,9 @@ from algoliasearch.search.models.scope_type import ScopeType
 from algoliasearch.search.models.search_dictionary_entries_params import (
     SearchDictionaryEntriesParams,
 )
+from algoliasearch.search.models.search_dictionary_entries_response import (
+    SearchDictionaryEntriesResponse,
+)
 from algoliasearch.search.models.search_for_facet_values_request import (
     SearchForFacetValuesRequest,
 )
@@ -503,7 +506,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Add a new API key with specific permissions and restrictions. The request must be authenticated with the admin API key. The response returns an API key string.
+        Creates a new API key with specific permissions and restrictions.
 
         Required API Key ACLs:
           - admin
@@ -539,7 +542,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AddApiKeyResponse:
         """
-        Add a new API key with specific permissions and restrictions. The request must be authenticated with the admin API key. The response returns an API key string.
+        Creates a new API key with specific permissions and restrictions.
 
         Required API Key ACLs:
           - admin
@@ -556,25 +559,29 @@ class SearchClient:
     async def add_or_update_object_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        body: Annotated[
+            Dict[str, Any],
+            Field(
+                description="The record, a schemaless object with attributes that are useful in the context of search and discovery."
+            ),
         ],
-        body: Annotated[Dict[str, Any], Field(description="Algolia record.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        If you use an existing `objectID`, the existing record will be replaced with the new one.  To update only some attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead.  To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
+        If a record with the specified object ID exists, the existing record is replaced. Otherwise, a new record is added to the index.  To update _some_ attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead. To add, update, or replace multiple records, use the [`batch` operation](#tag/Records/operation/batch).
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
-        :param body: Algolia record. (required)
+        :param body: The record, a schemaless object with attributes that are useful in the context of search and discovery. (required)
         :type body: object
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -614,25 +621,29 @@ class SearchClient:
     async def add_or_update_object(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        body: Annotated[
+            Dict[str, Any],
+            Field(
+                description="The record, a schemaless object with attributes that are useful in the context of search and discovery."
+            ),
         ],
-        body: Annotated[Dict[str, Any], Field(description="Algolia record.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtWithObjectIdResponse:
         """
-        If you use an existing `objectID`, the existing record will be replaced with the new one.  To update only some attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead.  To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
+        If a record with the specified object ID exists, the existing record is replaced. Otherwise, a new record is added to the index.  To update _some_ attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead. To add, update, or replace multiple records, use the [`batch` operation](#tag/Records/operation/batch).
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
-        :param body: Algolia record. (required)
+        :param body: The record, a schemaless object with attributes that are useful in the context of search and discovery. (required)
         :type body: object
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtWithObjectIdResponse' result object.
@@ -649,7 +660,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Add a source to the list of allowed sources.
+        Adds a source to the list of allowed sources.
 
         Required API Key ACLs:
           - admin
@@ -685,7 +696,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
-        Add a source to the list of allowed sources.
+        Adds a source to the list of allowed sources.
 
         Required API Key ACLs:
           - admin
@@ -702,18 +713,18 @@ class SearchClient:
     async def assign_user_id_with_http_info(
         self,
         x_algolia_user_id: Annotated[
-            str, Field(strict=True, description="userID to assign.")
+            str, Field(strict=True, description="User ID to assign.")
         ],
         assign_user_id_params: AssignUserIdParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Assign or move a user ID to a cluster. The time it takes to move a user is proportional to the amount of data linked to the user ID.
+        Assigns or moves a user ID to a cluster.  The time it takes to move a user is proportional to the amount of data linked to the user ID.
 
         Required API Key ACLs:
           - admin
 
-        :param x_algolia_user_id: userID to assign. (required)
+        :param x_algolia_user_id: User ID to assign. (required)
         :type x_algolia_user_id: str
         :param assign_user_id_params: (required)
         :type assign_user_id_params: AssignUserIdParams
@@ -754,18 +765,18 @@ class SearchClient:
     async def assign_user_id(
         self,
         x_algolia_user_id: Annotated[
-            str, Field(strict=True, description="userID to assign.")
+            str, Field(strict=True, description="User ID to assign.")
         ],
         assign_user_id_params: AssignUserIdParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
-        Assign or move a user ID to a cluster. The time it takes to move a user is proportional to the amount of data linked to the user ID.
+        Assigns or moves a user ID to a cluster.  The time it takes to move a user is proportional to the amount of data linked to the user ID.
 
         Required API Key ACLs:
           - admin
 
-        :param x_algolia_user_id: userID to assign. (required)
+        :param x_algolia_user_id: User ID to assign. (required)
         :type x_algolia_user_id: str
         :param assign_user_id_params: (required)
         :type assign_user_id_params: AssignUserIdParams
@@ -781,16 +792,17 @@ class SearchClient:
     async def batch_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         batch_write_params: BatchWriteParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        To reduce the time spent on network round trips, you can perform several write actions in a single API call. Actions are applied in the order they are specified. The supported `action`s are equivalent to the individual operations of the same name.
+        Adds, updates, or deletes records in one index with a single API request.  Batching index updates reduces latency and increases data integrity.  - Actions are applied in the order they're specified. - Actions are equivalent to the individual API requests of the same name.
 
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param batch_write_params: (required)
         :type batch_write_params: BatchWriteParams
@@ -825,16 +837,17 @@ class SearchClient:
     async def batch(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         batch_write_params: BatchWriteParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BatchResponse:
         """
-        To reduce the time spent on network round trips, you can perform several write actions in a single API call. Actions are applied in the order they are specified. The supported `action`s are equivalent to the individual operations of the same name.
+        Adds, updates, or deletes records in one index with a single API request.  Batching index updates reduces latency and increases data integrity.  - Actions are applied in the order they're specified. - Actions are equivalent to the individual API requests of the same name.
 
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param batch_write_params: (required)
         :type batch_write_params: BatchWriteParams
@@ -850,18 +863,18 @@ class SearchClient:
     async def batch_assign_user_ids_with_http_info(
         self,
         x_algolia_user_id: Annotated[
-            str, Field(strict=True, description="userID to assign.")
+            str, Field(strict=True, description="User ID to assign.")
         ],
         batch_assign_user_ids_params: BatchAssignUserIdsParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Assign multiple user IDs to a cluster. **You can't _move_ users with this operation.**.
+        Assigns multiple user IDs to a cluster.  **You can't move users with this operation**.
 
         Required API Key ACLs:
           - admin
 
-        :param x_algolia_user_id: userID to assign. (required)
+        :param x_algolia_user_id: User ID to assign. (required)
         :type x_algolia_user_id: str
         :param batch_assign_user_ids_params: (required)
         :type batch_assign_user_ids_params: BatchAssignUserIdsParams
@@ -902,18 +915,18 @@ class SearchClient:
     async def batch_assign_user_ids(
         self,
         x_algolia_user_id: Annotated[
-            str, Field(strict=True, description="userID to assign.")
+            str, Field(strict=True, description="User ID to assign.")
         ],
         batch_assign_user_ids_params: BatchAssignUserIdsParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
-        Assign multiple user IDs to a cluster. **You can't _move_ users with this operation.**.
+        Assigns multiple user IDs to a cluster.  **You can't move users with this operation**.
 
         Required API Key ACLs:
           - admin
 
-        :param x_algolia_user_id: userID to assign. (required)
+        :param x_algolia_user_id: User ID to assign. (required)
         :type x_algolia_user_id: str
         :param batch_assign_user_ids_params: (required)
         :type batch_assign_user_ids_params: BatchAssignUserIdsParams
@@ -929,18 +942,18 @@ class SearchClient:
     async def batch_dictionary_entries_with_http_info(
         self,
         dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary to search in.")
+            DictionaryType, Field(description="Dictionary type in which to search.")
         ],
         batch_dictionary_entries_params: BatchDictionaryEntriesParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Add or remove a batch of dictionary entries.
+        Adds or deletes multiple entries from your plurals, segmentation, or stop word dictionaries.
 
         Required API Key ACLs:
           - editSettings
 
-        :param dictionary_name: Dictionary to search in. (required)
+        :param dictionary_name: Dictionary type in which to search. (required)
         :type dictionary_name: DictionaryType
         :param batch_dictionary_entries_params: (required)
         :type batch_dictionary_entries_params: BatchDictionaryEntriesParams
@@ -977,18 +990,18 @@ class SearchClient:
     async def batch_dictionary_entries(
         self,
         dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary to search in.")
+            DictionaryType, Field(description="Dictionary type in which to search.")
         ],
         batch_dictionary_entries_params: BatchDictionaryEntriesParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        Add or remove a batch of dictionary entries.
+        Adds or deletes multiple entries from your plurals, segmentation, or stop word dictionaries.
 
         Required API Key ACLs:
           - editSettings
 
-        :param dictionary_name: Dictionary to search in. (required)
+        :param dictionary_name: Dictionary type in which to search. (required)
         :type dictionary_name: DictionaryType
         :param batch_dictionary_entries_params: (required)
         :type batch_dictionary_entries_params: BatchDictionaryEntriesParams
@@ -1004,18 +1017,19 @@ class SearchClient:
     async def browse_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         browse_params: Optional[BrowseParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieve up to 1,000 records per call. Supports full-text search and filters. For better performance, it doesn't support: - The `distinct` query parameter - Sorting by typos, proximity, words, or geographical distance.
+        Retrieves records from an index, up to 1,000 per request.  While searching retrieves _hits_ (records augmented with attributes for highlighting and ranking details), browsing _just_ returns matching records. This can be useful if you want to export your indices.  - The Analytics API doesn't collect data when using `browse`. - Records are ranked by attributes and custom ranking. - Deduplication (`distinct`) is turned off. - There's no ranking for: typo-tolerance, number of matched words, proximity, geo distance.
 
         Required API Key ACLs:
           - browse
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param browse_params:
         :type browse_params: BrowseParams
@@ -1047,18 +1061,19 @@ class SearchClient:
     async def browse(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         browse_params: Optional[BrowseParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
         """
-        Retrieve up to 1,000 records per call. Supports full-text search and filters. For better performance, it doesn't support: - The `distinct` query parameter - Sorting by typos, proximity, words, or geographical distance.
+        Retrieves records from an index, up to 1,000 per request.  While searching retrieves _hits_ (records augmented with attributes for highlighting and ranking details), browsing _just_ returns matching records. This can be useful if you want to export your indices.  - The Analytics API doesn't collect data when using `browse`. - Records are ranked by attributes and custom ranking. - Deduplication (`distinct`) is turned off. - There's no ranking for: typo-tolerance, number of matched words, proximity, geo distance.
 
         Required API Key ACLs:
           - browse
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param browse_params:
         :type browse_params: BrowseParams
@@ -1072,17 +1087,18 @@ class SearchClient:
     async def clear_objects_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete the records but leave settings and index-specific API keys untouched.
+        Deletes only the records from an index while keeping settings, synonyms, and rules.
 
         Required API Key ACLs:
           - deleteIndex
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1107,17 +1123,18 @@ class SearchClient:
     async def clear_objects(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        Delete the records but leave settings and index-specific API keys untouched.
+        Deletes only the records from an index while keeping settings, synonyms, and rules.
 
         Required API Key ACLs:
           - deleteIndex
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
@@ -1129,25 +1146,24 @@ class SearchClient:
     async def clear_rules_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete all rules in the index.
+        Deletes all rules from the index.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1178,25 +1194,24 @@ class SearchClient:
     async def clear_rules(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        Delete all rules in the index.
+        Deletes all rules from the index.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
@@ -1210,25 +1225,24 @@ class SearchClient:
     async def clear_synonyms_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete all synonyms in the index.
+        Deletes all synonyms from the index.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1259,25 +1273,24 @@ class SearchClient:
     async def clear_synonyms(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        Delete all synonyms in the index.
+        Deletes all synonyms from the index.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
@@ -1630,7 +1643,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete an existing API key. The request must be authenticated with the admin API key.
+        Deletes the API key.
 
         Required API Key ACLs:
           - admin
@@ -1661,7 +1674,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteApiKeyResponse:
         """
-        Delete an existing API key. The request must be authenticated with the admin API key.
+        Deletes the API key.
 
         Required API Key ACLs:
           - admin
@@ -1678,18 +1691,19 @@ class SearchClient:
     async def delete_by_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         delete_by_params: DeleteByParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This operation doesn't support all the query options, only its filters (numeric, facet, or tag) and geo queries. It doesn't accept empty filters or queries.
+        This operation doesn't accept empty queries or filters.  It's more efficient to get a list of object IDs with the [`browse` operation](#tag/Search/operation/browse), and then delete the records using the [`batch` operation](tag/Records/operation/batch).
 
         Required API Key ACLs:
           - deleteIndex
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param delete_by_params: (required)
         :type delete_by_params: DeleteByParams
@@ -1726,18 +1740,19 @@ class SearchClient:
     async def delete_by(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         delete_by_params: DeleteByParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeletedAtResponse:
         """
-        This operation doesn't support all the query options, only its filters (numeric, facet, or tag) and geo queries. It doesn't accept empty filters or queries.
+        This operation doesn't accept empty queries or filters.  It's more efficient to get a list of object IDs with the [`browse` operation](#tag/Search/operation/browse), and then delete the records using the [`batch` operation](tag/Records/operation/batch).
 
         Required API Key ACLs:
           - deleteIndex
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param delete_by_params: (required)
         :type delete_by_params: DeleteByParams
@@ -1753,17 +1768,18 @@ class SearchClient:
     async def delete_index_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete an existing index.
+        Deletes an index and all its settings.  - Deleting an index doesn't delete its analytics data. - If you try to delete a non-existing index, the operation is ignored without warning. - If the index you want to delete has replica indices, the replicas become independent indices. - If the index you want to delete is a replica index, you must first unlink it from its primary index before you can delete it.   For more information, see [Delete replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/deleting-replicas/).
 
         Required API Key ACLs:
           - deleteIndex
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1788,17 +1804,18 @@ class SearchClient:
     async def delete_index(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeletedAtResponse:
         """
-        Delete an existing index.
+        Deletes an index and all its settings.  - Deleting an index doesn't delete its analytics data. - If you try to delete a non-existing index, the operation is ignored without warning. - If the index you want to delete has replica indices, the replicas become independent indices. - If the index you want to delete is a replica index, you must first unlink it from its primary index before you can delete it.   For more information, see [Delete replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/deleting-replicas/).
 
         Required API Key ACLs:
           - deleteIndex
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
@@ -1810,22 +1827,21 @@ class SearchClient:
     async def delete_object_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        To delete a set of records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy) instead.
+        Deletes a record by its object ID.  To delete more than one record, use the [`batch` operation](#tag/Records/operation/batch). To delete records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy).
 
         Required API Key ACLs:
           - deleteObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1855,22 +1871,21 @@ class SearchClient:
     async def delete_object(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeletedAtResponse:
         """
-        To delete a set of records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy) instead.
+        Deletes a record by its object ID.  To delete more than one record, use the [`batch` operation](#tag/Records/operation/batch). To delete records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy).
 
         Required API Key ACLs:
           - deleteObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
@@ -1884,30 +1899,29 @@ class SearchClient:
     async def delete_rule_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
         ],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+        Deletes a rule by its ID. To find the object ID for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a rule object. (required)
         :type object_id: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1943,30 +1957,29 @@ class SearchClient:
     async def delete_rule(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
         ],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        Delete a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+        Deletes a rule by its ID. To find the object ID for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a rule object. (required)
         :type object_id: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
@@ -1985,7 +1998,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Remove a source from the list of allowed sources.
+        Deletes a source from the list of allowed sources.
 
         Required API Key ACLs:
           - admin
@@ -2020,7 +2033,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteSourceResponse:
         """
-        Remove a source from the list of allowed sources.
+        Deletes a source from the list of allowed sources.
 
         Required API Key ACLs:
           - admin
@@ -2037,30 +2050,29 @@ class SearchClient:
     async def delete_synonym_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
         ],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete a synonym by its `objectID`. To find the object IDs of your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
+        Deletes a synonym by its ID. To find the object IDs of your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a synonym object. (required)
         :type object_id: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2096,30 +2108,29 @@ class SearchClient:
     async def delete_synonym(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
         ],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeletedAtResponse:
         """
-        Delete a synonym by its `objectID`. To find the object IDs of your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
+        Deletes a synonym by its ID. To find the object IDs of your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a synonym object. (required)
         :type object_id: str
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
@@ -2136,7 +2147,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the permissions and restrictions of a specific API key. When authenticating with the admin API key, you can request information for any of your application's keys. When authenticating with other API keys, you can only retrieve information for that key.
+        Gets the permissions and restrictions of an API key.  When authenticating with the admin API key, you can request information for any of your application's keys. When authenticating with other API keys, you can only retrieve information for that key.
 
 
         :param key: API key. (required)
@@ -2163,7 +2174,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetApiKeyResponse:
         """
-        Get the permissions and restrictions of a specific API key. When authenticating with the admin API key, you can request information for any of your application's keys. When authenticating with other API keys, you can only retrieve information for that key.
+        Gets the permissions and restrictions of an API key.  When authenticating with the admin API key, you can request information for any of your application's keys. When authenticating with other API keys, you can only retrieve information for that key.
 
 
         :param key: API key. (required)
@@ -2179,7 +2190,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        Lists Algolia's [supported languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) and any customizations applied to each language's [stop word](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plural](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), and [segmentation (compound)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) features.
+        Lists supported languages with their supported dictionary types and number of custom entries.
 
         Required API Key ACLs:
           - settings
@@ -2201,7 +2212,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> Dict[str, Languages]:
         """
-        Lists Algolia's [supported languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) and any customizations applied to each language's [stop word](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plural](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), and [segmentation (compound)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) features.
+        Lists supported languages with their supported dictionary types and number of custom entries.
 
         Required API Key ACLs:
           - settings
@@ -2217,7 +2228,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        Get the languages for which [stop words are turned off](#tag/Dictionaries/operation/setDictionarySettings).
+        Retrieves the languages for which standard dictionary entries are turned off.
 
         Required API Key ACLs:
           - settings
@@ -2239,7 +2250,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> GetDictionarySettingsResponse:
         """
-        Get the languages for which [stop words are turned off](#tag/Dictionaries/operation/setDictionarySettings).
+        Retrieves the languages for which standard dictionary entries are turned off.
 
         Required API Key ACLs:
           - settings
@@ -2256,7 +2267,7 @@ class SearchClient:
         offset: Annotated[
             Optional[StrictInt],
             Field(
-                description="First log entry to retrieve. Sorted by decreasing date with 0 being the most recent."
+                description="First log entry to retrieve. The most recent entries are listed first."
             ),
         ] = None,
         length: Annotated[
@@ -2266,30 +2277,30 @@ class SearchClient:
         index_name: Annotated[
             Optional[StrictStr],
             Field(
-                description="Index for which log entries should be retrieved. When omitted, log entries are retrieved for all indices."
+                description="Index for which to retrieve log entries. By default, log entries are retrieved for all indices. "
             ),
         ] = None,
         type: Annotated[
             Optional[LogType],
             Field(
-                description="Type of log entries to retrieve. When omitted, all log entries are retrieved."
+                description="Type of log entries to retrieve. By default, all log entries are retrieved. "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        The request must be authenticated by an API key with the [`logs` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl). Logs are held for the last seven days. There's also a logging limit of 1,000 API calls per server. This request counts towards your [operations quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-) but doesn't appear in the logs itself. > **Note**: To fetch the logs for a Distributed Search Network (DSN) cluster, target the [DSN's endpoint](https://www.algolia.com/doc/guides/scaling/distributed-search-network-dsn/#accessing-dsn-servers).
+        The request must be authenticated by an API key with the [`logs` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).  - Logs are held for the last seven days. - Up to 1,000 API requests per server are logged. - This request counts towards your [operations quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-) but doesn't appear in the logs itself.
 
         Required API Key ACLs:
           - logs
 
-        :param offset: First log entry to retrieve. Sorted by decreasing date with 0 being the most recent.
+        :param offset: First log entry to retrieve. The most recent entries are listed first.
         :type offset: int
         :param length: Maximum number of entries to retrieve.
         :type length: int
-        :param index_name: Index for which log entries should be retrieved. When omitted, log entries are retrieved for all indices.
+        :param index_name: Index for which to retrieve log entries. By default, log entries are retrieved for all indices.
         :type index_name: str
-        :param type: Type of log entries to retrieve. When omitted, all log entries are retrieved.
+        :param type: Type of log entries to retrieve. By default, all log entries are retrieved.
         :type type: LogType
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2321,7 +2332,7 @@ class SearchClient:
         offset: Annotated[
             Optional[StrictInt],
             Field(
-                description="First log entry to retrieve. Sorted by decreasing date with 0 being the most recent."
+                description="First log entry to retrieve. The most recent entries are listed first."
             ),
         ] = None,
         length: Annotated[
@@ -2331,30 +2342,30 @@ class SearchClient:
         index_name: Annotated[
             Optional[StrictStr],
             Field(
-                description="Index for which log entries should be retrieved. When omitted, log entries are retrieved for all indices."
+                description="Index for which to retrieve log entries. By default, log entries are retrieved for all indices. "
             ),
         ] = None,
         type: Annotated[
             Optional[LogType],
             Field(
-                description="Type of log entries to retrieve. When omitted, all log entries are retrieved."
+                description="Type of log entries to retrieve. By default, all log entries are retrieved. "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetLogsResponse:
         """
-        The request must be authenticated by an API key with the [`logs` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl). Logs are held for the last seven days. There's also a logging limit of 1,000 API calls per server. This request counts towards your [operations quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-) but doesn't appear in the logs itself. > **Note**: To fetch the logs for a Distributed Search Network (DSN) cluster, target the [DSN's endpoint](https://www.algolia.com/doc/guides/scaling/distributed-search-network-dsn/#accessing-dsn-servers).
+        The request must be authenticated by an API key with the [`logs` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).  - Logs are held for the last seven days. - Up to 1,000 API requests per server are logged. - This request counts towards your [operations quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-) but doesn't appear in the logs itself.
 
         Required API Key ACLs:
           - logs
 
-        :param offset: First log entry to retrieve. Sorted by decreasing date with 0 being the most recent.
+        :param offset: First log entry to retrieve. The most recent entries are listed first.
         :type offset: int
         :param length: Maximum number of entries to retrieve.
         :type length: int
-        :param index_name: Index for which log entries should be retrieved. When omitted, log entries are retrieved for all indices.
+        :param index_name: Index for which to retrieve log entries. By default, log entries are retrieved for all indices.
         :type index_name: str
-        :param type: Type of log entries to retrieve. When omitted, all log entries are retrieved.
+        :param type: Type of log entries to retrieve. By default, all log entries are retrieved.
         :type type: LogType
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetLogsResponse' result object.
@@ -2368,30 +2379,29 @@ class SearchClient:
     async def get_object_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         attributes_to_retrieve: Annotated[
             Optional[List[StrictStr]],
             Field(
-                description="Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned. `objectID` is always retrieved, even when not specified. [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) won't be retrieved unless the request is authenticated with the admin API key. "
+                description="Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned.  `objectID` is always retrieved.  Attributes included in `unretrievableAttributes` won't be retrieved unless the request is authenticated with the admin API key. "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        To get more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
+        Retrieves one record by its object ID.  To retrieve more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
 
         Required API Key ACLs:
           - search
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
-        :param attributes_to_retrieve: Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned. `objectID` is always retrieved, even when not specified. [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) won't be retrieved unless the request is authenticated with the admin API key.
+        :param attributes_to_retrieve: Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned.  `objectID` is always retrieved.  Attributes included in `unretrievableAttributes` won't be retrieved unless the request is authenticated with the admin API key.
         :type attributes_to_retrieve: List[str]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2427,30 +2437,29 @@ class SearchClient:
     async def get_object(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         attributes_to_retrieve: Annotated[
             Optional[List[StrictStr]],
             Field(
-                description="Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned. `objectID` is always retrieved, even when not specified. [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) won't be retrieved unless the request is authenticated with the admin API key. "
+                description="Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned.  `objectID` is always retrieved.  Attributes included in `unretrievableAttributes` won't be retrieved unless the request is authenticated with the admin API key. "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, str]:
         """
-        To get more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
+        Retrieves one record by its object ID.  To retrieve more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
 
         Required API Key ACLs:
           - search
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
-        :param attributes_to_retrieve: Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned. `objectID` is always retrieved, even when not specified. [`unretrievableAttributes`](https://www.algolia.com/doc/api-reference/api-parameters/unretrievableAttributes/) won't be retrieved unless the request is authenticated with the admin API key.
+        :param attributes_to_retrieve: Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned.  `objectID` is always retrieved.  Attributes included in `unretrievableAttributes` won't be retrieved unless the request is authenticated with the admin API key.
         :type attributes_to_retrieve: List[str]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Dict[str, str]' result object.
@@ -2469,7 +2478,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieve one or more records, potentially from different indices, in a single API operation. Results will be received in the same order as the requests.
+        Retrieves one or more records, potentially from different indices.  Records are returned in the same order as the requests.
 
         Required API Key ACLs:
           - search
@@ -2507,7 +2516,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetObjectsResponse:
         """
-        Retrieve one or more records, potentially from different indices, in a single API operation. Results will be received in the same order as the requests.
+        Retrieves one or more records, potentially from different indices.  Records are returned in the same order as the requests.
 
         Required API Key ACLs:
           - search
@@ -2524,7 +2533,8 @@ class SearchClient:
     async def get_rule_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
@@ -2532,12 +2542,12 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
 
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a rule object. (required)
         :type object_id: str
@@ -2569,7 +2579,8 @@ class SearchClient:
     async def get_rule(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
@@ -2577,12 +2588,12 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Rule:
         """
-        Get a rule by its `objectID`. To find the `objectID` for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
 
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a rule object. (required)
         :type object_id: str
@@ -2596,17 +2607,18 @@ class SearchClient:
     async def get_settings_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return an object containing an index's [configuration settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/).
+        Retrieves an object with non-null index settings.
 
         Required API Key ACLs:
           - search
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2631,17 +2643,18 @@ class SearchClient:
     async def get_settings(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> IndexSettings:
         """
-        Return an object containing an index's [configuration settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/).
+        Retrieves an object with non-null index settings.
 
         Required API Key ACLs:
           - search
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IndexSettings' result object.
@@ -2654,7 +2667,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        Get all allowed sources (IP addresses).
+        Retrieves all allowed IP addresses with access to your application.
 
         Required API Key ACLs:
           - admin
@@ -2676,7 +2689,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> List[Source]:
         """
-        Get all allowed sources (IP addresses).
+        Retrieves all allowed IP addresses with access to your application.
 
         Required API Key ACLs:
           - admin
@@ -2691,7 +2704,8 @@ class SearchClient:
     async def get_synonym_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
@@ -2699,12 +2713,12 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a syonym by its `objectID`. To find the object IDs for your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
+        Retrieves a syonym by its ID. To find the object IDs for your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
 
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a synonym object. (required)
         :type object_id: str
@@ -2736,7 +2750,8 @@ class SearchClient:
     async def get_synonym(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
@@ -2744,12 +2759,12 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SynonymHit:
         """
-        Get a syonym by its `objectID`. To find the object IDs for your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
+        Retrieves a syonym by its ID. To find the object IDs for your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
 
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a synonym object. (required)
         :type object_id: str
@@ -2765,18 +2780,19 @@ class SearchClient:
     async def get_task_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Some operations, such as copying an index, will respond with a `taskID` value. Use this value here to check the status of that task.
+        Checks the status of a given task.  Indexing tasks are asynchronous. When you add, update, or delete records or indices, a task is created on a queue and completed depending on the load on the server.  The indexing tasks' responses include a task ID that you can use to check the status.
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param task_id: Unique task identifier. (required)
         :type task_id: int
@@ -2806,18 +2822,19 @@ class SearchClient:
     async def get_task(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTaskResponse:
         """
-        Some operations, such as copying an index, will respond with a `taskID` value. Use this value here to check the status of that task.
+        Checks the status of a given task.  Indexing tasks are asynchronous. When you add, update, or delete records or indices, a task is created on a queue and completed depending on the load on the server.  The indexing tasks' responses include a task ID that you can use to check the status.
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param task_id: Unique task identifier. (required)
         :type task_id: int
@@ -2832,7 +2849,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        Get the IDs of the 10 users with the highest number of records per cluster. Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
+        Get the IDs of the 10 users with the highest number of records per cluster.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
           - admin
@@ -2854,7 +2871,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> GetTopUserIdsResponse:
         """
-        Get the IDs of the 10 users with the highest number of records per cluster. Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
+        Get the IDs of the 10 users with the highest number of records per cluster.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
           - admin
@@ -2868,16 +2885,16 @@ class SearchClient:
 
     async def get_user_id_with_http_info(
         self,
-        user_id: Annotated[str, Field(strict=True, description="userID to assign.")],
+        user_id: Annotated[str, Field(strict=True, description="User ID to assign.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the userID data stored in the mapping. Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
+        Returns the user ID data stored in the mapping.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
           - admin
 
-        :param user_id: userID to assign. (required)
+        :param user_id: User ID to assign. (required)
         :type user_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2901,16 +2918,16 @@ class SearchClient:
 
     async def get_user_id(
         self,
-        user_id: Annotated[str, Field(strict=True, description="userID to assign.")],
+        user_id: Annotated[str, Field(strict=True, description="User ID to assign.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UserId:
         """
-        Returns the userID data stored in the mapping. Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
+        Returns the user ID data stored in the mapping.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
           - admin
 
-        :param user_id: userID to assign. (required)
+        :param user_id: User ID to assign. (required)
         :type user_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UserId' result object.
@@ -2924,7 +2941,7 @@ class SearchClient:
         get_clusters: Annotated[
             Optional[StrictBool],
             Field(
-                description="Indicates whether to include the cluster's pending mapping state in the response."
+                description="Whether to include the cluster's pending mapping state in the response."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -2935,7 +2952,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param get_clusters: Indicates whether to include the cluster's pending mapping state in the response.
+        :param get_clusters: Whether to include the cluster's pending mapping state in the response.
         :type get_clusters: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2961,7 +2978,7 @@ class SearchClient:
         get_clusters: Annotated[
             Optional[StrictBool],
             Field(
-                description="Indicates whether to include the cluster's pending mapping state in the response."
+                description="Whether to include the cluster's pending mapping state in the response."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -2972,7 +2989,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param get_clusters: Indicates whether to include the cluster's pending mapping state in the response.
+        :param get_clusters: Whether to include the cluster's pending mapping state in the response.
         :type get_clusters: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'HasPendingMappingsResponse' result object.
@@ -2987,7 +3004,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        List all API keys associated with your Algolia application, including their permissions and restrictions.
+        Lists all API keys associated with your Algolia application, including their permissions and restrictions.
 
         Required API Key ACLs:
           - admin
@@ -3009,7 +3026,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ListApiKeysResponse:
         """
-        List all API keys associated with your Algolia application, including their permissions and restrictions.
+        Lists all API keys associated with your Algolia application, including their permissions and restrictions.
 
         Required API Key ACLs:
           - admin
@@ -3025,7 +3042,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        List the available clusters in a multi-cluster setup.
+        Lists the available clusters in a multi-cluster setup.
 
         Required API Key ACLs:
           - admin
@@ -3047,7 +3064,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ListClustersResponse:
         """
-        List the available clusters in a multi-cluster setup.
+        Lists the available clusters in a multi-cluster setup.
 
         Required API Key ACLs:
           - admin
@@ -3064,23 +3081,23 @@ class SearchClient:
         page: Annotated[
             Optional[Annotated[int, Field(strict=True, ge=0)]],
             Field(
-                description="Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated. "
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
             ),
         ] = None,
         hits_per_page: Annotated[
-            Optional[StrictInt], Field(description="Maximum number of hits per page.")
+            Optional[StrictInt], Field(description="Number of hits per page.")
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        List indices in an Algolia application.
+        Lists all indices in the current Algolia application.  The request follows any index restrictions of the API key you use to make the request.
 
         Required API Key ACLs:
           - listIndexes
 
-        :param page: Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
         :type page: int
-        :param hits_per_page: Maximum number of hits per page.
+        :param hits_per_page: Number of hits per page.
         :type hits_per_page: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -3108,23 +3125,23 @@ class SearchClient:
         page: Annotated[
             Optional[Annotated[int, Field(strict=True, ge=0)]],
             Field(
-                description="Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated. "
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
             ),
         ] = None,
         hits_per_page: Annotated[
-            Optional[StrictInt], Field(description="Maximum number of hits per page.")
+            Optional[StrictInt], Field(description="Number of hits per page.")
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListIndicesResponse:
         """
-        List indices in an Algolia application.
+        Lists all indices in the current Algolia application.  The request follows any index restrictions of the API key you use to make the request.
 
         Required API Key ACLs:
           - listIndexes
 
-        :param page: Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
         :type page: int
-        :param hits_per_page: Maximum number of hits per page.
+        :param hits_per_page: Number of hits per page.
         :type hits_per_page: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListIndicesResponse' result object.
@@ -3138,23 +3155,23 @@ class SearchClient:
         page: Annotated[
             Optional[Annotated[int, Field(strict=True, ge=0)]],
             Field(
-                description="Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated. "
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
             ),
         ] = None,
         hits_per_page: Annotated[
-            Optional[StrictInt], Field(description="Maximum number of hits per page.")
+            Optional[StrictInt], Field(description="Number of hits per page.")
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        List the userIDs assigned to a multi-cluster application. Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
+        Lists the userIDs assigned to a multi-cluster application.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
           - admin
 
-        :param page: Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
         :type page: int
-        :param hits_per_page: Maximum number of hits per page.
+        :param hits_per_page: Number of hits per page.
         :type hits_per_page: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -3182,23 +3199,23 @@ class SearchClient:
         page: Annotated[
             Optional[Annotated[int, Field(strict=True, ge=0)]],
             Field(
-                description="Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated. "
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
             ),
         ] = None,
         hits_per_page: Annotated[
-            Optional[StrictInt], Field(description="Maximum number of hits per page.")
+            Optional[StrictInt], Field(description="Number of hits per page.")
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListUserIdsResponse:
         """
-        List the userIDs assigned to a multi-cluster application. Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time.
+        Lists the userIDs assigned to a multi-cluster application.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
           - admin
 
-        :param page: Returns the requested page number. The page size is determined by the `hitsPerPage` parameter. You can see the number of available pages in the `nbPages` response attribute. When `page` is null, the API response is not paginated.
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
         :type page: int
-        :param hits_per_page: Maximum number of hits per page.
+        :param hits_per_page: Number of hits per page.
         :type hits_per_page: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListUserIdsResponse' result object.
@@ -3215,7 +3232,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        To reduce the time spent on network round trips, you can perform several write actions in a single request. It's a multi-index version of the [`batch` operation](#tag/Records/operation/batch). Actions are applied in the order they are specified. The supported actions are equivalent to the individual operations of the same name.
+        Adds, updates, or deletes records in multiple indices with a single API request.  - Actions are applied in the order they are specified. - Actions are equivalent to the individual API requests of the same name.
 
 
         :param batch_params: (required)
@@ -3249,7 +3266,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> MultipleBatchResponse:
         """
-        To reduce the time spent on network round trips, you can perform several write actions in a single request. It's a multi-index version of the [`batch` operation](#tag/Records/operation/batch). Actions are applied in the order they are specified. The supported actions are equivalent to the individual operations of the same name.
+        Adds, updates, or deletes records in multiple indices with a single API request.  - Actions are applied in the order they are specified. - Actions are equivalent to the individual API requests of the same name.
 
 
         :param batch_params: (required)
@@ -3264,18 +3281,19 @@ class SearchClient:
     async def operation_index_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         operation_index_params: OperationIndexParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This `operation`, _copy_ or _move_, will copy or move a source index's (`IndexName`) records, settings, synonyms, and rules to a `destination` index. If the destination index exists, it will be replaced, except for index-specific API keys and analytics data. If the destination index doesn't exist, it will be created.  The choice between moving or copying an index depends on your needs. Choose:  - **Move** to rename an index. - **Copy** to create a new index with the same records and configuration as an existing one.  > **Note**: When considering copying or moving, be aware of the [rate limitations](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits) on these processes and the [impact on your analytics data](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/concepts/indices-analytics/).
+        Copies or moves (renames) an index within the same Algolia application.  - Existing destination indices are overwritten, except for index-specific API keys and analytics data. - If the destination index doesn't exist yet, it'll be created.  **Copy**  - Copying a source index that doesn't exist creates a new index with 0 records and default settings. - The API keys of the source index are merged with the existing keys in the destination index. - You can't copy the `enableReRanking`, `mode`, and `replicas` settings. - You can't copy to a destination index that already has replicas. - Be aware of the [size limits](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits). - Related guide: [Copy indices](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/how-to/copy-indices/)  **Move**  - Moving a source index that doesn't exist is ignored without returning an error. - When moving an index, the analytics data keep their original name and a new set of analytics data is started for the new name.   To access the original analytics in the dashboard, create an index with the original name. - If the destination index has replicas, moving will overwrite the existing index and copy the data to the replica indices. - Related guide: [Move indices](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/how-to/move-indices/).
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param operation_index_params: (required)
         :type operation_index_params: OperationIndexParams
@@ -3312,18 +3330,19 @@ class SearchClient:
     async def operation_index(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         operation_index_params: OperationIndexParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        This `operation`, _copy_ or _move_, will copy or move a source index's (`IndexName`) records, settings, synonyms, and rules to a `destination` index. If the destination index exists, it will be replaced, except for index-specific API keys and analytics data. If the destination index doesn't exist, it will be created.  The choice between moving or copying an index depends on your needs. Choose:  - **Move** to rename an index. - **Copy** to create a new index with the same records and configuration as an existing one.  > **Note**: When considering copying or moving, be aware of the [rate limitations](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits) on these processes and the [impact on your analytics data](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/concepts/indices-analytics/).
+        Copies or moves (renames) an index within the same Algolia application.  - Existing destination indices are overwritten, except for index-specific API keys and analytics data. - If the destination index doesn't exist yet, it'll be created.  **Copy**  - Copying a source index that doesn't exist creates a new index with 0 records and default settings. - The API keys of the source index are merged with the existing keys in the destination index. - You can't copy the `enableReRanking`, `mode`, and `replicas` settings. - You can't copy to a destination index that already has replicas. - Be aware of the [size limits](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits). - Related guide: [Copy indices](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/how-to/copy-indices/)  **Move**  - Moving a source index that doesn't exist is ignored without returning an error. - When moving an index, the analytics data keep their original name and a new set of analytics data is started for the new name.   To access the original analytics in the dashboard, create an index with the original name. - If the destination index has replicas, moving will overwrite the existing index and copy the data to the replica indices. - Related guide: [Move indices](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/how-to/move-indices/).
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param operation_index_params: (required)
         :type operation_index_params: OperationIndexParams
@@ -3339,36 +3358,33 @@ class SearchClient:
     async def partial_update_object_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         attributes_to_update: Annotated[
             Dict[str, AttributeToUpdate],
-            Field(description="Object with attributes to update."),
+            Field(description="Attributes with their values."),
         ],
         create_if_not_exists: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether to create a new record if it doesn't exist yet. "
-            ),
+            Field(description="Whether to create a new record if it doesn't exist."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Add new attributes or update current ones in an existing record. You can use any first-level attribute but not nested attributes. If you specify a [nested attribute](https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/how-to/creating-and-using-nested-attributes/), the engine treats it as a replacement for its first-level ancestor.
+        Adds new attributes to a record, or update existing ones.  - If a record with the specified object ID doesn't exist,   a new record is added to the index **if** `createIfNotExists` is true. - If the index doesn't exist yet, this method creates a new index. - You can use any first-level attribute but not nested attributes.   If you specify a nested attribute, the engine treats it as a replacement for its first-level ancestor.
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
-        :param attributes_to_update: Object with attributes to update. (required)
+        :param attributes_to_update: Attributes with their values. (required)
         :type attributes_to_update: Dict[str, AttributeToUpdate]
-        :param create_if_not_exists: Indicates whether to create a new record if it doesn't exist yet.
+        :param create_if_not_exists: Whether to create a new record if it doesn't exist.
         :type create_if_not_exists: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -3414,36 +3430,33 @@ class SearchClient:
     async def partial_update_object(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        object_id: Annotated[
-            StrictStr, Field(description="Unique record (object) identifier.")
-        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         attributes_to_update: Annotated[
             Dict[str, AttributeToUpdate],
-            Field(description="Object with attributes to update."),
+            Field(description="Attributes with their values."),
         ],
         create_if_not_exists: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether to create a new record if it doesn't exist yet. "
-            ),
+            Field(description="Whether to create a new record if it doesn't exist."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtWithObjectIdResponse:
         """
-        Add new attributes or update current ones in an existing record. You can use any first-level attribute but not nested attributes. If you specify a [nested attribute](https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/how-to/creating-and-using-nested-attributes/), the engine treats it as a replacement for its first-level ancestor.
+        Adds new attributes to a record, or update existing ones.  - If a record with the specified object ID doesn't exist,   a new record is added to the index **if** `createIfNotExists` is true. - If the index doesn't exist yet, this method creates a new index. - You can use any first-level attribute but not nested attributes.   If you specify a nested attribute, the engine treats it as a replacement for its first-level ancestor.
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param object_id: Unique record (object) identifier. (required)
+        :param object_id: Unique record identifier. (required)
         :type object_id: str
-        :param attributes_to_update: Object with attributes to update. (required)
+        :param attributes_to_update: Attributes with their values. (required)
         :type attributes_to_update: Dict[str, AttributeToUpdate]
-        :param create_if_not_exists: Indicates whether to create a new record if it doesn't exist yet.
+        :param create_if_not_exists: Whether to create a new record if it doesn't exist.
         :type create_if_not_exists: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtWithObjectIdResponse' result object.
@@ -3460,16 +3473,16 @@ class SearchClient:
 
     async def remove_user_id_with_http_info(
         self,
-        user_id: Annotated[str, Field(strict=True, description="userID to assign.")],
+        user_id: Annotated[str, Field(strict=True, description="User ID to assign.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Remove a userID and its associated data from the multi-clusters.
+        Deletes a user ID and its associated data from the clusters.
 
         Required API Key ACLs:
           - admin
 
-        :param user_id: userID to assign. (required)
+        :param user_id: User ID to assign. (required)
         :type user_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -3493,16 +3506,16 @@ class SearchClient:
 
     async def remove_user_id(
         self,
-        user_id: Annotated[str, Field(strict=True, description="userID to assign.")],
+        user_id: Annotated[str, Field(strict=True, description="User ID to assign.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RemoveUserIdResponse:
         """
-        Remove a userID and its associated data from the multi-clusters.
+        Deletes a user ID and its associated data from the clusters.
 
         Required API Key ACLs:
           - admin
 
-        :param user_id: userID to assign. (required)
+        :param user_id: User ID to assign. (required)
         :type user_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RemoveUserIdResponse' result object.
@@ -3517,7 +3530,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Replace all allowed sources.
+        Replaces the list of allowed sources.
 
         Required API Key ACLs:
           - admin
@@ -3553,7 +3566,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ReplaceSourceResponse:
         """
-        Replace all allowed sources.
+        Replaces the list of allowed sources.
 
         Required API Key ACLs:
           - admin
@@ -3573,7 +3586,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Restore a deleted API key, along with its associated permissions. The request must be authenticated with the admin API key.
+        Restores a deleted API key.  Restoring resets the `validity` attribute to `0`.  Algolia stores up to 1,000 API keys per application. If you create more, the oldest API keys are deleted and can't be restored.
 
         Required API Key ACLs:
           - admin
@@ -3604,7 +3617,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AddApiKeyResponse:
         """
-        Restore a deleted API key, along with its associated permissions. The request must be authenticated with the admin API key.
+        Restores a deleted API key.  Restoring resets the `validity` attribute to `0`.  Algolia stores up to 1,000 API keys per application. If you create more, the oldest API keys are deleted and can't be restored.
 
         Required API Key ACLs:
           - admin
@@ -3621,20 +3634,26 @@ class SearchClient:
     async def save_object_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        body: Annotated[Dict[str, Any], Field(description="The Algolia record.")],
+        body: Annotated[
+            Dict[str, Any],
+            Field(
+                description="The record, a schemaless object with attributes that are useful in the context of search and discovery."
+            ),
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Add a record (object) to an index or replace it. If the record doesn't contain an `objectID`, Algolia automatically adds it. If you use an existing `objectID`, the existing record is replaced with the new one. To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
+        Adds a record to an index or replace it.  - If the record doesn't have an object ID, a new record with an auto-generated object ID is added to your index. - If a record with the specified object ID exists, the existing record is replaced. - If a record with the specified object ID doesn't exist, a new record is added to your index. - If you add a record to an index that doesn't exist yet, a new index is created.  To update _some_ attributes of a record, use the [`partial` operation](#tag/Records/operation/partial). To add, update, or replace multiple records, use the [`batch` operation](#tag/Records/operation/batch).
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param body: The Algolia record. (required)
+        :param body: The record, a schemaless object with attributes that are useful in the context of search and discovery. (required)
         :type body: object
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -3667,20 +3686,26 @@ class SearchClient:
     async def save_object(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        body: Annotated[Dict[str, Any], Field(description="The Algolia record.")],
+        body: Annotated[
+            Dict[str, Any],
+            Field(
+                description="The record, a schemaless object with attributes that are useful in the context of search and discovery."
+            ),
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SaveObjectResponse:
         """
-        Add a record (object) to an index or replace it. If the record doesn't contain an `objectID`, Algolia automatically adds it. If you use an existing `objectID`, the existing record is replaced with the new one. To add multiple records to your index in a single API request, use the [`batch` operation](#tag/Records/operation/batch).
+        Adds a record to an index or replace it.  - If the record doesn't have an object ID, a new record with an auto-generated object ID is added to your index. - If a record with the specified object ID exists, the existing record is replaced. - If a record with the specified object ID doesn't exist, a new record is added to your index. - If you add a record to an index that doesn't exist yet, a new index is created.  To update _some_ attributes of a record, use the [`partial` operation](#tag/Records/operation/partial). To add, update, or replace multiple records, use the [`batch` operation](#tag/Records/operation/batch).
 
         Required API Key ACLs:
           - addObject
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param body: The Algolia record. (required)
+        :param body: The record, a schemaless object with attributes that are useful in the context of search and discovery. (required)
         :type body: object
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SaveObjectResponse' result object.
@@ -3692,7 +3717,8 @@ class SearchClient:
     async def save_rule_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
@@ -3700,25 +3726,23 @@ class SearchClient:
         rule: Rule,
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
+        If a rule with the specified object ID doesn't exist, it's created. Otherwise, the existing rule is replaced.  To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a rule object. (required)
         :type object_id: str
         :param rule: (required)
         :type rule: Rule
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -3762,7 +3786,8 @@ class SearchClient:
     async def save_rule(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
@@ -3770,25 +3795,23 @@ class SearchClient:
         rule: Rule,
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedRuleResponse:
         """
-        To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
+        If a rule with the specified object ID doesn't exist, it's created. Otherwise, the existing rule is replaced.  To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a rule object. (required)
         :type object_id: str
         :param rule: (required)
         :type rule: Rule
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedRuleResponse' result object.
@@ -3802,36 +3825,35 @@ class SearchClient:
     async def save_rules_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         rules: List[Rule],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         clear_existing_rules: Annotated[
             Optional[StrictBool],
             Field(
-                description="Indicates whether existing rules should be deleted before adding this batch."
+                description="Whether existing rules should be deleted before adding this batch."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create or update multiple rules.
+        Create or update multiple rules.  If a rule with the specified object ID doesn't exist, Algolia creates a new one. Otherwise, existing rules are replaced.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param rules: (required)
         :type rules: List[Rule]
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
-        :param clear_existing_rules: Indicates whether existing rules should be deleted before adding this batch.
+        :param clear_existing_rules: Whether existing rules should be deleted before adding this batch.
         :type clear_existing_rules: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -3872,36 +3894,35 @@ class SearchClient:
     async def save_rules(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         rules: List[Rule],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         clear_existing_rules: Annotated[
             Optional[StrictBool],
             Field(
-                description="Indicates whether existing rules should be deleted before adding this batch."
+                description="Whether existing rules should be deleted before adding this batch."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        Create or update multiple rules.
+        Create or update multiple rules.  If a rule with the specified object ID doesn't exist, Algolia creates a new one. Otherwise, existing rules are replaced.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param rules: (required)
         :type rules: List[Rule]
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
-        :param clear_existing_rules: Indicates whether existing rules should be deleted before adding this batch.
+        :param clear_existing_rules: Whether existing rules should be deleted before adding this batch.
         :type clear_existing_rules: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
@@ -3919,7 +3940,8 @@ class SearchClient:
     async def save_synonym_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
@@ -3927,25 +3949,23 @@ class SearchClient:
         synonym_hit: SynonymHit,
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Add a [synonym](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms) to an index or replace it. If the synonym `objectID` doesn't exist, Algolia adds a new one. If you use an existing synonym `objectID`, the existing synonym is replaced with the new one. To add multiple synonyms in a single API request, use the [`batch` operation](#tag/Synonyms/operation/saveSynonyms).
+        If a synonym with the specified object ID doesn't exist, Algolia adds a new one. Otherwise, the existing synonym is replaced. To add multiple synonyms in a single API request, use the [`batch` operation](#tag/Synonyms/operation/saveSynonyms).
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a synonym object. (required)
         :type object_id: str
         :param synonym_hit: (required)
         :type synonym_hit: SynonymHit
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -3991,7 +4011,8 @@ class SearchClient:
     async def save_synonym(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
@@ -3999,25 +4020,23 @@ class SearchClient:
         synonym_hit: SynonymHit,
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SaveSynonymResponse:
         """
-        Add a [synonym](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#the-different-types-of-synonyms) to an index or replace it. If the synonym `objectID` doesn't exist, Algolia adds a new one. If you use an existing synonym `objectID`, the existing synonym is replaced with the new one. To add multiple synonyms in a single API request, use the [`batch` operation](#tag/Synonyms/operation/saveSynonyms).
+        If a synonym with the specified object ID doesn't exist, Algolia adds a new one. Otherwise, the existing synonym is replaced. To add multiple synonyms in a single API request, use the [`batch` operation](#tag/Synonyms/operation/saveSynonyms).
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param object_id: Unique identifier of a synonym object. (required)
         :type object_id: str
         :param synonym_hit: (required)
         :type synonym_hit: SynonymHit
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SaveSynonymResponse' result object.
@@ -4031,36 +4050,35 @@ class SearchClient:
     async def save_synonyms_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         synonym_hit: List[SynonymHit],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         replace_existing_synonyms: Annotated[
             Optional[StrictBool],
             Field(
-                description="Indicates whether to replace all synonyms in the index with the ones sent with this request."
+                description="Whether to replace all synonyms in the index with the ones sent with this request."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create or update multiple synonyms.
+        If a synonym with the `objectID` doesn't exist, Algolia adds a new one. Otherwise, existing synonyms are replaced.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param synonym_hit: (required)
         :type synonym_hit: List[SynonymHit]
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
-        :param replace_existing_synonyms: Indicates whether to replace all synonyms in the index with the ones sent with this request.
+        :param replace_existing_synonyms: Whether to replace all synonyms in the index with the ones sent with this request.
         :type replace_existing_synonyms: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -4105,36 +4123,35 @@ class SearchClient:
     async def save_synonyms(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         synonym_hit: List[SynonymHit],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         replace_existing_synonyms: Annotated[
             Optional[StrictBool],
             Field(
-                description="Indicates whether to replace all synonyms in the index with the ones sent with this request."
+                description="Whether to replace all synonyms in the index with the ones sent with this request."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        Create or update multiple synonyms.
+        If a synonym with the `objectID` doesn't exist, Algolia adds a new one. Otherwise, existing synonyms are replaced.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param synonym_hit: (required)
         :type synonym_hit: List[SynonymHit]
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
-        :param replace_existing_synonyms: Indicates whether to replace all synonyms in the index with the ones sent with this request.
+        :param replace_existing_synonyms: Whether to replace all synonyms in the index with the ones sent with this request.
         :type replace_existing_synonyms: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
@@ -4154,18 +4171,18 @@ class SearchClient:
         search_method_params: Annotated[
             SearchMethodParams,
             Field(
-                description="Query requests and strategies. Results will be received in the same order as the queries."
+                description="Muli-search request body. Results are returned in the same order as the requests."
             ),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send multiple search queries to one or more indices.
+        Sends multiple search request to one or more indices.  This can be useful in these cases:  - Different indices for different purposes, such as, one index for products, another one for marketing content. - Multiple searches to the same index—for example, with different filters.
 
         Required API Key ACLs:
           - search
 
-        :param search_method_params: Query requests and strategies. Results will be received in the same order as the queries. (required)
+        :param search_method_params: Muli-search request body. Results are returned in the same order as the requests. (required)
         :type search_method_params: SearchMethodParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -4195,18 +4212,18 @@ class SearchClient:
         search_method_params: Annotated[
             SearchMethodParams,
             Field(
-                description="Query requests and strategies. Results will be received in the same order as the queries."
+                description="Muli-search request body. Results are returned in the same order as the requests."
             ),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchResponses:
         """
-        Send multiple search queries to one or more indices.
+        Sends multiple search request to one or more indices.  This can be useful in these cases:  - Different indices for different purposes, such as, one index for products, another one for marketing content. - Multiple searches to the same index—for example, with different filters.
 
         Required API Key ACLs:
           - search
 
-        :param search_method_params: Query requests and strategies. Results will be received in the same order as the queries. (required)
+        :param search_method_params: Muli-search request body. Results are returned in the same order as the requests. (required)
         :type search_method_params: SearchMethodParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchResponses' result object.
@@ -4218,18 +4235,18 @@ class SearchClient:
     async def search_dictionary_entries_with_http_info(
         self,
         dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary to search in.")
+            DictionaryType, Field(description="Dictionary type in which to search.")
         ],
         search_dictionary_entries_params: SearchDictionaryEntriesParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search for standard and [custom](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/) entries in the [stop words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plurals](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), or [segmentation (compounds)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) dictionaries.
+        Searches for standard and custom dictionary entries.
 
         Required API Key ACLs:
           - settings
 
-        :param dictionary_name: Dictionary to search in. (required)
+        :param dictionary_name: Dictionary type in which to search. (required)
         :type dictionary_name: DictionaryType
         :param search_dictionary_entries_params: (required)
         :type search_dictionary_entries_params: SearchDictionaryEntriesParams
@@ -4266,48 +4283,54 @@ class SearchClient:
     async def search_dictionary_entries(
         self,
         dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary to search in.")
+            DictionaryType, Field(description="Dictionary type in which to search.")
         ],
         search_dictionary_entries_params: SearchDictionaryEntriesParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> UpdatedAtResponse:
+    ) -> SearchDictionaryEntriesResponse:
         """
-        Search for standard and [custom](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/) entries in the [stop words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-stop-words/), [plurals](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-plurals-and-other-declensions/), or [segmentation (compounds)](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) dictionaries.
+        Searches for standard and custom dictionary entries.
 
         Required API Key ACLs:
           - settings
 
-        :param dictionary_name: Dictionary to search in. (required)
+        :param dictionary_name: Dictionary type in which to search. (required)
         :type dictionary_name: DictionaryType
         :param search_dictionary_entries_params: (required)
         :type search_dictionary_entries_params: SearchDictionaryEntriesParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        :return: Returns the deserialized response in a 'SearchDictionaryEntriesResponse' result object.
         """
         return (
             await self.search_dictionary_entries_with_http_info(
                 dictionary_name, search_dictionary_entries_params, request_options
             )
-        ).deserialize(UpdatedAtResponse)
+        ).deserialize(SearchDictionaryEntriesResponse)
 
     async def search_for_facet_values_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        facet_name: Annotated[StrictStr, Field(description="Facet name.")],
+        facet_name: Annotated[
+            StrictStr,
+            Field(
+                description="Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier. "
+            ),
+        ],
         search_for_facet_values_request: Optional[SearchForFacetValuesRequest] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        [Search for a facet's values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values), optionally restricting the returned values to those contained in records matching other search criteria. > **Note**: Pagination isn't supported (`page` and `hitsPerPage` are ignored). By default, the engine returns a maximum of 10 values but you can adjust this with `maxFacetHits`.
+        Searches for values of a specified facet attribute.  - By default, facet values are sorted by decreasing count.   You can adjust this with the `sortFacetValueBy` parameter. - Searching for facet values doesn't work if you have **more than 65 searchable facets and searchable attributes combined**.
 
         Required API Key ACLs:
           - search
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param facet_name: Facet name. (required)
+        :param facet_name: Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier.  (required)
         :type facet_name: str
         :param search_for_facet_values_request:
         :type search_for_facet_values_request: SearchForFacetValuesRequest
@@ -4344,21 +4367,27 @@ class SearchClient:
     async def search_for_facet_values(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
-        facet_name: Annotated[StrictStr, Field(description="Facet name.")],
+        facet_name: Annotated[
+            StrictStr,
+            Field(
+                description="Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier. "
+            ),
+        ],
         search_for_facet_values_request: Optional[SearchForFacetValuesRequest] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchForFacetValuesResponse:
         """
-        [Search for a facet's values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values), optionally restricting the returned values to those contained in records matching other search criteria. > **Note**: Pagination isn't supported (`page` and `hitsPerPage` are ignored). By default, the engine returns a maximum of 10 values but you can adjust this with `maxFacetHits`.
+        Searches for values of a specified facet attribute.  - By default, facet values are sorted by decreasing count.   You can adjust this with the `sortFacetValueBy` parameter. - Searching for facet values doesn't work if you have **more than 65 searchable facets and searchable attributes combined**.
 
         Required API Key ACLs:
           - search
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param facet_name: Facet name. (required)
+        :param facet_name: Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier.  (required)
         :type facet_name: str
         :param search_for_facet_values_request:
         :type search_for_facet_values_request: SearchForFacetValuesRequest
@@ -4374,18 +4403,19 @@ class SearchClient:
     async def search_rules_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         search_rules_params: Optional[SearchRulesParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search for rules in your index. You can control the search with parameters. To list all rules, send an empty request body.
+        Searches for rules in your index.
 
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param search_rules_params:
         :type search_rules_params: SearchRulesParams
@@ -4417,18 +4447,19 @@ class SearchClient:
     async def search_rules(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         search_rules_params: Optional[SearchRulesParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRulesResponse:
         """
-        Search for rules in your index. You can control the search with parameters. To list all rules, send an empty request body.
+        Searches for rules in your index.
 
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param search_rules_params:
         :type search_rules_params: SearchRulesParams
@@ -4444,18 +4475,19 @@ class SearchClient:
     async def search_single_index_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         search_params: Optional[SearchParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return records that match the query.
+        Searches a single index and return matching search results (_hits_).  This method lets you retrieve up to 1,000 hits. If you need more, use the [`browse` operation](#tag/Search/operation/browse) or increase the `paginatedLimitedTo` index setting.
 
         Required API Key ACLs:
           - search
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param search_params:
         :type search_params: SearchParams
@@ -4487,18 +4519,19 @@ class SearchClient:
     async def search_single_index(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         search_params: Optional[SearchParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchResponse:
         """
-        Return records that match the query.
+        Searches a single index and return matching search results (_hits_).  This method lets you retrieve up to 1,000 hits. If you need more, use the [`browse` operation](#tag/Search/operation/browse) or increase the `paginatedLimitedTo` index setting.
 
         Required API Key ACLs:
           - search
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param search_params:
         :type search_params: SearchParams
@@ -4514,7 +4547,8 @@ class SearchClient:
     async def search_synonyms_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         search_synonyms_params: Annotated[
             Optional[SearchSynonymsParams],
@@ -4523,12 +4557,12 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search for synonyms in your index. You can control and filter the search with parameters. To get all synonyms, send an empty request body.
+        Searches for synonyms in your index.
 
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param search_synonyms_params: Body of the `searchSynonyms` operation.
         :type search_synonyms_params: SearchSynonymsParams
@@ -4560,7 +4594,8 @@ class SearchClient:
     async def search_synonyms(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         search_synonyms_params: Annotated[
             Optional[SearchSynonymsParams],
@@ -4569,12 +4604,12 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchSynonymsResponse:
         """
-        Search for synonyms in your index. You can control and filter the search with parameters. To get all synonyms, send an empty request body.
+        Searches for synonyms in your index.
 
         Required API Key ACLs:
           - settings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param search_synonyms_params: Body of the `searchSynonyms` operation.
         :type search_synonyms_params: SearchSynonymsParams
@@ -4593,7 +4628,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time. To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
+        Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.  To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
 
         Required API Key ACLs:
           - admin
@@ -4629,7 +4664,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchUserIdsResponse:
         """
-        Since it can take up to a few seconds to get the data from the different clusters, the response isn't real-time. To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
+        Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.  To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
 
         Required API Key ACLs:
           - admin
@@ -4651,7 +4686,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Set stop word settings for a specific language.
+        Turns standard stop word dictionary entries on or off for a given language.
 
         Required API Key ACLs:
           - editSettings
@@ -4687,7 +4722,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        Set stop word settings for a specific language.
+        Turns standard stop word dictionary entries on or off for a given language.
 
         Required API Key ACLs:
           - editSettings
@@ -4706,28 +4741,27 @@ class SearchClient:
     async def set_settings_with_http_info(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         index_settings: IndexSettings,
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update the specified [index settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/). Specifying null for a setting resets it to its default value.
+        Update the specified index settings.  Index settings that you don't specify are left unchanged. Specify `null` to reset a setting to its default value.  For best performance, update the index settings before you add new records to your index.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param index_settings: (required)
         :type index_settings: IndexSettings
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -4768,28 +4802,27 @@ class SearchClient:
     async def set_settings(
         self,
         index_name: Annotated[
-            StrictStr, Field(description="Index on which to perform the request.")
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
         ],
         index_settings: IndexSettings,
         forward_to_replicas: Annotated[
             Optional[StrictBool],
-            Field(
-                description="Indicates whether changed index settings are forwarded to the replica indices."
-            ),
+            Field(description="Whether changes are applied to replica indices."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
-        Update the specified [index settings](https://www.algolia.com/doc/api-reference/settings-api-parameters/). Specifying null for a setting resets it to its default value.
+        Update the specified index settings.  Index settings that you don't specify are left unchanged. Specify `null` to reset a setting to its default value.  For best performance, update the index settings before you add new records to your index.
 
         Required API Key ACLs:
           - editSettings
 
-        :param index_name: Index on which to perform the request. (required)
+        :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param index_settings: (required)
         :type index_settings: IndexSettings
-        :param forward_to_replicas: Indicates whether changed index settings are forwarded to the replica indices.
+        :param forward_to_replicas: Whether changes are applied to replica indices.
         :type forward_to_replicas: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
@@ -4807,7 +4840,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Replace the permissions of an existing API key. Any unspecified parameter resets that permission to its default value. The request must be authenticated with the admin API key.
+        Replaces the permissions of an existing API key.  Any unspecified attribute resets that attribute to its default value.
 
         Required API Key ACLs:
           - admin
@@ -4851,7 +4884,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdateApiKeyResponse:
         """
-        Replace the permissions of an existing API key. Any unspecified parameter resets that permission to its default value. The request must be authenticated with the admin API key.
+        Replaces the permissions of an existing API key.  Any unspecified attribute resets that attribute to its default value.
 
         Required API Key ACLs:
           - admin

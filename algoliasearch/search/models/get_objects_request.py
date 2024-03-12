@@ -13,18 +13,19 @@ from pydantic import BaseModel, Field, StrictStr
 
 class GetObjectsRequest(BaseModel):
     """
-    Record retrieval operation.
+    Request body for retrieving records.
     """
 
     attributes_to_retrieve: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Attributes to retrieve. If not specified, all retrievable attributes are returned.",
+        description="Attributes to retrieve. If not specified, all retrievable attributes are returned. ",
         alias="attributesToRetrieve",
     )
-    object_id: StrictStr = Field(description="Record's objectID.", alias="objectID")
+    object_id: StrictStr = Field(
+        description="Object ID for the record to retrieve.", alias="objectID"
+    )
     index_name: StrictStr = Field(
-        description="Name of the index containing the required records.",
-        alias="indexName",
+        description="Index from which to retrieve the records.", alias="indexName"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

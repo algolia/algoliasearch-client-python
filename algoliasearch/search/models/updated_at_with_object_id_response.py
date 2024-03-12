@@ -18,7 +18,7 @@ class UpdatedAtWithObjectIdResponse(BaseModel):
 
     task_id: Optional[StrictInt] = Field(
         default=None,
-        description="Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`. ",
+        description="Unique identifier of a task.  A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the [`task` operation](#tag/Indices/operation/getTask) and this `taskID`. ",
         alias="taskID",
     )
     updated_at: Optional[StrictStr] = Field(
@@ -27,7 +27,7 @@ class UpdatedAtWithObjectIdResponse(BaseModel):
         alias="updatedAt",
     )
     object_id: Optional[StrictStr] = Field(
-        default=None, description="Unique object identifier.", alias="objectID"
+        default=None, description="Unique record identifier.", alias="objectID"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

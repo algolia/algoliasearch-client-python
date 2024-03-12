@@ -15,7 +15,7 @@ from algoliasearch.search.models.automatic_facet_filter import AutomaticFacetFil
 
 class AutomaticFacetFilters(BaseModel):
     """
-    Names of facets to which automatic filtering must be applied; they must match the facet name of a facet value placeholder in the query pattern.
+    Filter to be applied to the search.  You can use this to respond to search queries that match a facet value. For example, if users search for \"comedy\", which matches a facet value of the \"genre\" facet, you can filter the results to show the top-ranked comedy movies.
     """
 
     oneof_schema_1_validator: Optional[List[AutomaticFacetFilter]] = None

@@ -13,11 +13,11 @@ from pydantic import BaseModel, Field, StrictStr
 
 class ConsequenceHide(BaseModel):
     """
-    Unique identifier of the record to hide.
+    Object ID of the record to hide.
     """
 
     object_id: StrictStr = Field(
-        description="Unique object identifier.", alias="objectID"
+        description="Unique record identifier.", alias="objectID"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

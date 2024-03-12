@@ -21,11 +21,11 @@ class HighlightResult(BaseModel):
     oneof_schema_1_validator: Optional[HighlightResultOption] = None
     oneof_schema_2_validator: Optional[Dict[str, HighlightResultOption]] = Field(
         default=None,
-        description="Show highlighted section and words matched on a query.",
+        description="Surround words that match the query with HTML tags for highlighting.",
     )
     oneof_schema_3_validator: Optional[List[HighlightResultOption]] = Field(
         default=None,
-        description="Show highlighted section and words matched on a query.",
+        description="Surround words that match the query with HTML tags for highlighting.",
     )
     actual_instance: Optional[
         Union[

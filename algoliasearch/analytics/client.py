@@ -486,18 +486,14 @@ class AnalyticsClient:
 
     async def get_average_click_position_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -513,11 +509,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -553,18 +549,14 @@ class AnalyticsClient:
 
     async def get_average_click_position(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -580,11 +572,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -599,18 +591,14 @@ class AnalyticsClient:
 
     async def get_click_positions_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -626,11 +614,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -666,18 +654,14 @@ class AnalyticsClient:
 
     async def get_click_positions(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -693,11 +677,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -712,18 +696,14 @@ class AnalyticsClient:
 
     async def get_click_through_rate_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -739,11 +719,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -779,18 +759,14 @@ class AnalyticsClient:
 
     async def get_click_through_rate(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -806,11 +782,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -825,18 +801,14 @@ class AnalyticsClient:
 
     async def get_conversation_rate_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -852,11 +824,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -892,18 +864,14 @@ class AnalyticsClient:
 
     async def get_conversation_rate(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -919,11 +887,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -938,18 +906,14 @@ class AnalyticsClient:
 
     async def get_no_click_rate_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -965,11 +929,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1005,18 +969,14 @@ class AnalyticsClient:
 
     async def get_no_click_rate(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1032,11 +992,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1051,18 +1011,14 @@ class AnalyticsClient:
 
     async def get_no_results_rate_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1078,11 +1034,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1118,18 +1074,14 @@ class AnalyticsClient:
 
     async def get_no_results_rate(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1145,11 +1097,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1164,18 +1116,14 @@ class AnalyticsClient:
 
     async def get_searches_count_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1191,11 +1139,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1231,18 +1179,14 @@ class AnalyticsClient:
 
     async def get_searches_count(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1258,11 +1202,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1277,28 +1221,21 @@ class AnalyticsClient:
 
     async def get_searches_no_clicks_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1314,15 +1251,15 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1362,28 +1299,21 @@ class AnalyticsClient:
 
     async def get_searches_no_clicks(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1399,15 +1329,15 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1422,28 +1352,21 @@ class AnalyticsClient:
 
     async def get_searches_no_results_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1459,15 +1382,15 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1507,28 +1430,21 @@ class AnalyticsClient:
 
     async def get_searches_no_results(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1544,15 +1460,15 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1567,7 +1483,7 @@ class AnalyticsClient:
 
     async def get_status_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1576,7 +1492,7 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1602,7 +1518,7 @@ class AnalyticsClient:
 
     async def get_status(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetStatusResponse:
         """
@@ -1611,7 +1527,7 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetStatusResponse' result object.
@@ -1622,28 +1538,21 @@ class AnalyticsClient:
 
     async def get_top_countries_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1659,15 +1568,15 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1707,28 +1616,21 @@ class AnalyticsClient:
 
     async def get_top_countries(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1744,15 +1646,15 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1767,29 +1669,22 @@ class AnalyticsClient:
 
     async def get_top_filter_attributes_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1805,17 +1700,17 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param search: User query.
         :type search: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1857,29 +1752,22 @@ class AnalyticsClient:
 
     async def get_top_filter_attributes(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1895,17 +1783,17 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param search: User query.
         :type search: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -1928,29 +1816,22 @@ class AnalyticsClient:
     async def get_top_filter_for_attribute_with_http_info(
         self,
         attribute: Annotated[StrictStr, Field(description="Attribute name.")],
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1968,17 +1849,17 @@ class AnalyticsClient:
 
         :param attribute: Attribute name. (required)
         :type attribute: str
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param search: User query.
         :type search: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -2028,29 +1909,22 @@ class AnalyticsClient:
     async def get_top_filter_for_attribute(
         self,
         attribute: Annotated[StrictStr, Field(description="Attribute name.")],
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2068,17 +1942,17 @@ class AnalyticsClient:
 
         :param attribute: Attribute name. (required)
         :type attribute: str
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param search: User query.
         :type search: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -2101,29 +1975,22 @@ class AnalyticsClient:
 
     async def get_top_filters_no_results_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2139,17 +2006,17 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param search: User query.
         :type search: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -2191,29 +2058,22 @@ class AnalyticsClient:
 
     async def get_top_filters_no_results(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2229,17 +2089,17 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param search: User query.
         :type search: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -2261,7 +2121,7 @@ class AnalyticsClient:
 
     async def get_top_hits_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
         click_analytics: Annotated[
             Optional[StrictBool],
@@ -2270,26 +2130,19 @@ class AnalyticsClient:
             ),
         ] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2305,19 +2158,19 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param search: User query.
         :type search: str
         :param click_analytics: Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
         :type click_analytics: bool
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -2361,7 +2214,7 @@ class AnalyticsClient:
 
     async def get_top_hits(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
         click_analytics: Annotated[
             Optional[StrictBool],
@@ -2370,26 +2223,19 @@ class AnalyticsClient:
             ),
         ] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2405,19 +2251,19 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param search: User query.
         :type search: str
         :param click_analytics: Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
         :type click_analytics: bool
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -2440,7 +2286,7 @@ class AnalyticsClient:
 
     async def get_top_searches_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         click_analytics: Annotated[
             Optional[StrictBool],
             Field(
@@ -2448,16 +2294,12 @@ class AnalyticsClient:
             ),
         ] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         order_by: Annotated[
             Optional[OrderBy], Field(description="Reorder the results.")
@@ -2469,14 +2311,11 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2492,21 +2331,21 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param click_analytics: Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
         :type click_analytics: bool
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param order_by: Reorder the results.
         :type order_by: OrderBy
         :param direction: Sorting direction of the results: ascending or descending.
         :type direction: Direction
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -2552,7 +2391,7 @@ class AnalyticsClient:
 
     async def get_top_searches(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         click_analytics: Annotated[
             Optional[StrictBool],
             Field(
@@ -2560,16 +2399,12 @@ class AnalyticsClient:
             ),
         ] = None,
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         order_by: Annotated[
             Optional[OrderBy], Field(description="Reorder the results.")
@@ -2581,14 +2416,11 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2604,21 +2436,21 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
         :param click_analytics: Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
         :type click_analytics: bool
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param order_by: Reorder the results.
         :type order_by: OrderBy
         :param direction: Sorting direction of the results: ascending or descending.
         :type direction: Direction
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -2642,18 +2474,14 @@ class AnalyticsClient:
 
     async def get_users_count_with_http_info(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2669,11 +2497,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str
@@ -2709,18 +2537,14 @@ class AnalyticsClient:
 
     async def get_users_count(
         self,
-        index: Annotated[StrictStr, Field(description="Index name to target.")],
+        index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="Start date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[Annotated[str, Field(strict=True)]],
-            Field(
-                description="End date (a string in the format `YYYY-MM-DD`) of the period to analyze."
-            ),
+            Optional[str],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2736,11 +2560,11 @@ class AnalyticsClient:
         Required API Key ACLs:
           - analytics
 
-        :param index: Index name to target. (required)
+        :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
-        :param end_date: End date (a string in the format `YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
         :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
         :type tags: str

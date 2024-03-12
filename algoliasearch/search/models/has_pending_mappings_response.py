@@ -17,7 +17,7 @@ class HasPendingMappingsResponse(BaseModel):
     """
 
     pending: StrictBool = Field(
-        description="Indicates whether there are clusters undergoing migration, creation, or deletion."
+        description="Whether there are clusters undergoing migration, creation, or deletion."
     )
     clusters: Optional[Dict[str, List[StrictStr]]] = Field(
         default=None,

@@ -18,10 +18,10 @@ class FacetHits(BaseModel):
 
     value: StrictStr = Field(description="Facet value.")
     highlighted: StrictStr = Field(
-        description="Markup text with `facetQuery` matches highlighted."
+        description="Highlighted attribute value, including HTML tags."
     )
     count: StrictInt = Field(
-        description="Number of records containing this facet value. This takes into account the extra search parameters specified in the query. Like for a regular search query, the [counts may not be exhaustive](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-)."
+        description="Number of records with this facet value. [The count may be approximated](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-)."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

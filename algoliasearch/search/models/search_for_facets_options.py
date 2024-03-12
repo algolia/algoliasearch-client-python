@@ -19,7 +19,7 @@ class SearchForFacetsOptions(BaseModel):
     """
 
     facet: StrictStr = Field(description="Facet name.")
-    index_name: StrictStr = Field(description="Algolia index name.", alias="indexName")
+    index_name: StrictStr = Field(description="Index name.", alias="indexName")
     facet_query: Optional[StrictStr] = Field(
         default="",
         description="Text to search inside the facet's values.",
@@ -27,7 +27,7 @@ class SearchForFacetsOptions(BaseModel):
     )
     max_facet_hits: Optional[Annotated[int, Field(le=100, strict=True)]] = Field(
         default=10,
-        description="Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).",
+        description="Maximum number of facet values to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).",
         alias="maxFacetHits",
     )
     type: SearchTypeFacet

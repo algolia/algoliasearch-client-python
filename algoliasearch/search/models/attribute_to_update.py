@@ -19,7 +19,7 @@ class AttributeToUpdate(BaseModel):
     """
 
     oneof_schema_1_validator: Optional[StrictStr] = Field(
-        default=None, description="Value of the attribute to be updated."
+        default=None, description="Value of the attribute to update."
     )
     oneof_schema_2_validator: Optional[BuiltInOperation] = None
     actual_instance: Optional[Union[BuiltInOperation, str]] = None

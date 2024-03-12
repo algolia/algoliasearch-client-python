@@ -15,10 +15,15 @@ from algoliasearch.search.models.around_radius_all import AroundRadiusAll
 
 class AroundRadius(BaseModel):
     """
-    [Maximum radius](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#increase-the-search-radius) for a geographical search (in meters).
+    Maximum radius for a search around a central location.  This parameter works in combination with the `aroundLatLng` and `aroundLatLngViaIP` parameters. By default, the search radius is determined automatically from the density of hits around the central location. The search radius is small if there are many hits close to the central coordinates.
     """
 
-    oneof_schema_1_validator: Optional[Annotated[int, Field(strict=True, ge=1)]] = None
+    oneof_schema_1_validator: Optional[
+        Annotated[int, Field(strict=True, ge=1)]
+    ] = Field(
+        default=None,
+        description="Maximum search radius around a central location in meters.",
+    )
     oneof_schema_2_validator: Optional[AroundRadiusAll] = None
     actual_instance: Optional[Union[AroundRadiusAll, int]] = None
 

@@ -12,7 +12,7 @@ from typing import Self
 
 class Action(str, Enum):
     """
-    Type of batch operation.
+    Type of indexing operation.
     """
 
     """

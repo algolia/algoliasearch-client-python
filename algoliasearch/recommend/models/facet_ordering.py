@@ -16,12 +16,12 @@ from algoliasearch.recommend.models.value import Value
 
 class FacetOrdering(BaseModel):
     """
-    Defines the ordering of facets (widgets).
+    Order of facet names and facet values in your UI.
     """
 
     facets: Optional[Facets] = None
     values: Optional[Dict[str, Value]] = Field(
-        default=None, description="Ordering of facet values within an individual facet."
+        default=None, description="Order of facet values. One object for each facet."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

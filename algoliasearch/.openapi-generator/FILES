@@ -125,6 +125,7 @@ search/models/save_object_response.py
 search/models/save_synonym_response.py
 search/models/scope_type.py
 search/models/search_dictionary_entries_params.py
+search/models/search_dictionary_entries_response.py
 search/models/search_for_facet_values_request.py
 search/models/search_for_facet_values_response.py
 search/models/search_for_facets.py

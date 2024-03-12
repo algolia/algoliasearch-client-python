@@ -19,9 +19,7 @@ class RecommendationsHits(BaseModel):
     """
 
     hits: List[RecommendationsHit]
-    query: Optional[StrictStr] = Field(
-        default="", description="Text to search for in an index."
-    )
+    query: Optional[StrictStr] = Field(default="", description="Search query.")
     params: Optional[StrictStr] = Field(
         default=None, description="URL-encoded string of all search parameters."
     )

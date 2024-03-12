@@ -12,7 +12,7 @@ from typing import Self
 
 class OperationType(str, Enum):
     """
-    Operation to perform (_move_ or _copy_).
+    Operation to perform on the index.
     """
 
     """

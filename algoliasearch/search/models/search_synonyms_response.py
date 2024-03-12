@@ -18,10 +18,8 @@ class SearchSynonymsResponse(BaseModel):
     SearchSynonymsResponse
     """
 
-    hits: List[SynonymHit] = Field(description="Synonym objects.")
-    nb_hits: StrictInt = Field(
-        description="Number of hits the search query matched.", alias="nbHits"
-    )
+    hits: List[SynonymHit] = Field(description="Matching synonyms.")
+    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["hits", "nbHits"]
 

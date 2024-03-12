@@ -17,7 +17,7 @@ class CreatedAtResponse(BaseModel):
     """
 
     created_at: StrictStr = Field(
-        description="Timestamp of creation in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.",
+        description="Timestamp of creation in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.",
         alias="createdAt",
     )
 

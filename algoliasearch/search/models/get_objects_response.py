@@ -16,7 +16,7 @@ class GetObjectsResponse(BaseModel):
     GetObjectsResponse
     """
 
-    results: List[Dict[str, Any]] = Field(description="Retrieved results.")
+    results: List[Dict[str, Any]] = Field(description="Retrieved records.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

@@ -21,11 +21,11 @@ class SnippetResult(BaseModel):
     oneof_schema_1_validator: Optional[SnippetResultOption] = None
     oneof_schema_2_validator: Optional[Dict[str, SnippetResultOption]] = Field(
         default=None,
-        description="Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.",
+        description="Snippets that show the context around a matching search query.",
     )
     oneof_schema_3_validator: Optional[List[SnippetResultOption]] = Field(
         default=None,
-        description="Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.",
+        description="Snippets that show the context around a matching search query.",
     )
     actual_instance: Optional[
         Union[

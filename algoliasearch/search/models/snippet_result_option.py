@@ -15,11 +15,11 @@ from algoliasearch.search.models.match_level import MatchLevel
 
 class SnippetResultOption(BaseModel):
     """
-    Snippeted attributes show parts of the matched attributes. Only returned when attributesToSnippet is non-empty.
+    Snippets that show the context around a matching search query.
     """
 
     value: StrictStr = Field(
-        description="Markup text with `facetQuery` matches highlighted."
+        description="Highlighted attribute value, including HTML tags."
     )
     match_level: MatchLevel = Field(alias="matchLevel")
 

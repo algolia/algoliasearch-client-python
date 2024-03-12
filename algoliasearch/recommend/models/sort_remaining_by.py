@@ -12,7 +12,7 @@ from typing import Self
 
 class SortRemainingBy(str, Enum):
     """
-    How to display the remaining items:    - `count`: facet count (descending).   - `alpha`: alphabetical (ascending).   - `hidden`: show only pinned values.
+    Order of facet values that aren't explicitly positioned with the `order` setting.  <dl> <dt><code>count</code></dt> <dd> Order remaining facet values by decreasing count. The count is the number of matching records containing this facet value. </dd> <dt><code>alpha</code></dt> <dd>Sort facet values alphabetically.</dd> <dt><code>hidden</code></dt> <dd>Don't show facet values that aren't explicitly positioned.</dd> </dl>.
     """
 
     """

@@ -13,12 +13,12 @@ from pydantic import BaseModel, Field, StrictInt
 
 class DictionaryLanguage(BaseModel):
     """
-    Custom entries for a dictionary.
+    Dictionary type. If `null`, this dictionary type isn't supported for the language.
     """
 
     nb_custom_entries: Optional[StrictInt] = Field(
         default=None,
-        description="If `0`, the dictionary hasn't been customized and only contains standard entries provided by Algolia. If `null`, that feature isn't available or isn't supported for that language. ",
+        description="Number of custom dictionary entries.",
         alias="nbCustomEntries",
     )
 

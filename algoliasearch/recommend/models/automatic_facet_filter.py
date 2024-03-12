@@ -13,19 +13,19 @@ from pydantic import BaseModel, Field, StrictBool, StrictInt, StrictStr
 
 class AutomaticFacetFilter(BaseModel):
     """
-    Automatic facet Filter.
+    Filter or optional filter to be applied to the search.
     """
 
     facet: StrictStr = Field(
-        description="Attribute to filter on. This must match a facet placeholder in the Rule's pattern."
+        description="Facet name to be applied as filter. The name must match placeholders in the `pattern` parameter. For example, with `pattern: {facet:genre}`, `automaticFacetFilters` must be `genre`. "
     )
     score: Optional[StrictInt] = Field(
         default=1,
-        description="Score for the filter. Typically used for optional or disjunctive filters.",
+        description="Filter scores to give different weights to individual filters.",
     )
     disjunctive: Optional[StrictBool] = Field(
         default=False,
-        description="Whether the filter is disjunctive (true) or conjunctive (false).",
+        description="Whether the filter is disjunctive or conjunctive.  If true the filter has multiple matches, multiple occurences are combined with the logical `OR` operation. If false, multiple occurences are combined with the logical `AND` operation. ",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

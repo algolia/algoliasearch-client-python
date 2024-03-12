@@ -17,10 +17,11 @@ class TimeRange(BaseModel):
     """
 
     var_from: StrictInt = Field(
-        description="Lower bound of the time range (Unix timestamp).", alias="from"
+        description="When the rule should start to be active, in Unix epoch time.",
+        alias="from",
     )
     until: StrictInt = Field(
-        description="Upper bound of the time range (Unix timestamp)."
+        description="When the rule should stop to be active, in Unix epoch time."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

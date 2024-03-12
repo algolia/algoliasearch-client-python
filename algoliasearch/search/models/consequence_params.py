@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictBool, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, Field, StrictBool, StrictInt, StrictStr
 
 from algoliasearch.search.models.advanced_syntax_features import AdvancedSyntaxFeatures
 from algoliasearch.search.models.alternatives_as_exact import AlternativesAsExact
@@ -44,12 +44,12 @@ class ConsequenceParams(BaseModel):
 
     similar_query: Optional[StrictStr] = Field(
         default="",
-        description="Overrides the query parameter and performs a more generic search.",
+        description="Keywords to be used instead of the search query to conduct a more broader search.  Using the `similarQuery` parameter changes other settings:  - `queryType` is set to `prefixNone`. - `removeStopWords` is set to true. - `words` is set as the first ranking criterion. - All remaining words are treated as `optionalWords`.  Since the `similarQuery` is supposed to do a broad search, they usually return many results. Combine it with `filters` to narrow down the list of results. ",
         alias="similarQuery",
     )
     filters: Optional[StrictStr] = Field(
         default="",
-        description="[Filter](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) the query with numeric, facet, or tag filters. ",
+        description="Filter the search so that only records with matching values are included in the results.  These filters are supported:  - **Numeric filters.** `<facet> <op> <number>`, where `<op>` is one of `<`, `<=`, `=`, `!=`, `>`, `>=`. - **Ranges.** `<facet>:<lower> TO <upper>` where `<lower>` and `<upper>` are the lower and upper limits of the range (inclusive). - **Facet filters.** `<facet>:<value>` where `<facet>` is a facet attribute (case-sensitive) and `<value>` a facet value. - **Tag filters.** `_tags:<value>` or just `<value>` (case-sensitive). - **Boolean filters.** `<facet>: true | false`.  You can combine filters with `AND`, `OR`, and `NOT` operators with the following restrictions:  - You can only combine filters of the same type with `OR`.   **Not supported:** `facet:value OR num > 3`. - You can't use `NOT` with combinations of filters.   **Not supported:** `NOT(facet:value OR facet:value)` - You can't combine conjunctions (`AND`) with `OR`.   **Not supported:** `facet:value OR (facet:value AND facet:value)`  Use quotes around your filters, if the facet attribute name or facet value has spaces, keywords (`OR`, `AND`, `NOT`), or quotes. If a facet attribute is an array, the filter matches if it matches at least one element of the array.  For more information, see [Filters](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/). ",
     )
     facet_filters: Optional[FacetFilters] = Field(default=None, alias="facetFilters")
     optional_filters: Optional[OptionalFilters] = Field(
@@ -61,42 +61,41 @@ class ConsequenceParams(BaseModel):
     tag_filters: Optional[TagFilters] = Field(default=None, alias="tagFilters")
     sum_or_filters_scores: Optional[StrictBool] = Field(
         default=False,
-        description="Determines how to calculate [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores). If `false`, maximum score is kept. If `true`, score is summed. ",
+        description="Whether to sum all filter scores.  If true, all filter scores are summed. Otherwise, the maximum filter score is kept. For more information, see [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores). ",
         alias="sumOrFiltersScores",
     )
     restrict_searchable_attributes: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Restricts a query to only look at a subset of your [searchable attributes](https://www.algolia.com/doc/guides/managing-results/must-do/searchable-attributes/).",
+        description="Restricts a search to a subset of your searchable attributes.",
         alias="restrictSearchableAttributes",
     )
     facets: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Returns [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts), their facet values, and the number of matching facet values.",
+        description="Facets for which to retrieve facet values that match the search criteria and the number of matching facet values.  To retrieve all facets, use the wildcard character `*`. For more information, see [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts). ",
     )
     faceting_after_distinct: Optional[StrictBool] = Field(
         default=False,
-        description="Forces faceting to be applied after [de-duplication](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/) (with the distinct feature). Alternatively, the `afterDistinct` [modifier](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) of `attributesForFaceting` allows for more granular control. ",
+        description="Whether faceting should be applied after deduplication with `distinct`.  This leads to accurate facet counts when using faceting in combination with `distinct`. It's usually better to use `afterDistinct` modifiers in the `attributesForFaceting` setting, as `facetingAfterDistinct` only computes correct facet counts if all records have the same facet values for the `attributeForDistinct`. ",
         alias="facetingAfterDistinct",
     )
-    page: Optional[StrictInt] = Field(
-        default=0, description="Page to retrieve (the first page is `0`, not `1`)."
+    page: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
+        default=0, description="Page of search results to retrieve."
     )
     offset: Optional[StrictInt] = Field(
-        default=None,
-        description="Specifies the offset of the first hit to return. > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length). ",
+        default=None, description="Position of the first hit to retrieve."
     )
     length: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
         default=None,
-        description="Sets the number of hits to retrieve (for use with `offset`). > **Note**: Using `page` and `hitsPerPage` is the recommended method for [paging results](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/). However, you can use `offset` and `length` to implement [an alternative approach to paging](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/pagination/js/#retrieving-a-subset-of-records-with-offset-and-length). ",
+        description="Number of hits to retrieve (used in combination with `offset`).",
     )
     around_lat_lng: Optional[StrictStr] = Field(
         default="",
-        description="Search for entries [around a central location](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filter-around-a-central-point), enabling a geographical search within a circular area.",
+        description="Coordinates for the center of a circle, expressed as a comma-separated string of latitude and longitude.  Only records included within circle around this central location are included in the results. The radius of the circle is determined by the `aroundRadius` and `minimumAroundRadius` settings. This parameter is ignored if you also specify `insidePolygon` or `insideBoundingBox`. ",
         alias="aroundLatLng",
     )
     around_lat_lng_via_ip: Optional[StrictBool] = Field(
         default=False,
-        description="Search for entries around a location. The location is automatically computed from the requester's IP address.",
+        description="Whether to obtain the coordinates from the request's IP address.",
         alias="aroundLatLngViaIP",
     )
     around_radius: Optional[AroundRadius] = Field(default=None, alias="aroundRadius")
@@ -105,60 +104,75 @@ class ConsequenceParams(BaseModel):
     )
     minimum_around_radius: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
         default=None,
-        description="Minimum radius (in meters) used for a geographical search when `aroundRadius` isn't set.",
+        description="Minimum radius (in meters) for a search around a location when `aroundRadius` isn't set.",
         alias="minimumAroundRadius",
     )
-    inside_bounding_box: Optional[List[List[Union[StrictFloat, StrictInt]]]] = Field(
+    inside_bounding_box: Optional[
+        List[
+            List[
+                Union[
+                    Annotated[float, Field(strict=True)],
+                    Annotated[int, Field(strict=True)],
+                ]
+            ]
+        ]
+    ] = Field(
         default=None,
-        description="Search inside a [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).",
+        description="Coordinates for a rectangular area in which to search.  Each bounding box is defined by the two opposite points of its diagonal, and expressed as latitude and longitude pair: `[p1 lat, p1 long, p2 lat, p2 long]`. Provide multiple bounding boxes as nested arrays. For more information, see [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas). ",
         alias="insideBoundingBox",
     )
-    inside_polygon: Optional[List[List[Union[StrictFloat, StrictInt]]]] = Field(
+    inside_polygon: Optional[
+        List[
+            List[
+                Union[
+                    Annotated[float, Field(strict=True)],
+                    Annotated[int, Field(strict=True)],
+                ]
+            ]
+        ]
+    ] = Field(
         default=None,
-        description="Search inside a [polygon](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas) (in geographical coordinates).",
+        description="Coordinates of a polygon in which to search.  Polygons are defined by 3 to 10,000 points. Each point is represented by its latitude and longitude. Provide multiple polygons as nested arrays. For more information, see [filtering inside polygons](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas). This parameter is ignored, if you also specify `insideBoundingBox`. ",
         alias="insidePolygon",
     )
     natural_languages: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Changes the default values of parameters that work best for a natural language query, such as `ignorePlurals`, `removeStopWords`, `removeWordsIfNoResults`, `analyticsTags`, and `ruleContexts`. These parameters work well together when the query consists of fuller natural language strings instead of keywords, for example when processing voice search queries.",
+        description="ISO language codes that adjust settings that are useful for processing natural language queries (as opposed to keyword searches):  - Sets `removeStopWords` and `ignorePlurals` to the list of provided languages. - Sets `removeWordsIfNoResults` to `allOptional`. - Adds a `natural_language` attribute to `ruleContexts` and `analyticsTags`. ",
         alias="naturalLanguages",
     )
     rule_contexts: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Assigns [rule contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context) to search queries.",
+        description="Assigns a rule context to the search query.  [Rule contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context) are strings that you can use to trigger matching rules. ",
         alias="ruleContexts",
     )
-    personalization_impact: Optional[StrictInt] = Field(
+    personalization_impact: Optional[
+        Annotated[int, Field(le=100, strict=True, ge=0)]
+    ] = Field(
         default=100,
-        description="Defines how much [Personalization affects results](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).",
+        description="Impact that Personalization should have on this search.  The higher this value is, the more Personalization determines the ranking compared to other factors. For more information, see [Understanding Personalization impact](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact). ",
         alias="personalizationImpact",
     )
     user_token: Optional[StrictStr] = Field(
         default=None,
-        description="Associates a [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) with the current search.",
+        description="Unique pseudonymous or anonymous user identifier.  This helps with analytics and click and conversion events. For more information, see [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
         alias="userToken",
     )
     get_ranking_info: Optional[StrictBool] = Field(
         default=False,
-        description="Incidates whether the search response includes [detailed ranking information](https://www.algolia.com/doc/guides/building-search-ui/going-further/backend-search/in-depth/understanding-the-api-response/#ranking-information).",
+        description="Whether the search response should include detailed ranking information.",
         alias="getRankingInfo",
-    )
-    explain: Optional[List[StrictStr]] = Field(
-        default=None,
-        description="Enriches the API's response with information about how the query was processed.",
     )
     synonyms: Optional[StrictBool] = Field(
         default=True,
-        description="Whether to take into account an index's synonyms for a particular search.",
+        description="Whether to take into account an index's synonyms for this search.",
     )
     click_analytics: Optional[StrictBool] = Field(
         default=False,
-        description="Indicates whether a query ID parameter is included in the search response. This is required for [tracking click and conversion events](https://www.algolia.com/doc/guides/sending-events/concepts/event-types/#events-related-to-algolia-requests).",
+        description="Whether to include a `queryID` attribute in the response.  The query ID is a unique identifier for a search query and is required for tracking [click and conversion events](https://www.algolia.com/guides/sending-events/getting-started/). ",
         alias="clickAnalytics",
     )
     analytics: Optional[StrictBool] = Field(
-        default=True,
-        description="Indicates whether this query will be included in [analytics](https://www.algolia.com/doc/guides/search-analytics/guides/exclude-queries/).",
+        default=True, description="Whether this search will be included in Analytics."
     )
     analytics_tags: Optional[List[StrictStr]] = Field(
         default=None,
@@ -167,56 +181,51 @@ class ConsequenceParams(BaseModel):
     )
     percentile_computation: Optional[StrictBool] = Field(
         default=True,
-        description="Whether to include or exclude a query from the processing-time percentile computation.",
+        description="Whether to include this search when calculating processing-time percentiles.",
         alias="percentileComputation",
     )
     enable_ab_test: Optional[StrictBool] = Field(
         default=True,
-        description="Incidates whether this search will be considered in A/B testing.",
+        description="Whether to enable A/B testing for this search.",
         alias="enableABTest",
-    )
-    attributes_for_faceting: Optional[List[StrictStr]] = Field(
-        default=None,
-        description="Attributes used for [faceting](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/) and the [modifiers](https://www.algolia.com/doc/api-reference/api-parameters/attributesForFaceting/#modifiers) that can be applied: `filterOnly`, `searchable`, and `afterDistinct`. ",
-        alias="attributesForFaceting",
     )
     attributes_to_retrieve: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Attributes to include in the API response. To reduce the size of your response, you can retrieve only some of the attributes. By default, the response includes all attributes.",
+        description='Attributes to include in the API response.  To reduce the size of your response, you can retrieve only some of the attributes.  - `*` retrieves all attributes, except attributes included in the `customRanking` and `unretrievableAttributes` settings. - To retrieve all attributes except a specific one, prefix the attribute with a dash and combine it with the `*`: `["*", "-ATTRIBUTE"]`. - The `objectID` attribute is always included. ',
         alias="attributesToRetrieve",
     )
     ranking: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Determines the order in which Algolia [returns your results](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/).",
+        description='Determines the order in which Algolia returns your results.  By default, each entry corresponds to a [ranking criteria](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/). The tie-breaking algorithm sequentially applies each criterion in the order they\'re specified. If you configure a replica index for [sorting by an attribute](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/sort-by-attribute/), you put the sorting attribute at the top of the list.  **Modifiers**  <dl> <dt><code>asc("ATTRIBUTE")</code></dt> <dd>Sort the index by the values of an attribute, in ascending order.</dd> <dt><code>desc("ATTRIBUTE")</code></dt> <dd>Sort the index by the values of an attribute, in descending order.</dd> </dl>  Before you modify the default setting, you should test your changes in the dashboard, and by [A/B testing](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/). ',
     )
     custom_ranking: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Specifies the [Custom ranking criterion](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Use the `asc` and `desc` modifiers to specify the ranking order: ascending or descending. ",
+        description='Attributes to use as [custom ranking](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/).  The custom ranking attributes decide which items are shown first if the other ranking criteria are equal.  Records with missing values for your selected custom ranking attributes are always sorted last. Boolean attributes are sorted based on their alphabetical order.  **Modifiers**  <dl> <dt><code>asc("ATTRIBUTE")</code></dt> <dd>Sort the index by the values of an attribute, in ascending order.</dd> <dt><code>desc("ATTRIBUTE")</code></dt> <dd>Sort the index by the values of an attribute, in descending order.</dd> </dl>  If you use two or more custom ranking attributes, [reduce the precision](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/how-to/controlling-custom-ranking-metrics-precision/) of your first attributes, or the other attributes will never be applied. ',
         alias="customRanking",
     )
     relevancy_strictness: Optional[StrictInt] = Field(
         default=100,
-        description="Relevancy threshold below which less relevant results aren't included in the results.",
+        description="Relevancy threshold below which less relevant results aren't included in the results.  You can only set `relevancyStrictness` on [virtual replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/#what-are-virtual-replicas). Use this setting to strike a balance between the relevance and number of returned results. ",
         alias="relevancyStrictness",
     )
     attributes_to_highlight: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Attributes to highlight. Strings that match the search query in the attributes are highlighted by surrounding them with HTML tags (`highlightPreTag` and `highlightPostTag`).",
+        description="Attributes to highlight.  By default, all searchable attributes are highlighted. Use `*` to highlight all attributes or use an empty array `[]` to turn off highlighting.  With highlighting, strings that match the search query are surrounded by HTML tags defined by `highlightPreTag` and `highlightPostTag`. You can use this to visually highlight matching parts of a search query in your UI.  For more information, see [Highlighting and snippeting](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js/). ",
         alias="attributesToHighlight",
     )
     attributes_to_snippet: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Attributes to _snippet_. 'Snippeting' is shortening the attribute to a certain number of words. If not specified, the attribute is shortened to the 10 words around the matching string but you can specify the number. For example: `body:20`. ",
+        description="Attributes for which to enable snippets.  Snippets provide additional context to matched words. If you enable snippets, they include 10 words, including the matched word. The matched word will also be wrapped by HTML tags for highlighting. You can adjust the number of words with the following notation: `ATTRIBUTE:NUMBER`, where `NUMBER` is the number of words to be extracted. ",
         alias="attributesToSnippet",
     )
     highlight_pre_tag: Optional[StrictStr] = Field(
         default="<em>",
-        description="HTML string to insert before the highlighted parts in all highlight and snippet results.",
+        description="HTML tag to insert before the highlighted parts in all highlighted results and snippets.",
         alias="highlightPreTag",
     )
     highlight_post_tag: Optional[StrictStr] = Field(
         default="</em>",
-        description="HTML string to insert after the highlighted parts in all highlight and snippet results.",
+        description="HTML tag to insert after the highlighted parts in all highlighted results and snippets.",
         alias="highlightPostTag",
     )
     snippet_ellipsis_text: Optional[StrictStr] = Field(
@@ -226,7 +235,7 @@ class ConsequenceParams(BaseModel):
     )
     restrict_highlight_and_snippet_arrays: Optional[StrictBool] = Field(
         default=False,
-        description="Restrict highlighting and snippeting to items that matched the query.",
+        description="Whether to restrict highlighting and snippeting to items that at least partially matched the search query. By default, all items are highlighted and snippeted. ",
         alias="restrictHighlightAndSnippetArrays",
     )
     hits_per_page: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
@@ -234,23 +243,23 @@ class ConsequenceParams(BaseModel):
     )
     min_word_sizefor1_typo: Optional[StrictInt] = Field(
         default=4,
-        description="Minimum number of characters a word in the query string must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).",
+        description="Minimum number of characters a word in the search query must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).",
         alias="minWordSizefor1Typo",
     )
     min_word_sizefor2_typos: Optional[StrictInt] = Field(
         default=8,
-        description="Minimum number of characters a word in the query string must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).",
+        description="Minimum number of characters a word in the search query must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos).",
         alias="minWordSizefor2Typos",
     )
     typo_tolerance: Optional[TypoTolerance] = Field(default=None, alias="typoTolerance")
     allow_typos_on_numeric_tokens: Optional[StrictBool] = Field(
         default=True,
-        description='Whether to allow typos on numbers ("numeric tokens") in the query string.',
+        description="Whether to allow typos on numbers in the search query.  Turn off this setting to reduce the number of irrelevant matches when searching in large sets of similar numbers. ",
         alias="allowTyposOnNumericTokens",
     )
     disable_typo_tolerance_on_attributes: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Attributes for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).",
+        description="Attributes for which you want to turn off [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/).  Returning only exact matches can help when:  - [Searching in hyphenated attributes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/how-to/how-to-search-in-hyphenated-attributes/). - Reducing the number of matches when you have too many.   This can happen with attributes that are long blocks of text, such as product descriptions.  Consider alternatives such as `disableTypoToleranceOnWords` or adding synonyms if your attributes have intentional unusual spellings that might look like typos. ",
         alias="disableTypoToleranceOnAttributes",
     )
     ignore_plurals: Optional[IgnorePlurals] = Field(default=None, alias="ignorePlurals")
@@ -259,27 +268,25 @@ class ConsequenceParams(BaseModel):
     )
     keep_diacritics_on_characters: Optional[StrictStr] = Field(
         default="",
-        description="Characters that the engine shouldn't automatically [normalize](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).",
+        description="Characters for which diacritics should be preserved.  By default, Algolia removes diacritics from letters. For example, `é` becomes `e`. If this causes issues in your search, you can specify characters that should keep their diacritics. ",
         alias="keepDiacriticsOnCharacters",
     )
     query_languages: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Sets your user's search language. This adjusts language-specific settings and features such as `ignorePlurals`, `removeStopWords`, and [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk) word detection.",
+        description="[ISO code](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) for language-specific settings such as plurals, stop words, and word-detection dictionaries.  This setting sets a default list of languages used by the `removeStopWords` and `ignorePlurals` settings. This setting also sets a dictionary for word detection in the logogram-based [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk) languages. To support this, you must place the CJK language **first**.   **You should always specify a query language.** If you don't specify an indexing language, the search engine uses all [supported languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/), or the languages you specified with the `ignorePlurals` or `removeStopWords` parameters. This can lead to unexpected search results. For more information, see [Language-specific configuration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/). ",
         alias="queryLanguages",
     )
     decompound_query: Optional[StrictBool] = Field(
         default=True,
-        description="[Splits compound words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words) into their component word parts in the query. ",
+        description="Whether to split compound words into their building blocks.  For more information, see [Word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words). Word segmentation is supported for these languages: German, Dutch, Finnish, Swedish, and Norwegian. ",
         alias="decompoundQuery",
     )
     enable_rules: Optional[StrictBool] = Field(
-        default=True,
-        description="Incidates whether [Rules](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/) are enabled.",
-        alias="enableRules",
+        default=True, description="Whether to enable rules.", alias="enableRules"
     )
     enable_personalization: Optional[StrictBool] = Field(
         default=False,
-        description="Incidates whether [Personalization](https://www.algolia.com/doc/guides/personalization/what-is-personalization/) is enabled.",
+        description="Whether to enable Personalization.",
         alias="enablePersonalization",
     )
     query_type: Optional[QueryType] = Field(default=None, alias="queryType")
@@ -292,17 +299,17 @@ class ConsequenceParams(BaseModel):
     )
     advanced_syntax: Optional[StrictBool] = Field(
         default=False,
-        description="Enables the [advanced query syntax](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/#advanced-syntax).",
+        description="Whether to support phrase matching and excluding words from search queries.  Use the `advancedSyntaxFeatures` parameter to control which feature is supported. ",
         alias="advancedSyntax",
     )
     optional_words: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Words which should be considered [optional](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words) when found in a query.",
+        description='Words that should be considered optional when found in the query.  By default, records must match all words in the search query to be included in the search results. Adding optional words can help to increase the number of search results by running an additional search query that doesn\'t include the optional words. For example, if the search query is "action video" and "video" is an optional word, the search engine runs two queries. One for "action video" and one for "action". Records that match all words are ranked higher.  For a search query with 4 or more words **and** all its words are optional, the number of matched words required for a record to be included in the search results increases for every 1,000 records:  - If `optionalWords` has less than 10 words, the required number of matched words increases by 1:   results 1 to 1,000 require 1 matched word, results 1,001 to 2000 need 2 matched words. - If `optionalWords` has 10 or more words, the number of required matched words increases by the number of optional words dividied by 5 (rounded down).   For example, with 18 optional words: results 1 to 1,000 require 1 matched word, results 1,001 to 2000 need 4 matched words.  For more information, see [Optional words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words). ',
         alias="optionalWords",
     )
     disable_exact_on_attributes: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Attributes for which you want to [turn off the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).",
+        description="Searchable attributes for which you want to [turn off the Exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).  This can be useful for attributes with long values, where the likelyhood of an exact match is high, such as product descriptions. Turning off the Exact ranking criterion for these attributes favors exact matching on other attributes. This reduces the impact of individual attributes with a lot of content on ranking. ",
         alias="disableExactOnAttributes",
     )
     exact_on_single_word_query: Optional[ExactOnSingleWordQuery] = Field(
@@ -310,48 +317,48 @@ class ConsequenceParams(BaseModel):
     )
     alternatives_as_exact: Optional[List[AlternativesAsExact]] = Field(
         default=None,
-        description="Alternatives that should be considered an exact match by [the exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes).",
+        description='Alternatives of query words that should be considered as exact matches by the Exact ranking criterion.  <dl> <dt><code>ignorePlurals</code></dt> <dd>  Plurals and similar declensions added by the `ignorePlurals` setting are considered exact matches.  </dd> <dt><code>singleWordSynonym</code></dt> <dd> Single-word synonyms, such as "NY/NYC" are considered exact matches. </dd> <dt><code>multiWordsSynonym</code></dt> <dd> Multi-word synonyms, such as "NY/New York" are considered exact matches. </dd> </dl>. ',
         alias="alternativesAsExact",
     )
     advanced_syntax_features: Optional[List[AdvancedSyntaxFeatures]] = Field(
         default=None,
-        description="Allows you to specify which advanced syntax features are active when `advancedSyntax` is enabled.",
+        description='Advanced search syntax features you want to support.  <dl> <dt><code>exactPhrase</code></dt> <dd>  Phrases in quotes must match exactly. For example, `sparkly blue "iPhone case"` only returns records with the exact string "iPhone case".  </dd> <dt><code>excludeWords</code></dt> <dd>  Query words prefixed with a `-` must not occur in a record. For example, `search -engine` matches records that contain "search" but not "engine".  </dd> </dl>  This setting only has an effect if `advancedSyntax` is true. ',
         alias="advancedSyntaxFeatures",
     )
     distinct: Optional[Distinct] = None
     replace_synonyms_in_highlight: Optional[StrictBool] = Field(
         default=False,
-        description="Whether to highlight and snippet the original word that matches the synonym or the synonym itself.",
+        description='Whether to replace a highlighted word with the matched synonym.  By default, the original words are highlighted even if a synonym matches. For example, with `home` as a synonym for `house` and a search for `home`, records matching either "home" or "house" are included in the search results, and either "home" or "house" are highlighted.  With `replaceSynonymsInHighlight` set to `true`, a search for `home` still matches the same records, but all occurences of "house" are replaced by "home" in the highlighted response. ',
         alias="replaceSynonymsInHighlight",
     )
     min_proximity: Optional[Annotated[int, Field(le=7, strict=True, ge=1)]] = Field(
         default=1,
-        description="Precision of the [proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity).",
+        description="Minimum proximity score for two matching words.  This adjusts the [Proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity) by equally scoring matches that are farther apart.  For example, if `minProximity` is 2, neighboring matches and matches with one word between them would have the same score. ",
         alias="minProximity",
     )
     response_fields: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Attributes to include in the API response for search and browse queries.",
+        description="Properties to include in the API response of `search` and `browse` requests.  By default, all response properties are included. To reduce the response size, you can select, which attributes should be included.  You can't exclude these properties: `message`, `warning`, `cursor`, `serverUsed`, `indexUsed`, `abTestVariantID`, `parsedQuery`, or any property triggered by the `getRankingInfo` parameter.  Don't exclude properties that you might need in your search UI. ",
         alias="responseFields",
     )
     max_facet_hits: Optional[Annotated[int, Field(le=100, strict=True)]] = Field(
         default=10,
-        description="Maximum number of facet hits to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).",
+        description="Maximum number of facet values to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).",
         alias="maxFacetHits",
     )
-    max_values_per_facet: Optional[StrictInt] = Field(
+    max_values_per_facet: Optional[Annotated[int, Field(le=1000, strict=True)]] = Field(
         default=100,
         description="Maximum number of facet values to return for each facet.",
         alias="maxValuesPerFacet",
     )
     sort_facet_values_by: Optional[StrictStr] = Field(
         default="count",
-        description="Controls how facet values are fetched.",
+        description="Order in which to retrieve facet values.  <dl> <dt><code>count</code></dt> <dd> Facet values are retrieved by decreasing count. The count is the number of matching records containing this facet value. </dd> <dt><code>alpha</code></dt> <dd>Retrieve facet values alphabetically.</dd> </dl>  This setting doesn't influence how facet values are displayed in your UI (see `renderingContent`). For more information, see [facet value display](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/facet-display/js/). ",
         alias="sortFacetValuesBy",
     )
     attribute_criteria_computed_by_min_proximity: Optional[StrictBool] = Field(
         default=False,
-        description="When the [Attribute criterion is ranked above Proximity](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute-and-proximity-combinations) in your ranking formula, Proximity is used to select which searchable attribute is matched in the Attribute ranking stage.",
+        description="Whether the best matching attribute should be determined by minimum proximity.  This setting only affects ranking if the Attribute ranking criterion comes before Proximity in the `ranking` setting. If true, the best matching attribute is selected based on the minimum proximity of multiple matches. Otherwise, the best matching attribute is determined by the order in the `searchableAttributes` setting. ",
         alias="attributeCriteriaComputedByMinProximity",
     )
     rendering_content: Optional[RenderingContent] = Field(
@@ -359,7 +366,7 @@ class ConsequenceParams(BaseModel):
     )
     enable_re_ranking: Optional[StrictBool] = Field(
         default=True,
-        description="Indicates whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).",
+        description="Whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/).  This setting only has an effect if you activated Dynamic Re-Ranking for this index in the Algolia dashboard. ",
         alias="enableReRanking",
     )
     re_ranking_apply_filter: Optional[ReRankingApplyFilter] = Field(
@@ -490,14 +497,12 @@ class ConsequenceParams(BaseModel):
                 "personalizationImpact": obj.get("personalizationImpact"),
                 "userToken": obj.get("userToken"),
                 "getRankingInfo": obj.get("getRankingInfo"),
-                "explain": obj.get("explain"),
                 "synonyms": obj.get("synonyms"),
                 "clickAnalytics": obj.get("clickAnalytics"),
                 "analytics": obj.get("analytics"),
                 "analyticsTags": obj.get("analyticsTags"),
                 "percentileComputation": obj.get("percentileComputation"),
                 "enableABTest": obj.get("enableABTest"),
-                "attributesForFaceting": obj.get("attributesForFaceting"),
                 "attributesToRetrieve": obj.get("attributesToRetrieve"),
                 "ranking": obj.get("ranking"),
                 "customRanking": obj.get("customRanking"),

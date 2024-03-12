@@ -16,9 +16,7 @@ class SearchParamsQuery(BaseModel):
     SearchParamsQuery
     """
 
-    query: Optional[StrictStr] = Field(
-        default="", description="Text to search for in an index."
-    )
+    query: Optional[StrictStr] = Field(default="", description="Search query.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

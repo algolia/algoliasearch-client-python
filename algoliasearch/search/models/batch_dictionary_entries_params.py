@@ -17,16 +17,16 @@ from algoliasearch.search.models.batch_dictionary_entries_request import (
 
 class BatchDictionaryEntriesParams(BaseModel):
     """
-    `batchDictionaryEntries` parameters.
+    Request body for updating dictionary entries.
     """
 
     clear_existing_dictionary_entries: Optional[StrictBool] = Field(
         default=False,
-        description="Incidates whether to replace all custom entries in the dictionary with the ones sent with this request.",
+        description="Whether to replace all custom entries in the dictionary with the ones sent with this request.",
         alias="clearExistingDictionaryEntries",
     )
     requests: List[BatchDictionaryEntriesRequest] = Field(
-        description="Operations to batch."
+        description="List of additions and deletions to your dictionaries."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

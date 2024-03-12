@@ -15,16 +15,15 @@ from algoliasearch.recommend.models.match_level import MatchLevel
 
 class HighlightResultOption(BaseModel):
     """
-    Show highlighted section and words matched on a query.
+    Surround words that match the query with HTML tags for highlighting.
     """
 
     value: StrictStr = Field(
-        description="Markup text with `facetQuery` matches highlighted."
+        description="Highlighted attribute value, including HTML tags."
     )
     match_level: MatchLevel = Field(alias="matchLevel")
     matched_words: List[StrictStr] = Field(
-        description="List of words from the query that matched the object.",
-        alias="matchedWords",
+        description="List of matched words from the search query.", alias="matchedWords"
     )
     fully_highlighted: Optional[StrictBool] = Field(
         default=None,

@@ -12,7 +12,7 @@ from typing import Self
 
 class DictionaryEntryState(str, Enum):
     """
-    Indicates whether a dictionary entry is active (`enabled`) or inactive (`disabled`).
+    Whether a dictionary entry is active.
     """
 
     """

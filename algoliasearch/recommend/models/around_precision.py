@@ -17,14 +17,14 @@ from algoliasearch.recommend.models.around_precision_from_value_inner import (
 
 class AroundPrecision(BaseModel):
     """
-    Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).
+    Precision of a coordinate-based search in meters to group results with similar distances.  The Geo ranking criterion considers all matches within the same range of distances to be equal.
     """
 
-    oneof_schema_1_validator: Optional[StrictInt] = 10
-    oneof_schema_2_validator: Optional[List[AroundPrecisionFromValueInner]] = Field(
-        default=None,
-        description="Precision of a geographical search (in meters), to [group results that are more or less the same distance from a central point](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/in-depth/geo-ranking-precision/).",
+    oneof_schema_1_validator: Optional[StrictInt] = Field(
+        default=10,
+        description="Distance in meters to group results by similar distances.  For example, if you set `aroundPrecision` to 100, records wihin 100 meters to the central coordinate are considered to have the same distance, as are records between 100 and 199 meters. ",
     )
+    oneof_schema_2_validator: Optional[List[AroundPrecisionFromValueInner]] = None
     actual_instance: Optional[Union[List[AroundPrecisionFromValueInner], int]] = None
 
     def __init__(self, *args, **kwargs) -> None:

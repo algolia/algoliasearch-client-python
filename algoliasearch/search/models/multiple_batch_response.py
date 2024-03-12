@@ -17,10 +17,10 @@ class MultipleBatchResponse(BaseModel):
     """
 
     task_id: Dict[str, StrictInt] = Field(
-        description="TaskIDs per index.", alias="taskID"
+        description="Task IDs. One for each index.", alias="taskID"
     )
     object_ids: List[StrictStr] = Field(
-        description="Unique object (record) identifiers.", alias="objectIDs"
+        description="Unique record identifiers.", alias="objectIDs"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

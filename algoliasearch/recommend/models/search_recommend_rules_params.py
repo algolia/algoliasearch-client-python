@@ -16,13 +16,13 @@ class SearchRecommendRulesParams(BaseModel):
     Recommend rules search parameters.
     """
 
-    query: Optional[StrictStr] = Field(default="", description="Full-text query.")
+    query: Optional[StrictStr] = Field(default="", description="Search query.")
     context: Optional[StrictStr] = Field(
         default=None,
         description="Restricts responses to the specified [contextual rule](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#creating-contextual-rules).",
     )
     page: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
-        default=None, description="Requested page (the first page is page 0)."
+        default=None, description="Requested page of the API response."
     )
     hits_per_page: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
         default=20, description="Maximum number of hits per page.", alias="hitsPerPage"

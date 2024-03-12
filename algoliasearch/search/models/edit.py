@@ -24,7 +24,7 @@ class Edit(BaseModel):
     )
     insert: Optional[StrictStr] = Field(
         default=None,
-        description="Text that should be inserted in place of the removed text inside the query string.",
+        description="Text to be added in place of the deleted text inside the query string.",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

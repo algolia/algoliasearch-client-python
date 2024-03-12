@@ -18,7 +18,9 @@ class SearchForFacetValuesResponse(BaseModel):
     SearchForFacetValuesResponse
     """
 
-    facet_hits: List[FacetHits] = Field(alias="facetHits")
+    facet_hits: List[FacetHits] = Field(
+        description="Matching facet values.", alias="facetHits"
+    )
     exhaustive_facets_count: StrictBool = Field(
         description="See the `facetsCount` field of the `exhaustive` object in the response.",
         alias="exhaustiveFacetsCount",

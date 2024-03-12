@@ -19,9 +19,11 @@ class ConsequenceQueryObject(BaseModel):
     """
 
     remove: Optional[List[StrictStr]] = Field(
-        default=None, description="Words to remove."
+        default=None, description="Words to remove from the search query."
     )
-    edits: Optional[List[Edit]] = Field(default=None, description="Edits to apply.")
+    edits: Optional[List[Edit]] = Field(
+        default=None, description="Changes to make to the search query."
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

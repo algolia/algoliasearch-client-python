@@ -13,12 +13,12 @@ from pydantic import BaseModel, Field, StrictStr
 
 class SemanticSearch(BaseModel):
     """
-    Settings for the semantic search part of NeuralSearch. Only used when `mode` is _neuralSearch_.
+    Settings for the semantic search part of NeuralSearch. Only used when `mode` is `neuralSearch`.
     """
 
     event_sources: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Indices from which to collect click and conversion events. If null, the current index and replica group will be used as the event source.",
+        description="Indices from which to collect click and conversion events.  If null, the current index and all its replicas are used. ",
         alias="eventSources",
     )
 

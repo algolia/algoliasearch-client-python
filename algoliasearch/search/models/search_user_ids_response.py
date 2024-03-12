@@ -19,11 +19,9 @@ class SearchUserIdsResponse(BaseModel):
     """
 
     hits: List[UserHit] = Field(description="User objects that match the query.")
-    nb_hits: StrictInt = Field(
-        description="Number of hits the search query matched.", alias="nbHits"
-    )
-    page: StrictInt = Field(
-        description="Page to retrieve (the first page is `0`, not `1`)."
+    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
+    page: Annotated[int, Field(strict=True, ge=0)] = Field(
+        description="Page of search results to retrieve."
     )
     hits_per_page: Annotated[int, Field(le=1000, strict=True, ge=1)] = Field(
         description="Maximum number of hits per page.", alias="hitsPerPage"

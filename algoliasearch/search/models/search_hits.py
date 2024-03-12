@@ -18,8 +18,10 @@ class SearchHits(BaseModel):
     SearchHits
     """
 
-    hits: List[Hit]
-    query: StrictStr = Field(description="Text to search for in an index.")
+    hits: List[Hit] = Field(
+        description="Search results (hits).  Hits are records from your index that match the search criteria, augmented with additional attributes, such as, for highlighting. "
+    )
+    query: StrictStr = Field(description="Search query.")
     params: StrictStr = Field(
         description="URL-encoded string of all search parameters."
     )

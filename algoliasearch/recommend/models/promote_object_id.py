@@ -17,10 +17,10 @@ class PromoteObjectID(BaseModel):
     """
 
     object_id: StrictStr = Field(
-        description="Unique identifier of the record to promote.", alias="objectID"
+        description="Unique record identifier.", alias="objectID"
     )
     position: StrictInt = Field(
-        description="The position to promote the records to. If you pass objectIDs, the records are placed at this position as a group. For example, if you pronmote four objectIDs to position 0, the records take the first four positions."
+        description="Position in the search results where you want to show the promoted records."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

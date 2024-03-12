@@ -12,7 +12,7 @@ from typing import Self
 
 class AroundRadiusAll(str, Enum):
     """
-    AroundRadiusAll
+    Return all records with a valid `_geoloc` attribute. Don't filter by distance.
     """
 
     """

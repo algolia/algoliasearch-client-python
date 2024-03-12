@@ -15,7 +15,7 @@ from algoliasearch.recommend.models.mixed_search_filters import MixedSearchFilte
 
 class ReRankingApplyFilter(BaseModel):
     """
-    When [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) is enabled, only records that match these filters will be affected by Dynamic Re-Ranking.
+    Restrict [Dynamic Re-ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) to records that match these filters.
     """
 
     oneof_schema_1_validator: Optional[List[MixedSearchFilters]] = None

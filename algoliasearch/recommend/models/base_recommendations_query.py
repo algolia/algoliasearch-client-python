@@ -21,7 +21,7 @@ class BaseRecommendationsQuery(BaseModel):
 
     model: RecommendationModels
     object_id: StrictStr = Field(
-        description="Unique object identifier.", alias="objectID"
+        description="Unique record identifier.", alias="objectID"
     )
     query_parameters: Optional[SearchParamsObject] = Field(
         default=None, alias="queryParameters"

@@ -23,7 +23,7 @@ class RecommendedForYouQuery(BaseModel):
     RecommendedForYouQuery
     """
 
-    index_name: StrictStr = Field(description="Algolia index name.", alias="indexName")
+    index_name: StrictStr = Field(description="Index name.", alias="indexName")
     threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = Field(
         default=None,
         description="Recommendations with a confidence score lower than `threshold` won't appear in results. > **Note**: Each recommendation has a confidence score of 0 to 100. The closer the score is to 100, the more relevant the recommendations are. ",

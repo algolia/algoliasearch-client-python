@@ -40,7 +40,7 @@ class SearchResponse(BaseModel):
     )
     automatic_radius: Optional[StrictStr] = Field(
         default=None,
-        description="Automatically-computed radius.",
+        description="Distance from a central coordinate provided by `aroundLatLng`.",
         alias="automaticRadius",
     )
     exhaustive: Optional[Exhaustive] = None
@@ -60,8 +60,7 @@ class SearchResponse(BaseModel):
         alias="exhaustiveTypo",
     )
     facets: Optional[Dict[str, Dict[str, StrictInt]]] = Field(
-        default=None,
-        description="Mapping of each facet name to the corresponding facet counts.",
+        default=None, description="Facet counts."
     )
     facets_stats: Optional[Dict[str, FacetsStats]] = Field(
         default=None, description="Statistics for numerical facets."
@@ -80,19 +79,17 @@ class SearchResponse(BaseModel):
     message: Optional[StrictStr] = Field(
         default=None, description="Warnings about the query."
     )
-    nb_hits: StrictInt = Field(
-        description="Number of hits the search query matched.", alias="nbHits"
-    )
+    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
     nb_pages: StrictInt = Field(
-        description="Number of pages of results for the current query.", alias="nbPages"
+        description="Number of pages of results.", alias="nbPages"
     )
     nb_sorted_hits: Optional[StrictInt] = Field(
         default=None,
         description="Number of hits selected and sorted by the relevant sort algorithm.",
         alias="nbSortedHits",
     )
-    page: StrictInt = Field(
-        description="Page to retrieve (the first page is `0`, not `1`)."
+    page: Annotated[int, Field(strict=True, ge=0)] = Field(
+        description="Page of search results to retrieve."
     )
     parsed_query: Optional[StrictStr] = Field(
         default=None,
@@ -129,7 +126,7 @@ class SearchResponse(BaseModel):
     )
     user_data: Optional[Dict[str, Any]] = Field(
         default=None,
-        description="Lets you store custom data in your indices.",
+        description="An object with custom data.  You can store up to 32&nbsp;kB as custom data. ",
         alias="userData",
     )
     query_id: Optional[StrictStr] = Field(
@@ -137,8 +134,10 @@ class SearchResponse(BaseModel):
         description="Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics/).",
         alias="queryID",
     )
-    hits: List[Hit]
-    query: StrictStr = Field(description="Text to search for in an index.")
+    hits: List[Hit] = Field(
+        description="Search results (hits).  Hits are records from your index that match the search criteria, augmented with additional attributes, such as, for highlighting. "
+    )
+    query: StrictStr = Field(description="Search query.")
     params: StrictStr = Field(
         description="URL-encoded string of all search parameters."
     )

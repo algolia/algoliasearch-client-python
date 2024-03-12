@@ -17,11 +17,11 @@ class BatchResponse(BaseModel):
     """
 
     task_id: StrictInt = Field(
-        description="Unique identifier of a task. A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the `task` operation and this `taskID`. ",
+        description="Unique identifier of a task.  A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the [`task` operation](#tag/Indices/operation/getTask) and this `taskID`. ",
         alias="taskID",
     )
     object_ids: List[StrictStr] = Field(
-        description="Unique object (record) identifiers.", alias="objectIDs"
+        description="Unique record identifiers.", alias="objectIDs"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

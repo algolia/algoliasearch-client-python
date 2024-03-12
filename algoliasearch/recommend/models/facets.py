@@ -13,11 +13,12 @@ from pydantic import BaseModel, Field, StrictStr
 
 class Facets(BaseModel):
     """
-    Ordering of facets (widgets).
+    Order of facet names.
     """
 
     order: Optional[List[StrictStr]] = Field(
-        default=None, description="Pinned order of facet lists."
+        default=None,
+        description="Explicit order of facets or facet values.  This setting lets you always show specific facets or facet values at the top of the list. ",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

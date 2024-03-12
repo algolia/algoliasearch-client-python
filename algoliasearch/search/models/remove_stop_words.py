@@ -8,16 +8,26 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, StrictBool, StrictStr, ValidationError, model_serializer
+from pydantic import (
+    BaseModel,
+    Field,
+    StrictBool,
+    StrictStr,
+    ValidationError,
+    model_serializer,
+)
 
 
 class RemoveStopWords(BaseModel):
     """
-    Removes stop (common) words from the query before executing it. `removeStopWords` is used in conjunction with the `queryLanguages` setting. _list_: language ISO codes for which stop words should be enabled. This list will override any values that you may have set in `queryLanguages`. _true_: enables the stop words feature, ensuring that stop words are removed from consideration in a search. The languages supported here are either [every language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) (this is the default) or those set by `queryLanguages`. _false_: turns off the stop words feature, allowing stop words to be taken into account in a search.
+    Removes stop words from the search query.  Stop words are common words like articles, conjunctions, prepositions, or pronouns that have little or no meaning on their own. In English, \"the\", \"a\", or \"and\" are stop words.  You should only use this feature for the languages used in your index.
     """
 
     oneof_schema_1_validator: Optional[List[StrictStr]] = None
-    oneof_schema_2_validator: Optional[StrictBool] = False
+    oneof_schema_2_validator: Optional[StrictBool] = Field(
+        default=False,
+        description="If true, stop words are removed for all languages you included in `queryLanguages`, or for all supported languages, if `queryLanguages` is empty. If false, stop words are not removed. ",
+    )
     actual_instance: Optional[Union[List[str], bool]] = None
 
     def __init__(self, *args, **kwargs) -> None:

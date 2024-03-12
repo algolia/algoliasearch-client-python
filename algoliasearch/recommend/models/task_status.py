@@ -12,7 +12,7 @@ from typing import Self
 
 class TaskStatus(str, Enum):
     """
-    _published_ if the task has been processed, _notPublished_ otherwise.
+    Task status, `published` if the task is completed, `notPublished` otherwise.
     """
 
     """

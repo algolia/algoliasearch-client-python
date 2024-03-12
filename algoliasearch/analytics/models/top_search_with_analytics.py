@@ -45,9 +45,7 @@ class TopSearchWithAnalytics(BaseModel):
     conversion_count: StrictInt = Field(
         description="Number of converted clicks.", alias="conversionCount"
     )
-    nb_hits: StrictInt = Field(
-        description="Number of hits the search query matched.", alias="nbHits"
-    )
+    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

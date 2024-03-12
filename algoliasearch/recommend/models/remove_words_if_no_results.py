@@ -12,7 +12,7 @@ from typing import Self
 
 class RemoveWordsIfNoResults(str, Enum):
     """
-    Strategy to [remove words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/) from the query when it doesn't match any hits.
+    Strategy for removing words from the query when it doesn't return any results. This helps to avoid returning empty search results.  <dl> <dt><code>none</code></dt> <dd>No words are removed when a query doesn't return results.</dd> <dt><code>lastWords</code></dt> <dd>Treat the last (then second to last, then third to last) word as optional, until there are results or at most 5 words have been removed.</dd> <dt><code>firstWords</code></dt> <dd>Treat the first (then second, then third) word as optional, until there are results or at most 5 words have been removed.</dd> <dt><code>allOptional</code></dt> <dd>Treat all words as optional.</dd> </dl>  For more information, see [Remove words to improve results](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/in-depth/why-use-remove-words-if-no-results/).
     """
 
     """

@@ -18,9 +18,7 @@ class SearchNoResultEvent(BaseModel):
 
     search: StrictStr = Field(description="User query.")
     count: StrictInt = Field(description="Number of occurrences.")
-    nb_hits: StrictInt = Field(
-        description="Number of hits the search query matched.", alias="nbHits"
-    )
+    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

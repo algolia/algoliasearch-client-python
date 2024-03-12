@@ -12,7 +12,7 @@ from typing import Self
 
 class BuiltInOperationType(str, Enum):
     """
-    Operation to apply to the attribute.
+    How to change the attribute.
     """
 
     """

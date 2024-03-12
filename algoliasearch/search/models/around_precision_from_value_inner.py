@@ -13,11 +13,18 @@ from pydantic import BaseModel, Field, StrictInt
 
 class AroundPrecisionFromValueInner(BaseModel):
     """
-    AroundPrecisionFromValueInner
+    Range object with lower and upper values in meters to define custom ranges.
     """
 
-    var_from: Optional[StrictInt] = Field(default=None, alias="from")
-    value: Optional[StrictInt] = None
+    var_from: Optional[StrictInt] = Field(
+        default=None,
+        description="Lower boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.",
+        alias="from",
+    )
+    value: Optional[StrictInt] = Field(
+        default=None,
+        description="Upper boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.",
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

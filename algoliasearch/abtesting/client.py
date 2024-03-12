@@ -600,14 +600,11 @@ class AbtestingClient:
     async def list_ab_tests_with_http_info(
         self,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         index_prefix: Annotated[
             Optional[StrictStr],
@@ -629,9 +626,9 @@ class AbtestingClient:
         Required API Key ACLs:
           - analytics
 
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
         :param index_prefix: Only return A/B tests for indices starting with this prefix.
         :type index_prefix: str
@@ -665,14 +662,11 @@ class AbtestingClient:
     async def list_ab_tests(
         self,
         offset: Annotated[
-            Optional[StrictInt],
-            Field(
-                description="Position of the starting record. Used for paging. 0 is the first record."
-            ),
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt],
-            Field(description="Number of records to return (page size)."),
+            Optional[StrictInt], Field(description="Number of items to return.")
         ] = None,
         index_prefix: Annotated[
             Optional[StrictStr],
@@ -694,9 +688,9 @@ class AbtestingClient:
         Required API Key ACLs:
           - analytics
 
-        :param offset: Position of the starting record. Used for paging. 0 is the first record.
+        :param offset: Position of the first item to return.
         :type offset: int
-        :param limit: Number of records to return (page size).
+        :param limit: Number of items to return.
         :type limit: int
         :param index_prefix: Only return A/B tests for indices starting with this prefix.
         :type index_prefix: str

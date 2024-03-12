@@ -12,7 +12,7 @@ from typing import Self
 
 class MatchLevel(str, Enum):
     """
-    Indicates how well the attribute matched the search query.
+    Whether the whole query string matches or only a part.
     """
 
     """

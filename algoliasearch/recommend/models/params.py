@@ -17,7 +17,7 @@ from algoliasearch.recommend.models.rendering_content import RenderingContent
 
 class Params(BaseModel):
     """
-    Additional search parameters.
+    Parameters to apply to this search.  You can use all search parameters, plus special `automaticFacetFilters`, `automaticOptionalFacetFilters`, and `query`.
     """
 
     query: Optional[ConsequenceQuery] = None
