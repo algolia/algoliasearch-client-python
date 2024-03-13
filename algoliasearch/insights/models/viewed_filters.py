@@ -20,30 +20,32 @@ class ViewedFilters(BaseModel):
     """
 
     event_name: Annotated[str, Field(min_length=1, strict=True, max_length=64)] = Field(
-        description="The name of the event, up to 64 ASCII characters.  Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework. ",
+        description="Event name, up to 64 ASCII characters.  Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework. ",
         alias="eventName",
     )
     event_type: ViewEvent = Field(alias="eventType")
-    index: StrictStr = Field(description="The name of an Algolia index.")
+    index: StrictStr = Field(
+        description="Index name to which the event's items belong."
+    )
     filters: Annotated[List[StrictStr], Field(min_length=1, max_length=20)] = Field(
-        description="Facet filters.  Each facet filter string must be URL-encoded, such as, `discount:10%25`. "
+        description="Applied facet filters.  Facet filters are `facet:value` pairs. Facet values must be URL-encoded, such as, `discount:10%25`. "
     )
     user_token: Annotated[
         str, Field(min_length=1, strict=True, max_length=129)
     ] = Field(
-        description="An anonymous or pseudonymous user identifier.  > **Note**: Never include personally identifiable information in user tokens. ",
+        description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
         alias="userToken",
     )
     authenticated_user_token: Optional[
         Annotated[str, Field(min_length=1, strict=True, max_length=129)]
     ] = Field(
         default=None,
-        description="An identifier for authenticated users.  > **Note**: Never include personally identifiable information in user tokens. ",
+        description="Identifier for authenticated users.  When the user signs in, you can get an identifier from your system and send it as `authenticatedUserToken`. This lets you keep using the `userToken` from before the user signed in, while providing a reliable way to identify users across sessions. Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
         alias="authenticatedUserToken",
     )
     timestamp: Optional[StrictInt] = Field(
         default=None,
-        description="The timestamp of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp. ",
+        description="Timestamp of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp. ",
     )
 
     @field_validator("event_name")

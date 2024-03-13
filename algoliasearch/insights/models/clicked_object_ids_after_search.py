@@ -20,17 +20,19 @@ class ClickedObjectIDsAfterSearch(BaseModel):
     """
 
     event_name: Annotated[str, Field(min_length=1, strict=True, max_length=64)] = Field(
-        description="The name of the event, up to 64 ASCII characters.  Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework. ",
+        description="Event name, up to 64 ASCII characters.  Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework. ",
         alias="eventName",
     )
     event_type: ClickEvent = Field(alias="eventType")
-    index: StrictStr = Field(description="The name of an Algolia index.")
+    index: StrictStr = Field(
+        description="Index name to which the event's items belong."
+    )
     object_ids: Annotated[List[StrictStr], Field(min_length=1, max_length=20)] = Field(
-        description="The object IDs of the records that are part of the event.",
+        description="Object IDs of the records that are part of the event.",
         alias="objectIDs",
     )
     positions: Annotated[List[StrictInt], Field(min_length=1, max_length=20)] = Field(
-        description="The position of the clicked item the search results.  The first search result has a position of 1 (not 0). You must provide 1 `position` for each `objectID`. "
+        description="Position of the clicked item the search results.  You must provide 1 `position` for each `objectID`. "
     )
     query_id: Annotated[str, Field(min_length=32, strict=True, max_length=32)] = Field(
         description="Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response. ",
@@ -39,19 +41,19 @@ class ClickedObjectIDsAfterSearch(BaseModel):
     user_token: Annotated[
         str, Field(min_length=1, strict=True, max_length=129)
     ] = Field(
-        description="An anonymous or pseudonymous user identifier.  > **Note**: Never include personally identifiable information in user tokens. ",
+        description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
         alias="userToken",
     )
     authenticated_user_token: Optional[
         Annotated[str, Field(min_length=1, strict=True, max_length=129)]
     ] = Field(
         default=None,
-        description="An identifier for authenticated users.  > **Note**: Never include personally identifiable information in user tokens. ",
+        description="Identifier for authenticated users.  When the user signs in, you can get an identifier from your system and send it as `authenticatedUserToken`. This lets you keep using the `userToken` from before the user signed in, while providing a reliable way to identify users across sessions. Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
         alias="authenticatedUserToken",
     )
     timestamp: Optional[StrictInt] = Field(
         default=None,
-        description="The timestamp of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp. ",
+        description="Timestamp of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp. ",
     )
 
     @field_validator("event_name")

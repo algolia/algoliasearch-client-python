@@ -445,16 +445,16 @@ class InsightsClient:
                 min_length=1,
                 strict=True,
                 max_length=129,
-                description="The user token for which to delete all associated events.",
+                description="User token for which to delete all associated events.",
             ),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete all events related to a certain user token from events metrics and analytics. To delete a personalization user profile, see [Delete a user profile](https://www.algolia.com/doc/rest-api/personalization/#delete-a-user-profile).
+        Deletes all events related to the specified user token from events metrics and analytics. To delete a personalization user profile, see [Delete a user profile](/specs/personalization#tag/profiles/operation/deleteUserProfile).
 
 
-        :param user_token: The user token for which to delete all associated events. (required)
+        :param user_token: User token for which to delete all associated events. (required)
         :type user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -484,16 +484,16 @@ class InsightsClient:
                 min_length=1,
                 strict=True,
                 max_length=129,
-                description="The user token for which to delete all associated events.",
+                description="User token for which to delete all associated events.",
             ),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> None:
         """
-        Delete all events related to a certain user token from events metrics and analytics. To delete a personalization user profile, see [Delete a user profile](https://www.algolia.com/doc/rest-api/personalization/#delete-a-user-profile).
+        Deletes all events related to the specified user token from events metrics and analytics. To delete a personalization user profile, see [Delete a user profile](/specs/personalization#tag/profiles/operation/deleteUserProfile).
 
 
-        :param user_token: The user token for which to delete all associated events. (required)
+        :param user_token: User token for which to delete all associated events. (required)
         :type user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         """
@@ -507,7 +507,7 @@ class InsightsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Send a list of events to the Insights API.  You can include up to 1,000 events in a single request, but the request body must be smaller than 2&nbsp;MB.
+        Sends a list of events to the Insights API.  You can include up to 1,000 events in a single request, but the request body must be smaller than 2&nbsp;MB.
 
 
         :param insights_events: (required)
@@ -541,7 +541,7 @@ class InsightsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> EventsResponse:
         """
-        Send a list of events to the Insights API.  You can include up to 1,000 events in a single request, but the request body must be smaller than 2&nbsp;MB.
+        Sends a list of events to the Insights API.  You can include up to 1,000 events in a single request, but the request body must be smaller than 2&nbsp;MB.
 
 
         :param insights_events: (required)

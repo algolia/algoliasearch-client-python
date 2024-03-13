@@ -20,7 +20,7 @@ from pydantic import (
 
 class Discount(BaseModel):
     """
-    The absolute value of the discount for this product, in units of `currency`.
+    Absolute value of the discount for this product, in units of `currency`.
     """
 
     oneof_schema_1_validator: Optional[Union[StrictFloat, StrictInt]] = None
