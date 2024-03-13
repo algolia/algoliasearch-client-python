@@ -15,6 +15,9 @@ from algoliasearch.ingestion.models.source_big_query import SourceBigQuery
 from algoliasearch.ingestion.models.source_commercetools import SourceCommercetools
 from algoliasearch.ingestion.models.source_csv import SourceCSV
 from algoliasearch.ingestion.models.source_docker import SourceDocker
+from algoliasearch.ingestion.models.source_ga4_big_query_export import (
+    SourceGA4BigQueryExport,
+)
 from algoliasearch.ingestion.models.source_json import SourceJSON
 
 
@@ -28,7 +31,8 @@ class SourceInput(BaseModel):
     oneof_schema_3_validator: Optional[SourceJSON] = None
     oneof_schema_4_validator: Optional[SourceCSV] = None
     oneof_schema_5_validator: Optional[SourceBigQuery] = None
-    oneof_schema_6_validator: Optional[SourceDocker] = None
+    oneof_schema_6_validator: Optional[SourceGA4BigQueryExport] = None
+    oneof_schema_7_validator: Optional[SourceDocker] = None
     actual_instance: Optional[
         Union[
             SourceBigCommerce,
@@ -36,6 +40,7 @@ class SourceInput(BaseModel):
             SourceCSV,
             SourceCommercetools,
             SourceDocker,
+            SourceGA4BigQueryExport,
             SourceJSON,
         ]
     ] = None
@@ -64,6 +69,7 @@ class SourceInput(BaseModel):
             SourceCSV,
             SourceCommercetools,
             SourceDocker,
+            SourceGA4BigQueryExport,
             SourceJSON,
         ]
     ]:
@@ -113,6 +119,12 @@ class SourceInput(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
+            instance.actual_instance = SourceGA4BigQueryExport.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
             instance.actual_instance = SourceDocker.from_json(json_str)
 
             return instance
@@ -120,7 +132,7 @@ class SourceInput(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into SourceInput with oneOf schemas: SourceBigCommerce, SourceBigQuery, SourceCSV, SourceCommercetools, SourceDocker, SourceJSON. Details: "
+            "No match found when deserializing the JSON string into SourceInput with oneOf schemas: SourceBigCommerce, SourceBigQuery, SourceCSV, SourceCommercetools, SourceDocker, SourceGA4BigQueryExport, SourceJSON. Details: "
             + ", ".join(error_messages)
         )
 

@@ -2289,11 +2289,11 @@ class IngestionClient:
         ] = None,
         source_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The sourceIDs of the tasks to retrive."),
+            Field(description="The sourceIDs of the tasks to retrieve."),
         ] = None,
         destination_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The destinationIDs of the tasks to retrive."),
+            Field(description="The destinationIDs of the tasks to retrieve."),
         ] = None,
         trigger_type: Annotated[
             Optional[List[TriggerType]],
@@ -2324,9 +2324,9 @@ class IngestionClient:
         :type action: List[ActionType]
         :param enabled: Whether the task is enabled or not.
         :type enabled: bool
-        :param source_id: The sourceIDs of the tasks to retrive.
+        :param source_id: The sourceIDs of the tasks to retrieve.
         :type source_id: List[str]
-        :param destination_id: The destinationIDs of the tasks to retrive.
+        :param destination_id: The destinationIDs of the tasks to retrieve.
         :type destination_id: List[str]
         :param trigger_type: The trigger type of the task.
         :type trigger_type: List[TriggerType]
@@ -2389,11 +2389,11 @@ class IngestionClient:
         ] = None,
         source_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The sourceIDs of the tasks to retrive."),
+            Field(description="The sourceIDs of the tasks to retrieve."),
         ] = None,
         destination_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The destinationIDs of the tasks to retrive."),
+            Field(description="The destinationIDs of the tasks to retrieve."),
         ] = None,
         trigger_type: Annotated[
             Optional[List[TriggerType]],
@@ -2424,9 +2424,9 @@ class IngestionClient:
         :type action: List[ActionType]
         :param enabled: Whether the task is enabled or not.
         :type enabled: bool
-        :param source_id: The sourceIDs of the tasks to retrive.
+        :param source_id: The sourceIDs of the tasks to retrieve.
         :type source_id: List[str]
-        :param destination_id: The destinationIDs of the tasks to retrive.
+        :param destination_id: The destinationIDs of the tasks to retrieve.
         :type destination_id: List[str]
         :param trigger_type: The trigger type of the task.
         :type trigger_type: List[TriggerType]

@@ -16,6 +16,7 @@ from algoliasearch.ingestion.models.on_demand_date_utils_input import (
 from algoliasearch.ingestion.models.schedule_date_utils_input import (
     ScheduleDateUtilsInput,
 )
+from algoliasearch.ingestion.models.streaming_utils_input import StreamingUtilsInput
 
 
 class TaskInput(BaseModel):
@@ -25,8 +26,9 @@ class TaskInput(BaseModel):
 
     oneof_schema_1_validator: Optional[OnDemandDateUtilsInput] = None
     oneof_schema_2_validator: Optional[ScheduleDateUtilsInput] = None
+    oneof_schema_3_validator: Optional[StreamingUtilsInput] = None
     actual_instance: Optional[
-        Union[OnDemandDateUtilsInput, ScheduleDateUtilsInput]
+        Union[OnDemandDateUtilsInput, ScheduleDateUtilsInput, StreamingUtilsInput]
     ] = None
 
     def __init__(self, *args, **kwargs) -> None:
@@ -46,7 +48,9 @@ class TaskInput(BaseModel):
     @model_serializer
     def unwrap_actual_instance(
         self,
-    ) -> Optional[Union[OnDemandDateUtilsInput, ScheduleDateUtilsInput]]:
+    ) -> Optional[
+        Union[OnDemandDateUtilsInput, ScheduleDateUtilsInput, StreamingUtilsInput]
+    ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -74,9 +78,15 @@ class TaskInput(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = StreamingUtilsInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into TaskInput with oneOf schemas: OnDemandDateUtilsInput, ScheduleDateUtilsInput. Details: "
+            "No match found when deserializing the JSON string into TaskInput with oneOf schemas: OnDemandDateUtilsInput, ScheduleDateUtilsInput, StreamingUtilsInput. Details: "
             + ", ".join(error_messages)
         )
 

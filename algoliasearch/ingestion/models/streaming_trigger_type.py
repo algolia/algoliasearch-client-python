@@ -10,20 +10,17 @@ from json import loads
 from typing import Self
 
 
-class ActionType(str, Enum):
+class StreamingTriggerType(str, Enum):
     """
-    The action to perform on the Algolia index.
+    A task that runs continuously.
     """
 
     """
     allowed enum values
     """
-    REPLACE = "replace"
-    SAVE = "save"
-    PARTIAL = "partial"
-    APPEND = "append"
+    STREAMING = "streaming"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of ActionType from a JSON string"""
+        """Create an instance of StreamingTriggerType from a JSON string"""
         return cls(loads(json_str))

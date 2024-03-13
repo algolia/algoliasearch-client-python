@@ -12,6 +12,7 @@ from pydantic import BaseModel, ValidationError, model_serializer
 
 from algoliasearch.ingestion.models.on_demand_trigger_input import OnDemandTriggerInput
 from algoliasearch.ingestion.models.schedule_trigger_input import ScheduleTriggerInput
+from algoliasearch.ingestion.models.streaming_trigger import StreamingTrigger
 from algoliasearch.ingestion.models.subscription_trigger import SubscriptionTrigger
 
 
@@ -23,8 +24,14 @@ class TaskCreateTrigger(BaseModel):
     oneof_schema_1_validator: Optional[OnDemandTriggerInput] = None
     oneof_schema_2_validator: Optional[ScheduleTriggerInput] = None
     oneof_schema_3_validator: Optional[SubscriptionTrigger] = None
+    oneof_schema_4_validator: Optional[StreamingTrigger] = None
     actual_instance: Optional[
-        Union[OnDemandTriggerInput, ScheduleTriggerInput, SubscriptionTrigger]
+        Union[
+            OnDemandTriggerInput,
+            ScheduleTriggerInput,
+            StreamingTrigger,
+            SubscriptionTrigger,
+        ]
     ] = None
 
     def __init__(self, *args, **kwargs) -> None:
@@ -45,7 +52,12 @@ class TaskCreateTrigger(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Optional[
-        Union[OnDemandTriggerInput, ScheduleTriggerInput, SubscriptionTrigger]
+        Union[
+            OnDemandTriggerInput,
+            ScheduleTriggerInput,
+            StreamingTrigger,
+            SubscriptionTrigger,
+        ]
     ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
@@ -80,9 +92,15 @@ class TaskCreateTrigger(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = StreamingTrigger.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into TaskCreateTrigger with oneOf schemas: OnDemandTriggerInput, ScheduleTriggerInput, SubscriptionTrigger. Details: "
+            "No match found when deserializing the JSON string into TaskCreateTrigger with oneOf schemas: OnDemandTriggerInput, ScheduleTriggerInput, StreamingTrigger, SubscriptionTrigger. Details: "
             + ", ".join(error_messages)
         )
 

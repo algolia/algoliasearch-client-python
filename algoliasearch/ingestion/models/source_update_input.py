@@ -12,6 +12,9 @@ from pydantic import BaseModel, ValidationError, model_serializer
 
 from algoliasearch.ingestion.models.source_big_query import SourceBigQuery
 from algoliasearch.ingestion.models.source_csv import SourceCSV
+from algoliasearch.ingestion.models.source_ga4_big_query_export import (
+    SourceGA4BigQueryExport,
+)
 from algoliasearch.ingestion.models.source_json import SourceJSON
 from algoliasearch.ingestion.models.source_update_commercetools import (
     SourceUpdateCommercetools,
@@ -28,11 +31,13 @@ class SourceUpdateInput(BaseModel):
     oneof_schema_2_validator: Optional[SourceJSON] = None
     oneof_schema_3_validator: Optional[SourceCSV] = None
     oneof_schema_4_validator: Optional[SourceBigQuery] = None
-    oneof_schema_5_validator: Optional[SourceUpdateDocker] = None
+    oneof_schema_5_validator: Optional[SourceGA4BigQueryExport] = None
+    oneof_schema_6_validator: Optional[SourceUpdateDocker] = None
     actual_instance: Optional[
         Union[
             SourceBigQuery,
             SourceCSV,
+            SourceGA4BigQueryExport,
             SourceJSON,
             SourceUpdateCommercetools,
             SourceUpdateDocker,
@@ -60,6 +65,7 @@ class SourceUpdateInput(BaseModel):
         Union[
             SourceBigQuery,
             SourceCSV,
+            SourceGA4BigQueryExport,
             SourceJSON,
             SourceUpdateCommercetools,
             SourceUpdateDocker,
@@ -105,6 +111,12 @@ class SourceUpdateInput(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
+            instance.actual_instance = SourceGA4BigQueryExport.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
             instance.actual_instance = SourceUpdateDocker.from_json(json_str)
 
             return instance
@@ -112,7 +124,7 @@ class SourceUpdateInput(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into SourceUpdateInput with oneOf schemas: SourceBigQuery, SourceCSV, SourceJSON, SourceUpdateCommercetools, SourceUpdateDocker. Details: "
+            "No match found when deserializing the JSON string into SourceUpdateInput with oneOf schemas: SourceBigQuery, SourceCSV, SourceGA4BigQueryExport, SourceJSON, SourceUpdateCommercetools, SourceUpdateDocker. Details: "
             + ", ".join(error_messages)
         )
 

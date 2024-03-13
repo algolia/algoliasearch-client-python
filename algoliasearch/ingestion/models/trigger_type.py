@@ -12,7 +12,7 @@ from typing import Self
 
 class TriggerType(str, Enum):
     """
-    The type of the task reflect how it can be used:   - onDemand: a task that runs manually   - schedule: a task that runs regularly, following a given cron expression   - subscription: a task that runs after a subscription event is received from an integration (e.g. Webhook).
+    The type of the task reflect how it can be used:   - onDemand: a task that runs manually   - schedule: a task that runs regularly, following a given cron expression   - subscription: a task that runs after a subscription event is received from an integration (e.g. Webhook).   - streaming: a task that runs continuously.
     """
 
     """
@@ -21,6 +21,7 @@ class TriggerType(str, Enum):
     ONDEMAND = "onDemand"
     SCHEDULE = "schedule"
     SUBSCRIPTION = "subscription"
+    STREAMING = "streaming"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

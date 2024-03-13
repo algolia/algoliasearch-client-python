@@ -24,6 +24,7 @@ class SourceType(str, Enum):
     CSV = "csv"
     BIGQUERY = "bigquery"
     DOCKER = "docker"
+    GA4BIGQUERYEXPORT = "ga4BigqueryExport"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
