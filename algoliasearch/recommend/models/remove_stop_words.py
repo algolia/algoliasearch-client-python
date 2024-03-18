@@ -8,14 +8,9 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Self, Union
 
-from pydantic import (
-    BaseModel,
-    Field,
-    StrictBool,
-    StrictStr,
-    ValidationError,
-    model_serializer,
-)
+from pydantic import BaseModel, Field, StrictBool, ValidationError, model_serializer
+
+from algoliasearch.recommend.models.supported_language import SupportedLanguage
 
 
 class RemoveStopWords(BaseModel):
@@ -23,12 +18,15 @@ class RemoveStopWords(BaseModel):
     Removes stop words from the search query.  Stop words are common words like articles, conjunctions, prepositions, or pronouns that have little or no meaning on their own. In English, \"the\", \"a\", or \"and\" are stop words.  You should only use this feature for the languages used in your index.
     """
 
-    oneof_schema_1_validator: Optional[List[StrictStr]] = None
+    oneof_schema_1_validator: Optional[List[SupportedLanguage]] = Field(
+        default=None,
+        description="ISO code for languages for which stop words should be removed. This overrides languages you set in `queryLanguges`.",
+    )
     oneof_schema_2_validator: Optional[StrictBool] = Field(
         default=False,
         description="If true, stop words are removed for all languages you included in `queryLanguages`, or for all supported languages, if `queryLanguages` is empty. If false, stop words are not removed. ",
     )
-    actual_instance: Optional[Union[List[str], bool]] = None
+    actual_instance: Optional[Union[List[SupportedLanguage], bool]] = None
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -45,7 +43,7 @@ class RemoveStopWords(BaseModel):
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[List[str], bool]]:
+    def unwrap_actual_instance(self) -> Optional[Union[List[SupportedLanguage], bool]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -77,7 +75,7 @@ class RemoveStopWords(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into RemoveStopWords with oneOf schemas: List[str], bool. Details: "
+            "No match found when deserializing the JSON string into RemoveStopWords with oneOf schemas: List[SupportedLanguage], bool. Details: "
             + ", ".join(error_messages)
         )
 

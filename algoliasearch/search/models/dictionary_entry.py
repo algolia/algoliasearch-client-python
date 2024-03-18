@@ -11,6 +11,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Self
 from pydantic import BaseModel, Field, StrictStr
 
 from algoliasearch.search.models.dictionary_entry_state import DictionaryEntryState
+from algoliasearch.search.models.supported_language import SupportedLanguage
 
 
 class DictionaryEntry(BaseModel):
@@ -21,9 +22,7 @@ class DictionaryEntry(BaseModel):
     object_id: StrictStr = Field(
         description="Unique identifier for the dictionary entry.", alias="objectID"
     )
-    language: StrictStr = Field(
-        description="ISO code of a [supported language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/)."
-    )
+    language: SupportedLanguage
     word: Optional[StrictStr] = Field(
         default=None,
         description="Matching dictionary word for `stopwords` and `compounds` dictionaries.",

@@ -8,14 +8,9 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Self, Union
 
-from pydantic import (
-    BaseModel,
-    Field,
-    StrictBool,
-    StrictStr,
-    ValidationError,
-    model_serializer,
-)
+from pydantic import BaseModel, Field, StrictBool, ValidationError, model_serializer
+
+from algoliasearch.recommend.models.supported_language import SupportedLanguage
 
 
 class IgnorePlurals(BaseModel):
@@ -23,12 +18,15 @@ class IgnorePlurals(BaseModel):
     Treat singular, plurals, and other forms of declensions as equivalent. You should only use this feature for the languages used in your index.
     """
 
-    oneof_schema_1_validator: Optional[List[StrictStr]] = None
+    oneof_schema_1_validator: Optional[List[SupportedLanguage]] = Field(
+        default=None,
+        description="ISO code for languages for which this feature should be active. This overrides languages you set with `queryLanguages`. ",
+    )
     oneof_schema_2_validator: Optional[StrictBool] = Field(
         default=False,
         description="If true, `ignorePlurals` is active for all languages included in `queryLanguages`, or for all supported languages, if `queryLanguges` is empty. If false, singulars, plurals, and other declensions won't be considered equivalent. ",
     )
-    actual_instance: Optional[Union[List[str], bool]] = None
+    actual_instance: Optional[Union[List[SupportedLanguage], bool]] = None
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -45,7 +43,7 @@ class IgnorePlurals(BaseModel):
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[List[str], bool]]:
+    def unwrap_actual_instance(self) -> Optional[Union[List[SupportedLanguage], bool]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -77,7 +75,7 @@ class IgnorePlurals(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into IgnorePlurals with oneOf schemas: List[str], bool. Details: "
+            "No match found when deserializing the JSON string into IgnorePlurals with oneOf schemas: List[SupportedLanguage], bool. Details: "
             + ", ".join(error_messages)
         )
 

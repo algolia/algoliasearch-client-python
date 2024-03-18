@@ -10,6 +10,8 @@ from typing import Annotated, Any, Dict, List, Optional, Self
 
 from pydantic import BaseModel, Field, StrictBool, StrictStr
 
+from algoliasearch.search.models.supported_language import SupportedLanguage
+
 
 class BaseIndexSettings(BaseModel):
     """
@@ -57,9 +59,9 @@ class BaseIndexSettings(BaseModel):
         description='Searchable attributes to which Algolia should apply [word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/how-to/customize-segmentation/) (decompounding).  Compound words are formed by combining two or more individual words, and are particularly prevalent in Germanic languages—for example, "firefighter". With decompounding, the individual components are indexed separately.  You can specify different lists for different languages. Decompounding is supported for these languages: Dutch (`nl`), German (`de`), Finnish (`fi`), Danish (`da`), Swedish (`sv`), and Norwegian (`no`). ',
         alias="decompoundedAttributes",
     )
-    index_languages: Optional[List[StrictStr]] = Field(
+    index_languages: Optional[List[SupportedLanguage]] = Field(
         default=None,
-        description="[ISO code](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) for a language for language-specific processing steps, such as word detection and dictionary settings.  **You should always specify an indexing language.** If you don't specify an indexing language, the search engine uses all [supported languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/), or the languages you specified with the `ignorePlurals` or `removeStopWords` parameters. This can lead to unexpected search results. For more information, see [Language-specific configuration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/). ",
+        description="Languages for language-specific processing steps, such as word detection and dictionary settings.  **You should always specify an indexing language.** If you don't specify an indexing language, the search engine uses all [supported languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/), or the languages you specified with the `ignorePlurals` or `removeStopWords` parameters. This can lead to unexpected search results. For more information, see [Language-specific configuration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/). ",
         alias="indexLanguages",
     )
     disable_prefix_on_attributes: Optional[List[StrictStr]] = Field(

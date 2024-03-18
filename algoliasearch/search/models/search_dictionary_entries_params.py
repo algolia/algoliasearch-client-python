@@ -10,6 +10,8 @@ from typing import Annotated, Any, Dict, Optional, Self
 
 from pydantic import BaseModel, Field, StrictStr
 
+from algoliasearch.search.models.supported_language import SupportedLanguage
+
 
 class SearchDictionaryEntriesParams(BaseModel):
     """
@@ -23,10 +25,7 @@ class SearchDictionaryEntriesParams(BaseModel):
     hits_per_page: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
         default=20, description="Number of hits per page.", alias="hitsPerPage"
     )
-    language: Optional[StrictStr] = Field(
-        default=None,
-        description="ISO code of a [supported language](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/).",
-    )
+    language: Optional[SupportedLanguage] = None
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

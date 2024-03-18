@@ -158,6 +158,7 @@ search/models/snippet_result_option.py
 search/models/sort_remaining_by.py
 search/models/source.py
 search/models/standard_entries.py
+search/models/supported_language.py
 search/models/synonym_hit.py
 search/models/synonym_type.py
 search/models/tag_filters.py
