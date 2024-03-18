@@ -24,7 +24,7 @@ class SourceIndex(BaseModel):
     )
     replicas: Optional[StrictBool] = Field(
         default=False,
-        description="If true, Query Suggestions uses all replicas of the primary index to find popular searches. If false, only the primary index is used.  ",
+        description="If true, Query Suggestions uses all replicas of the primary index to find popular searches. If false, only the primary index is used. ",
     )
     analytics_tags: Optional[List[StrictStr]] = Field(
         default=None,
@@ -45,7 +45,7 @@ class SourceIndex(BaseModel):
         description="Minimum letters required to be included as a suggestion.  A search query must be at least `minLetters` long to be included in the Query Suggestions index. ",
         alias="minLetters",
     )
-    generate: Optional[List[Optional[List[StrictStr]]]] = None
+    generate: Optional[List[List[StrictStr]]] = None
     external: Optional[List[StrictStr]] = Field(
         default=None,
         description="Algolia indices with popular searches to use as query suggestions.  Records of these indices must have these attributes:    - `query`: search query which will be added as a suggestion   - `count`: measure of popularity of that search query  For example, you can export popular searches from an external analytics tool, such as Google Analytics or Adobe Analytics, and feed this data into an external Algolia index. You can use this external index to generate query suggestions until your Algolia analytics has collected enough data. ",
