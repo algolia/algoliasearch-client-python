@@ -64,9 +64,11 @@ class TopHitsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "hits": [TopHit.from_dict(_item) for _item in obj.get("hits")]
-                if obj.get("hits") is not None
-                else None
+                "hits": (
+                    [TopHit.from_dict(_item) for _item in obj.get("hits")]
+                    if obj.get("hits") is not None
+                    else None
+                )
             }
         )
         return _obj

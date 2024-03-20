@@ -62,9 +62,11 @@ class LatencyResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "metrics": LatencyResponseMetrics.from_dict(obj.get("metrics"))
-                if obj.get("metrics") is not None
-                else None
+                "metrics": (
+                    LatencyResponseMetrics.from_dict(obj.get("metrics"))
+                    if obj.get("metrics") is not None
+                    else None
+                )
             }
         )
         return _obj

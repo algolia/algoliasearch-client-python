@@ -68,13 +68,17 @@ class ObjectData(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "price": Price.from_dict(obj.get("price"))
-                if obj.get("price") is not None
-                else None,
+                "price": (
+                    Price.from_dict(obj.get("price"))
+                    if obj.get("price") is not None
+                    else None
+                ),
                 "quantity": obj.get("quantity"),
-                "discount": Discount.from_dict(obj.get("discount"))
-                if obj.get("discount") is not None
-                else None,
+                "discount": (
+                    Discount.from_dict(obj.get("discount"))
+                    if obj.get("discount") is not None
+                    else None
+                ),
             }
         )
         return _obj

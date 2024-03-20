@@ -68,12 +68,14 @@ class TopSearchesResponseWithAnalytics(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "searches": [
-                    TopSearchWithAnalytics.from_dict(_item)
-                    for _item in obj.get("searches")
-                ]
-                if obj.get("searches") is not None
-                else None
+                "searches": (
+                    [
+                        TopSearchWithAnalytics.from_dict(_item)
+                        for _item in obj.get("searches")
+                    ]
+                    if obj.get("searches") is not None
+                    else None
+                )
             }
         )
         return _obj

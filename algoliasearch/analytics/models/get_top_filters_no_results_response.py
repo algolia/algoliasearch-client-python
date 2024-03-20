@@ -68,12 +68,14 @@ class GetTopFiltersNoResultsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "values": [
-                    GetTopFiltersNoResultsValues.from_dict(_item)
-                    for _item in obj.get("values")
-                ]
-                if obj.get("values") is not None
-                else None
+                "values": (
+                    [
+                        GetTopFiltersNoResultsValues.from_dict(_item)
+                        for _item in obj.get("values")
+                    ]
+                    if obj.get("values") is not None
+                    else None
+                )
             }
         )
         return _obj

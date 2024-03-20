@@ -23,9 +23,9 @@ class GetTopHitsResponse(BaseModel):
 
     oneof_schema_1_validator: Optional[TopHitsResponse] = None
     oneof_schema_2_validator: Optional[TopHitsResponseWithAnalytics] = None
-    actual_instance: Optional[
-        Union[TopHitsResponse, TopHitsResponseWithAnalytics]
-    ] = None
+    actual_instance: Optional[Union[TopHitsResponse, TopHitsResponseWithAnalytics]] = (
+        None
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         if args:

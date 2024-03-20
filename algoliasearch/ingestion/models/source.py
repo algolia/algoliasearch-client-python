@@ -78,9 +78,11 @@ class Source(BaseModel):
                 "sourceID": obj.get("sourceID"),
                 "type": obj.get("type"),
                 "name": obj.get("name"),
-                "input": SourceInput.from_dict(obj.get("input"))
-                if obj.get("input") is not None
-                else None,
+                "input": (
+                    SourceInput.from_dict(obj.get("input"))
+                    if obj.get("input") is not None
+                    else None
+                ),
                 "authenticationID": obj.get("authenticationID"),
                 "createdAt": obj.get("createdAt"),
                 "updatedAt": obj.get("updatedAt"),

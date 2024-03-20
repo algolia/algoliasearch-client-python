@@ -64,11 +64,14 @@ class GetObjectsParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "requests": [
-                    GetObjectsRequest.from_dict(_item) for _item in obj.get("requests")
-                ]
-                if obj.get("requests") is not None
-                else None
+                "requests": (
+                    [
+                        GetObjectsRequest.from_dict(_item)
+                        for _item in obj.get("requests")
+                    ]
+                    if obj.get("requests") is not None
+                    else None
+                )
             }
         )
         return _obj

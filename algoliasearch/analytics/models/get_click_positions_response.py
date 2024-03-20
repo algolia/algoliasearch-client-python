@@ -18,9 +18,9 @@ class GetClickPositionsResponse(BaseModel):
     GetClickPositionsResponse
     """
 
-    positions: Annotated[
-        List[ClickPosition], Field(min_length=2, max_length=2)
-    ] = Field(description="Click positions.")
+    positions: Annotated[List[ClickPosition], Field(min_length=2, max_length=2)] = (
+        Field(description="Click positions.")
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -66,11 +66,11 @@ class GetClickPositionsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "positions": [
-                    ClickPosition.from_dict(_item) for _item in obj.get("positions")
-                ]
-                if obj.get("positions") is not None
-                else None
+                "positions": (
+                    [ClickPosition.from_dict(_item) for _item in obj.get("positions")]
+                    if obj.get("positions") is not None
+                    else None
+                )
             }
         )
         return _obj

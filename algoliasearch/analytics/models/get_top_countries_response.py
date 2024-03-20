@@ -64,11 +64,11 @@ class GetTopCountriesResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "countries": [
-                    TopCountry.from_dict(_item) for _item in obj.get("countries")
-                ]
-                if obj.get("countries") is not None
-                else None
+                "countries": (
+                    [TopCountry.from_dict(_item) for _item in obj.get("countries")]
+                    if obj.get("countries") is not None
+                    else None
+                )
             }
         )
         return _obj

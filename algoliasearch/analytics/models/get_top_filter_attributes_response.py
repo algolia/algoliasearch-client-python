@@ -68,12 +68,14 @@ class GetTopFilterAttributesResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "attributes": [
-                    GetTopFilterAttribute.from_dict(_item)
-                    for _item in obj.get("attributes")
-                ]
-                if obj.get("attributes") is not None
-                else None
+                "attributes": (
+                    [
+                        GetTopFilterAttribute.from_dict(_item)
+                        for _item in obj.get("attributes")
+                    ]
+                    if obj.get("attributes") is not None
+                    else None
+                )
             }
         )
         return _obj

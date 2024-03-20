@@ -110,21 +110,27 @@ class RecommendHit(BaseModel):
         _obj = cls.model_validate(
             {
                 "objectID": obj.get("objectID"),
-                "_highlightResult": dict(
-                    (_k, HighlightResult.from_dict(_v))
-                    for _k, _v in obj.get("_highlightResult").items()
-                )
-                if obj.get("_highlightResult") is not None
-                else None,
-                "_snippetResult": dict(
-                    (_k, SnippetResult.from_dict(_v))
-                    for _k, _v in obj.get("_snippetResult").items()
-                )
-                if obj.get("_snippetResult") is not None
-                else None,
-                "_rankingInfo": RankingInfo.from_dict(obj.get("_rankingInfo"))
-                if obj.get("_rankingInfo") is not None
-                else None,
+                "_highlightResult": (
+                    dict(
+                        (_k, HighlightResult.from_dict(_v))
+                        for _k, _v in obj.get("_highlightResult").items()
+                    )
+                    if obj.get("_highlightResult") is not None
+                    else None
+                ),
+                "_snippetResult": (
+                    dict(
+                        (_k, SnippetResult.from_dict(_v))
+                        for _k, _v in obj.get("_snippetResult").items()
+                    )
+                    if obj.get("_snippetResult") is not None
+                    else None
+                ),
+                "_rankingInfo": (
+                    RankingInfo.from_dict(obj.get("_rankingInfo"))
+                    if obj.get("_rankingInfo") is not None
+                    else None
+                ),
                 "_distinctSeqID": obj.get("_distinctSeqID"),
                 "_score": obj.get("_score"),
             }

@@ -85,22 +85,28 @@ class SourceBigCommerce(BaseModel):
         _obj = cls.model_validate(
             {
                 "storeHash": obj.get("storeHash"),
-                "channel": BigCommerceChannel.from_dict(obj.get("channel"))
-                if obj.get("channel") is not None
-                else None,
+                "channel": (
+                    BigCommerceChannel.from_dict(obj.get("channel"))
+                    if obj.get("channel") is not None
+                    else None
+                ),
                 "customFields": obj.get("customFields"),
-                "productMetafields": [
-                    BigCommerceMetafield.from_dict(_item)
-                    for _item in obj.get("productMetafields")
-                ]
-                if obj.get("productMetafields") is not None
-                else None,
-                "variantMetafields": [
-                    BigCommerceMetafield.from_dict(_item)
-                    for _item in obj.get("variantMetafields")
-                ]
-                if obj.get("variantMetafields") is not None
-                else None,
+                "productMetafields": (
+                    [
+                        BigCommerceMetafield.from_dict(_item)
+                        for _item in obj.get("productMetafields")
+                    ]
+                    if obj.get("productMetafields") is not None
+                    else None
+                ),
+                "variantMetafields": (
+                    [
+                        BigCommerceMetafield.from_dict(_item)
+                        for _item in obj.get("variantMetafields")
+                    ]
+                    if obj.get("variantMetafields") is not None
+                    else None
+                ),
             }
         )
         return _obj

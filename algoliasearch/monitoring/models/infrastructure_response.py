@@ -62,9 +62,11 @@ class InfrastructureResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "metrics": InfrastructureResponseMetrics.from_dict(obj.get("metrics"))
-                if obj.get("metrics") is not None
-                else None
+                "metrics": (
+                    InfrastructureResponseMetrics.from_dict(obj.get("metrics"))
+                    if obj.get("metrics") is not None
+                    else None
+                )
             }
         )
         return _obj

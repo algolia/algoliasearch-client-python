@@ -64,11 +64,11 @@ class ListApiKeysResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "keys": [
-                    GetApiKeyResponse.from_dict(_item) for _item in obj.get("keys")
-                ]
-                if obj.get("keys") is not None
-                else None
+                "keys": (
+                    [GetApiKeyResponse.from_dict(_item) for _item in obj.get("keys")]
+                    if obj.get("keys") is not None
+                    else None
+                )
             }
         )
         return _obj

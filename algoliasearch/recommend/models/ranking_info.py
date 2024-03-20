@@ -113,14 +113,16 @@ class RankingInfo(BaseModel):
                 "firstMatchedWord": obj.get("firstMatchedWord"),
                 "geoDistance": obj.get("geoDistance"),
                 "geoPrecision": obj.get("geoPrecision"),
-                "matchedGeoLocation": MatchedGeoLocation.from_dict(
-                    obj.get("matchedGeoLocation")
-                )
-                if obj.get("matchedGeoLocation") is not None
-                else None,
-                "personalization": Personalization.from_dict(obj.get("personalization"))
-                if obj.get("personalization") is not None
-                else None,
+                "matchedGeoLocation": (
+                    MatchedGeoLocation.from_dict(obj.get("matchedGeoLocation"))
+                    if obj.get("matchedGeoLocation") is not None
+                    else None
+                ),
+                "personalization": (
+                    Personalization.from_dict(obj.get("personalization"))
+                    if obj.get("personalization") is not None
+                    else None
+                ),
                 "nbExactWords": obj.get("nbExactWords"),
                 "nbTypos": obj.get("nbTypos"),
                 "promoted": obj.get("promoted"),

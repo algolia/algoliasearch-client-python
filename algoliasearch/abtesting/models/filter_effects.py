@@ -68,14 +68,16 @@ class FilterEffects(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "outliers": FilterEffectsOutliers.from_dict(obj.get("outliers"))
-                if obj.get("outliers") is not None
-                else None,
-                "emptySearch": FilterEffectsEmptySearch.from_dict(
-                    obj.get("emptySearch")
-                )
-                if obj.get("emptySearch") is not None
-                else None,
+                "outliers": (
+                    FilterEffectsOutliers.from_dict(obj.get("outliers"))
+                    if obj.get("outliers") is not None
+                    else None
+                ),
+                "emptySearch": (
+                    FilterEffectsEmptySearch.from_dict(obj.get("emptySearch"))
+                    if obj.get("emptySearch") is not None
+                    else None
+                ),
             }
         )
         return _obj

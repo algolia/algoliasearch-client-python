@@ -80,9 +80,11 @@ class Destination(BaseModel):
                 "destinationID": obj.get("destinationID"),
                 "type": obj.get("type"),
                 "name": obj.get("name"),
-                "input": DestinationInput.from_dict(obj.get("input"))
-                if obj.get("input") is not None
-                else None,
+                "input": (
+                    DestinationInput.from_dict(obj.get("input"))
+                    if obj.get("input") is not None
+                    else None
+                ),
                 "createdAt": obj.get("createdAt"),
                 "updatedAt": obj.get("updatedAt"),
                 "authenticationID": obj.get("authenticationID"),

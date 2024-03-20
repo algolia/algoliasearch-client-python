@@ -44,12 +44,12 @@ class IndexSettings(BaseModel):
         default=None,
         description="Creates [replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/).  Replicas are copies of a primary index with the same records but different settings, synonyms, or rules. If you want to offer a different ranking or sorting of your search results, you'll use replica indices. All index operations on a primary index are automatically forwarded to its replicas. To add a replica index, you must provide the complete set of replicas to this parameter. If you omit a replica from this list, the replica turns into a regular, standalone index that will no longer by synced with the primary index.  **Modifier**  <dl> <dt><code>virtual(\"REPLICA\")</code></dt> <dd>  Create a virtual replica, Virtual replicas don't increase the number of records and are optimized for [Relevant sorting](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/relevant-sort/).  </dd> </dl>  Without modifier, a standard replica is created, which duplicates your record count and is used for strict, or [exhaustive sorting](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/exhaustive-sort/). ",
     )
-    pagination_limited_to: Optional[
-        Annotated[int, Field(le=20000, strict=True)]
-    ] = Field(
-        default=1000,
-        description="Maximum number of search results that can be obtained through pagination.  Higher pagination limits might slow down your search. For pagination limits above 1,000, the sorting of results beyond the 1,000th hit can't be guaranteed. ",
-        alias="paginationLimitedTo",
+    pagination_limited_to: Optional[Annotated[int, Field(le=20000, strict=True)]] = (
+        Field(
+            default=1000,
+            description="Maximum number of search results that can be obtained through pagination.  Higher pagination limits might slow down your search. For pagination limits above 1,000, the sorting of results beyond the 1,000th hit can't be guaranteed. ",
+            alias="paginationLimitedTo",
+        )
     )
     unretrievable_attributes: Optional[List[StrictStr]] = Field(
         default=None,
@@ -401,19 +401,25 @@ class IndexSettings(BaseModel):
                 "hitsPerPage": obj.get("hitsPerPage"),
                 "minWordSizefor1Typo": obj.get("minWordSizefor1Typo"),
                 "minWordSizefor2Typos": obj.get("minWordSizefor2Typos"),
-                "typoTolerance": TypoTolerance.from_dict(obj.get("typoTolerance"))
-                if obj.get("typoTolerance") is not None
-                else None,
+                "typoTolerance": (
+                    TypoTolerance.from_dict(obj.get("typoTolerance"))
+                    if obj.get("typoTolerance") is not None
+                    else None
+                ),
                 "allowTyposOnNumericTokens": obj.get("allowTyposOnNumericTokens"),
                 "disableTypoToleranceOnAttributes": obj.get(
                     "disableTypoToleranceOnAttributes"
                 ),
-                "ignorePlurals": IgnorePlurals.from_dict(obj.get("ignorePlurals"))
-                if obj.get("ignorePlurals") is not None
-                else None,
-                "removeStopWords": RemoveStopWords.from_dict(obj.get("removeStopWords"))
-                if obj.get("removeStopWords") is not None
-                else None,
+                "ignorePlurals": (
+                    IgnorePlurals.from_dict(obj.get("ignorePlurals"))
+                    if obj.get("ignorePlurals") is not None
+                    else None
+                ),
+                "removeStopWords": (
+                    RemoveStopWords.from_dict(obj.get("removeStopWords"))
+                    if obj.get("removeStopWords") is not None
+                    else None
+                ),
                 "keepDiacriticsOnCharacters": obj.get("keepDiacriticsOnCharacters"),
                 "queryLanguages": obj.get("queryLanguages"),
                 "decompoundQuery": obj.get("decompoundQuery"),
@@ -422,18 +428,22 @@ class IndexSettings(BaseModel):
                 "queryType": obj.get("queryType"),
                 "removeWordsIfNoResults": obj.get("removeWordsIfNoResults"),
                 "mode": obj.get("mode"),
-                "semanticSearch": SemanticSearch.from_dict(obj.get("semanticSearch"))
-                if obj.get("semanticSearch") is not None
-                else None,
+                "semanticSearch": (
+                    SemanticSearch.from_dict(obj.get("semanticSearch"))
+                    if obj.get("semanticSearch") is not None
+                    else None
+                ),
                 "advancedSyntax": obj.get("advancedSyntax"),
                 "optionalWords": obj.get("optionalWords"),
                 "disableExactOnAttributes": obj.get("disableExactOnAttributes"),
                 "exactOnSingleWordQuery": obj.get("exactOnSingleWordQuery"),
                 "alternativesAsExact": obj.get("alternativesAsExact"),
                 "advancedSyntaxFeatures": obj.get("advancedSyntaxFeatures"),
-                "distinct": Distinct.from_dict(obj.get("distinct"))
-                if obj.get("distinct") is not None
-                else None,
+                "distinct": (
+                    Distinct.from_dict(obj.get("distinct"))
+                    if obj.get("distinct") is not None
+                    else None
+                ),
                 "replaceSynonymsInHighlight": obj.get("replaceSynonymsInHighlight"),
                 "minProximity": obj.get("minProximity"),
                 "responseFields": obj.get("responseFields"),
@@ -443,17 +453,17 @@ class IndexSettings(BaseModel):
                 "attributeCriteriaComputedByMinProximity": obj.get(
                     "attributeCriteriaComputedByMinProximity"
                 ),
-                "renderingContent": RenderingContent.from_dict(
-                    obj.get("renderingContent")
-                )
-                if obj.get("renderingContent") is not None
-                else None,
+                "renderingContent": (
+                    RenderingContent.from_dict(obj.get("renderingContent"))
+                    if obj.get("renderingContent") is not None
+                    else None
+                ),
                 "enableReRanking": obj.get("enableReRanking"),
-                "reRankingApplyFilter": ReRankingApplyFilter.from_dict(
-                    obj.get("reRankingApplyFilter")
-                )
-                if obj.get("reRankingApplyFilter") is not None
-                else None,
+                "reRankingApplyFilter": (
+                    ReRankingApplyFilter.from_dict(obj.get("reRankingApplyFilter"))
+                    if obj.get("reRankingApplyFilter") is not None
+                    else None
+                ),
             }
         )
         return _obj

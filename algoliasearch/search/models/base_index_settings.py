@@ -27,12 +27,12 @@ class BaseIndexSettings(BaseModel):
         default=None,
         description="Creates [replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/).  Replicas are copies of a primary index with the same records but different settings, synonyms, or rules. If you want to offer a different ranking or sorting of your search results, you'll use replica indices. All index operations on a primary index are automatically forwarded to its replicas. To add a replica index, you must provide the complete set of replicas to this parameter. If you omit a replica from this list, the replica turns into a regular, standalone index that will no longer by synced with the primary index.  **Modifier**  <dl> <dt><code>virtual(\"REPLICA\")</code></dt> <dd>  Create a virtual replica, Virtual replicas don't increase the number of records and are optimized for [Relevant sorting](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/relevant-sort/).  </dd> </dl>  Without modifier, a standard replica is created, which duplicates your record count and is used for strict, or [exhaustive sorting](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/exhaustive-sort/). ",
     )
-    pagination_limited_to: Optional[
-        Annotated[int, Field(le=20000, strict=True)]
-    ] = Field(
-        default=1000,
-        description="Maximum number of search results that can be obtained through pagination.  Higher pagination limits might slow down your search. For pagination limits above 1,000, the sorting of results beyond the 1,000th hit can't be guaranteed. ",
-        alias="paginationLimitedTo",
+    pagination_limited_to: Optional[Annotated[int, Field(le=20000, strict=True)]] = (
+        Field(
+            default=1000,
+            description="Maximum number of search results that can be obtained through pagination.  Higher pagination limits might slow down your search. For pagination limits above 1,000, the sorting of results beyond the 1,000th hit can't be guaranteed. ",
+            alias="paginationLimitedTo",
+        )
     )
     unretrievable_attributes: Optional[List[StrictStr]] = Field(
         default=None,

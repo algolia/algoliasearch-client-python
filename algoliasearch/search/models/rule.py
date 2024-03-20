@@ -94,21 +94,23 @@ class Rule(BaseModel):
         _obj = cls.model_validate(
             {
                 "objectID": obj.get("objectID"),
-                "conditions": [
-                    Condition.from_dict(_item) for _item in obj.get("conditions")
-                ]
-                if obj.get("conditions") is not None
-                else None,
-                "consequence": Consequence.from_dict(obj.get("consequence"))
-                if obj.get("consequence") is not None
-                else None,
+                "conditions": (
+                    [Condition.from_dict(_item) for _item in obj.get("conditions")]
+                    if obj.get("conditions") is not None
+                    else None
+                ),
+                "consequence": (
+                    Consequence.from_dict(obj.get("consequence"))
+                    if obj.get("consequence") is not None
+                    else None
+                ),
                 "description": obj.get("description"),
                 "enabled": obj.get("enabled"),
-                "validity": [
-                    TimeRange.from_dict(_item) for _item in obj.get("validity")
-                ]
-                if obj.get("validity") is not None
-                else None,
+                "validity": (
+                    [TimeRange.from_dict(_item) for _item in obj.get("validity")]
+                    if obj.get("validity") is not None
+                    else None
+                ),
             }
         )
         return _obj

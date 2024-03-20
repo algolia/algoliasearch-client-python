@@ -86,9 +86,11 @@ class SecuredAPIKeyRestrictions(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "searchParams": SearchParamsObject.from_dict(obj.get("searchParams"))
-                if obj.get("searchParams") is not None
-                else None,
+                "searchParams": (
+                    SearchParamsObject.from_dict(obj.get("searchParams"))
+                    if obj.get("searchParams") is not None
+                    else None
+                ),
                 "filters": obj.get("filters"),
                 "validUntil": obj.get("validUntil"),
                 "restrictIndices": obj.get("restrictIndices"),

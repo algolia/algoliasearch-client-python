@@ -68,9 +68,11 @@ class DestinationCreate(BaseModel):
             {
                 "type": obj.get("type"),
                 "name": obj.get("name"),
-                "input": DestinationInput.from_dict(obj.get("input"))
-                if obj.get("input") is not None
-                else None,
+                "input": (
+                    DestinationInput.from_dict(obj.get("input"))
+                    if obj.get("input") is not None
+                    else None
+                ),
                 "authenticationID": obj.get("authenticationID"),
             }
         )

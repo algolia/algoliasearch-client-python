@@ -74,16 +74,16 @@ class BaseRecommendationsQuery(BaseModel):
             {
                 "model": obj.get("model"),
                 "objectID": obj.get("objectID"),
-                "queryParameters": SearchParamsObject.from_dict(
-                    obj.get("queryParameters")
-                )
-                if obj.get("queryParameters") is not None
-                else None,
-                "fallbackParameters": SearchParamsObject.from_dict(
-                    obj.get("fallbackParameters")
-                )
-                if obj.get("fallbackParameters") is not None
-                else None,
+                "queryParameters": (
+                    SearchParamsObject.from_dict(obj.get("queryParameters"))
+                    if obj.get("queryParameters") is not None
+                    else None
+                ),
+                "fallbackParameters": (
+                    SearchParamsObject.from_dict(obj.get("fallbackParameters"))
+                    if obj.get("fallbackParameters") is not None
+                    else None
+                ),
             }
         )
         return _obj

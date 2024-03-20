@@ -23,9 +23,9 @@ class SearchResult(BaseModel):
 
     oneof_schema_1_validator: Optional[SearchResponse] = None
     oneof_schema_2_validator: Optional[SearchForFacetValuesResponse] = None
-    actual_instance: Optional[
-        Union[SearchForFacetValuesResponse, SearchResponse]
-    ] = None
+    actual_instance: Optional[Union[SearchForFacetValuesResponse, SearchResponse]] = (
+        None
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         if args:

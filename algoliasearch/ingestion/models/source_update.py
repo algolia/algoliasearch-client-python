@@ -65,9 +65,11 @@ class SourceUpdate(BaseModel):
         _obj = cls.model_validate(
             {
                 "name": obj.get("name"),
-                "input": SourceUpdateInput.from_dict(obj.get("input"))
-                if obj.get("input") is not None
-                else None,
+                "input": (
+                    SourceUpdateInput.from_dict(obj.get("input"))
+                    if obj.get("input") is not None
+                    else None
+                ),
                 "authenticationID": obj.get("authenticationID"),
             }
         )

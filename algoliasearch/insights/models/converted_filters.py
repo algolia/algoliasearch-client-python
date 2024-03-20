@@ -30,11 +30,11 @@ class ConvertedFilters(BaseModel):
     filters: Annotated[List[StrictStr], Field(min_length=1, max_length=20)] = Field(
         description="Applied facet filters.  Facet filters are `facet:value` pairs. Facet values must be URL-encoded, such as, `discount:10%25`. "
     )
-    user_token: Annotated[
-        str, Field(min_length=1, strict=True, max_length=129)
-    ] = Field(
-        description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
-        alias="userToken",
+    user_token: Annotated[str, Field(min_length=1, strict=True, max_length=129)] = (
+        Field(
+            description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
+            alias="userToken",
+        )
     )
     authenticated_user_token: Optional[
         Annotated[str, Field(min_length=1, strict=True, max_length=129)]

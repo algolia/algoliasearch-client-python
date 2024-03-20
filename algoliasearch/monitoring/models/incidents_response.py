@@ -69,9 +69,11 @@ class IncidentsResponse(BaseModel):
                 "incidents": dict(
                     (
                         _k,
-                        [IncidentsInner.from_dict(_item) for _item in _v]
-                        if _v is not None
-                        else None,
+                        (
+                            [IncidentsInner.from_dict(_item) for _item in _v]
+                            if _v is not None
+                            else None
+                        ),
                     )
                     for _k, _v in obj.get("incidents").items()
                 )

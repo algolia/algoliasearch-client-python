@@ -64,9 +64,11 @@ class ListUserIdsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "userIDs": [UserId.from_dict(_item) for _item in obj.get("userIDs")]
-                if obj.get("userIDs") is not None
-                else None
+                "userIDs": (
+                    [UserId.from_dict(_item) for _item in obj.get("userIDs")]
+                    if obj.get("userIDs") is not None
+                    else None
+                )
             }
         )
         return _obj

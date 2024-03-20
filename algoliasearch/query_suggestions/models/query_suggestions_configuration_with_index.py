@@ -93,14 +93,16 @@ class QuerySuggestionsConfigurationWithIndex(BaseModel):
         _obj = cls.model_validate(
             {
                 "indexName": obj.get("indexName"),
-                "sourceIndices": [
-                    SourceIndex.from_dict(_item) for _item in obj.get("sourceIndices")
-                ]
-                if obj.get("sourceIndices") is not None
-                else None,
-                "languages": Languages.from_dict(obj.get("languages"))
-                if obj.get("languages") is not None
-                else None,
+                "sourceIndices": (
+                    [SourceIndex.from_dict(_item) for _item in obj.get("sourceIndices")]
+                    if obj.get("sourceIndices") is not None
+                    else None
+                ),
+                "languages": (
+                    Languages.from_dict(obj.get("languages"))
+                    if obj.get("languages") is not None
+                    else None
+                ),
                 "exclude": obj.get("exclude"),
                 "enablePersonalization": obj.get("enablePersonalization"),
                 "allowSpecialCharacters": obj.get("allowSpecialCharacters"),

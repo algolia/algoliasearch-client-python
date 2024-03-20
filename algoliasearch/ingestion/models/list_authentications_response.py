@@ -68,15 +68,19 @@ class ListAuthenticationsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "authentications": [
-                    Authentication.from_dict(_item)
-                    for _item in obj.get("authentications")
-                ]
-                if obj.get("authentications") is not None
-                else None,
-                "pagination": Pagination.from_dict(obj.get("pagination"))
-                if obj.get("pagination") is not None
-                else None,
+                "authentications": (
+                    [
+                        Authentication.from_dict(_item)
+                        for _item in obj.get("authentications")
+                    ]
+                    if obj.get("authentications") is not None
+                    else None
+                ),
+                "pagination": (
+                    Pagination.from_dict(obj.get("pagination"))
+                    if obj.get("pagination") is not None
+                    else None
+                ),
             }
         )
         return _obj

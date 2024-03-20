@@ -69,9 +69,11 @@ class ListIndicesResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "items": [FetchedIndex.from_dict(_item) for _item in obj.get("items")]
-                if obj.get("items") is not None
-                else None,
+                "items": (
+                    [FetchedIndex.from_dict(_item) for _item in obj.get("items")]
+                    if obj.get("items") is not None
+                    else None
+                ),
                 "nbPages": obj.get("nbPages"),
             }
         )

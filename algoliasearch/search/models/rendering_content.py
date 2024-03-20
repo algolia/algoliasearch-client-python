@@ -60,9 +60,11 @@ class RenderingContent(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "facetOrdering": FacetOrdering.from_dict(obj.get("facetOrdering"))
-                if obj.get("facetOrdering") is not None
-                else None
+                "facetOrdering": (
+                    FacetOrdering.from_dict(obj.get("facetOrdering"))
+                    if obj.get("facetOrdering") is not None
+                    else None
+                )
             }
         )
         return _obj

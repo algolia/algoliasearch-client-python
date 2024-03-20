@@ -150,9 +150,11 @@ class ABTest(BaseModel):
                 "endAt": obj.get("endAt"),
                 "name": obj.get("name"),
                 "status": obj.get("status"),
-                "variants": [Variant.from_dict(_item) for _item in obj.get("variants")]
-                if obj.get("variants") is not None
-                else None,
+                "variants": (
+                    [Variant.from_dict(_item) for _item in obj.get("variants")]
+                    if obj.get("variants") is not None
+                    else None
+                ),
             }
         )
         return _obj

@@ -76,12 +76,14 @@ class BatchDictionaryEntriesParams(BaseModel):
                 "clearExistingDictionaryEntries": obj.get(
                     "clearExistingDictionaryEntries"
                 ),
-                "requests": [
-                    BatchDictionaryEntriesRequest.from_dict(_item)
-                    for _item in obj.get("requests")
-                ]
-                if obj.get("requests") is not None
-                else None,
+                "requests": (
+                    [
+                        BatchDictionaryEntriesRequest.from_dict(_item)
+                        for _item in obj.get("requests")
+                    ]
+                    if obj.get("requests") is not None
+                    else None
+                ),
             }
         )
         return _obj

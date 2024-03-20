@@ -204,17 +204,21 @@ class Variant(BaseModel):
                 "clickThroughRate": obj.get("clickThroughRate"),
                 "conversionCount": obj.get("conversionCount"),
                 "conversionRate": obj.get("conversionRate"),
-                "currencies": dict(
-                    (_k, CurrenciesValue.from_dict(_v))
-                    for _k, _v in obj.get("currencies").items()
-                )
-                if obj.get("currencies") is not None
-                else None,
+                "currencies": (
+                    dict(
+                        (_k, CurrenciesValue.from_dict(_v))
+                        for _k, _v in obj.get("currencies").items()
+                    )
+                    if obj.get("currencies") is not None
+                    else None
+                ),
                 "description": obj.get("description"),
                 "estimatedSampleSize": obj.get("estimatedSampleSize"),
-                "filterEffects": FilterEffects.from_dict(obj.get("filterEffects"))
-                if obj.get("filterEffects") is not None
-                else None,
+                "filterEffects": (
+                    FilterEffects.from_dict(obj.get("filterEffects"))
+                    if obj.get("filterEffects") is not None
+                    else None
+                ),
                 "index": obj.get("index"),
                 "noResultCount": obj.get("noResultCount"),
                 "purchaseCount": obj.get("purchaseCount"),

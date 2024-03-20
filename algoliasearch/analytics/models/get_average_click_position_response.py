@@ -72,11 +72,11 @@ class GetAverageClickPositionResponse(BaseModel):
             {
                 "average": obj.get("average"),
                 "clickCount": obj.get("clickCount"),
-                "dates": [
-                    AverageClickEvent.from_dict(_item) for _item in obj.get("dates")
-                ]
-                if obj.get("dates") is not None
-                else None,
+                "dates": (
+                    [AverageClickEvent.from_dict(_item) for _item in obj.get("dates")]
+                    if obj.get("dates") is not None
+                    else None
+                ),
             }
         )
         return _obj

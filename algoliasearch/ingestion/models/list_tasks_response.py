@@ -68,12 +68,16 @@ class ListTasksResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "tasks": [Task.from_dict(_item) for _item in obj.get("tasks")]
-                if obj.get("tasks") is not None
-                else None,
-                "pagination": Pagination.from_dict(obj.get("pagination"))
-                if obj.get("pagination") is not None
-                else None,
+                "tasks": (
+                    [Task.from_dict(_item) for _item in obj.get("tasks")]
+                    if obj.get("tasks") is not None
+                    else None
+                ),
+                "pagination": (
+                    Pagination.from_dict(obj.get("pagination"))
+                    if obj.get("pagination") is not None
+                    else None
+                ),
             }
         )
         return _obj

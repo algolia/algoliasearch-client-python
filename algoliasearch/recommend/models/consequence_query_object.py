@@ -70,9 +70,11 @@ class ConsequenceQueryObject(BaseModel):
         _obj = cls.model_validate(
             {
                 "remove": obj.get("remove"),
-                "edits": [Edit.from_dict(_item) for _item in obj.get("edits")]
-                if obj.get("edits") is not None
-                else None,
+                "edits": (
+                    [Edit.from_dict(_item) for _item in obj.get("edits")]
+                    if obj.get("edits") is not None
+                    else None
+                ),
             }
         )
         return _obj

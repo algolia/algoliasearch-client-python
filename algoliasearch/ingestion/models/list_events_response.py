@@ -72,15 +72,21 @@ class ListEventsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "events": [Event.from_dict(_item) for _item in obj.get("events")]
-                if obj.get("events") is not None
-                else None,
-                "pagination": Pagination.from_dict(obj.get("pagination"))
-                if obj.get("pagination") is not None
-                else None,
-                "window": Window.from_dict(obj.get("window"))
-                if obj.get("window") is not None
-                else None,
+                "events": (
+                    [Event.from_dict(_item) for _item in obj.get("events")]
+                    if obj.get("events") is not None
+                    else None
+                ),
+                "pagination": (
+                    Pagination.from_dict(obj.get("pagination"))
+                    if obj.get("pagination") is not None
+                    else None
+                ),
+                "window": (
+                    Window.from_dict(obj.get("window"))
+                    if obj.get("window") is not None
+                    else None
+                ),
             }
         )
         return _obj

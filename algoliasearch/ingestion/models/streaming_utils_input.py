@@ -60,9 +60,11 @@ class StreamingUtilsInput(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "mapping": MappingInput.from_dict(obj.get("mapping"))
-                if obj.get("mapping") is not None
-                else None
+                "mapping": (
+                    MappingInput.from_dict(obj.get("mapping"))
+                    if obj.get("mapping") is not None
+                    else None
+                )
             }
         )
         return _obj

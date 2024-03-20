@@ -111,20 +111,28 @@ class DeleteByParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "facetFilters": FacetFilters.from_dict(obj.get("facetFilters"))
-                if obj.get("facetFilters") is not None
-                else None,
+                "facetFilters": (
+                    FacetFilters.from_dict(obj.get("facetFilters"))
+                    if obj.get("facetFilters") is not None
+                    else None
+                ),
                 "filters": obj.get("filters"),
-                "numericFilters": NumericFilters.from_dict(obj.get("numericFilters"))
-                if obj.get("numericFilters") is not None
-                else None,
-                "tagFilters": TagFilters.from_dict(obj.get("tagFilters"))
-                if obj.get("tagFilters") is not None
-                else None,
+                "numericFilters": (
+                    NumericFilters.from_dict(obj.get("numericFilters"))
+                    if obj.get("numericFilters") is not None
+                    else None
+                ),
+                "tagFilters": (
+                    TagFilters.from_dict(obj.get("tagFilters"))
+                    if obj.get("tagFilters") is not None
+                    else None
+                ),
                 "aroundLatLng": obj.get("aroundLatLng"),
-                "aroundRadius": AroundRadius.from_dict(obj.get("aroundRadius"))
-                if obj.get("aroundRadius") is not None
-                else None,
+                "aroundRadius": (
+                    AroundRadius.from_dict(obj.get("aroundRadius"))
+                    if obj.get("aroundRadius") is not None
+                    else None
+                ),
                 "insideBoundingBox": obj.get("insideBoundingBox"),
                 "insidePolygon": obj.get("insidePolygon"),
             }

@@ -66,11 +66,11 @@ class SearchMethodParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "requests": [
-                    SearchQuery.from_dict(_item) for _item in obj.get("requests")
-                ]
-                if obj.get("requests") is not None
-                else None,
+                "requests": (
+                    [SearchQuery.from_dict(_item) for _item in obj.get("requests")]
+                    if obj.get("requests") is not None
+                    else None
+                ),
                 "strategy": obj.get("strategy"),
             }
         )

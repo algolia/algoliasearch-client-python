@@ -31,11 +31,11 @@ class ConvertedObjectIDs(BaseModel):
         description="Object IDs of the records that are part of the event.",
         alias="objectIDs",
     )
-    user_token: Annotated[
-        str, Field(min_length=1, strict=True, max_length=129)
-    ] = Field(
-        description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
-        alias="userToken",
+    user_token: Annotated[str, Field(min_length=1, strict=True, max_length=129)] = (
+        Field(
+            description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
+            alias="userToken",
+        )
     )
     authenticated_user_token: Optional[
         Annotated[str, Field(min_length=1, strict=True, max_length=129)]

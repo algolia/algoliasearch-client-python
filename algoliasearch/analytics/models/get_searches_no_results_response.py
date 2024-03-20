@@ -64,12 +64,14 @@ class GetSearchesNoResultsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "searches": [
-                    SearchNoResultEvent.from_dict(_item)
-                    for _item in obj.get("searches")
-                ]
-                if obj.get("searches") is not None
-                else None
+                "searches": (
+                    [
+                        SearchNoResultEvent.from_dict(_item)
+                        for _item in obj.get("searches")
+                    ]
+                    if obj.get("searches") is not None
+                    else None
+                )
             }
         )
         return _obj

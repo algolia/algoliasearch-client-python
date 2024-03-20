@@ -80,9 +80,11 @@ class SearchHits(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "hits": [Hit.from_dict(_item) for _item in obj.get("hits")]
-                if obj.get("hits") is not None
-                else None,
+                "hits": (
+                    [Hit.from_dict(_item) for _item in obj.get("hits")]
+                    if obj.get("hits") is not None
+                    else None
+                ),
                 "query": obj.get("query"),
                 "params": obj.get("params"),
             }

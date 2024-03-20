@@ -89,11 +89,11 @@ class UserHit(BaseModel):
                 "nbRecords": obj.get("nbRecords"),
                 "dataSize": obj.get("dataSize"),
                 "objectID": obj.get("objectID"),
-                "_highlightResult": UserHighlightResult.from_dict(
-                    obj.get("_highlightResult")
-                )
-                if obj.get("_highlightResult") is not None
-                else None,
+                "_highlightResult": (
+                    UserHighlightResult.from_dict(obj.get("_highlightResult"))
+                    if obj.get("_highlightResult") is not None
+                    else None
+                ),
             }
         )
         return _obj

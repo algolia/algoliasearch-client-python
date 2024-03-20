@@ -113,9 +113,11 @@ class SourceIndex(BaseModel):
                 "indexName": obj.get("indexName"),
                 "replicas": obj.get("replicas"),
                 "analyticsTags": obj.get("analyticsTags"),
-                "facets": [Facet.from_dict(_item) for _item in obj.get("facets")]
-                if obj.get("facets") is not None
-                else None,
+                "facets": (
+                    [Facet.from_dict(_item) for _item in obj.get("facets")]
+                    if obj.get("facets") is not None
+                    else None
+                ),
                 "minHits": obj.get("minHits"),
                 "minLetters": obj.get("minLetters"),
                 "generate": obj.get("generate"),

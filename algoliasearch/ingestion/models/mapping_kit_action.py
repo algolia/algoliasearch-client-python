@@ -74,12 +74,14 @@ class MappingKitAction(BaseModel):
                 "id": obj.get("id"),
                 "enabled": obj.get("enabled"),
                 "trigger": obj.get("trigger"),
-                "fieldDirectives": [
-                    MappingFieldDirective.from_dict(_item)
-                    for _item in obj.get("fieldDirectives")
-                ]
-                if obj.get("fieldDirectives") is not None
-                else None,
+                "fieldDirectives": (
+                    [
+                        MappingFieldDirective.from_dict(_item)
+                        for _item in obj.get("fieldDirectives")
+                    ]
+                    if obj.get("fieldDirectives") is not None
+                    else None
+                ),
             }
         )
         return _obj

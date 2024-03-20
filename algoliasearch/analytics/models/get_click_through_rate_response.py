@@ -90,11 +90,14 @@ class GetClickThroughRateResponse(BaseModel):
                 "rate": obj.get("rate"),
                 "clickCount": obj.get("clickCount"),
                 "trackedSearchCount": obj.get("trackedSearchCount"),
-                "dates": [
-                    ClickThroughRateEvent.from_dict(_item) for _item in obj.get("dates")
-                ]
-                if obj.get("dates") is not None
-                else None,
+                "dates": (
+                    [
+                        ClickThroughRateEvent.from_dict(_item)
+                        for _item in obj.get("dates")
+                    ]
+                    if obj.get("dates") is not None
+                    else None
+                ),
             }
         )
         return _obj

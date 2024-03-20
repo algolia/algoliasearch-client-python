@@ -66,12 +66,14 @@ class Redirect(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "index": [
-                    RedirectRuleIndexMetadata.from_dict(_item)
-                    for _item in obj.get("index")
-                ]
-                if obj.get("index") is not None
-                else None
+                "index": (
+                    [
+                        RedirectRuleIndexMetadata.from_dict(_item)
+                        for _item in obj.get("index")
+                    ]
+                    if obj.get("index") is not None
+                    else None
+                )
             }
         )
         return _obj

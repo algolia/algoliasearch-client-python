@@ -115,11 +115,11 @@ class Log(BaseModel):
                 "index": obj.get("index"),
                 "query_params": obj.get("query_params"),
                 "query_nb_hits": obj.get("query_nb_hits"),
-                "inner_queries": [
-                    LogQuery.from_dict(_item) for _item in obj.get("inner_queries")
-                ]
-                if obj.get("inner_queries") is not None
-                else None,
+                "inner_queries": (
+                    [LogQuery.from_dict(_item) for _item in obj.get("inner_queries")]
+                    if obj.get("inner_queries") is not None
+                    else None
+                ),
             }
         )
         return _obj

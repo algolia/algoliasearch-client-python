@@ -86,18 +86,22 @@ class RuleResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "_metadata": RuleResponseMetadata.from_dict(obj.get("_metadata"))
-                if obj.get("_metadata") is not None
-                else None,
+                "_metadata": (
+                    RuleResponseMetadata.from_dict(obj.get("_metadata"))
+                    if obj.get("_metadata") is not None
+                    else None
+                ),
                 "objectID": obj.get("objectID"),
-                "conditions": [
-                    Condition.from_dict(_item) for _item in obj.get("conditions")
-                ]
-                if obj.get("conditions") is not None
-                else None,
-                "consequence": Consequence.from_dict(obj.get("consequence"))
-                if obj.get("consequence") is not None
-                else None,
+                "conditions": (
+                    [Condition.from_dict(_item) for _item in obj.get("conditions")]
+                    if obj.get("conditions") is not None
+                    else None
+                ),
+                "consequence": (
+                    Consequence.from_dict(obj.get("consequence"))
+                    if obj.get("consequence") is not None
+                    else None
+                ),
                 "description": obj.get("description"),
                 "enabled": obj.get("enabled"),
             }

@@ -72,15 +72,21 @@ class RunListResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "runs": [Run.from_dict(_item) for _item in obj.get("runs")]
-                if obj.get("runs") is not None
-                else None,
-                "pagination": Pagination.from_dict(obj.get("pagination"))
-                if obj.get("pagination") is not None
-                else None,
-                "window": Window.from_dict(obj.get("window"))
-                if obj.get("window") is not None
-                else None,
+                "runs": (
+                    [Run.from_dict(_item) for _item in obj.get("runs")]
+                    if obj.get("runs") is not None
+                    else None
+                ),
+                "pagination": (
+                    Pagination.from_dict(obj.get("pagination"))
+                    if obj.get("pagination") is not None
+                    else None
+                ),
+                "window": (
+                    Window.from_dict(obj.get("window"))
+                    if obj.get("window") is not None
+                    else None
+                ),
             }
         )
         return _obj

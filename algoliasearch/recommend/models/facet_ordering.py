@@ -70,14 +70,19 @@ class FacetOrdering(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "facets": Facets.from_dict(obj.get("facets"))
-                if obj.get("facets") is not None
-                else None,
-                "values": dict(
-                    (_k, Value.from_dict(_v)) for _k, _v in obj.get("values").items()
-                )
-                if obj.get("values") is not None
-                else None,
+                "facets": (
+                    Facets.from_dict(obj.get("facets"))
+                    if obj.get("facets") is not None
+                    else None
+                ),
+                "values": (
+                    dict(
+                        (_k, Value.from_dict(_v))
+                        for _k, _v in obj.get("values").items()
+                    )
+                    if obj.get("values") is not None
+                    else None
+                ),
             }
         )
         return _obj

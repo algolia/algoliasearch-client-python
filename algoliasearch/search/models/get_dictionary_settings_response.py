@@ -60,11 +60,11 @@ class GetDictionarySettingsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "disableStandardEntries": StandardEntries.from_dict(
-                    obj.get("disableStandardEntries")
+                "disableStandardEntries": (
+                    StandardEntries.from_dict(obj.get("disableStandardEntries"))
+                    if obj.get("disableStandardEntries") is not None
+                    else None
                 )
-                if obj.get("disableStandardEntries") is not None
-                else None
             }
         )
         return _obj

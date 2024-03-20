@@ -65,9 +65,11 @@ class IncidentsInner(BaseModel):
         _obj = cls.model_validate(
             {
                 "t": obj.get("t"),
-                "v": Incident.from_dict(obj.get("v"))
-                if obj.get("v") is not None
-                else None,
+                "v": (
+                    Incident.from_dict(obj.get("v"))
+                    if obj.get("v") is not None
+                    else None
+                ),
             }
         )
         return _obj

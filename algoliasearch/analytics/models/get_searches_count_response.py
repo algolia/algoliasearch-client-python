@@ -68,9 +68,11 @@ class GetSearchesCountResponse(BaseModel):
         _obj = cls.model_validate(
             {
                 "count": obj.get("count"),
-                "dates": [SearchEvent.from_dict(_item) for _item in obj.get("dates")]
-                if obj.get("dates") is not None
-                else None,
+                "dates": (
+                    [SearchEvent.from_dict(_item) for _item in obj.get("dates")]
+                    if obj.get("dates") is not None
+                    else None
+                ),
             }
         )
         return _obj

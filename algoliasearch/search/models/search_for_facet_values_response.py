@@ -75,11 +75,11 @@ class SearchForFacetValuesResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "facetHits": [
-                    FacetHits.from_dict(_item) for _item in obj.get("facetHits")
-                ]
-                if obj.get("facetHits") is not None
-                else None,
+                "facetHits": (
+                    [FacetHits.from_dict(_item) for _item in obj.get("facetHits")]
+                    if obj.get("facetHits") is not None
+                    else None
+                ),
                 "exhaustiveFacetsCount": obj.get("exhaustiveFacetsCount"),
                 "processingTimeMS": obj.get("processingTimeMS"),
             }

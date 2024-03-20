@@ -78,16 +78,16 @@ class BaseTrendingItemsQuery(BaseModel):
                 "facetName": obj.get("facetName"),
                 "facetValue": obj.get("facetValue"),
                 "model": obj.get("model"),
-                "queryParameters": SearchParamsObject.from_dict(
-                    obj.get("queryParameters")
-                )
-                if obj.get("queryParameters") is not None
-                else None,
-                "fallbackParameters": SearchParamsObject.from_dict(
-                    obj.get("fallbackParameters")
-                )
-                if obj.get("fallbackParameters") is not None
-                else None,
+                "queryParameters": (
+                    SearchParamsObject.from_dict(obj.get("queryParameters"))
+                    if obj.get("queryParameters") is not None
+                    else None
+                ),
+                "fallbackParameters": (
+                    SearchParamsObject.from_dict(obj.get("fallbackParameters"))
+                    if obj.get("fallbackParameters") is not None
+                    else None
+                ),
             }
         )
         return _obj

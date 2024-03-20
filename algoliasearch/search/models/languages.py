@@ -81,15 +81,21 @@ class Languages(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "plurals": DictionaryLanguage.from_dict(obj.get("plurals"))
-                if obj.get("plurals") is not None
-                else None,
-                "stopwords": DictionaryLanguage.from_dict(obj.get("stopwords"))
-                if obj.get("stopwords") is not None
-                else None,
-                "compounds": DictionaryLanguage.from_dict(obj.get("compounds"))
-                if obj.get("compounds") is not None
-                else None,
+                "plurals": (
+                    DictionaryLanguage.from_dict(obj.get("plurals"))
+                    if obj.get("plurals") is not None
+                    else None
+                ),
+                "stopwords": (
+                    DictionaryLanguage.from_dict(obj.get("stopwords"))
+                    if obj.get("stopwords") is not None
+                    else None
+                ),
+                "compounds": (
+                    DictionaryLanguage.from_dict(obj.get("compounds"))
+                    if obj.get("compounds") is not None
+                    else None
+                ),
             }
         )
         return _obj

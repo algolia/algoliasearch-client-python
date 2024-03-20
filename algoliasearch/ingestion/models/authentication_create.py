@@ -73,9 +73,11 @@ class AuthenticationCreate(BaseModel):
                 "type": obj.get("type"),
                 "name": obj.get("name"),
                 "platform": obj.get("platform"),
-                "input": AuthInput.from_dict(obj.get("input"))
-                if obj.get("input") is not None
-                else None,
+                "input": (
+                    AuthInput.from_dict(obj.get("input"))
+                    if obj.get("input") is not None
+                    else None
+                ),
             }
         )
         return _obj

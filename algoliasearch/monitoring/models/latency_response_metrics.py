@@ -69,9 +69,11 @@ class LatencyResponseMetrics(BaseModel):
                 "latency": dict(
                     (
                         _k,
-                        [TimeInner.from_dict(_item) for _item in _v]
-                        if _v is not None
-                        else None,
+                        (
+                            [TimeInner.from_dict(_item) for _item in _v]
+                            if _v is not None
+                            else None
+                        ),
                     )
                     for _k, _v in obj.get("latency").items()
                 )

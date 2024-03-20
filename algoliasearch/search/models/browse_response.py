@@ -218,19 +218,23 @@ class BrowseResponse(BaseModel):
                 "abTestVariantID": obj.get("abTestVariantID"),
                 "aroundLatLng": obj.get("aroundLatLng"),
                 "automaticRadius": obj.get("automaticRadius"),
-                "exhaustive": Exhaustive.from_dict(obj.get("exhaustive"))
-                if obj.get("exhaustive") is not None
-                else None,
+                "exhaustive": (
+                    Exhaustive.from_dict(obj.get("exhaustive"))
+                    if obj.get("exhaustive") is not None
+                    else None
+                ),
                 "exhaustiveFacetsCount": obj.get("exhaustiveFacetsCount"),
                 "exhaustiveNbHits": obj.get("exhaustiveNbHits"),
                 "exhaustiveTypo": obj.get("exhaustiveTypo"),
                 "facets": obj.get("facets"),
-                "facets_stats": dict(
-                    (_k, FacetsStats.from_dict(_v))
-                    for _k, _v in obj.get("facets_stats").items()
-                )
-                if obj.get("facets_stats") is not None
-                else None,
+                "facets_stats": (
+                    dict(
+                        (_k, FacetsStats.from_dict(_v))
+                        for _k, _v in obj.get("facets_stats").items()
+                    )
+                    if obj.get("facets_stats") is not None
+                    else None
+                ),
                 "hitsPerPage": obj.get("hitsPerPage"),
                 "index": obj.get("index"),
                 "indexUsed": obj.get("indexUsed"),
@@ -243,21 +247,25 @@ class BrowseResponse(BaseModel):
                 "processingTimeMS": obj.get("processingTimeMS"),
                 "processingTimingsMS": obj.get("processingTimingsMS"),
                 "queryAfterRemoval": obj.get("queryAfterRemoval"),
-                "redirect": Redirect.from_dict(obj.get("redirect"))
-                if obj.get("redirect") is not None
-                else None,
-                "renderingContent": RenderingContent.from_dict(
-                    obj.get("renderingContent")
-                )
-                if obj.get("renderingContent") is not None
-                else None,
+                "redirect": (
+                    Redirect.from_dict(obj.get("redirect"))
+                    if obj.get("redirect") is not None
+                    else None
+                ),
+                "renderingContent": (
+                    RenderingContent.from_dict(obj.get("renderingContent"))
+                    if obj.get("renderingContent") is not None
+                    else None
+                ),
                 "serverTimeMS": obj.get("serverTimeMS"),
                 "serverUsed": obj.get("serverUsed"),
                 "userData": obj.get("userData"),
                 "queryID": obj.get("queryID"),
-                "hits": [Hit.from_dict(_item) for _item in obj.get("hits")]
-                if obj.get("hits") is not None
-                else None,
+                "hits": (
+                    [Hit.from_dict(_item) for _item in obj.get("hits")]
+                    if obj.get("hits") is not None
+                    else None
+                ),
                 "query": obj.get("query"),
                 "params": obj.get("params"),
                 "cursor": obj.get("cursor"),

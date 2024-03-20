@@ -68,12 +68,14 @@ class GetRecommendationsParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "requests": [
-                    RecommendationsRequest.from_dict(_item)
-                    for _item in obj.get("requests")
-                ]
-                if obj.get("requests") is not None
-                else None
+                "requests": (
+                    [
+                        RecommendationsRequest.from_dict(_item)
+                        for _item in obj.get("requests")
+                    ]
+                    if obj.get("requests") is not None
+                    else None
+                )
             }
         )
         return _obj

@@ -35,11 +35,11 @@ class ConvertedObjectIDsAfterSearch(BaseModel):
         description="Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response. ",
         alias="queryID",
     )
-    user_token: Annotated[
-        str, Field(min_length=1, strict=True, max_length=129)
-    ] = Field(
-        description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
-        alias="userToken",
+    user_token: Annotated[str, Field(min_length=1, strict=True, max_length=129)] = (
+        Field(
+            description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
+            alias="userToken",
+        )
     )
     authenticated_user_token: Optional[
         Annotated[str, Field(min_length=1, strict=True, max_length=129)]

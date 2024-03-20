@@ -64,9 +64,11 @@ class InventoryResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "inventory": [Server.from_dict(_item) for _item in obj.get("inventory")]
-                if obj.get("inventory") is not None
-                else None
+                "inventory": (
+                    [Server.from_dict(_item) for _item in obj.get("inventory")]
+                    if obj.get("inventory") is not None
+                    else None
+                )
             }
         )
         return _obj

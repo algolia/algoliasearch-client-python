@@ -64,11 +64,11 @@ class TopHitsResponseWithAnalytics(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "hits": [
-                    TopHitWithAnalytics.from_dict(_item) for _item in obj.get("hits")
-                ]
-                if obj.get("hits") is not None
-                else None
+                "hits": (
+                    [TopHitWithAnalytics.from_dict(_item) for _item in obj.get("hits")]
+                    if obj.get("hits") is not None
+                    else None
+                )
             }
         )
         return _obj

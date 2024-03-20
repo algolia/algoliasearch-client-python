@@ -96,16 +96,22 @@ class Consequence(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "params": ConsequenceParams.from_dict(obj.get("params"))
-                if obj.get("params") is not None
-                else None,
-                "promote": [Promote.from_dict(_item) for _item in obj.get("promote")]
-                if obj.get("promote") is not None
-                else None,
+                "params": (
+                    ConsequenceParams.from_dict(obj.get("params"))
+                    if obj.get("params") is not None
+                    else None
+                ),
+                "promote": (
+                    [Promote.from_dict(_item) for _item in obj.get("promote")]
+                    if obj.get("promote") is not None
+                    else None
+                ),
                 "filterPromotes": obj.get("filterPromotes"),
-                "hide": [ConsequenceHide.from_dict(_item) for _item in obj.get("hide")]
-                if obj.get("hide") is not None
-                else None,
+                "hide": (
+                    [ConsequenceHide.from_dict(_item) for _item in obj.get("hide")]
+                    if obj.get("hide") is not None
+                    else None
+                ),
                 "userData": obj.get("userData"),
             }
         )

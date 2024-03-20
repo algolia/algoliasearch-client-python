@@ -28,12 +28,12 @@ class Run(BaseModel):
     status: RunStatus
     progress: Optional[RunProgress] = None
     outcome: Optional[RunOutcome] = None
-    failure_threshold: Optional[
-        Annotated[int, Field(le=100, strict=True, ge=0)]
-    ] = Field(
-        default=None,
-        description="A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.",
-        alias="failureThreshold",
+    failure_threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = (
+        Field(
+            default=None,
+            description="A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.",
+            alias="failureThreshold",
+        )
     )
     reason: Optional[StrictStr] = Field(
         default=None, description="Explains the result of outcome."
@@ -94,9 +94,11 @@ class Run(BaseModel):
                 "appID": obj.get("appID"),
                 "taskID": obj.get("taskID"),
                 "status": obj.get("status"),
-                "progress": RunProgress.from_dict(obj.get("progress"))
-                if obj.get("progress") is not None
-                else None,
+                "progress": (
+                    RunProgress.from_dict(obj.get("progress"))
+                    if obj.get("progress") is not None
+                    else None
+                ),
                 "outcome": obj.get("outcome"),
                 "failureThreshold": obj.get("failureThreshold"),
                 "reason": obj.get("reason"),

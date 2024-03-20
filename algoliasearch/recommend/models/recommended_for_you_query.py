@@ -87,16 +87,20 @@ class RecommendedForYouQuery(BaseModel):
                 "threshold": obj.get("threshold"),
                 "maxRecommendations": obj.get("maxRecommendations"),
                 "model": obj.get("model"),
-                "queryParameters": RecommendedForYouQueryParameters.from_dict(
-                    obj.get("queryParameters")
-                )
-                if obj.get("queryParameters") is not None
-                else None,
-                "fallbackParameters": RecommendedForYouQueryParameters.from_dict(
-                    obj.get("fallbackParameters")
-                )
-                if obj.get("fallbackParameters") is not None
-                else None,
+                "queryParameters": (
+                    RecommendedForYouQueryParameters.from_dict(
+                        obj.get("queryParameters")
+                    )
+                    if obj.get("queryParameters") is not None
+                    else None
+                ),
+                "fallbackParameters": (
+                    RecommendedForYouQueryParameters.from_dict(
+                        obj.get("fallbackParameters")
+                    )
+                    if obj.get("fallbackParameters") is not None
+                    else None
+                ),
             }
         )
         return _obj

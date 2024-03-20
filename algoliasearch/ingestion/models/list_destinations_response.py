@@ -68,14 +68,16 @@ class ListDestinationsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "destinations": [
-                    Destination.from_dict(_item) for _item in obj.get("destinations")
-                ]
-                if obj.get("destinations") is not None
-                else None,
-                "pagination": Pagination.from_dict(obj.get("pagination"))
-                if obj.get("pagination") is not None
-                else None,
+                "destinations": (
+                    [Destination.from_dict(_item) for _item in obj.get("destinations")]
+                    if obj.get("destinations") is not None
+                    else None
+                ),
+                "pagination": (
+                    Pagination.from_dict(obj.get("pagination"))
+                    if obj.get("pagination") is not None
+                    else None
+                ),
             }
         )
         return _obj

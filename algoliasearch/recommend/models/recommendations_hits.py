@@ -68,11 +68,11 @@ class RecommendationsHits(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "hits": [
-                    RecommendationsHit.from_dict(_item) for _item in obj.get("hits")
-                ]
-                if obj.get("hits") is not None
-                else None,
+                "hits": (
+                    [RecommendationsHit.from_dict(_item) for _item in obj.get("hits")]
+                    if obj.get("hits") is not None
+                    else None
+                ),
                 "query": obj.get("query"),
                 "params": obj.get("params"),
             }

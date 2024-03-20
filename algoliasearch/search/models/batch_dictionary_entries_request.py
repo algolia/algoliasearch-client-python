@@ -63,9 +63,11 @@ class BatchDictionaryEntriesRequest(BaseModel):
         _obj = cls.model_validate(
             {
                 "action": obj.get("action"),
-                "body": DictionaryEntry.from_dict(obj.get("body"))
-                if obj.get("body") is not None
-                else None,
+                "body": (
+                    DictionaryEntry.from_dict(obj.get("body"))
+                    if obj.get("body") is not None
+                    else None
+                ),
             }
         )
         return _obj

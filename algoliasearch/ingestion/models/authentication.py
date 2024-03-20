@@ -85,9 +85,11 @@ class Authentication(BaseModel):
                 "type": obj.get("type"),
                 "name": obj.get("name"),
                 "platform": obj.get("platform"),
-                "input": AuthInputPartial.from_dict(obj.get("input"))
-                if obj.get("input") is not None
-                else None,
+                "input": (
+                    AuthInputPartial.from_dict(obj.get("input"))
+                    if obj.get("input") is not None
+                    else None
+                ),
                 "createdAt": obj.get("createdAt"),
                 "updatedAt": obj.get("updatedAt"),
             }

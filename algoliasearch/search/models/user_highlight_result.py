@@ -63,12 +63,16 @@ class UserHighlightResult(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "userID": HighlightResult.from_dict(obj.get("userID"))
-                if obj.get("userID") is not None
-                else None,
-                "clusterName": HighlightResult.from_dict(obj.get("clusterName"))
-                if obj.get("clusterName") is not None
-                else None,
+                "userID": (
+                    HighlightResult.from_dict(obj.get("userID"))
+                    if obj.get("userID") is not None
+                    else None
+                ),
+                "clusterName": (
+                    HighlightResult.from_dict(obj.get("clusterName"))
+                    if obj.get("clusterName") is not None
+                    else None
+                ),
             }
         )
         return _obj

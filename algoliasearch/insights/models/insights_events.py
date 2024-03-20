@@ -66,9 +66,11 @@ class InsightsEvents(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "events": [EventsItems.from_dict(_item) for _item in obj.get("events")]
-                if obj.get("events") is not None
-                else None
+                "events": (
+                    [EventsItems.from_dict(_item) for _item in obj.get("events")]
+                    if obj.get("events") is not None
+                    else None
+                )
             }
         )
         return _obj

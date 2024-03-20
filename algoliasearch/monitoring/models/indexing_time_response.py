@@ -62,9 +62,11 @@ class IndexingTimeResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "metrics": IndexingTimeResponseMetrics.from_dict(obj.get("metrics"))
-                if obj.get("metrics") is not None
-                else None
+                "metrics": (
+                    IndexingTimeResponseMetrics.from_dict(obj.get("metrics"))
+                    if obj.get("metrics") is not None
+                    else None
+                )
             }
         )
         return _obj

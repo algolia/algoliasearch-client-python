@@ -455,18 +455,26 @@ class SearchForHits(BaseModel):
                 "query": obj.get("query"),
                 "similarQuery": obj.get("similarQuery"),
                 "filters": obj.get("filters"),
-                "facetFilters": FacetFilters.from_dict(obj.get("facetFilters"))
-                if obj.get("facetFilters") is not None
-                else None,
-                "optionalFilters": OptionalFilters.from_dict(obj.get("optionalFilters"))
-                if obj.get("optionalFilters") is not None
-                else None,
-                "numericFilters": NumericFilters.from_dict(obj.get("numericFilters"))
-                if obj.get("numericFilters") is not None
-                else None,
-                "tagFilters": TagFilters.from_dict(obj.get("tagFilters"))
-                if obj.get("tagFilters") is not None
-                else None,
+                "facetFilters": (
+                    FacetFilters.from_dict(obj.get("facetFilters"))
+                    if obj.get("facetFilters") is not None
+                    else None
+                ),
+                "optionalFilters": (
+                    OptionalFilters.from_dict(obj.get("optionalFilters"))
+                    if obj.get("optionalFilters") is not None
+                    else None
+                ),
+                "numericFilters": (
+                    NumericFilters.from_dict(obj.get("numericFilters"))
+                    if obj.get("numericFilters") is not None
+                    else None
+                ),
+                "tagFilters": (
+                    TagFilters.from_dict(obj.get("tagFilters"))
+                    if obj.get("tagFilters") is not None
+                    else None
+                ),
                 "sumOrFiltersScores": obj.get("sumOrFiltersScores"),
                 "restrictSearchableAttributes": obj.get("restrictSearchableAttributes"),
                 "facets": obj.get("facets"),
@@ -476,12 +484,16 @@ class SearchForHits(BaseModel):
                 "length": obj.get("length"),
                 "aroundLatLng": obj.get("aroundLatLng"),
                 "aroundLatLngViaIP": obj.get("aroundLatLngViaIP"),
-                "aroundRadius": AroundRadius.from_dict(obj.get("aroundRadius"))
-                if obj.get("aroundRadius") is not None
-                else None,
-                "aroundPrecision": AroundPrecision.from_dict(obj.get("aroundPrecision"))
-                if obj.get("aroundPrecision") is not None
-                else None,
+                "aroundRadius": (
+                    AroundRadius.from_dict(obj.get("aroundRadius"))
+                    if obj.get("aroundRadius") is not None
+                    else None
+                ),
+                "aroundPrecision": (
+                    AroundPrecision.from_dict(obj.get("aroundPrecision"))
+                    if obj.get("aroundPrecision") is not None
+                    else None
+                ),
                 "minimumAroundRadius": obj.get("minimumAroundRadius"),
                 "insideBoundingBox": obj.get("insideBoundingBox"),
                 "insidePolygon": obj.get("insidePolygon"),
@@ -511,19 +523,25 @@ class SearchForHits(BaseModel):
                 "hitsPerPage": obj.get("hitsPerPage"),
                 "minWordSizefor1Typo": obj.get("minWordSizefor1Typo"),
                 "minWordSizefor2Typos": obj.get("minWordSizefor2Typos"),
-                "typoTolerance": TypoTolerance.from_dict(obj.get("typoTolerance"))
-                if obj.get("typoTolerance") is not None
-                else None,
+                "typoTolerance": (
+                    TypoTolerance.from_dict(obj.get("typoTolerance"))
+                    if obj.get("typoTolerance") is not None
+                    else None
+                ),
                 "allowTyposOnNumericTokens": obj.get("allowTyposOnNumericTokens"),
                 "disableTypoToleranceOnAttributes": obj.get(
                     "disableTypoToleranceOnAttributes"
                 ),
-                "ignorePlurals": IgnorePlurals.from_dict(obj.get("ignorePlurals"))
-                if obj.get("ignorePlurals") is not None
-                else None,
-                "removeStopWords": RemoveStopWords.from_dict(obj.get("removeStopWords"))
-                if obj.get("removeStopWords") is not None
-                else None,
+                "ignorePlurals": (
+                    IgnorePlurals.from_dict(obj.get("ignorePlurals"))
+                    if obj.get("ignorePlurals") is not None
+                    else None
+                ),
+                "removeStopWords": (
+                    RemoveStopWords.from_dict(obj.get("removeStopWords"))
+                    if obj.get("removeStopWords") is not None
+                    else None
+                ),
                 "keepDiacriticsOnCharacters": obj.get("keepDiacriticsOnCharacters"),
                 "queryLanguages": obj.get("queryLanguages"),
                 "decompoundQuery": obj.get("decompoundQuery"),
@@ -532,18 +550,22 @@ class SearchForHits(BaseModel):
                 "queryType": obj.get("queryType"),
                 "removeWordsIfNoResults": obj.get("removeWordsIfNoResults"),
                 "mode": obj.get("mode"),
-                "semanticSearch": SemanticSearch.from_dict(obj.get("semanticSearch"))
-                if obj.get("semanticSearch") is not None
-                else None,
+                "semanticSearch": (
+                    SemanticSearch.from_dict(obj.get("semanticSearch"))
+                    if obj.get("semanticSearch") is not None
+                    else None
+                ),
                 "advancedSyntax": obj.get("advancedSyntax"),
                 "optionalWords": obj.get("optionalWords"),
                 "disableExactOnAttributes": obj.get("disableExactOnAttributes"),
                 "exactOnSingleWordQuery": obj.get("exactOnSingleWordQuery"),
                 "alternativesAsExact": obj.get("alternativesAsExact"),
                 "advancedSyntaxFeatures": obj.get("advancedSyntaxFeatures"),
-                "distinct": Distinct.from_dict(obj.get("distinct"))
-                if obj.get("distinct") is not None
-                else None,
+                "distinct": (
+                    Distinct.from_dict(obj.get("distinct"))
+                    if obj.get("distinct") is not None
+                    else None
+                ),
                 "replaceSynonymsInHighlight": obj.get("replaceSynonymsInHighlight"),
                 "minProximity": obj.get("minProximity"),
                 "responseFields": obj.get("responseFields"),
@@ -553,17 +575,17 @@ class SearchForHits(BaseModel):
                 "attributeCriteriaComputedByMinProximity": obj.get(
                     "attributeCriteriaComputedByMinProximity"
                 ),
-                "renderingContent": RenderingContent.from_dict(
-                    obj.get("renderingContent")
-                )
-                if obj.get("renderingContent") is not None
-                else None,
+                "renderingContent": (
+                    RenderingContent.from_dict(obj.get("renderingContent"))
+                    if obj.get("renderingContent") is not None
+                    else None
+                ),
                 "enableReRanking": obj.get("enableReRanking"),
-                "reRankingApplyFilter": ReRankingApplyFilter.from_dict(
-                    obj.get("reRankingApplyFilter")
-                )
-                if obj.get("reRankingApplyFilter") is not None
-                else None,
+                "reRankingApplyFilter": (
+                    ReRankingApplyFilter.from_dict(obj.get("reRankingApplyFilter"))
+                    if obj.get("reRankingApplyFilter") is not None
+                    else None
+                ),
                 "indexName": obj.get("indexName"),
                 "type": obj.get("type"),
             }

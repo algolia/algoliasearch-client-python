@@ -68,11 +68,11 @@ class MappingInput(BaseModel):
         _obj = cls.model_validate(
             {
                 "format": obj.get("format"),
-                "actions": [
-                    MappingKitAction.from_dict(_item) for _item in obj.get("actions")
-                ]
-                if obj.get("actions") is not None
-                else None,
+                "actions": (
+                    [MappingKitAction.from_dict(_item) for _item in obj.get("actions")]
+                    if obj.get("actions") is not None
+                    else None
+                ),
             }
         )
         return _obj

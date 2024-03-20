@@ -81,11 +81,11 @@ class SourceCommercetools(BaseModel):
                 "url": obj.get("url"),
                 "projectKey": obj.get("projectKey"),
                 "fallbackIsInStockValue": obj.get("fallbackIsInStockValue"),
-                "customFields": CommercetoolsCustomFields.from_dict(
-                    obj.get("customFields")
-                )
-                if obj.get("customFields") is not None
-                else None,
+                "customFields": (
+                    CommercetoolsCustomFields.from_dict(obj.get("customFields"))
+                    if obj.get("customFields") is not None
+                    else None
+                ),
             }
         )
         return _obj

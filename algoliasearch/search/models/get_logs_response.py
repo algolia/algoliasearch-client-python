@@ -64,9 +64,11 @@ class GetLogsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "logs": [Log.from_dict(_item) for _item in obj.get("logs")]
-                if obj.get("logs") is not None
-                else None
+                "logs": (
+                    [Log.from_dict(_item) for _item in obj.get("logs")]
+                    if obj.get("logs") is not None
+                    else None
+                )
             }
         )
         return _obj

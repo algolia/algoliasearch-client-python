@@ -61,9 +61,9 @@ class Params(BaseModel):
         if self.automatic_facet_filters:
             _dict["automaticFacetFilters"] = self.automatic_facet_filters.to_dict()
         if self.automatic_optional_facet_filters:
-            _dict[
-                "automaticOptionalFacetFilters"
-            ] = self.automatic_optional_facet_filters.to_dict()
+            _dict["automaticOptionalFacetFilters"] = (
+                self.automatic_optional_facet_filters.to_dict()
+            )
         if self.rendering_content:
             _dict["renderingContent"] = self.rendering_content.to_dict()
         return _dict
@@ -79,24 +79,28 @@ class Params(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "query": ConsequenceQuery.from_dict(obj.get("query"))
-                if obj.get("query") is not None
-                else None,
-                "automaticFacetFilters": AutomaticFacetFilters.from_dict(
-                    obj.get("automaticFacetFilters")
-                )
-                if obj.get("automaticFacetFilters") is not None
-                else None,
-                "automaticOptionalFacetFilters": AutomaticFacetFilters.from_dict(
-                    obj.get("automaticOptionalFacetFilters")
-                )
-                if obj.get("automaticOptionalFacetFilters") is not None
-                else None,
-                "renderingContent": RenderingContent.from_dict(
-                    obj.get("renderingContent")
-                )
-                if obj.get("renderingContent") is not None
-                else None,
+                "query": (
+                    ConsequenceQuery.from_dict(obj.get("query"))
+                    if obj.get("query") is not None
+                    else None
+                ),
+                "automaticFacetFilters": (
+                    AutomaticFacetFilters.from_dict(obj.get("automaticFacetFilters"))
+                    if obj.get("automaticFacetFilters") is not None
+                    else None
+                ),
+                "automaticOptionalFacetFilters": (
+                    AutomaticFacetFilters.from_dict(
+                        obj.get("automaticOptionalFacetFilters")
+                    )
+                    if obj.get("automaticOptionalFacetFilters") is not None
+                    else None
+                ),
+                "renderingContent": (
+                    RenderingContent.from_dict(obj.get("renderingContent"))
+                    if obj.get("renderingContent") is not None
+                    else None
+                ),
             }
         )
         return _obj

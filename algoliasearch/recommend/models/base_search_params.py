@@ -225,18 +225,26 @@ class BaseSearchParams(BaseModel):
                 "query": obj.get("query"),
                 "similarQuery": obj.get("similarQuery"),
                 "filters": obj.get("filters"),
-                "facetFilters": FacetFilters.from_dict(obj.get("facetFilters"))
-                if obj.get("facetFilters") is not None
-                else None,
-                "optionalFilters": OptionalFilters.from_dict(obj.get("optionalFilters"))
-                if obj.get("optionalFilters") is not None
-                else None,
-                "numericFilters": NumericFilters.from_dict(obj.get("numericFilters"))
-                if obj.get("numericFilters") is not None
-                else None,
-                "tagFilters": TagFilters.from_dict(obj.get("tagFilters"))
-                if obj.get("tagFilters") is not None
-                else None,
+                "facetFilters": (
+                    FacetFilters.from_dict(obj.get("facetFilters"))
+                    if obj.get("facetFilters") is not None
+                    else None
+                ),
+                "optionalFilters": (
+                    OptionalFilters.from_dict(obj.get("optionalFilters"))
+                    if obj.get("optionalFilters") is not None
+                    else None
+                ),
+                "numericFilters": (
+                    NumericFilters.from_dict(obj.get("numericFilters"))
+                    if obj.get("numericFilters") is not None
+                    else None
+                ),
+                "tagFilters": (
+                    TagFilters.from_dict(obj.get("tagFilters"))
+                    if obj.get("tagFilters") is not None
+                    else None
+                ),
                 "sumOrFiltersScores": obj.get("sumOrFiltersScores"),
                 "restrictSearchableAttributes": obj.get("restrictSearchableAttributes"),
                 "facets": obj.get("facets"),
@@ -246,12 +254,16 @@ class BaseSearchParams(BaseModel):
                 "length": obj.get("length"),
                 "aroundLatLng": obj.get("aroundLatLng"),
                 "aroundLatLngViaIP": obj.get("aroundLatLngViaIP"),
-                "aroundRadius": AroundRadius.from_dict(obj.get("aroundRadius"))
-                if obj.get("aroundRadius") is not None
-                else None,
-                "aroundPrecision": AroundPrecision.from_dict(obj.get("aroundPrecision"))
-                if obj.get("aroundPrecision") is not None
-                else None,
+                "aroundRadius": (
+                    AroundRadius.from_dict(obj.get("aroundRadius"))
+                    if obj.get("aroundRadius") is not None
+                    else None
+                ),
+                "aroundPrecision": (
+                    AroundPrecision.from_dict(obj.get("aroundPrecision"))
+                    if obj.get("aroundPrecision") is not None
+                    else None
+                ),
                 "minimumAroundRadius": obj.get("minimumAroundRadius"),
                 "insideBoundingBox": obj.get("insideBoundingBox"),
                 "insidePolygon": obj.get("insidePolygon"),

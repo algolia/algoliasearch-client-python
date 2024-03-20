@@ -71,9 +71,11 @@ class ListABTestsResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "abtests": [ABTest.from_dict(_item) for _item in obj.get("abtests")]
-                if obj.get("abtests") is not None
-                else None,
+                "abtests": (
+                    [ABTest.from_dict(_item) for _item in obj.get("abtests")]
+                    if obj.get("abtests") is not None
+                    else None
+                ),
                 "count": obj.get("count"),
                 "total": obj.get("total"),
             }

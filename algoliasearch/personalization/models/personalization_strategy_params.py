@@ -80,16 +80,16 @@ class PersonalizationStrategyParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "eventScoring": [
-                    EventScoring.from_dict(_item) for _item in obj.get("eventScoring")
-                ]
-                if obj.get("eventScoring") is not None
-                else None,
-                "facetScoring": [
-                    FacetScoring.from_dict(_item) for _item in obj.get("facetScoring")
-                ]
-                if obj.get("facetScoring") is not None
-                else None,
+                "eventScoring": (
+                    [EventScoring.from_dict(_item) for _item in obj.get("eventScoring")]
+                    if obj.get("eventScoring") is not None
+                    else None
+                ),
+                "facetScoring": (
+                    [FacetScoring.from_dict(_item) for _item in obj.get("facetScoring")]
+                    if obj.get("facetScoring") is not None
+                    else None
+                ),
                 "personalizationImpact": obj.get("personalizationImpact"),
             }
         )

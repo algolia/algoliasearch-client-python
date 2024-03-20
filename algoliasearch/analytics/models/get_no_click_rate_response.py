@@ -79,11 +79,11 @@ class GetNoClickRateResponse(BaseModel):
                 "rate": obj.get("rate"),
                 "count": obj.get("count"),
                 "noClickCount": obj.get("noClickCount"),
-                "dates": [
-                    NoClickRateEvent.from_dict(_item) for _item in obj.get("dates")
-                ]
-                if obj.get("dates") is not None
-                else None,
+                "dates": (
+                    [NoClickRateEvent.from_dict(_item) for _item in obj.get("dates")]
+                    if obj.get("dates") is not None
+                    else None
+                ),
             }
         )
         return _obj

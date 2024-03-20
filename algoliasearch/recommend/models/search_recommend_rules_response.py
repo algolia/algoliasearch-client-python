@@ -71,9 +71,11 @@ class SearchRecommendRulesResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "hits": [RuleResponse.from_dict(_item) for _item in obj.get("hits")]
-                if obj.get("hits") is not None
-                else None,
+                "hits": (
+                    [RuleResponse.from_dict(_item) for _item in obj.get("hits")]
+                    if obj.get("hits") is not None
+                    else None
+                ),
                 "nbHits": obj.get("nbHits"),
                 "page": obj.get("page"),
                 "nbPages": obj.get("nbPages"),

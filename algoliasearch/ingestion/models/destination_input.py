@@ -23,9 +23,9 @@ class DestinationInput(BaseModel):
 
     oneof_schema_1_validator: Optional[DestinationIndexPrefix] = None
     oneof_schema_2_validator: Optional[DestinationIndexName] = None
-    actual_instance: Optional[
-        Union[DestinationIndexName, DestinationIndexPrefix]
-    ] = None
+    actual_instance: Optional[Union[DestinationIndexName, DestinationIndexPrefix]] = (
+        None
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         if args:

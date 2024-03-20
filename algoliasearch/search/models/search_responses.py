@@ -64,11 +64,11 @@ class SearchResponses(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "results": [
-                    SearchResult.from_dict(_item) for _item in obj.get("results")
-                ]
-                if obj.get("results") is not None
-                else None
+                "results": (
+                    [SearchResult.from_dict(_item) for _item in obj.get("results")]
+                    if obj.get("results") is not None
+                    else None
+                )
             }
         )
         return _obj

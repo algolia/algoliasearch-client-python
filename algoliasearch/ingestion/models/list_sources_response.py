@@ -68,12 +68,16 @@ class ListSourcesResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "sources": [Source.from_dict(_item) for _item in obj.get("sources")]
-                if obj.get("sources") is not None
-                else None,
-                "pagination": Pagination.from_dict(obj.get("pagination"))
-                if obj.get("pagination") is not None
-                else None,
+                "sources": (
+                    [Source.from_dict(_item) for _item in obj.get("sources")]
+                    if obj.get("sources") is not None
+                    else None
+                ),
+                "pagination": (
+                    Pagination.from_dict(obj.get("pagination"))
+                    if obj.get("pagination") is not None
+                    else None
+                ),
             }
         )
         return _obj

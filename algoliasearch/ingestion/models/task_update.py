@@ -27,12 +27,12 @@ class TaskUpdate(BaseModel):
     enabled: Optional[StrictBool] = Field(
         default=None, description="Whether the task is enabled or not."
     )
-    failure_threshold: Optional[
-        Annotated[int, Field(le=100, strict=True, ge=0)]
-    ] = Field(
-        default=None,
-        description="A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.",
-        alias="failureThreshold",
+    failure_threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = (
+        Field(
+            default=None,
+            description="A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.",
+            alias="failureThreshold",
+        )
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
@@ -78,12 +78,16 @@ class TaskUpdate(BaseModel):
         _obj = cls.model_validate(
             {
                 "destinationID": obj.get("destinationID"),
-                "trigger": TriggerUpdateInput.from_dict(obj.get("trigger"))
-                if obj.get("trigger") is not None
-                else None,
-                "input": TaskInput.from_dict(obj.get("input"))
-                if obj.get("input") is not None
-                else None,
+                "trigger": (
+                    TriggerUpdateInput.from_dict(obj.get("trigger"))
+                    if obj.get("trigger") is not None
+                    else None
+                ),
+                "input": (
+                    TaskInput.from_dict(obj.get("input"))
+                    if obj.get("input") is not None
+                    else None
+                ),
                 "enabled": obj.get("enabled"),
                 "failureThreshold": obj.get("failureThreshold"),
             }

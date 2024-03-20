@@ -70,9 +70,11 @@ class RedirectRuleIndexMetadata(BaseModel):
                 "dest": obj.get("dest"),
                 "reason": obj.get("reason"),
                 "succeed": obj.get("succeed"),
-                "data": RedirectRuleIndexMetadataData.from_dict(obj.get("data"))
-                if obj.get("data") is not None
-                else None,
+                "data": (
+                    RedirectRuleIndexMetadataData.from_dict(obj.get("data"))
+                    if obj.get("data") is not None
+                    else None
+                ),
             }
         )
         return _obj

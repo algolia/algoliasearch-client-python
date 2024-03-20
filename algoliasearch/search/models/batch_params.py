@@ -64,12 +64,14 @@ class BatchParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "requests": [
-                    MultipleBatchRequest.from_dict(_item)
-                    for _item in obj.get("requests")
-                ]
-                if obj.get("requests") is not None
-                else None
+                "requests": (
+                    [
+                        MultipleBatchRequest.from_dict(_item)
+                        for _item in obj.get("requests")
+                    ]
+                    if obj.get("requests") is not None
+                    else None
+                )
             }
         )
         return _obj

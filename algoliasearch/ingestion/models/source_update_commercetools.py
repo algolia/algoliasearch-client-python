@@ -83,11 +83,11 @@ class SourceUpdateCommercetools(BaseModel):
                 "locales": obj.get("locales"),
                 "url": obj.get("url"),
                 "fallbackIsInStockValue": obj.get("fallbackIsInStockValue"),
-                "customFields": CommercetoolsCustomFields.from_dict(
-                    obj.get("customFields")
-                )
-                if obj.get("customFields") is not None
-                else None,
+                "customFields": (
+                    CommercetoolsCustomFields.from_dict(obj.get("customFields"))
+                    if obj.get("customFields") is not None
+                    else None
+                ),
             }
         )
         return _obj

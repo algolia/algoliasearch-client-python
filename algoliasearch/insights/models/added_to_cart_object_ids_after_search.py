@@ -39,11 +39,11 @@ class AddedToCartObjectIDsAfterSearch(BaseModel):
         description="Object IDs of the records that are part of the event.",
         alias="objectIDs",
     )
-    user_token: Annotated[
-        str, Field(min_length=1, strict=True, max_length=129)
-    ] = Field(
-        description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
-        alias="userToken",
+    user_token: Annotated[str, Field(min_length=1, strict=True, max_length=129)] = (
+        Field(
+            description="Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
+            alias="userToken",
+        )
     )
     authenticated_user_token: Optional[
         Annotated[str, Field(min_length=1, strict=True, max_length=129)]
@@ -161,16 +161,20 @@ class AddedToCartObjectIDsAfterSearch(BaseModel):
                 "userToken": obj.get("userToken"),
                 "authenticatedUserToken": obj.get("authenticatedUserToken"),
                 "currency": obj.get("currency"),
-                "objectData": [
-                    ObjectDataAfterSearch.from_dict(_item)
-                    for _item in obj.get("objectData")
-                ]
-                if obj.get("objectData") is not None
-                else None,
+                "objectData": (
+                    [
+                        ObjectDataAfterSearch.from_dict(_item)
+                        for _item in obj.get("objectData")
+                    ]
+                    if obj.get("objectData") is not None
+                    else None
+                ),
                 "timestamp": obj.get("timestamp"),
-                "value": Value.from_dict(obj.get("value"))
-                if obj.get("value") is not None
-                else None,
+                "value": (
+                    Value.from_dict(obj.get("value"))
+                    if obj.get("value") is not None
+                    else None
+                ),
             }
         )
         return _obj

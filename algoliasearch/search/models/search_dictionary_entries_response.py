@@ -73,9 +73,11 @@ class SearchDictionaryEntriesResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "hits": [DictionaryEntry.from_dict(_item) for _item in obj.get("hits")]
-                if obj.get("hits") is not None
-                else None,
+                "hits": (
+                    [DictionaryEntry.from_dict(_item) for _item in obj.get("hits")]
+                    if obj.get("hits") is not None
+                    else None
+                ),
                 "page": obj.get("page"),
                 "nbHits": obj.get("nbHits"),
                 "nbPages": obj.get("nbPages"),

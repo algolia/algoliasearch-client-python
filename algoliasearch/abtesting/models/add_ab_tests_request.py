@@ -19,9 +19,9 @@ class AddABTestsRequest(BaseModel):
     """
 
     name: StrictStr = Field(description="A/B test name.")
-    variants: Annotated[
-        List[AddABTestsVariant], Field(min_length=2, max_length=2)
-    ] = Field(description="A/B test variants.")
+    variants: Annotated[List[AddABTestsVariant], Field(min_length=2, max_length=2)] = (
+        Field(description="A/B test variants.")
+    )
     end_at: StrictStr = Field(
         description="End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.",
         alias="endAt",
@@ -72,11 +72,14 @@ class AddABTestsRequest(BaseModel):
         _obj = cls.model_validate(
             {
                 "name": obj.get("name"),
-                "variants": [
-                    AddABTestsVariant.from_dict(_item) for _item in obj.get("variants")
-                ]
-                if obj.get("variants") is not None
-                else None,
+                "variants": (
+                    [
+                        AddABTestsVariant.from_dict(_item)
+                        for _item in obj.get("variants")
+                    ]
+                    if obj.get("variants") is not None
+                    else None
+                ),
                 "endAt": obj.get("endAt"),
             }
         )
