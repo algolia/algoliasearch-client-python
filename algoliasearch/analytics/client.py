@@ -187,7 +187,7 @@ class AnalyticsClient:
 
         return await self._transporter.request(
             verb=Verb.DELETE,
-            path="/1{path}".replace("{path}", path),
+            path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -261,7 +261,7 @@ class AnalyticsClient:
 
         return await self._transporter.request(
             verb=Verb.GET,
-            path="/1{path}".replace("{path}", path),
+            path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 user_request_options=request_options,
@@ -345,7 +345,7 @@ class AnalyticsClient:
 
         return await self._transporter.request(
             verb=Verb.POST,
-            path="/1{path}".replace("{path}", path),
+            path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 data=dumps(bodySerializer(_data)),
@@ -438,7 +438,7 @@ class AnalyticsClient:
 
         return await self._transporter.request(
             verb=Verb.PUT,
-            path="/1{path}".replace("{path}", path),
+            path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 data=dumps(bodySerializer(_data)),
