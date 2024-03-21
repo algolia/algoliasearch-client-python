@@ -21,7 +21,7 @@ class GetTopFilterAttributesResponse(BaseModel):
     """
 
     attributes: List[GetTopFilterAttribute] = Field(
-        description="Filterable attributes."
+        description="Most frequent filters."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

@@ -10,7 +10,7 @@ from typing import Annotated, Any, Dict, List, Self
 
 from pydantic import BaseModel, Field
 
-from algoliasearch.analytics.models.click_position import ClickPosition
+from algoliasearch.analytics.models.click_positions_inner import ClickPositionsInner
 
 
 class GetClickPositionsResponse(BaseModel):
@@ -18,8 +18,10 @@ class GetClickPositionsResponse(BaseModel):
     GetClickPositionsResponse
     """
 
-    positions: Annotated[List[ClickPosition], Field(min_length=2, max_length=2)] = (
-        Field(description="Click positions.")
+    positions: Annotated[
+        List[ClickPositionsInner], Field(min_length=12, max_length=12)
+    ] = Field(
+        description="List of positions in the search results and clicks associated with this search."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
@@ -67,7 +69,10 @@ class GetClickPositionsResponse(BaseModel):
         _obj = cls.model_validate(
             {
                 "positions": (
-                    [ClickPosition.from_dict(_item) for _item in obj.get("positions")]
+                    [
+                        ClickPositionsInner.from_dict(_item)
+                        for _item in obj.get("positions")
+                    ]
                     if obj.get("positions") is not None
                     else None
                 )

@@ -18,7 +18,7 @@ class TopHitsResponse(BaseModel):
     TopHitsResponse
     """
 
-    hits: List[TopHit] = Field(description="Top hits.")
+    hits: List[TopHit] = Field(description="Most frequent search results.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

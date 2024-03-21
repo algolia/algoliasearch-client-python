@@ -13,6 +13,9 @@ from pydantic import Field, StrictBool, StrictInt, StrictStr
 
 from algoliasearch.analytics.config import AnalyticsConfig
 from algoliasearch.analytics.models.direction import Direction
+from algoliasearch.analytics.models.get_add_to_cart_rate_response import (
+    GetAddToCartRateResponse,
+)
 from algoliasearch.analytics.models.get_average_click_position_response import (
     GetAverageClickPositionResponse,
 )
@@ -22,8 +25,8 @@ from algoliasearch.analytics.models.get_click_positions_response import (
 from algoliasearch.analytics.models.get_click_through_rate_response import (
     GetClickThroughRateResponse,
 )
-from algoliasearch.analytics.models.get_conversation_rate_response import (
-    GetConversationRateResponse,
+from algoliasearch.analytics.models.get_conversion_rate_response import (
+    GetConversionRateResponse,
 )
 from algoliasearch.analytics.models.get_no_click_rate_response import (
     GetNoClickRateResponse,
@@ -31,6 +34,10 @@ from algoliasearch.analytics.models.get_no_click_rate_response import (
 from algoliasearch.analytics.models.get_no_results_rate_response import (
     GetNoResultsRateResponse,
 )
+from algoliasearch.analytics.models.get_purchase_rate_response import (
+    GetPurchaseRateResponse,
+)
+from algoliasearch.analytics.models.get_revenue import GetRevenue
 from algoliasearch.analytics.models.get_searches_count_response import (
     GetSearchesCountResponse,
 )
@@ -484,27 +491,27 @@ class AnalyticsClient:
             )
         ).deserialize(object)
 
-    async def get_average_click_position_with_http_info(
+    async def get_add_to_cart_rate_with_http_info(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the average click position for the complete time range and for individual days. > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+        Retrieves the add-to-cart rate for all of your searches with at least one add-to-cart event, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -515,7 +522,112 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
+        :type tags: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_add_to_cart_rate`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if index is not None:
+            _query_parameters.append(("index", index))
+        if start_date is not None:
+            _query_parameters.append(("startDate", start_date))
+        if end_date is not None:
+            _query_parameters.append(("endDate", end_date))
+        if tags is not None:
+            _query_parameters.append(("tags", tags))
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/2/conversions/addToCartRate",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_add_to_cart_rate(
+        self,
+        index: Annotated[StrictStr, Field(description="Index name.")],
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        tags: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetAddToCartRateResponse:
+        """
+        Retrieves the add-to-cart rate for all of your searches with at least one add-to-cart event, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param index: Index name. (required)
+        :type index: str
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :type start_date: str
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :type end_date: str
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
+        :type tags: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetAddToCartRateResponse' result object.
+        """
+        return (
+            await self.get_add_to_cart_rate_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetAddToCartRateResponse)
+
+    async def get_average_click_position_with_http_info(
+        self,
+        index: Annotated[StrictStr, Field(description="Index name.")],
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        tags: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the average click position of your search results, including a daily breakdown.  The average click position is the average of all clicked search results' positions. For example, if users only ever click on the first result for any search, the average click position is 1. By default, the analyzed period includes the last eight days including the current day.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param index: Index name. (required)
+        :type index: str
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :type start_date: str
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :type end_date: str
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -551,23 +663,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetAverageClickPositionResponse:
         """
-        Return the average click position for the complete time range and for individual days. > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+        Retrieves the average click position of your search results, including a daily breakdown.  The average click position is the average of all clicked search results' positions. For example, if users only ever click on the first result for any search, the average click position is 1. By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -578,7 +690,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetAverageClickPositionResponse' result object.
@@ -593,23 +705,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Show the number of clicks events and their associated position in the search results.  > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+        Retrieves the positions in the search results and their associated number of clicks.  This lets you check how many clicks the first, second, or tenth search results receive.
 
         Required API Key ACLs:
           - analytics
@@ -620,7 +732,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -656,23 +768,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetClickPositionsResponse:
         """
-        Show the number of clicks events and their associated position in the search results.  > **Note**: If all `positions` have a `clickCount` of `0` or `null`, it means Algolia didn't receive any click events for tracked searches. A _tracked_ search is a search request where the `clickAnalytics` parameter is `true`.
+        Retrieves the positions in the search results and their associated number of clicks.  This lets you check how many clicks the first, second, or tenth search results receive.
 
         Required API Key ACLs:
           - analytics
@@ -683,7 +795,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetClickPositionsResponse' result object.
@@ -698,23 +810,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns a [click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+        Retrieves the click-through rate for all of your searches with at least one click event, including a daily breakdown  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -725,7 +837,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -761,23 +873,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetClickThroughRateResponse:
         """
-        Returns a [click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate).
+        Retrieves the click-through rate for all of your searches with at least one click event, including a daily breakdown  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -788,7 +900,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetClickThroughRateResponse' result object.
@@ -799,27 +911,27 @@ class AnalyticsClient:
             )
         ).deserialize(GetClickThroughRateResponse)
 
-    async def get_conversation_rate_with_http_info(
+    async def get_conversion_rate_with_http_info(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+        Retrieves the conversion rate for all of your searches with at least one conversion event, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -830,7 +942,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -838,7 +950,7 @@ class AnalyticsClient:
 
         if index is None:
             raise ValueError(
-                "Parameter `index` is required when calling `get_conversation_rate`."
+                "Parameter `index` is required when calling `get_conversion_rate`."
             )
 
         _query_parameters: List[Tuple[str, str]] = []
@@ -862,27 +974,27 @@ class AnalyticsClient:
             use_read_transporter=False,
         )
 
-    async def get_conversation_rate(
+    async def get_conversion_rate(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> GetConversationRateResponse:
+    ) -> GetConversionRateResponse:
         """
-        Return a [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).
+        Retrieves the conversion rate for all of your searches with at least one conversion event, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -893,38 +1005,38 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'GetConversationRateResponse' result object.
+        :return: Returns the deserialized response in a 'GetConversionRateResponse' result object.
         """
         return (
-            await self.get_conversation_rate_with_http_info(
+            await self.get_conversion_rate_with_http_info(
                 index, start_date, end_date, tags, request_options
             )
-        ).deserialize(GetConversationRateResponse)
+        ).deserialize(GetConversionRateResponse)
 
     async def get_no_click_rate_with_http_info(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+        Retrieves the fraction of searches that didn't lead to any click within a time range, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -935,7 +1047,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -971,23 +1083,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetNoClickRateResponse:
         """
-        Returns the rate at which searches don't lead to any clicks. The endpoint returns a value for the complete given time range, as well as a value per day. It also returns the count of searches and searches without clicks.
+        Retrieves the fraction of searches that didn't lead to any click within a time range, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -998,7 +1110,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetNoClickRateResponse' result object.
@@ -1013,23 +1125,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the rate at which searches didn't return any results.
+        Retrieves the fraction of searches that didn't return any results within a time range, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -1040,7 +1152,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1076,23 +1188,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetNoResultsRateResponse:
         """
-        Returns the rate at which searches didn't return any results.
+        Retrieves the fraction of searches that didn't return any results within a time range, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -1103,7 +1215,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetNoResultsRateResponse' result object.
@@ -1114,27 +1226,27 @@ class AnalyticsClient:
             )
         ).deserialize(GetNoResultsRateResponse)
 
-    async def get_searches_count_with_http_info(
+    async def get_purchase_rate_with_http_info(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the number of searches within a time range.
+        Retrieves the purchase rate for all of your searches with at least one purchase event, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -1145,7 +1257,217 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
+        :type tags: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_purchase_rate`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if index is not None:
+            _query_parameters.append(("index", index))
+        if start_date is not None:
+            _query_parameters.append(("startDate", start_date))
+        if end_date is not None:
+            _query_parameters.append(("endDate", end_date))
+        if tags is not None:
+            _query_parameters.append(("tags", tags))
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/2/conversions/purchaseRate",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_purchase_rate(
+        self,
+        index: Annotated[StrictStr, Field(description="Index name.")],
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        tags: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetPurchaseRateResponse:
+        """
+        Retrieves the purchase rate for all of your searches with at least one purchase event, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param index: Index name. (required)
+        :type index: str
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :type start_date: str
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :type end_date: str
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
+        :type tags: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetPurchaseRateResponse' result object.
+        """
+        return (
+            await self.get_purchase_rate_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetPurchaseRateResponse)
+
+    async def get_revenue_with_http_info(
+        self,
+        index: Annotated[StrictStr, Field(description="Index name.")],
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        tags: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves revenue-related metrics, such as the total revenue or the average order value.  To retrieve revenue-related metrics, sent purchase events. By default, the analyzed period includes the last eight days including the current day.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param index: Index name. (required)
+        :type index: str
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :type start_date: str
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :type end_date: str
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
+        :type tags: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_revenue`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if index is not None:
+            _query_parameters.append(("index", index))
+        if start_date is not None:
+            _query_parameters.append(("startDate", start_date))
+        if end_date is not None:
+            _query_parameters.append(("endDate", end_date))
+        if tags is not None:
+            _query_parameters.append(("tags", tags))
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/2/conversions/revenue",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_revenue(
+        self,
+        index: Annotated[StrictStr, Field(description="Index name.")],
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        tags: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetRevenue:
+        """
+        Retrieves revenue-related metrics, such as the total revenue or the average order value.  To retrieve revenue-related metrics, sent purchase events. By default, the analyzed period includes the last eight days including the current day.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param index: Index name. (required)
+        :type index: str
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :type start_date: str
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :type end_date: str
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
+        :type tags: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetRevenue' result object.
+        """
+        return (
+            await self.get_revenue_with_http_info(
+                index, start_date, end_date, tags, request_options
+            )
+        ).deserialize(GetRevenue)
+
+    async def get_searches_count_with_http_info(
+        self,
+        index: Annotated[StrictStr, Field(description="Index name.")],
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+        ] = None,
+        tags: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the number of searches within a time range, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param index: Index name. (required)
+        :type index: str
+        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :type start_date: str
+        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :type end_date: str
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1181,23 +1503,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetSearchesCountResponse:
         """
-        Returns the number of searches within a time range.
+        Retrieves the number of searches within a time range, including a daily breakdown.  By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -1208,7 +1530,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesCountResponse' result object.
@@ -1223,11 +1545,11 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1240,13 +1562,13 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the most popular of the last 1,000 searches that didn't lead to any clicks.
+        Retrieves the most popular searches that didn't lead to any clicks, from the 1,000 most frequent searches.
 
         Required API Key ACLs:
           - analytics
@@ -1261,7 +1583,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1301,11 +1623,11 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1318,13 +1640,13 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetSearchesNoClicksResponse:
         """
-        Return the most popular of the last 1,000 searches that didn't lead to any clicks.
+        Retrieves the most popular searches that didn't lead to any clicks, from the 1,000 most frequent searches.
 
         Required API Key ACLs:
           - analytics
@@ -1339,7 +1661,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesNoClicksResponse' result object.
@@ -1354,11 +1676,11 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1371,13 +1693,13 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the most popular of the latest 1,000 searches that didn't return any results.
+        Retrieves the most popular searches that didn't return any results.
 
         Required API Key ACLs:
           - analytics
@@ -1392,7 +1714,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1432,11 +1754,11 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1449,13 +1771,13 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetSearchesNoResultsResponse:
         """
-        Returns the most popular of the latest 1,000 searches that didn't return any results.
+        Retrieves the most popular searches that didn't return any results.
 
         Required API Key ACLs:
           - analytics
@@ -1470,7 +1792,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesNoResultsResponse' result object.
@@ -1487,7 +1809,7 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`. > **Note**: The Analytics API is updated every 5&nbsp;minutes.
+        Retrieves the time when the Analytics data for the specified index was last updated.  The Analytics data is updated every 5 minutes.
 
         Required API Key ACLs:
           - analytics
@@ -1522,7 +1844,7 @@ class AnalyticsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetStatusResponse:
         """
-        Return the latest update time of the Analytics API for an index. If the index has been recently created or no search has been performed yet, `updatedAt` will be `null`. > **Note**: The Analytics API is updated every 5&nbsp;minutes.
+        Retrieves the time when the Analytics data for the specified index was last updated.  The Analytics data is updated every 5 minutes.
 
         Required API Key ACLs:
           - analytics
@@ -1540,11 +1862,11 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1557,13 +1879,13 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns top countries. Limited to the 1,000 most frequent ones.
+        Retrieves the countries with the most searches to your index.
 
         Required API Key ACLs:
           - analytics
@@ -1578,7 +1900,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1618,11 +1940,11 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1635,13 +1957,13 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopCountriesResponse:
         """
-        Returns top countries. Limited to the 1,000 most frequent ones.
+        Retrieves the countries with the most searches to your index.
 
         Required API Key ACLs:
           - analytics
@@ -1656,7 +1978,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopCountriesResponse' result object.
@@ -1670,13 +1992,15 @@ class AnalyticsClient:
     async def get_top_filter_attributes_with_http_info(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
-        search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
+        search: Annotated[
+            Optional[StrictStr], Field(description="Search query.")
+        ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1689,20 +2013,20 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the most popular [filterable attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most recently used filters.
+        Retrieves the most frequently used filter attributes.  These are attributes of your records that you included in the `attributesForFaceting` setting.
 
         Required API Key ACLs:
           - analytics
 
         :param index: Index name. (required)
         :type index: str
-        :param search: User query.
+        :param search: Search query.
         :type search: str
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
@@ -1712,7 +2036,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1753,13 +2077,15 @@ class AnalyticsClient:
     async def get_top_filter_attributes(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
-        search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
+        search: Annotated[
+            Optional[StrictStr], Field(description="Search query.")
+        ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1772,20 +2098,20 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopFilterAttributesResponse:
         """
-        Return the most popular [filterable attributes](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/) in the 1,000 most recently used filters.
+        Retrieves the most frequently used filter attributes.  These are attributes of your records that you included in the `attributesForFaceting` setting.
 
         Required API Key ACLs:
           - analytics
 
         :param index: Index name. (required)
         :type index: str
-        :param search: User query.
+        :param search: Search query.
         :type search: str
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
@@ -1795,7 +2121,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFilterAttributesResponse' result object.
@@ -1817,13 +2143,15 @@ class AnalyticsClient:
         self,
         attribute: Annotated[StrictStr, Field(description="Attribute name.")],
         index: Annotated[StrictStr, Field(description="Index name.")],
-        search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
+        search: Annotated[
+            Optional[StrictStr], Field(description="Search query.")
+        ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1836,13 +2164,13 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
+        Retrieves the most frequent filter (facet) values for a filter attribute.  These are attributes of your records that you included in the `attributesForFaceting` setting.
 
         Required API Key ACLs:
           - analytics
@@ -1851,7 +2179,7 @@ class AnalyticsClient:
         :type attribute: str
         :param index: Index name. (required)
         :type index: str
-        :param search: User query.
+        :param search: Search query.
         :type search: str
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
@@ -1861,7 +2189,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1910,13 +2238,15 @@ class AnalyticsClient:
         self,
         attribute: Annotated[StrictStr, Field(description="Attribute name.")],
         index: Annotated[StrictStr, Field(description="Index name.")],
-        search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
+        search: Annotated[
+            Optional[StrictStr], Field(description="Search query.")
+        ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1929,13 +2259,13 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopFilterForAttributeResponse:
         """
-        Returns the most popular filter values for an attribute in the 1,000 most recently used filters.
+        Retrieves the most frequent filter (facet) values for a filter attribute.  These are attributes of your records that you included in the `attributesForFaceting` setting.
 
         Required API Key ACLs:
           - analytics
@@ -1944,7 +2274,7 @@ class AnalyticsClient:
         :type attribute: str
         :param index: Index name. (required)
         :type index: str
-        :param search: User query.
+        :param search: Search query.
         :type search: str
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
@@ -1954,7 +2284,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFilterForAttributeResponse' result object.
@@ -1976,13 +2306,15 @@ class AnalyticsClient:
     async def get_top_filters_no_results_with_http_info(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
-        search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
+        search: Annotated[
+            Optional[StrictStr], Field(description="Search query.")
+        ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -1995,20 +2327,20 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used filters.
+        Retrieves the most frequently used filters for a search that didn't return any results.  To get the most frequent searches without results, use the [Retrieve searches without results](#tag/search/operation/getSearchesNoResults) operation.
 
         Required API Key ACLs:
           - analytics
 
         :param index: Index name. (required)
         :type index: str
-        :param search: User query.
+        :param search: Search query.
         :type search: str
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
@@ -2018,7 +2350,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2059,13 +2391,15 @@ class AnalyticsClient:
     async def get_top_filters_no_results(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
-        search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
+        search: Annotated[
+            Optional[StrictStr], Field(description="Search query.")
+        ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -2078,20 +2412,20 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopFiltersNoResultsResponse:
         """
-        Returns top filters for filter-enabled searches that don't return results. Limited to the 1,000 most recently used filters.
+        Retrieves the most frequently used filters for a search that didn't return any results.  To get the most frequent searches without results, use the [Retrieve searches without results](#tag/search/operation/getSearchesNoResults) operation.
 
         Required API Key ACLs:
           - analytics
 
         :param index: Index name. (required)
         :type index: str
-        :param search: User query.
+        :param search: Search query.
         :type search: str
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
@@ -2101,7 +2435,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFiltersNoResultsResponse' result object.
@@ -2122,19 +2456,27 @@ class AnalyticsClient:
     async def get_top_hits_with_http_info(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
-        search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
+        search: Annotated[
+            Optional[StrictStr], Field(description="Search query.")
+        ] = None,
         click_analytics: Annotated[
             Optional[StrictBool],
             Field(
-                description="Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search."
+                description="Whether to include metrics related to click and conversion events in the response."
+            ),
+        ] = None,
+        revenue_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response. "
             ),
         ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -2147,23 +2489,25 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the most popular clicked results in the last 1,000 searches.
+        Retrieves the object IDs of the most frequent search results.
 
         Required API Key ACLs:
           - analytics
 
         :param index: Index name. (required)
         :type index: str
-        :param search: User query.
+        :param search: Search query.
         :type search: str
-        :param click_analytics: Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
+        :param click_analytics: Whether to include metrics related to click and conversion events in the response.
         :type click_analytics: bool
+        :param revenue_analytics: Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response.
+        :type revenue_analytics: bool
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
@@ -2172,7 +2516,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2191,6 +2535,8 @@ class AnalyticsClient:
             _query_parameters.append(("search", search))
         if click_analytics is not None:
             _query_parameters.append(("clickAnalytics", click_analytics))
+        if revenue_analytics is not None:
+            _query_parameters.append(("revenueAnalytics", revenue_analytics))
         if start_date is not None:
             _query_parameters.append(("startDate", start_date))
         if end_date is not None:
@@ -2215,19 +2561,27 @@ class AnalyticsClient:
     async def get_top_hits(
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
-        search: Annotated[Optional[StrictStr], Field(description="User query.")] = None,
+        search: Annotated[
+            Optional[StrictStr], Field(description="Search query.")
+        ] = None,
         click_analytics: Annotated[
             Optional[StrictBool],
             Field(
-                description="Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search."
+                description="Whether to include metrics related to click and conversion events in the response."
+            ),
+        ] = None,
+        revenue_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response. "
             ),
         ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         limit: Annotated[
@@ -2240,23 +2594,25 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopHitsResponse:
         """
-        Return the most popular clicked results in the last 1,000 searches.
+        Retrieves the object IDs of the most frequent search results.
 
         Required API Key ACLs:
           - analytics
 
         :param index: Index name. (required)
         :type index: str
-        :param search: User query.
+        :param search: Search query.
         :type search: str
-        :param click_analytics: Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
+        :param click_analytics: Whether to include metrics related to click and conversion events in the response.
         :type click_analytics: bool
+        :param revenue_analytics: Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response.
+        :type revenue_analytics: bool
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
@@ -2265,7 +2621,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopHitsResponse' result object.
@@ -2275,6 +2631,7 @@ class AnalyticsClient:
                 index,
                 search,
                 click_analytics,
+                revenue_analytics,
                 start_date,
                 end_date,
                 limit,
@@ -2290,19 +2647,28 @@ class AnalyticsClient:
         click_analytics: Annotated[
             Optional[StrictBool],
             Field(
-                description="Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search."
+                description="Whether to include metrics related to click and conversion events in the response."
+            ),
+        ] = None,
+        revenue_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response. "
             ),
         ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         order_by: Annotated[
-            Optional[OrderBy], Field(description="Reorder the results.")
+            Optional[OrderBy],
+            Field(
+                description="Attribute by which to order the response items.  If the `clickAnalytics` parameter is false, only `searchCount` is available. "
+            ),
         ] = None,
         direction: Annotated[
             Optional[Direction],
@@ -2320,26 +2686,28 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
+        Returns the most popular search terms.
 
         Required API Key ACLs:
           - analytics
 
         :param index: Index name. (required)
         :type index: str
-        :param click_analytics: Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
+        :param click_analytics: Whether to include metrics related to click and conversion events in the response.
         :type click_analytics: bool
+        :param revenue_analytics: Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response.
+        :type revenue_analytics: bool
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param order_by: Reorder the results.
+        :param order_by: Attribute by which to order the response items.  If the `clickAnalytics` parameter is false, only `searchCount` is available.
         :type order_by: OrderBy
         :param direction: Sorting direction of the results: ascending or descending.
         :type direction: Direction
@@ -2347,7 +2715,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2364,6 +2732,8 @@ class AnalyticsClient:
             _query_parameters.append(("index", index))
         if click_analytics is not None:
             _query_parameters.append(("clickAnalytics", click_analytics))
+        if revenue_analytics is not None:
+            _query_parameters.append(("revenueAnalytics", revenue_analytics))
         if start_date is not None:
             _query_parameters.append(("startDate", start_date))
         if end_date is not None:
@@ -2395,19 +2765,28 @@ class AnalyticsClient:
         click_analytics: Annotated[
             Optional[StrictBool],
             Field(
-                description="Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search."
+                description="Whether to include metrics related to click and conversion events in the response."
+            ),
+        ] = None,
+        revenue_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response. "
             ),
         ] = None,
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         order_by: Annotated[
-            Optional[OrderBy], Field(description="Reorder the results.")
+            Optional[OrderBy],
+            Field(
+                description="Attribute by which to order the response items.  If the `clickAnalytics` parameter is false, only `searchCount` is available. "
+            ),
         ] = None,
         direction: Annotated[
             Optional[Direction],
@@ -2425,26 +2804,28 @@ class AnalyticsClient:
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTopSearchesResponse:
         """
-        Returns the most popular of the latest 1,000 searches. For each search, also returns the number of hits.
+        Returns the most popular search terms.
 
         Required API Key ACLs:
           - analytics
 
         :param index: Index name. (required)
         :type index: str
-        :param click_analytics: Whether to include [click and conversion](https://www.algolia.com/doc/guides/sending-events/getting-started/) rates for a search.
+        :param click_analytics: Whether to include metrics related to click and conversion events in the response.
         :type click_analytics: bool
+        :param revenue_analytics: Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response.
+        :type revenue_analytics: bool
         :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param order_by: Reorder the results.
+        :param order_by: Attribute by which to order the response items.  If the `clickAnalytics` parameter is false, only `searchCount` is available.
         :type order_by: OrderBy
         :param direction: Sorting direction of the results: ascending or descending.
         :type direction: Direction
@@ -2452,7 +2833,7 @@ class AnalyticsClient:
         :type limit: int
         :param offset: Position of the first item to return.
         :type offset: int
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopSearchesResponse' result object.
@@ -2461,6 +2842,7 @@ class AnalyticsClient:
             await self.get_top_searches_with_http_info(
                 index,
                 click_analytics,
+                revenue_analytics,
                 start_date,
                 end_date,
                 order_by,
@@ -2476,23 +2858,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return the count of unique users.
+        Retrieves the number of unique users within a time range, including a daily breakdown.  Since this endpoint returns the number of unique users, the sum of the daily values might be different from the total number.  By default, Algolia distinguishes search users by their IP address, _unless_ you include a pseudonymous user identifier in your search requests with the `userToken` API parameter or `x-algolia-usertoken` request header. By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -2503,7 +2885,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2539,23 +2921,23 @@ class AnalyticsClient:
         self,
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         end_date: Annotated[
-            Optional[str],
+            Optional[StrictStr],
             Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
             Field(
-                description="Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded."
+                description="Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/). "
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetUsersCountResponse:
         """
-        Return the count of unique users.
+        Retrieves the number of unique users within a time range, including a daily breakdown.  Since this endpoint returns the number of unique users, the sum of the daily values might be different from the total number.  By default, Algolia distinguishes search users by their IP address, _unless_ you include a pseudonymous user identifier in your search requests with the `userToken` API parameter or `x-algolia-usertoken` request header. By default, the analyzed period includes the last eight days including the current day.
 
         Required API Key ACLs:
           - analytics
@@ -2566,7 +2948,7 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
         :type end_date: str
-        :param tags: Filter analytics on the [`analyticsTags`](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) set at search time. Multiple tags can be combined with the operators OR and AND. If a tag contains characters like spaces or parentheses, it must be URL-encoded.
+        :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetUsersCountResponse' result object.

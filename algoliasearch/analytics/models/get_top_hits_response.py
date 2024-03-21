@@ -14,6 +14,9 @@ from algoliasearch.analytics.models.top_hits_response import TopHitsResponse
 from algoliasearch.analytics.models.top_hits_response_with_analytics import (
     TopHitsResponseWithAnalytics,
 )
+from algoliasearch.analytics.models.top_hits_response_with_revenue_analytics import (
+    TopHitsResponseWithRevenueAnalytics,
+)
 
 
 class GetTopHitsResponse(BaseModel):
@@ -23,9 +26,14 @@ class GetTopHitsResponse(BaseModel):
 
     oneof_schema_1_validator: Optional[TopHitsResponse] = None
     oneof_schema_2_validator: Optional[TopHitsResponseWithAnalytics] = None
-    actual_instance: Optional[Union[TopHitsResponse, TopHitsResponseWithAnalytics]] = (
-        None
-    )
+    oneof_schema_3_validator: Optional[TopHitsResponseWithRevenueAnalytics] = None
+    actual_instance: Optional[
+        Union[
+            TopHitsResponse,
+            TopHitsResponseWithAnalytics,
+            TopHitsResponseWithRevenueAnalytics,
+        ]
+    ] = None
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -44,7 +52,13 @@ class GetTopHitsResponse(BaseModel):
     @model_serializer
     def unwrap_actual_instance(
         self,
-    ) -> Optional[Union[TopHitsResponse, TopHitsResponseWithAnalytics]]:
+    ) -> Optional[
+        Union[
+            TopHitsResponse,
+            TopHitsResponseWithAnalytics,
+            TopHitsResponseWithRevenueAnalytics,
+        ]
+    ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -72,9 +86,17 @@ class GetTopHitsResponse(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = TopHitsResponseWithRevenueAnalytics.from_json(
+                json_str
+            )
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into GetTopHitsResponse with oneOf schemas: TopHitsResponse, TopHitsResponseWithAnalytics. Details: "
+            "No match found when deserializing the JSON string into GetTopHitsResponse with oneOf schemas: TopHitsResponse, TopHitsResponseWithAnalytics, TopHitsResponseWithRevenueAnalytics. Details: "
             + ", ".join(error_messages)
         )
 

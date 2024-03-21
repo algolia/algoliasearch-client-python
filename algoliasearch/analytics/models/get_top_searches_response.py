@@ -14,6 +14,9 @@ from algoliasearch.analytics.models.top_searches_response import TopSearchesResp
 from algoliasearch.analytics.models.top_searches_response_with_analytics import (
     TopSearchesResponseWithAnalytics,
 )
+from algoliasearch.analytics.models.top_searches_response_with_revenue_analytics import (
+    TopSearchesResponseWithRevenueAnalytics,
+)
 
 
 class GetTopSearchesResponse(BaseModel):
@@ -23,8 +26,13 @@ class GetTopSearchesResponse(BaseModel):
 
     oneof_schema_1_validator: Optional[TopSearchesResponse] = None
     oneof_schema_2_validator: Optional[TopSearchesResponseWithAnalytics] = None
+    oneof_schema_3_validator: Optional[TopSearchesResponseWithRevenueAnalytics] = None
     actual_instance: Optional[
-        Union[TopSearchesResponse, TopSearchesResponseWithAnalytics]
+        Union[
+            TopSearchesResponse,
+            TopSearchesResponseWithAnalytics,
+            TopSearchesResponseWithRevenueAnalytics,
+        ]
     ] = None
 
     def __init__(self, *args, **kwargs) -> None:
@@ -44,7 +52,13 @@ class GetTopSearchesResponse(BaseModel):
     @model_serializer
     def unwrap_actual_instance(
         self,
-    ) -> Optional[Union[TopSearchesResponse, TopSearchesResponseWithAnalytics]]:
+    ) -> Optional[
+        Union[
+            TopSearchesResponse,
+            TopSearchesResponseWithAnalytics,
+            TopSearchesResponseWithRevenueAnalytics,
+        ]
+    ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -74,9 +88,17 @@ class GetTopSearchesResponse(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = (
+                TopSearchesResponseWithRevenueAnalytics.from_json(json_str)
+            )
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into GetTopSearchesResponse with oneOf schemas: TopSearchesResponse, TopSearchesResponseWithAnalytics. Details: "
+            "No match found when deserializing the JSON string into GetTopSearchesResponse with oneOf schemas: TopSearchesResponse, TopSearchesResponseWithAnalytics, TopSearchesResponseWithRevenueAnalytics. Details: "
             + ", ".join(error_messages)
         )
 

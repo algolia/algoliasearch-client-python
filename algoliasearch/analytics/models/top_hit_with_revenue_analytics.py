@@ -10,10 +10,12 @@ from typing import Annotated, Any, Dict, Optional, Self, Union
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr
 
+from algoliasearch.analytics.models.currencies_value import CurrenciesValue
 
-class TopHitWithAnalytics(BaseModel):
+
+class TopHitWithRevenueAnalytics(BaseModel):
     """
-    TopHitWithAnalytics
+    TopHitWithRevenueAnalytics
     """
 
     hit: StrictStr = Field(
@@ -48,6 +50,34 @@ class TopHitWithAnalytics(BaseModel):
     conversion_count: Annotated[int, Field(strict=True, ge=0)] = Field(
         description="Number of conversions from this search.", alias="conversionCount"
     )
+    add_to_cart_rate: Optional[
+        Union[
+            Annotated[float, Field(le=1, strict=True, ge=0)],
+            Annotated[int, Field(le=1, strict=True, ge=0)],
+        ]
+    ] = Field(
+        description="Add-to-cart rate, calculated as number of tracked searches with at least one add-to-cart event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. ",
+        alias="addToCartRate",
+    )
+    add_to_cart_count: Annotated[int, Field(strict=True, ge=0)] = Field(
+        description="Number of add-to-cart events from this search.",
+        alias="addToCartCount",
+    )
+    purchase_rate: Optional[
+        Union[
+            Annotated[float, Field(le=1, strict=True, ge=0)],
+            Annotated[int, Field(le=1, strict=True, ge=0)],
+        ]
+    ] = Field(
+        description="Purchase rate, calculated as number of tracked searches with at least one purchase event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. ",
+        alias="purchaseRate",
+    )
+    purchase_count: StrictInt = Field(
+        description="Number of purchase events from this search.", alias="purchaseCount"
+    )
+    currencies: Dict[str, CurrenciesValue] = Field(
+        description="Revenue associated with this search, broken-down by currencies."
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -56,7 +86,7 @@ class TopHitWithAnalytics(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of TopHitWithAnalytics from a JSON string"""
+        """Create an instance of TopHitWithRevenueAnalytics from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,6 +104,12 @@ class TopHitWithAnalytics(BaseModel):
             exclude={},
             exclude_none=True,
         )
+        _field_dict = {}
+        if self.currencies:
+            for _key in self.currencies:
+                if self.currencies[_key]:
+                    _field_dict[_key] = self.currencies[_key].to_dict()
+            _dict["currencies"] = _field_dict
         # set to None if click_through_rate (nullable) is None
         # and model_fields_set contains the field
         if (
@@ -87,11 +123,24 @@ class TopHitWithAnalytics(BaseModel):
         if self.conversion_rate is None and "conversion_rate" in self.model_fields_set:
             _dict["conversionRate"] = None
 
+        # set to None if add_to_cart_rate (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.add_to_cart_rate is None
+            and "add_to_cart_rate" in self.model_fields_set
+        ):
+            _dict["addToCartRate"] = None
+
+        # set to None if purchase_rate (nullable) is None
+        # and model_fields_set contains the field
+        if self.purchase_rate is None and "purchase_rate" in self.model_fields_set:
+            _dict["purchaseRate"] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of TopHitWithAnalytics from a dict"""
+        """Create an instance of TopHitWithRevenueAnalytics from a dict"""
         if obj is None:
             return None
 
@@ -107,6 +156,18 @@ class TopHitWithAnalytics(BaseModel):
                 "trackedHitCount": obj.get("trackedHitCount"),
                 "clickCount": obj.get("clickCount"),
                 "conversionCount": obj.get("conversionCount"),
+                "addToCartRate": obj.get("addToCartRate"),
+                "addToCartCount": obj.get("addToCartCount"),
+                "purchaseRate": obj.get("purchaseRate"),
+                "purchaseCount": obj.get("purchaseCount"),
+                "currencies": (
+                    dict(
+                        (_k, CurrenciesValue.from_dict(_v))
+                        for _k, _v in obj.get("currencies").items()
+                    )
+                    if obj.get("currencies") is not None
+                    else None
+                ),
             }
         )
         return _obj

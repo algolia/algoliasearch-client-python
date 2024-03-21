@@ -10,6 +10,8 @@ from typing import Any, Dict, Self
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr
 
+from algoliasearch.analytics.models.operator import Operator
+
 
 class GetTopFilterForAttribute(BaseModel):
     """
@@ -17,7 +19,7 @@ class GetTopFilterForAttribute(BaseModel):
     """
 
     attribute: StrictStr = Field(description="Attribute name.")
-    operator: StrictStr = Field(description="Operator.")
+    operator: Operator
     value: StrictStr = Field(description="Attribute value.")
     count: StrictInt = Field(description="Number of occurrences.")
 

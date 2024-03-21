@@ -10,6 +10,8 @@ from typing import Any, Dict, Self
 
 from pydantic import BaseModel, Field, StrictStr
 
+from algoliasearch.analytics.models.operator import Operator
+
 
 class GetTopFiltersNoResultsValue(BaseModel):
     """
@@ -17,7 +19,7 @@ class GetTopFiltersNoResultsValue(BaseModel):
     """
 
     attribute: StrictStr = Field(description="Attribute name.")
-    operator: StrictStr = Field(description="Operator.")
+    operator: Operator
     value: StrictStr = Field(description="Attribute value.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

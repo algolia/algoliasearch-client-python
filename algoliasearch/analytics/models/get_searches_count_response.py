@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Self
 
 from pydantic import BaseModel, Field, StrictInt
 
-from algoliasearch.analytics.models.search_event import SearchEvent
+from algoliasearch.analytics.models.daily_searches import DailySearches
 
 
 class GetSearchesCountResponse(BaseModel):
@@ -19,9 +19,7 @@ class GetSearchesCountResponse(BaseModel):
     """
 
     count: StrictInt = Field(description="Number of occurrences.")
-    dates: List[SearchEvent] = Field(
-        description="Search events with their associated dates and hit counts."
-    )
+    dates: List[DailySearches] = Field(description="Daily number of searches.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -69,7 +67,7 @@ class GetSearchesCountResponse(BaseModel):
             {
                 "count": obj.get("count"),
                 "dates": (
-                    [SearchEvent.from_dict(_item) for _item in obj.get("dates")]
+                    [DailySearches.from_dict(_item) for _item in obj.get("dates")]
                     if obj.get("dates") is not None
                     else None
                 ),

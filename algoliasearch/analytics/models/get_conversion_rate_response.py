@@ -10,14 +10,12 @@ from typing import Annotated, Any, Dict, List, Optional, Self, Union
 
 from pydantic import BaseModel, Field, StrictInt
 
-from algoliasearch.analytics.models.daily_click_through_rates import (
-    DailyClickThroughRates,
-)
+from algoliasearch.analytics.models.daily_conversion_rates import DailyConversionRates
 
 
-class GetClickThroughRateResponse(BaseModel):
+class GetConversionRateResponse(BaseModel):
     """
-    GetClickThroughRateResponse
+    GetConversionRateResponse
     """
 
     rate: Optional[
@@ -26,18 +24,16 @@ class GetClickThroughRateResponse(BaseModel):
             Annotated[int, Field(le=1, strict=True, ge=0)],
         ]
     ] = Field(
-        description="Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. "
-    )
-    click_count: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Number of clicks associated with this search.", alias="clickCount"
+        description="Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. "
     )
     tracked_search_count: StrictInt = Field(
         description="Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true.",
         alias="trackedSearchCount",
     )
-    dates: List[DailyClickThroughRates] = Field(
-        description="Daily click-through rates."
+    conversion_count: Annotated[int, Field(strict=True, ge=0)] = Field(
+        description="Number of conversions from this search.", alias="conversionCount"
     )
+    dates: List[DailyConversionRates] = Field(description="Daily conversion rates.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -46,7 +42,7 @@ class GetClickThroughRateResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of GetClickThroughRateResponse from a JSON string"""
+        """Create an instance of GetConversionRateResponse from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -79,7 +75,7 @@ class GetClickThroughRateResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of GetClickThroughRateResponse from a dict"""
+        """Create an instance of GetConversionRateResponse from a dict"""
         if obj is None:
             return None
 
@@ -89,11 +85,11 @@ class GetClickThroughRateResponse(BaseModel):
         _obj = cls.model_validate(
             {
                 "rate": obj.get("rate"),
-                "clickCount": obj.get("clickCount"),
                 "trackedSearchCount": obj.get("trackedSearchCount"),
+                "conversionCount": obj.get("conversionCount"),
                 "dates": (
                     [
-                        DailyClickThroughRates.from_dict(_item)
+                        DailyConversionRates.from_dict(_item)
                         for _item in obj.get("dates")
                     ]
                     if obj.get("dates") is not None

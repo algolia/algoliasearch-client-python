@@ -10,17 +10,19 @@ from typing import Any, Dict, List, Self
 
 from pydantic import BaseModel, Field
 
-from algoliasearch.analytics.models.top_search import TopSearch
+from algoliasearch.analytics.models.currencies_value import CurrenciesValue
+from algoliasearch.analytics.models.daily_revenue import DailyRevenue
 
 
-class TopSearchesResponse(BaseModel):
+class GetRevenue(BaseModel):
     """
-    TopSearchesResponse
+    GetRevenue
     """
 
-    searches: List[TopSearch] = Field(
-        description="Most popular searches and their number of search results (hits)."
+    currencies: Dict[str, CurrenciesValue] = Field(
+        description="Revenue associated with this search, broken-down by currencies."
     )
+    dates: List[DailyRevenue] = Field(description="Daily revenue.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -29,7 +31,7 @@ class TopSearchesResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of TopSearchesResponse from a JSON string"""
+        """Create an instance of GetRevenue from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -47,17 +49,23 @@ class TopSearchesResponse(BaseModel):
             exclude={},
             exclude_none=True,
         )
+        _field_dict = {}
+        if self.currencies:
+            for _key in self.currencies:
+                if self.currencies[_key]:
+                    _field_dict[_key] = self.currencies[_key].to_dict()
+            _dict["currencies"] = _field_dict
         _items = []
-        if self.searches:
-            for _item in self.searches:
+        if self.dates:
+            for _item in self.dates:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict["searches"] = _items
+            _dict["dates"] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of TopSearchesResponse from a dict"""
+        """Create an instance of GetRevenue from a dict"""
         if obj is None:
             return None
 
@@ -66,11 +74,19 @@ class TopSearchesResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "searches": (
-                    [TopSearch.from_dict(_item) for _item in obj.get("searches")]
-                    if obj.get("searches") is not None
+                "currencies": (
+                    dict(
+                        (_k, CurrenciesValue.from_dict(_v))
+                        for _k, _v in obj.get("currencies").items()
+                    )
+                    if obj.get("currencies") is not None
                     else None
-                )
+                ),
+                "dates": (
+                    [DailyRevenue.from_dict(_item) for _item in obj.get("dates")]
+                    if obj.get("dates") is not None
+                    else None
+                ),
             }
         )
         return _obj

@@ -10,20 +10,23 @@ from json import loads
 from typing import Self
 
 
-class OrderBy(str, Enum):
+class Operator(str, Enum):
     """
-    Attribute by which to order the response items.  If the `clickAnalytics` parameter is false, only `searchCount` is available.
+    Character that characterizes how the filter is applied.  For example, for a facet filter `facet:value`, `:` is the operator. For a numeric filter `count>50`, `>` is the operator.
     """
 
     """
     allowed enum values
     """
-    SEARCHCOUNT = "searchCount"
-    CLICKTHROUGHRATE = "clickThroughRate"
-    CONVERSIONRATE = "conversionRate"
-    AVERAGECLICKPOSITION = "averageClickPosition"
+    COLON = ":"
+    LESS_THAN = "<"
+    LESS_THAN_EQUAL = "<="
+    EQUAL = "="
+    EXCLAMATION_EQUAL = "!="
+    GREATER_THAN = ">"
+    GREATER_THAN_EQUAL = ">="
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of OrderBy from a JSON string"""
+        """Create an instance of Operator from a JSON string"""
         return cls(loads(json_str))

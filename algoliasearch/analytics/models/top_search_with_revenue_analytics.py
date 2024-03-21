@@ -11,11 +11,12 @@ from typing import Annotated, Any, Dict, List, Optional, Self, Union
 from pydantic import BaseModel, Field, StrictInt, StrictStr
 
 from algoliasearch.analytics.models.click_positions_inner import ClickPositionsInner
+from algoliasearch.analytics.models.currencies_value import CurrenciesValue
 
 
-class TopSearchWithAnalytics(BaseModel):
+class TopSearchWithRevenueAnalytics(BaseModel):
     """
-    TopSearchWithAnalytics
+    TopSearchWithRevenueAnalytics
     """
 
     search: StrictStr = Field(description="Search query.")
@@ -64,6 +65,34 @@ class TopSearchWithAnalytics(BaseModel):
         description="Number of conversions from this search.", alias="conversionCount"
     )
     nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
+    currencies: Dict[str, CurrenciesValue] = Field(
+        description="Revenue associated with this search, broken-down by currencies."
+    )
+    add_to_cart_rate: Optional[
+        Union[
+            Annotated[float, Field(le=1, strict=True, ge=0)],
+            Annotated[int, Field(le=1, strict=True, ge=0)],
+        ]
+    ] = Field(
+        description="Add-to-cart rate, calculated as number of tracked searches with at least one add-to-cart event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. ",
+        alias="addToCartRate",
+    )
+    add_to_cart_count: Annotated[int, Field(strict=True, ge=0)] = Field(
+        description="Number of add-to-cart events from this search.",
+        alias="addToCartCount",
+    )
+    purchase_rate: Optional[
+        Union[
+            Annotated[float, Field(le=1, strict=True, ge=0)],
+            Annotated[int, Field(le=1, strict=True, ge=0)],
+        ]
+    ] = Field(
+        description="Purchase rate, calculated as number of tracked searches with at least one purchase event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. ",
+        alias="purchaseRate",
+    )
+    purchase_count: StrictInt = Field(
+        description="Number of purchase events from this search.", alias="purchaseCount"
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -72,7 +101,7 @@ class TopSearchWithAnalytics(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of TopSearchWithAnalytics from a JSON string"""
+        """Create an instance of TopSearchWithRevenueAnalytics from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -96,6 +125,12 @@ class TopSearchWithAnalytics(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict["clickPositions"] = _items
+        _field_dict = {}
+        if self.currencies:
+            for _key in self.currencies:
+                if self.currencies[_key]:
+                    _field_dict[_key] = self.currencies[_key].to_dict()
+            _dict["currencies"] = _field_dict
         # set to None if click_through_rate (nullable) is None
         # and model_fields_set contains the field
         if (
@@ -117,11 +152,24 @@ class TopSearchWithAnalytics(BaseModel):
         if self.conversion_rate is None and "conversion_rate" in self.model_fields_set:
             _dict["conversionRate"] = None
 
+        # set to None if add_to_cart_rate (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.add_to_cart_rate is None
+            and "add_to_cart_rate" in self.model_fields_set
+        ):
+            _dict["addToCartRate"] = None
+
+        # set to None if purchase_rate (nullable) is None
+        # and model_fields_set contains the field
+        if self.purchase_rate is None and "purchase_rate" in self.model_fields_set:
+            _dict["purchaseRate"] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of TopSearchWithAnalytics from a dict"""
+        """Create an instance of TopSearchWithRevenueAnalytics from a dict"""
         if obj is None:
             return None
 
@@ -147,6 +195,18 @@ class TopSearchWithAnalytics(BaseModel):
                 "clickCount": obj.get("clickCount"),
                 "conversionCount": obj.get("conversionCount"),
                 "nbHits": obj.get("nbHits"),
+                "currencies": (
+                    dict(
+                        (_k, CurrenciesValue.from_dict(_v))
+                        for _k, _v in obj.get("currencies").items()
+                    )
+                    if obj.get("currencies") is not None
+                    else None
+                ),
+                "addToCartRate": obj.get("addToCartRate"),
+                "addToCartCount": obj.get("addToCartCount"),
+                "purchaseRate": obj.get("purchaseRate"),
+                "purchaseCount": obj.get("purchaseCount"),
             }
         )
         return _obj

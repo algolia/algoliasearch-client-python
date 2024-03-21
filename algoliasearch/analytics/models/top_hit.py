@@ -16,7 +16,9 @@ class TopHit(BaseModel):
     TopHit
     """
 
-    hit: StrictStr = Field(description="Hit.")
+    hit: StrictStr = Field(
+        description="Object ID of a record that's returned as a search result."
+    )
     count: StrictInt = Field(description="Number of occurrences.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

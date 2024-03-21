@@ -10,16 +10,18 @@ from typing import Any, Dict, List, Self
 
 from pydantic import BaseModel, Field
 
-from algoliasearch.analytics.models.top_search import TopSearch
+from algoliasearch.analytics.models.top_search_with_revenue_analytics import (
+    TopSearchWithRevenueAnalytics,
+)
 
 
-class TopSearchesResponse(BaseModel):
+class TopSearchesResponseWithRevenueAnalytics(BaseModel):
     """
-    TopSearchesResponse
+    TopSearchesResponseWithRevenueAnalytics
     """
 
-    searches: List[TopSearch] = Field(
-        description="Most popular searches and their number of search results (hits)."
+    searches: List[TopSearchWithRevenueAnalytics] = Field(
+        description="Most popular searches, including their click and revenue metrics."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
@@ -29,7 +31,7 @@ class TopSearchesResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of TopSearchesResponse from a JSON string"""
+        """Create an instance of TopSearchesResponseWithRevenueAnalytics from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -57,7 +59,7 @@ class TopSearchesResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of TopSearchesResponse from a dict"""
+        """Create an instance of TopSearchesResponseWithRevenueAnalytics from a dict"""
         if obj is None:
             return None
 
@@ -67,7 +69,10 @@ class TopSearchesResponse(BaseModel):
         _obj = cls.model_validate(
             {
                 "searches": (
-                    [TopSearch.from_dict(_item) for _item in obj.get("searches")]
+                    [
+                        TopSearchWithRevenueAnalytics.from_dict(_item)
+                        for _item in obj.get("searches")
+                    ]
                     if obj.get("searches") is not None
                     else None
                 )

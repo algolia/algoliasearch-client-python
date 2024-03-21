@@ -10,7 +10,7 @@ from typing import Annotated, Any, Dict, List, Self, Union
 
 from pydantic import BaseModel, Field, StrictInt
 
-from algoliasearch.analytics.models.no_click_rate_event import NoClickRateEvent
+from algoliasearch.analytics.models.daily_no_click_rates import DailyNoClickRates
 
 
 class GetNoClickRateResponse(BaseModel):
@@ -22,15 +22,16 @@ class GetNoClickRateResponse(BaseModel):
         Annotated[float, Field(le=1, strict=True, ge=0)],
         Annotated[int, Field(le=1, strict=True, ge=0)],
     ] = Field(
-        description="[Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate). "
+        description="No click rate, calculated as number of tracked searches without any click divided by the number of tracked searches."
     )
-    count: StrictInt = Field(description="Number of click events.")
-    no_click_count: StrictInt = Field(
-        description="Number of click events.", alias="noClickCount"
+    count: StrictInt = Field(
+        description="Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true."
     )
-    dates: List[NoClickRateEvent] = Field(
-        description="Overall count of searches without clicks plus a daily breakdown."
+    no_click_count: Annotated[int, Field(strict=True, ge=1)] = Field(
+        description="Number of times this search was returned as a result without any click.",
+        alias="noClickCount",
     )
+    dates: List[DailyNoClickRates] = Field(description="Daily no click rates.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -80,7 +81,7 @@ class GetNoClickRateResponse(BaseModel):
                 "count": obj.get("count"),
                 "noClickCount": obj.get("noClickCount"),
                 "dates": (
-                    [NoClickRateEvent.from_dict(_item) for _item in obj.get("dates")]
+                    [DailyNoClickRates.from_dict(_item) for _item in obj.get("dates")]
                     if obj.get("dates") is not None
                     else None
                 ),

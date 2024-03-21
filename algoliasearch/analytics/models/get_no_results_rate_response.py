@@ -10,7 +10,7 @@ from typing import Annotated, Any, Dict, List, Self, Union
 
 from pydantic import BaseModel, Field, StrictInt
 
-from algoliasearch.analytics.models.no_results_rate_event import NoResultsRateEvent
+from algoliasearch.analytics.models.daily_no_results_rates import DailyNoResultsRates
 
 
 class GetNoResultsRateResponse(BaseModel):
@@ -22,15 +22,13 @@ class GetNoResultsRateResponse(BaseModel):
         Annotated[float, Field(le=1, strict=True, ge=0)],
         Annotated[int, Field(le=1, strict=True, ge=0)],
     ] = Field(
-        description="[Click-through rate (CTR)](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate). "
+        description="No results rate, calculated as number of searches with zero results divided by the total number of searches."
     )
-    count: StrictInt = Field(description="Number of occurrences.")
+    count: StrictInt = Field(description="Number of searches.")
     no_result_count: StrictInt = Field(
-        description="Number of occurrences.", alias="noResultCount"
+        description="Number of searches without any results.", alias="noResultCount"
     )
-    dates: List[NoResultsRateEvent] = Field(
-        description="Overall count of searches without results plus a daily breakdown."
-    )
+    dates: List[DailyNoResultsRates] = Field(description="Daily no results rates.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -80,7 +78,7 @@ class GetNoResultsRateResponse(BaseModel):
                 "count": obj.get("count"),
                 "noResultCount": obj.get("noResultCount"),
                 "dates": (
-                    [NoResultsRateEvent.from_dict(_item) for _item in obj.get("dates")]
+                    [DailyNoResultsRates.from_dict(_item) for _item in obj.get("dates")]
                     if obj.get("dates") is not None
                     else None
                 ),

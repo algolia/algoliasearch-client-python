@@ -16,10 +16,8 @@ class TopSearch(BaseModel):
     TopSearch
     """
 
-    search: StrictStr = Field(description="User query.")
-    count: StrictInt = Field(
-        description="Number of tracked _and_ untracked searches (where the `clickAnalytics` parameter isn't `true`)."
-    )
+    search: StrictStr = Field(description="Search query.")
+    count: StrictInt = Field(description="Number of searches.")
     nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

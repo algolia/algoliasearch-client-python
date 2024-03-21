@@ -21,7 +21,7 @@ class TopSearchesResponseWithAnalytics(BaseModel):
     """
 
     searches: List[TopSearchWithAnalytics] = Field(
-        description="Top searches with their hits count and analytics."
+        description="Most popular searches and their associated click and conversion metrics."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

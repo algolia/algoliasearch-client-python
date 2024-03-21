@@ -10,7 +10,7 @@ from typing import Any, Dict, Optional, Self, Union
 
 from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr
 
-from algoliasearch.abtesting.models.currencies_value import CurrenciesValue
+from algoliasearch.abtesting.models.currency import Currency
 from algoliasearch.abtesting.models.filter_effects import FilterEffects
 
 
@@ -45,7 +45,7 @@ class Variant(BaseModel):
         description="Variant's [conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate).",
         alias="conversionRate",
     )
-    currencies: Optional[Dict[str, CurrenciesValue]] = Field(
+    currencies: Optional[Dict[str, Currency]] = Field(
         default=None, description="A/B test currencies."
     )
     description: StrictStr = Field(description="A/B test description.")
@@ -72,7 +72,8 @@ class Variant(BaseModel):
         alias="searchCount",
     )
     tracked_search_count: Optional[StrictInt] = Field(
-        description="Number of tracked searches. This is the number of search requests where the `clickAnalytics` parameter is `true`.",
+        default=0,
+        description="Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true.",
         alias="trackedSearchCount",
     )
     traffic_percentage: StrictInt = Field(
@@ -163,14 +164,6 @@ class Variant(BaseModel):
         if self.search_count is None and "search_count" in self.model_fields_set:
             _dict["searchCount"] = None
 
-        # set to None if tracked_search_count (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.tracked_search_count is None
-            and "tracked_search_count" in self.model_fields_set
-        ):
-            _dict["trackedSearchCount"] = None
-
         # set to None if user_count (nullable) is None
         # and model_fields_set contains the field
         if self.user_count is None and "user_count" in self.model_fields_set:
@@ -206,7 +199,7 @@ class Variant(BaseModel):
                 "conversionRate": obj.get("conversionRate"),
                 "currencies": (
                     dict(
-                        (_k, CurrenciesValue.from_dict(_v))
+                        (_k, Currency.from_dict(_v))
                         for _k, _v in obj.get("currencies").items()
                     )
                     if obj.get("currencies") is not None

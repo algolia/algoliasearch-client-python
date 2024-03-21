@@ -10,16 +10,18 @@ from typing import Any, Dict, List, Self
 
 from pydantic import BaseModel, Field
 
-from algoliasearch.analytics.models.top_search import TopSearch
+from algoliasearch.analytics.models.top_hit_with_revenue_analytics import (
+    TopHitWithRevenueAnalytics,
+)
 
 
-class TopSearchesResponse(BaseModel):
+class TopHitsResponseWithRevenueAnalytics(BaseModel):
     """
-    TopSearchesResponse
+    TopHitsResponseWithRevenueAnalytics
     """
 
-    searches: List[TopSearch] = Field(
-        description="Most popular searches and their number of search results (hits)."
+    hits: List[TopHitWithRevenueAnalytics] = Field(
+        description="Most frequent search results with click, conversion, and revenue metrics."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
@@ -29,7 +31,7 @@ class TopSearchesResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of TopSearchesResponse from a JSON string"""
+        """Create an instance of TopHitsResponseWithRevenueAnalytics from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -48,16 +50,16 @@ class TopSearchesResponse(BaseModel):
             exclude_none=True,
         )
         _items = []
-        if self.searches:
-            for _item in self.searches:
+        if self.hits:
+            for _item in self.hits:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict["searches"] = _items
+            _dict["hits"] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of TopSearchesResponse from a dict"""
+        """Create an instance of TopHitsResponseWithRevenueAnalytics from a dict"""
         if obj is None:
             return None
 
@@ -66,9 +68,12 @@ class TopSearchesResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "searches": (
-                    [TopSearch.from_dict(_item) for _item in obj.get("searches")]
-                    if obj.get("searches") is not None
+                "hits": (
+                    [
+                        TopHitWithRevenueAnalytics.from_dict(_item)
+                        for _item in obj.get("hits")
+                    ]
+                    if obj.get("hits") is not None
                     else None
                 )
             }

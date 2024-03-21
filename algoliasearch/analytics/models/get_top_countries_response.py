@@ -18,7 +18,7 @@ class GetTopCountriesResponse(BaseModel):
     GetTopCountriesResponse
     """
 
-    countries: List[TopCountry] = Field(description="Countries")
+    countries: List[TopCountry] = Field(description="Countries and number of searches.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

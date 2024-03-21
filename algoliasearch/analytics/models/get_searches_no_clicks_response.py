@@ -10,7 +10,9 @@ from typing import Any, Dict, List, Self
 
 from pydantic import BaseModel, Field
 
-from algoliasearch.analytics.models.search_no_click_event import SearchNoClickEvent
+from algoliasearch.analytics.models.daily_searches_no_clicks import (
+    DailySearchesNoClicks,
+)
 
 
 class GetSearchesNoClicksResponse(BaseModel):
@@ -18,7 +20,9 @@ class GetSearchesNoClicksResponse(BaseModel):
     GetSearchesNoClicksResponse
     """
 
-    searches: List[SearchNoClickEvent] = Field(description="Searches with no clicks.")
+    searches: List[DailySearchesNoClicks] = Field(
+        description="Searches without any clicks."
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -66,7 +70,7 @@ class GetSearchesNoClicksResponse(BaseModel):
             {
                 "searches": (
                     [
-                        SearchNoClickEvent.from_dict(_item)
+                        DailySearchesNoClicks.from_dict(_item)
                         for _item in obj.get("searches")
                     ]
                     if obj.get("searches") is not None

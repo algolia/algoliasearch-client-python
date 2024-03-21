@@ -16,7 +16,7 @@ class TopCountry(BaseModel):
     TopCountry
     """
 
-    country: StrictStr = Field(description="Country.")
+    country: StrictStr = Field(description="Country code.")
     count: StrictInt = Field(description="Number of occurrences.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
