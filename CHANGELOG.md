@@ -1,3 +1,9 @@
+## [4.0.0b12](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b11...4.0.0b12)
+
+- [10c9339c8](https://github.com/algolia/api-clients-automation/commit/10c9339c8) fix(specs): more flexible custom methods ([#2889](https://github.com/algolia/api-clients-automation/pull/2889)) by [@damcou](https://github.com/damcou/)
+- [c15c328e6](https://github.com/algolia/api-clients-automation/commit/c15c328e6) chore(python): playground lock file ([#2893](https://github.com/algolia/api-clients-automation/pull/2893)) by [@dependabot[bot]](https://github.com/dependabot[bot]/)
+- [ae17a76ba](https://github.com/algolia/api-clients-automation/commit/ae17a76ba) fix(python): bump black from 23.11.0 to 24.3.0 ([#2892](https://github.com/algolia/api-clients-automation/pull/2892)) by [@dependabot[bot]](https://github.com/dependabot[bot]/)
+
 ## [4.0.0b11](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b10...4.0.0b11)
 
 - [7dc719cbe](https://github.com/algolia/api-clients-automation/commit/7dc719cbe) fix(specs): make languages an enum ([#2865](https://github.com/algolia/api-clients-automation/pull/2865)) by [@kai687](https://github.com/kai687/)
