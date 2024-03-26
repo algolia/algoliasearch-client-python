@@ -12,7 +12,7 @@ from typing import Self
 
 class Region(str, Enum):
     """
-    The region where the cluster is located.
+    Region where the cluster is located.
     """
 
     """

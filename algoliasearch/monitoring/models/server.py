@@ -24,11 +24,10 @@ class Server(BaseModel):
     region: Optional[Region] = None
     is_slave: Optional[StrictBool] = Field(
         default=False,
-        description="Included to support legacy applications. Do not rely on this attribute being present in the response. Use `is_replica` instead. ",
+        description="Included to support legacy applications. Use `is_replica` instead. ",
     )
     is_replica: Optional[StrictBool] = Field(
-        default=False,
-        description="Indicates whether this server is a replica of another server.",
+        default=False, description="Whether this server is a replica of another server."
     )
     cluster: Optional[StrictStr] = Field(
         default=None, description="Name of the cluster to which this server belongs."
