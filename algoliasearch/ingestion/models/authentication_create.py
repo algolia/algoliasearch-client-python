@@ -17,11 +17,11 @@ from algoliasearch.ingestion.models.platform import Platform
 
 class AuthenticationCreate(BaseModel):
     """
-    The payload when creating an authentication.
+    Request body for creating a new authentication resource.
     """
 
     type: AuthenticationType
-    name: StrictStr = Field(description="An human readable name describing the object.")
+    name: StrictStr = Field(description="Descriptive name for the resource.")
     platform: Optional[Platform] = None
     input: AuthInput
 

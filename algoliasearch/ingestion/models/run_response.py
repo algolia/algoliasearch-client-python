@@ -13,12 +13,14 @@ from pydantic import BaseModel, Field, StrictStr
 
 class RunResponse(BaseModel):
     """
-    The response from the run task API, containing an Observability Run ID and the time it was created at.
+    API response for running a task.
     """
 
-    run_id: StrictStr = Field(description="The run UUID.", alias="runID")
+    run_id: StrictStr = Field(
+        description="Universally unique identifier (UUID) of a task run.", alias="runID"
+    )
     created_at: StrictStr = Field(
-        description="Date of creation (RFC3339 format).", alias="createdAt"
+        description="Date of creation in RFC3339 format.", alias="createdAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

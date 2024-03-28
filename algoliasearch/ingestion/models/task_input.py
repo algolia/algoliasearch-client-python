@@ -21,7 +21,7 @@ from algoliasearch.ingestion.models.streaming_utils_input import StreamingUtilsI
 
 class TaskInput(BaseModel):
     """
-    TaskInput
+    Configuration of the task, depending on its type.
     """
 
     oneof_schema_1_validator: Optional[OnDemandDateUtilsInput] = None

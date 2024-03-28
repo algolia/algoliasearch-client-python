@@ -15,15 +15,16 @@ from algoliasearch.ingestion.models.mapping_input import MappingInput
 
 class OnDemandDateUtilsInput(BaseModel):
     """
-    The input for an `onDemand` task whose source is of type `bigquery` and for which extracted data spans a given time range.
+    Input for a manually-triggered task whose source is of type `bigquery` and for which extracted data spans a given time range.
     """
 
     start_date: StrictStr = Field(
-        description="The start date of the extraction (RFC3339 format).",
+        description="Earliest date in RFC3339 format of the extracted data from Big Query.",
         alias="startDate",
     )
     end_date: StrictStr = Field(
-        description="The end date of the extraction (RFC3339 format).", alias="endDate"
+        description="Latest date in RFC3339 format of the extracted data from Big Query.",
+        alias="endDate",
     )
     mapping: Optional[MappingInput] = None
 

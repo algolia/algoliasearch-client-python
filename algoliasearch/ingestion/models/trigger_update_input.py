@@ -13,12 +13,10 @@ from pydantic import BaseModel, Field, StrictStr
 
 class TriggerUpdateInput(BaseModel):
     """
-    The trigger input for a task update.
+    Trigger for a task update.
     """
 
-    cron: StrictStr = Field(
-        description="A cron expression that represent at which regularity the task should run."
-    )
+    cron: StrictStr = Field(description="Cron expression for the task's schedule.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

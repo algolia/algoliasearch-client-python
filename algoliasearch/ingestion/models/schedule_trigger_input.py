@@ -15,13 +15,11 @@ from algoliasearch.ingestion.models.schedule_trigger_type import ScheduleTrigger
 
 class ScheduleTriggerInput(BaseModel):
     """
-    The trigger input for a task of type 'schedule'.
+    Trigger input for scheduled tasks.
     """
 
     type: ScheduleTriggerType
-    cron: StrictStr = Field(
-        description="A cron expression that represent at which regularity the task should run."
-    )
+    cron: StrictStr = Field(description="Cron expression for the task's schedule.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

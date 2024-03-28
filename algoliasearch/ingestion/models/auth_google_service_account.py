@@ -13,14 +13,15 @@ from pydantic import BaseModel, Field, StrictStr
 
 class AuthGoogleServiceAccount(BaseModel):
     """
-    Authentication input to connect to a Google service (e.g. BigQuery).
+    Credentials for authenticating with a Google service account, such as BigQuery.
     """
 
     client_email: StrictStr = Field(
-        description="Email address of the Service Account.", alias="clientEmail"
+        description="Email address of the Google service account.", alias="clientEmail"
     )
     private_key: StrictStr = Field(
-        description="Private key of the Service Account.", alias="privateKey"
+        description="Private key of the Google service account. This field is `null` in the API response.",
+        alias="privateKey",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

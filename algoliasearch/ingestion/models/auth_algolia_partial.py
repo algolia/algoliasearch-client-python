@@ -13,15 +13,15 @@ from pydantic import BaseModel, Field, StrictStr
 
 class AuthAlgoliaPartial(BaseModel):
     """
-    AuthAlgoliaPartial
+    Credentials for authenticating with Algolia.
     """
 
     app_id: Optional[StrictStr] = Field(
-        default=None, description="Algolia Application ID.", alias="appID"
+        default=None, description="Algolia application ID.", alias="appID"
     )
     api_key: Optional[StrictStr] = Field(
         default=None,
-        description="Algolia API Key, with the correct rights to push to an index and change settings.",
+        description="Algolia API key with the ACL: `addObject`, `deleteObject`, `settings`, `editSettings`, `listIndexes`, `deleteIndex`. This field is `null` in the API response. ",
         alias="apiKey",
     )
 

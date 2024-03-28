@@ -12,7 +12,7 @@ from typing import Self
 
 class DestinationSortKeys(str, Enum):
     """
-    Used to sort the Destination list endpoint.
+    Property by which to sort the destinations.
     """
 
     """

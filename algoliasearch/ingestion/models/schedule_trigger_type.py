@@ -12,7 +12,7 @@ from typing import Self
 
 class ScheduleTriggerType(str, Enum):
     """
-    A task which is triggered by a schedule (cron expression).
+    Task runs on a schedule.
     """
 
     """

@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field, StrictStr
 
 class DestinationSearch(BaseModel):
     """
-    Payload to search for multiple destinations, based on the given `destinationIDs`.
+    API request body for searching destinations.
     """
 
     destination_ids: List[StrictStr] = Field(alias="destinationIDs")

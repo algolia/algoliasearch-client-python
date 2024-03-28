@@ -17,22 +17,23 @@ from algoliasearch.ingestion.models.platform import Platform
 
 class Authentication(BaseModel):
     """
-    An authentication is used to login into a Source or a Destination, with obfuscated input.
+    Resource representing the information required to authenticate with a source or a destination.
     """
 
     authentication_id: StrictStr = Field(
-        description="The authentication UUID.", alias="authenticationID"
+        description="Universally unique identifier (UUID) of an authentication resource.",
+        alias="authenticationID",
     )
     type: AuthenticationType
-    name: StrictStr = Field(description="An human readable name describing the object.")
+    name: StrictStr = Field(description="Descriptive name for the resource.")
     platform: Optional[Platform] = None
     input: AuthInputPartial
     created_at: StrictStr = Field(
-        description="Date of creation (RFC3339 format).", alias="createdAt"
+        description="Date of creation in RFC3339 format.", alias="createdAt"
     )
     updated_at: Optional[StrictStr] = Field(
         default=None,
-        description="Date of last update (RFC3339 format).",
+        description="Date of last update in RFC3339 format.",
         alias="updatedAt",
     )
 

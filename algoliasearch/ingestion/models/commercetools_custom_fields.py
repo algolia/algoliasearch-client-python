@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field, StrictStr
 
 class CommercetoolsCustomFields(BaseModel):
     """
-    Custom fields from Commercetools to index in the records (see https://docs.commercetools.com/tutorials/custom-types).
+    Custom fields from commercetools to add to the records.  For more information, see [Using Custom Types and Custom Fields](https://docs.commercetools.com/tutorials/custom-types).
     """
 
     inventory: Optional[List[StrictStr]] = Field(

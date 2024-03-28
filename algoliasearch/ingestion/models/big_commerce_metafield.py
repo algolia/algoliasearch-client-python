@@ -16,8 +16,8 @@ class BigCommerceMetafield(BaseModel):
     BigCommerceMetafield
     """
 
-    namespace: StrictStr = Field(description="The namespace of the metafield.")
-    key: StrictStr = Field(description="The key identifier of the metafield.")
+    namespace: StrictStr = Field(description="Namespace of the metafield.")
+    key: StrictStr = Field(description="Key identifier of the metafield.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

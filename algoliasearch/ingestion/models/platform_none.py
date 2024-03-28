@@ -12,7 +12,7 @@ from typing import Self
 
 class PlatformNone(str, Enum):
     """
-    Used to filter Authentication without platform property.
+    Authentication resource not tied to any ecommerce platform, used for filtering.
     """
 
     """

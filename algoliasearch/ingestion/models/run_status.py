@@ -12,7 +12,7 @@ from typing import Self
 
 class RunStatus(str, Enum):
     """
-    RunStatus
+    Task run status.
     """
 
     """

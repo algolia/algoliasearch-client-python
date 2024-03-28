@@ -16,7 +16,7 @@ from algoliasearch.ingestion.models.task import Task
 
 class ListTasksResponse(BaseModel):
     """
-    A list of tasks with pagination details.
+    Configured tasks and pagination information.
     """
 
     tasks: List[Task]

@@ -17,22 +17,26 @@ from algoliasearch.ingestion.models.task_input import TaskInput
 
 class TaskCreate(BaseModel):
     """
-    The payload for a task creation.
+    API request body for creating a task.
     """
 
-    source_id: StrictStr = Field(description="The source UUID.", alias="sourceID")
+    source_id: StrictStr = Field(
+        description="Universally uniqud identifier (UUID) of a source.",
+        alias="sourceID",
+    )
     destination_id: StrictStr = Field(
-        description="The destination UUID.", alias="destinationID"
+        description="Universally unique identifier (UUID) of a destination resource.",
+        alias="destinationID",
     )
     trigger: TaskCreateTrigger
     action: ActionType
     enabled: Optional[StrictBool] = Field(
-        default=None, description="Whether the task is enabled or not."
+        default=None, description="Whether the task is enabled."
     )
     failure_threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = (
         Field(
             default=None,
-            description="A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.",
+            description="Maximum accepted percentage of failures for a task run to finish successfully.",
             alias="failureThreshold",
         )
     )

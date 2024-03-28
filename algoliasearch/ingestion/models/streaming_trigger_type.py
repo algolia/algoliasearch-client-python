@@ -12,7 +12,7 @@ from typing import Self
 
 class StreamingTriggerType(str, Enum):
     """
-    A task that runs continuously.
+    Task runs continuously.
     """
 
     """

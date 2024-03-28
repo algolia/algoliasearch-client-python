@@ -12,7 +12,7 @@ from typing import Self
 
 class TaskSortKeys(str, Enum):
     """
-    Used to sort the Task list endpoint.
+    Property by which to sort the list of tasks.
     """
 
     """

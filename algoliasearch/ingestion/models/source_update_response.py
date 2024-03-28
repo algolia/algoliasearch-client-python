@@ -16,10 +16,13 @@ class SourceUpdateResponse(BaseModel):
     SourceUpdateResponse
     """
 
-    source_id: StrictStr = Field(description="The source UUID.", alias="sourceID")
-    name: StrictStr
+    source_id: StrictStr = Field(
+        description="Universally uniqud identifier (UUID) of a source.",
+        alias="sourceID",
+    )
+    name: StrictStr = Field(description="Descriptive name of the source.")
     updated_at: StrictStr = Field(
-        description="Date of last update (RFC3339 format).", alias="updatedAt"
+        description="Date of last update in RFC3339 format.", alias="updatedAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

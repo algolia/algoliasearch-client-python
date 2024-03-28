@@ -16,21 +16,23 @@ from algoliasearch.ingestion.models.trigger_update_input import TriggerUpdateInp
 
 class TaskUpdate(BaseModel):
     """
-    The payload for a task update.
+    API request body for updating a task.
     """
 
     destination_id: Optional[StrictStr] = Field(
-        default=None, description="The destination UUID.", alias="destinationID"
+        default=None,
+        description="Universally unique identifier (UUID) of a destination resource.",
+        alias="destinationID",
     )
     trigger: Optional[TriggerUpdateInput] = None
     input: Optional[TaskInput] = None
     enabled: Optional[StrictBool] = Field(
-        default=None, description="Whether the task is enabled or not."
+        default=None, description="Whether the task is enabled."
     )
     failure_threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = (
         Field(
             default=None,
-            description="A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.",
+            description="Maximum accepted percentage of failures for a task run to finish successfully.",
             alias="failureThreshold",
         )
     )

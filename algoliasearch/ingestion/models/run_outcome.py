@@ -12,7 +12,7 @@ from typing import Self
 
 class RunOutcome(str, Enum):
     """
-    RunOutcome
+    Task run outcome.
     """
 
     """

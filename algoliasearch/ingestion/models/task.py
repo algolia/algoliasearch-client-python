@@ -20,28 +20,34 @@ class Task(BaseModel):
     Task
     """
 
-    task_id: StrictStr = Field(description="The task UUID.", alias="taskID")
-    source_id: StrictStr = Field(description="The source UUID.", alias="sourceID")
+    task_id: StrictStr = Field(
+        description="Universally unique identifier (UUID) of a task.", alias="taskID"
+    )
+    source_id: StrictStr = Field(
+        description="Universally uniqud identifier (UUID) of a source.",
+        alias="sourceID",
+    )
     destination_id: StrictStr = Field(
-        description="The destination UUID.", alias="destinationID"
+        description="Universally unique identifier (UUID) of a destination resource.",
+        alias="destinationID",
     )
     trigger: Trigger
     input: Optional[TaskInput] = None
-    enabled: StrictBool = Field(description="Whether the task is enabled or not.")
+    enabled: StrictBool = Field(description="Whether the task is enabled.")
     failure_threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = (
         Field(
             default=None,
-            description="A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.",
+            description="Maximum accepted percentage of failures for a task run to finish successfully.",
             alias="failureThreshold",
         )
     )
     action: ActionType
     created_at: StrictStr = Field(
-        description="Date of creation (RFC3339 format).", alias="createdAt"
+        description="Date of creation in RFC3339 format.", alias="createdAt"
     )
     updated_at: Optional[StrictStr] = Field(
         default=None,
-        description="Date of last update (RFC3339 format).",
+        description="Date of last update in RFC3339 format.",
         alias="updatedAt",
     )
 

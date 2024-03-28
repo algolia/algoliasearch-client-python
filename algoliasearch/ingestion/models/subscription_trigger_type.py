@@ -12,7 +12,7 @@ from typing import Self
 
 class SubscriptionTriggerType(str, Enum):
     """
-    A task which is triggered by an external subscription (e.g. Webhook).
+    Task runs after receiving subscribed event.
     """
 
     """

@@ -13,15 +13,16 @@ from pydantic import BaseModel, Field, StrictStr
 
 class DestinationCreateResponse(BaseModel):
     """
-    Response from the API when the Destination is successfully created.
+    API response for creating a new destination.
     """
 
     destination_id: StrictStr = Field(
-        description="The destination UUID.", alias="destinationID"
+        description="Universally unique identifier (UUID) of a destination resource.",
+        alias="destinationID",
     )
-    name: StrictStr = Field(description="An human readable name describing the object.")
+    name: StrictStr = Field(description="Descriptive name for the resource.")
     created_at: StrictStr = Field(
-        description="Date of creation (RFC3339 format).", alias="createdAt"
+        description="Date of creation in RFC3339 format.", alias="createdAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

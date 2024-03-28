@@ -16,10 +16,9 @@ class BigCommerceChannel(BaseModel):
     BigCommerceChannel
     """
 
-    id: StrictInt = Field(description="The ID of the bigcommerce channel.")
+    id: StrictInt = Field(description="ID of the BigCommerce channel.")
     currencies: Optional[List[StrictStr]] = Field(
-        default=None,
-        description="An array of currencies for the given channel `ID`, a currency is a trigram string that represents the currency code.",
+        default=None, description="Currencies for the given channel."
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

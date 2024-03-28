@@ -15,7 +15,7 @@ from algoliasearch.ingestion.models.streaming_trigger_type import StreamingTrigg
 
 class StreamingTrigger(BaseModel):
     """
-    The trigger input for a task of type 'streaming'.
+    Trigger input for continuously running tasks.
     """
 
     type: StreamingTriggerType

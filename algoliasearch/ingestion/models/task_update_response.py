@@ -13,12 +13,14 @@ from pydantic import BaseModel, Field, StrictStr
 
 class TaskUpdateResponse(BaseModel):
     """
-    The response from the API after a task update.
+    API response for updating a task.
     """
 
-    task_id: StrictStr = Field(description="The task UUID.", alias="taskID")
+    task_id: StrictStr = Field(
+        description="Universally unique identifier (UUID) of a task.", alias="taskID"
+    )
     updated_at: StrictStr = Field(
-        description="Date of last update (RFC3339 format).", alias="updatedAt"
+        description="Date of last update in RFC3339 format.", alias="updatedAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

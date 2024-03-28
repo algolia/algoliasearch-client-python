@@ -18,13 +18,11 @@ class DestinationIndexName(BaseModel):
     DestinationIndexName
     """
 
-    index_name: StrictStr = Field(
-        description="The index name to store data in.", alias="indexName"
-    )
+    index_name: StrictStr = Field(description="Algolia index name.", alias="indexName")
     record_type: Optional[RecordType] = Field(default=None, alias="recordType")
     attributes_to_exclude: Optional[List[StrictStr]] = Field(
         default=None,
-        description='Determines the attributes to exclude from an Algolia record. To remove nested element, you can separate the path to the element with dots (`.`):   - "foo.bar": will remove `bar` from `foo`. To remove elements from an array, you can use the following:   - "foo.[0].bar": will only remove `bar` from the first element of `foo`.   - "foo.[*].bar": will remove `bar` from every elements of `foo`. ',
+        description="Attributes from your source to exclude from Algolia records.  Not all your data attributes will be useful for searching. Keeping your Algolia records small increases indexing and search performance.  - Exclude nested attributes with `.` notation. For example, `foo.bar` indexes the `foo` attribute and all its children **except** the `bar` attribute. - Exclude attributes from arrays with `[i]`, where `i` is the index of the array element.   For example, `foo.[0].bar` only excludes the `bar` attribute from the first element of the `foo` array, but indexes the complete `foo` attribute for all other elements.   Use `*` as wildcard: `foo.[*].bar` excludes `bar` from all elements of the `foo` array. ",
         alias="attributesToExclude",
     )
 

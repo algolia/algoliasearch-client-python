@@ -15,7 +15,7 @@ from algoliasearch.ingestion.models.mapping_input import MappingInput
 
 class StreamingUtilsInput(BaseModel):
     """
-    The input for a `streaming` task whose source is of type `ga4BigqueryExport` and for which extracted data is continuously streamed.
+    Input for a `streaming` task whose source is of type `ga4BigqueryExport` and for which extracted data is continuously streamed.
     """
 
     mapping: MappingInput

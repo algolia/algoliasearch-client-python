@@ -19,13 +19,11 @@ class SourceUpdateDocker(BaseModel):
     """
 
     registry: Optional[DockerRegistry] = None
-    image: Optional[StrictStr] = Field(
-        default=None, description="The name of the image to pull."
-    )
+    image: Optional[StrictStr] = Field(default=None, description="Docker image name.")
     version: Optional[StrictStr] = Field(
-        default=None, description="The version of the image, defaults to `latest`."
+        default="latest", description="Docker image version."
     )
-    configuration: Dict[str, Any] = Field(description="The configuration of the spec.")
+    configuration: Dict[str, Any] = Field(description="Configuration of the spec.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

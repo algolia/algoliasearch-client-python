@@ -13,15 +13,16 @@ from pydantic import BaseModel, Field, StrictStr
 
 class AuthenticationUpdateResponse(BaseModel):
     """
-    Response from the API when the Authentication is successfully updated.
+    API response for a successful update of an authentication resource.
     """
 
     authentication_id: StrictStr = Field(
-        description="The authentication UUID.", alias="authenticationID"
+        description="Universally unique identifier (UUID) of an authentication resource.",
+        alias="authenticationID",
     )
-    name: StrictStr = Field(description="An human readable name describing the object.")
+    name: StrictStr = Field(description="Descriptive name for the resource.")
     updated_at: StrictStr = Field(
-        description="Date of last update (RFC3339 format).", alias="updatedAt"
+        description="Date of last update in RFC3339 format.", alias="updatedAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

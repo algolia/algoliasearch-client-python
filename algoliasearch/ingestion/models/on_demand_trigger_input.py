@@ -15,7 +15,7 @@ from algoliasearch.ingestion.models.on_demand_trigger_type import OnDemandTrigge
 
 class OnDemandTriggerInput(BaseModel):
     """
-    The trigger information of a task of type `onDemand`.
+    Trigger information for manually-triggered tasks.
     """
 
     type: OnDemandTriggerType

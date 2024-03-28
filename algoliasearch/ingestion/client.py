@@ -9,7 +9,7 @@ from json import dumps
 from typing import Annotated, Any, Dict, List, Optional, Self, Tuple, Union
 from urllib.parse import quote
 
-from pydantic import Field, StrictBool, StrictInt, StrictStr
+from pydantic import Field, StrictBool, StrictStr
 
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.request_options import RequestOptions
@@ -171,7 +171,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a authentication.
+        Creates a new authentication resource.
 
         Required API Key ACLs:
           - addObject
@@ -209,7 +209,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AuthenticationCreateResponse:
         """
-        Create a authentication.
+        Creates a new authentication resource.
 
         Required API Key ACLs:
           - addObject
@@ -233,7 +233,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a destination.
+        Creates a new destination.
 
         Required API Key ACLs:
           - addObject
@@ -271,7 +271,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DestinationCreateResponse:
         """
-        Create a destination.
+        Creates a new destination.
 
         Required API Key ACLs:
           - addObject
@@ -295,7 +295,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a source.
+        Creates a new source.
 
         Required API Key ACLs:
           - addObject
@@ -333,7 +333,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceCreateResponse:
         """
-        Create a source.
+        Creates a new source.
 
         Required API Key ACLs:
           - addObject
@@ -351,14 +351,16 @@ class IngestionClient:
 
     async def create_task_with_http_info(
         self,
-        task_create: TaskCreate,
+        task_create: Annotated[
+            TaskCreate, Field(description="Request body for creating a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a task.
+        Creates a new task.
 
 
-        :param task_create:  (required)
+        :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreate
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -385,14 +387,16 @@ class IngestionClient:
 
     async def create_task(
         self,
-        task_create: TaskCreate,
+        task_create: Annotated[
+            TaskCreate, Field(description="Request body for creating a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskCreateResponse:
         """
-        Create a task.
+        Creates a new task.
 
 
-        :param task_create:  (required)
+        :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreate
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'TaskCreateResponse' result object.
@@ -740,19 +744,20 @@ class IngestionClient:
     async def delete_authentication_with_http_info(
         self,
         authentication_id: Annotated[
-            StrictStr, Field(description="The authentication UUID.")
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Soft delete the authentication of the given authenticationID.
+        Deletes an authentication resource. You can't delete authentication resources that are used by a source or a destination.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param authentication_id: The authentication UUID. (required)
+        :param authentication_id: Unique identifier of an authentication resource. (required)
         :type authentication_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -777,19 +782,20 @@ class IngestionClient:
     async def delete_authentication(
         self,
         authentication_id: Annotated[
-            StrictStr, Field(description="The authentication UUID.")
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
-        Soft delete the authentication of the given authenticationID.
+        Deletes an authentication resource. You can't delete authentication resources that are used by a source or a destination.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param authentication_id: The authentication UUID. (required)
+        :param authentication_id: Unique identifier of an authentication resource. (required)
         :type authentication_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteResponse' result object.
@@ -803,19 +809,19 @@ class IngestionClient:
     async def delete_destination_with_http_info(
         self,
         destination_id: Annotated[
-            StrictStr, Field(description="The destination UUID.")
+            StrictStr, Field(description="Unique identifier of a destination.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Soft delete the destination of the given destinationID.
+        Deletes a destination by its ID. You can't delete destinations that are referenced in tasks.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param destination_id: The destination UUID. (required)
+        :param destination_id: Unique identifier of a destination. (required)
         :type destination_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -840,19 +846,19 @@ class IngestionClient:
     async def delete_destination(
         self,
         destination_id: Annotated[
-            StrictStr, Field(description="The destination UUID.")
+            StrictStr, Field(description="Unique identifier of a destination.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
-        Soft delete the destination of the given destinationID.
+        Deletes a destination by its ID. You can't delete destinations that are referenced in tasks.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param destination_id: The destination UUID. (required)
+        :param destination_id: Unique identifier of a destination. (required)
         :type destination_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteResponse' result object.
@@ -865,18 +871,20 @@ class IngestionClient:
 
     async def delete_source_with_http_info(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Soft delete the source of the given sourceID.
+        Deletes a source by its ID. You can't delete sources that are referenced in tasks.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -900,18 +908,20 @@ class IngestionClient:
 
     async def delete_source(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
-        Soft delete the source of the given sourceID.
+        Deletes a source by its ID. You can't delete sources that are referenced in tasks.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteResponse' result object.
@@ -922,14 +932,16 @@ class IngestionClient:
 
     async def delete_task_with_http_info(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Soft delete the task of the given taskID.
+        Deletes a task by its ID.
 
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -951,14 +963,16 @@ class IngestionClient:
 
     async def delete_task(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
-        Soft delete the task of the given taskID.
+        Deletes a task by its ID.
 
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeleteResponse' result object.
@@ -969,18 +983,20 @@ class IngestionClient:
 
     async def disable_task_with_http_info(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Disable the task of the given taskID.
+        Disables a task.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1004,18 +1020,20 @@ class IngestionClient:
 
     async def disable_task(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
-        Disable the task of the given taskID.
+        Disables a task.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
@@ -1026,18 +1044,20 @@ class IngestionClient:
 
     async def enable_task_with_http_info(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Enable the task of the given taskID.
+        Enables a task.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1061,18 +1081,20 @@ class IngestionClient:
 
     async def enable_task(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
-        Enable the task of the given taskID.
+        Enables a task.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
@@ -1084,19 +1106,20 @@ class IngestionClient:
     async def get_authentication_with_http_info(
         self,
         authentication_id: Annotated[
-            StrictStr, Field(description="The authentication UUID.")
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the authentication of the given authenticationID.
+        Retrieves an authentication resource by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param authentication_id: The authentication UUID. (required)
+        :param authentication_id: Unique identifier of an authentication resource. (required)
         :type authentication_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1121,19 +1144,20 @@ class IngestionClient:
     async def get_authentication(
         self,
         authentication_id: Annotated[
-            StrictStr, Field(description="The authentication UUID.")
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Authentication:
         """
-        Get the authentication of the given authenticationID.
+        Retrieves an authentication resource by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param authentication_id: The authentication UUID. (required)
+        :param authentication_id: Unique identifier of an authentication resource. (required)
         :type authentication_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Authentication' result object.
@@ -1147,49 +1171,54 @@ class IngestionClient:
     async def get_authentications_with_http_info(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         type: Annotated[
             Optional[List[AuthenticationType]],
-            Field(description="The type of the authentications to retrieve."),
+            Field(description="Type of authentication resource to retrieve."),
         ] = None,
         platform: Annotated[
             Optional[List[PlatformWithNone]],
-            Field(description="The platform of the authentications to retrieve."),
+            Field(
+                description="Ecommerce platform for which to retrieve authentication resources."
+            ),
         ] = None,
         sort: Annotated[
             Optional[AuthenticationSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(
+                description="Property by which to sort the list of authentication resources."
+            ),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of authentications for the given query parameters, with pagination details.
+        Retrieves a list of all authentication resources.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param type: The type of the authentications to retrieve.
+        :param type: Type of authentication resource to retrieve.
         :type type: List[AuthenticationType]
-        :param platform: The platform of the authentications to retrieve.
+        :param platform: Ecommerce platform for which to retrieve authentication resources.
         :type platform: List[PlatformWithNone]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of authentication resources.
         :type sort: AuthenticationSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1223,49 +1252,54 @@ class IngestionClient:
     async def get_authentications(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         type: Annotated[
             Optional[List[AuthenticationType]],
-            Field(description="The type of the authentications to retrieve."),
+            Field(description="Type of authentication resource to retrieve."),
         ] = None,
         platform: Annotated[
             Optional[List[PlatformWithNone]],
-            Field(description="The platform of the authentications to retrieve."),
+            Field(
+                description="Ecommerce platform for which to retrieve authentication resources."
+            ),
         ] = None,
         sort: Annotated[
             Optional[AuthenticationSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(
+                description="Property by which to sort the list of authentication resources."
+            ),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListAuthenticationsResponse:
         """
-        Get a list of authentications for the given query parameters, with pagination details.
+        Retrieves a list of all authentication resources.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param type: The type of the authentications to retrieve.
+        :param type: Type of authentication resource to retrieve.
         :type type: List[AuthenticationType]
-        :param platform: The platform of the authentications to retrieve.
+        :param platform: Ecommerce platform for which to retrieve authentication resources.
         :type platform: List[PlatformWithNone]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of authentication resources.
         :type sort: AuthenticationSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListAuthenticationsResponse' result object.
@@ -1279,19 +1313,19 @@ class IngestionClient:
     async def get_destination_with_http_info(
         self,
         destination_id: Annotated[
-            StrictStr, Field(description="The destination UUID.")
+            StrictStr, Field(description="Unique identifier of a destination.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the destination of the given destinationID.
+        Retrieves a destination by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param destination_id: The destination UUID. (required)
+        :param destination_id: Unique identifier of a destination. (required)
         :type destination_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1316,19 +1350,19 @@ class IngestionClient:
     async def get_destination(
         self,
         destination_id: Annotated[
-            StrictStr, Field(description="The destination UUID.")
+            StrictStr, Field(description="Unique identifier of a destination.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Destination:
         """
-        Get the destination of the given destinationID.
+        Retrieves a destination by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param destination_id: The destination UUID. (required)
+        :param destination_id: Unique identifier of a destination. (required)
         :type destination_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Destination' result object.
@@ -1340,49 +1374,49 @@ class IngestionClient:
     async def get_destinations_with_http_info(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         type: Annotated[
-            Optional[List[DestinationType]],
-            Field(description="The type of the destinations to retrive."),
+            Optional[List[DestinationType]], Field(description="Destination type.")
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The authenticationIDs of the destinations to retrive."),
+            Field(description="Authentication ID used by destinations."),
         ] = None,
         sort: Annotated[
             Optional[DestinationSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the destinations."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of destinations for the given query parameters, with pagination details.
+        Retrieves a list of destinations.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param type: The type of the destinations to retrive.
+        :param type: Destination type.
         :type type: List[DestinationType]
-        :param authentication_id: The authenticationIDs of the destinations to retrive.
+        :param authentication_id: Authentication ID used by destinations.
         :type authentication_id: List[str]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the destinations.
         :type sort: DestinationSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1416,49 +1450,49 @@ class IngestionClient:
     async def get_destinations(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         type: Annotated[
-            Optional[List[DestinationType]],
-            Field(description="The type of the destinations to retrive."),
+            Optional[List[DestinationType]], Field(description="Destination type.")
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The authenticationIDs of the destinations to retrive."),
+            Field(description="Authentication ID used by destinations."),
         ] = None,
         sort: Annotated[
             Optional[DestinationSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the destinations."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListDestinationsResponse:
         """
-        Get a list of destinations for the given query parameters, with pagination details.
+        Retrieves a list of destinations.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param type: The type of the destinations to retrive.
+        :param type: Destination type.
         :type type: List[DestinationType]
-        :param authentication_id: The authenticationIDs of the destinations to retrive.
+        :param authentication_id: Authentication ID used by destinations.
         :type authentication_id: List[str]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the destinations.
         :type sort: DestinationSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListDestinationsResponse' result object.
@@ -1477,18 +1511,20 @@ class IngestionClient:
 
     async def get_docker_source_streams_with_http_info(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieve a stream listing for a given Singer specification compatible docker type source ID.
+        Retrieves a stream listing for a source.  Listing streams only works with sources with `type: docker` and `imageType: singer`.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1512,18 +1548,20 @@ class IngestionClient:
 
     async def get_docker_source_streams(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DockerSourceStreams:
         """
-        Retrieve a stream listing for a given Singer specification compatible docker type source ID.
+        Retrieves a stream listing for a source.  Listing streams only works with sources with `type: docker` and `imageType: singer`.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DockerSourceStreams' result object.
@@ -1536,21 +1574,25 @@ class IngestionClient:
 
     async def get_event_with_http_info(
         self,
-        run_id: Annotated[StrictStr, Field(description="The run UUID.")],
-        event_id: Annotated[StrictStr, Field(description="The event UUID.")],
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
+        event_id: Annotated[
+            StrictStr, Field(description="Unique identifier of an event.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a single event for a specific runID.
+        Retrieves a single task run event by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param run_id: The run UUID. (required)
+        :param run_id: Unique identifier of a task run. (required)
         :type run_id: str
-        :param event_id: The event UUID. (required)
+        :param event_id: Unique identifier of an event. (required)
         :type event_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1577,21 +1619,25 @@ class IngestionClient:
 
     async def get_event(
         self,
-        run_id: Annotated[StrictStr, Field(description="The run UUID.")],
-        event_id: Annotated[StrictStr, Field(description="The event UUID.")],
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
+        event_id: Annotated[
+            StrictStr, Field(description="Unique identifier of an event.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Event:
         """
-        Get a single event for a specific runID.
+        Retrieves a single task run event by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param run_id: The run UUID. (required)
+        :param run_id: Unique identifier of a task run. (required)
         :type run_id: str
-        :param event_id: The event UUID. (required)
+        :param event_id: Unique identifier of an event. (required)
         :type event_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Event' result object.
@@ -1602,69 +1648,72 @@ class IngestionClient:
 
     async def get_events_with_http_info(
         self,
-        run_id: Annotated[StrictStr, Field(description="The run UUID.")],
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         status: Annotated[
             Optional[List[EventStatus]],
-            Field(description="Filter the status of the events."),
+            Field(description="Event status for filtering the list of task runs."),
         ] = None,
         type: Annotated[
             Optional[List[EventType]],
-            Field(description="Filter the type of the events."),
+            Field(description="Event type for filtering the list of task runs."),
         ] = None,
         sort: Annotated[
             Optional[EventSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the list of task run events."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="The start date (in RFC3339 format) of the events fetching window. Defaults to 'now'-3 hours if omitted."
+                description="Date and time in RFC3339 format for the earliest events to retrieve. By default, the current time minus three hours is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="The end date (in RFC3339 format) of the events fetching window. Defaults to 'now' days if omitted."
+                description="Date and time in RFC3339 format for the latest events to retrieve. By default, the current time is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of events associated to the given runID, for the given query parameters.
+        Retrieves a list of events for a task run, identified by it's ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param run_id: The run UUID. (required)
+        :param run_id: Unique identifier of a task run. (required)
         :type run_id: str
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param status: Filter the status of the events.
+        :param status: Event status for filtering the list of task runs.
         :type status: List[EventStatus]
-        :param type: Filter the type of the events.
+        :param type: Event type for filtering the list of task runs.
         :type type: List[EventType]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of task run events.
         :type sort: EventSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: The start date (in RFC3339 format) of the events fetching window. Defaults to 'now'-3 hours if omitted.
+        :param start_date: Date and time in RFC3339 format for the earliest events to retrieve. By default, the current time minus three hours is used.
         :type start_date: str
-        :param end_date: The end date (in RFC3339 format) of the events fetching window. Defaults to 'now' days if omitted.
+        :param end_date: Date and time in RFC3339 format for the latest events to retrieve. By default, the current time is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1708,69 +1757,72 @@ class IngestionClient:
 
     async def get_events(
         self,
-        run_id: Annotated[StrictStr, Field(description="The run UUID.")],
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         status: Annotated[
             Optional[List[EventStatus]],
-            Field(description="Filter the status of the events."),
+            Field(description="Event status for filtering the list of task runs."),
         ] = None,
         type: Annotated[
             Optional[List[EventType]],
-            Field(description="Filter the type of the events."),
+            Field(description="Event type for filtering the list of task runs."),
         ] = None,
         sort: Annotated[
             Optional[EventSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the list of task run events."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="The start date (in RFC3339 format) of the events fetching window. Defaults to 'now'-3 hours if omitted."
+                description="Date and time in RFC3339 format for the earliest events to retrieve. By default, the current time minus three hours is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="The end date (in RFC3339 format) of the events fetching window. Defaults to 'now' days if omitted."
+                description="Date and time in RFC3339 format for the latest events to retrieve. By default, the current time is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListEventsResponse:
         """
-        Get a list of events associated to the given runID, for the given query parameters.
+        Retrieves a list of events for a task run, identified by it's ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param run_id: The run UUID. (required)
+        :param run_id: Unique identifier of a task run. (required)
         :type run_id: str
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param status: Filter the status of the events.
+        :param status: Event status for filtering the list of task runs.
         :type status: List[EventStatus]
-        :param type: Filter the type of the events.
+        :param type: Event type for filtering the list of task runs.
         :type type: List[EventType]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of task run events.
         :type sort: EventSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: The start date (in RFC3339 format) of the events fetching window. Defaults to 'now'-3 hours if omitted.
+        :param start_date: Date and time in RFC3339 format for the earliest events to retrieve. By default, the current time minus three hours is used.
         :type start_date: str
-        :param end_date: The end date (in RFC3339 format) of the events fetching window. Defaults to 'now' days if omitted.
+        :param end_date: Date and time in RFC3339 format for the latest events to retrieve. By default, the current time is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListEventsResponse' result object.
@@ -1792,18 +1844,20 @@ class IngestionClient:
 
     async def get_run_with_http_info(
         self,
-        run_id: Annotated[StrictStr, Field(description="The run UUID.")],
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a single run for the given ID.
+        Retrieve a single task run by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param run_id: The run UUID. (required)
+        :param run_id: Unique identifier of a task run. (required)
         :type run_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1823,18 +1877,20 @@ class IngestionClient:
 
     async def get_run(
         self,
-        run_id: Annotated[StrictStr, Field(description="The run UUID.")],
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Run:
         """
-        Get a single run for the given ID.
+        Retrieve a single task run by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param run_id: The run UUID. (required)
+        :param run_id: Unique identifier of a task run. (required)
         :type run_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Run' result object.
@@ -1846,64 +1902,66 @@ class IngestionClient:
     async def get_runs_with_http_info(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         status: Annotated[
             Optional[List[RunStatus]],
-            Field(description="Filter the status of the runs."),
+            Field(description="Run status for filtering the list of task runs."),
         ] = None,
         task_id: Annotated[
-            Optional[StrictStr], Field(description="Filter by taskID.")
+            Optional[StrictStr],
+            Field(description="Task ID for filtering the list of task runs."),
         ] = None,
         sort: Annotated[
             Optional[RunSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the list of task runs."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted."
+                description="Date in RFC3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted."
+                description="Date in RFC3339 format for the latest run to retrieve. By default, the current day is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of runs for the given query parameters, with pagination details.
+        Retrieve a list of task runs.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param status: Filter the status of the runs.
+        :param status: Run status for filtering the list of task runs.
         :type status: List[RunStatus]
-        :param task_id: Filter by taskID.
+        :param task_id: Task ID for filtering the list of task runs.
         :type task_id: str
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of task runs.
         :type sort: RunSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted.
+        :param start_date: Date in RFC3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
         :type start_date: str
-        :param end_date: The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted.
+        :param end_date: Date in RFC3339 format for the latest run to retrieve. By default, the current day is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1941,64 +1999,66 @@ class IngestionClient:
     async def get_runs(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         status: Annotated[
             Optional[List[RunStatus]],
-            Field(description="Filter the status of the runs."),
+            Field(description="Run status for filtering the list of task runs."),
         ] = None,
         task_id: Annotated[
-            Optional[StrictStr], Field(description="Filter by taskID.")
+            Optional[StrictStr],
+            Field(description="Task ID for filtering the list of task runs."),
         ] = None,
         sort: Annotated[
             Optional[RunSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the list of task runs."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted."
+                description="Date in RFC3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted."
+                description="Date in RFC3339 format for the latest run to retrieve. By default, the current day is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunListResponse:
         """
-        Get a list of runs for the given query parameters, with pagination details.
+        Retrieve a list of task runs.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param status: Filter the status of the runs.
+        :param status: Run status for filtering the list of task runs.
         :type status: List[RunStatus]
-        :param task_id: Filter by taskID.
+        :param task_id: Task ID for filtering the list of task runs.
         :type task_id: str
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of task runs.
         :type sort: RunSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: The start date (in RFC3339 format) of the runs fetching window. Defaults to 'now'-7 days if omitted.
+        :param start_date: Date in RFC3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
         :type start_date: str
-        :param end_date: The end date (in RFC3339 format) of the runs fetching window. Defaults to 'now' days if omitted.
+        :param end_date: Date in RFC3339 format for the latest run to retrieve. By default, the current day is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunListResponse' result object.
@@ -2019,18 +2079,20 @@ class IngestionClient:
 
     async def get_source_with_http_info(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the source of the given sourceID.
+        Retrieve a source by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2054,18 +2116,20 @@ class IngestionClient:
 
     async def get_source(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Source:
         """
-        Get the source of the given sourceID.
+        Retrieve a source by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Source' result object.
@@ -2077,51 +2141,52 @@ class IngestionClient:
     async def get_sources_with_http_info(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         type: Annotated[
             Optional[List[SourceType]],
-            Field(description="The type of the sources to retrieve."),
+            Field(description="Source type. Some sources require authentication."),
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
             Field(
-                description="The authenticationIDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication. "
+                description="Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication resource. "
             ),
         ] = None,
         sort: Annotated[
             Optional[SourceSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the list of sources."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of sources for the given query parameters, with pagination details.
+        Retrieves a list of sources.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param type: The type of the sources to retrieve.
+        :param type: Source type. Some sources require authentication.
         :type type: List[SourceType]
-        :param authentication_id: The authenticationIDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication.
+        :param authentication_id: Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication resource.
         :type authentication_id: List[str]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of sources.
         :type sort: SourceSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2155,51 +2220,52 @@ class IngestionClient:
     async def get_sources(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         type: Annotated[
             Optional[List[SourceType]],
-            Field(description="The type of the sources to retrieve."),
+            Field(description="Source type. Some sources require authentication."),
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
             Field(
-                description="The authenticationIDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication. "
+                description="Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication resource. "
             ),
         ] = None,
         sort: Annotated[
             Optional[SourceSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the list of sources."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListSourcesResponse:
         """
-        Get a list of sources for the given query parameters, with pagination details.
+        Retrieves a list of sources.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param type: The type of the sources to retrieve.
+        :param type: Source type. Some sources require authentication.
         :type type: List[SourceType]
-        :param authentication_id: The authenticationIDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication.
+        :param authentication_id: Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication resource.
         :type authentication_id: List[str]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of sources.
         :type sort: SourceSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListSourcesResponse' result object.
@@ -2218,18 +2284,20 @@ class IngestionClient:
 
     async def get_task_with_http_info(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the task of the given taskID.
+        Retrieves a task by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2249,18 +2317,20 @@ class IngestionClient:
 
     async def get_task(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Task:
         """
-        Get the task of the given taskID.
+        Retrieves a task by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Task' result object.
@@ -2272,67 +2342,70 @@ class IngestionClient:
     async def get_tasks_with_http_info(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         action: Annotated[
             Optional[List[ActionType]],
-            Field(description="The action of the tasks to retrieve."),
+            Field(description="Actions for filtering the list of tasks."),
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
-            Field(description="Whether the task is enabled or not."),
+            Field(
+                description="Whether to filter the list of tasks by the `enabled` status."
+            ),
         ] = None,
         source_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The sourceIDs of the tasks to retrieve."),
+            Field(description="Source IDs for filtering the list of tasks."),
         ] = None,
         destination_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The destinationIDs of the tasks to retrieve."),
+            Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
         trigger_type: Annotated[
             Optional[List[TriggerType]],
-            Field(description="The trigger type of the task."),
+            Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
         sort: Annotated[
             Optional[TaskSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the list of tasks."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a list of tasks for the given query parameters, with pagination details.
+        Retrieves a list of tasks.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param action: The action of the tasks to retrieve.
+        :param action: Actions for filtering the list of tasks.
         :type action: List[ActionType]
-        :param enabled: Whether the task is enabled or not.
+        :param enabled: Whether to filter the list of tasks by the `enabled` status.
         :type enabled: bool
-        :param source_id: The sourceIDs of the tasks to retrieve.
+        :param source_id: Source IDs for filtering the list of tasks.
         :type source_id: List[str]
-        :param destination_id: The destinationIDs of the tasks to retrieve.
+        :param destination_id: Destination IDs for filtering the list of tasks.
         :type destination_id: List[str]
-        :param trigger_type: The trigger type of the task.
+        :param trigger_type: Type of task trigger for filtering the list of tasks.
         :type trigger_type: List[TriggerType]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of tasks.
         :type sort: TaskSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2372,67 +2445,70 @@ class IngestionClient:
     async def get_tasks(
         self,
         items_per_page: Annotated[
-            Optional[StrictInt],
-            Field(description="The number of items per page to return."),
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
         ] = None,
         page: Annotated[
-            Optional[StrictInt],
-            Field(description="The page number to fetch, starting at 1."),
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
         ] = None,
         action: Annotated[
             Optional[List[ActionType]],
-            Field(description="The action of the tasks to retrieve."),
+            Field(description="Actions for filtering the list of tasks."),
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
-            Field(description="Whether the task is enabled or not."),
+            Field(
+                description="Whether to filter the list of tasks by the `enabled` status."
+            ),
         ] = None,
         source_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The sourceIDs of the tasks to retrieve."),
+            Field(description="Source IDs for filtering the list of tasks."),
         ] = None,
         destination_id: Annotated[
             Optional[List[StrictStr]],
-            Field(description="The destinationIDs of the tasks to retrieve."),
+            Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
         trigger_type: Annotated[
             Optional[List[TriggerType]],
-            Field(description="The trigger type of the task."),
+            Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
         sort: Annotated[
             Optional[TaskSortKeys],
-            Field(description="The key by which the list should be sorted."),
+            Field(description="Property by which to sort the list of tasks."),
         ] = None,
         order: Annotated[
-            Optional[OrderKeys], Field(description="The order of the returned list.")
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTasksResponse:
         """
-        Get a list of tasks for the given query parameters, with pagination details.
+        Retrieves a list of tasks.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param items_per_page: The number of items per page to return.
+        :param items_per_page: Number of items per page.
         :type items_per_page: int
-        :param page: The page number to fetch, starting at 1.
+        :param page: Page number of the paginated API response.
         :type page: int
-        :param action: The action of the tasks to retrieve.
+        :param action: Actions for filtering the list of tasks.
         :type action: List[ActionType]
-        :param enabled: Whether the task is enabled or not.
+        :param enabled: Whether to filter the list of tasks by the `enabled` status.
         :type enabled: bool
-        :param source_id: The sourceIDs of the tasks to retrieve.
+        :param source_id: Source IDs for filtering the list of tasks.
         :type source_id: List[str]
-        :param destination_id: The destinationIDs of the tasks to retrieve.
+        :param destination_id: Destination IDs for filtering the list of tasks.
         :type destination_id: List[str]
-        :param trigger_type: The trigger type of the task.
+        :param trigger_type: Type of task trigger for filtering the list of tasks.
         :type trigger_type: List[TriggerType]
-        :param sort: The key by which the list should be sorted.
+        :param sort: Property by which to sort the list of tasks.
         :type sort: TaskSortKeys
-        :param order: The order of the returned list.
+        :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListTasksResponse' result object.
@@ -2454,18 +2530,20 @@ class IngestionClient:
 
     async def run_task_with_http_info(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Run the task of the given taskID.
+        Runs a task. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2487,18 +2565,20 @@ class IngestionClient:
 
     async def run_task(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
-        Run the task of the given taskID.
+        Runs a task. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunResponse' result object.
@@ -2513,7 +2593,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search among authentications with a defined set of parameters.
+        Searches for authentication resources.
 
         Required API Key ACLs:
           - addObject
@@ -2551,7 +2631,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Authentication]:
         """
-        Search among authentications with a defined set of parameters.
+        Searches for authentication resources.
 
         Required API Key ACLs:
           - addObject
@@ -2575,7 +2655,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search among destinations with a defined set of parameters.
+        Searches for destinations.
 
         Required API Key ACLs:
           - addObject
@@ -2613,7 +2693,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Destination]:
         """
-        Search among destinations with a defined set of parameters.
+        Searches for destinations.
 
         Required API Key ACLs:
           - addObject
@@ -2637,7 +2717,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search among sources with a defined set of parameters.
+        Searches for sources.
 
         Required API Key ACLs:
           - addObject
@@ -2675,7 +2755,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Source]:
         """
-        Search among sources with a defined set of parameters.
+        Searches for sources.
 
         Required API Key ACLs:
           - addObject
@@ -2697,7 +2777,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Search among tasks with a defined set of parameters.
+        Searches for tasks.
 
         Required API Key ACLs:
           - addObject
@@ -2735,7 +2815,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Task]:
         """
-        Search among tasks with a defined set of parameters.
+        Searches for tasks.
 
         Required API Key ACLs:
           - addObject
@@ -2753,18 +2833,20 @@ class IngestionClient:
 
     async def trigger_docker_source_discover_with_http_info(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Trigger a stream listing request for a Singer specification compatible docker type source.
+        Triggers a stream-listing request for a source. Triggering stream-listing requests only works with sources with `type: docker` and `imageType: singer`.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2788,18 +2870,20 @@ class IngestionClient:
 
     async def trigger_docker_source_discover(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DockerSourceDiscover:
         """
-        Trigger a stream listing request for a Singer specification compatible docker type source.
+        Triggers a stream-listing request for a source. Triggering stream-listing requests only works with sources with `type: docker` and `imageType: singer`.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DockerSourceDiscover' result object.
@@ -2813,20 +2897,21 @@ class IngestionClient:
     async def update_authentication_with_http_info(
         self,
         authentication_id: Annotated[
-            StrictStr, Field(description="The authentication UUID.")
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
         ],
         authentication_update: AuthenticationUpdate,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update the authentication of the given authenticationID.
+        Updates an authentication resource.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param authentication_id: The authentication UUID. (required)
+        :param authentication_id: Unique identifier of an authentication resource. (required)
         :type authentication_id: str
         :param authentication_update: (required)
         :type authentication_update: AuthenticationUpdate
@@ -2863,20 +2948,21 @@ class IngestionClient:
     async def update_authentication(
         self,
         authentication_id: Annotated[
-            StrictStr, Field(description="The authentication UUID.")
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
         ],
         authentication_update: AuthenticationUpdate,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AuthenticationUpdateResponse:
         """
-        Update the authentication of the given authenticationID.
+        Updates an authentication resource.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param authentication_id: The authentication UUID. (required)
+        :param authentication_id: Unique identifier of an authentication resource. (required)
         :type authentication_id: str
         :param authentication_update: (required)
         :type authentication_update: AuthenticationUpdate
@@ -2892,20 +2978,20 @@ class IngestionClient:
     async def update_destination_with_http_info(
         self,
         destination_id: Annotated[
-            StrictStr, Field(description="The destination UUID.")
+            StrictStr, Field(description="Unique identifier of a destination.")
         ],
         destination_update: DestinationUpdate,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update the destination of the given destinationID.
+        Updates the destination by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param destination_id: The destination UUID. (required)
+        :param destination_id: Unique identifier of a destination. (required)
         :type destination_id: str
         :param destination_update: (required)
         :type destination_update: DestinationUpdate
@@ -2942,20 +3028,20 @@ class IngestionClient:
     async def update_destination(
         self,
         destination_id: Annotated[
-            StrictStr, Field(description="The destination UUID.")
+            StrictStr, Field(description="Unique identifier of a destination.")
         ],
         destination_update: DestinationUpdate,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DestinationUpdateResponse:
         """
-        Update the destination of the given destinationID.
+        Updates the destination by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param destination_id: The destination UUID. (required)
+        :param destination_id: Unique identifier of a destination. (required)
         :type destination_id: str
         :param destination_update: (required)
         :type destination_update: DestinationUpdate
@@ -2970,19 +3056,21 @@ class IngestionClient:
 
     async def update_source_with_http_info(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         source_update: SourceUpdate,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update the source of the given sourceID.
+        Updates a source by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param source_update: (required)
         :type source_update: SourceUpdate
@@ -3018,19 +3106,21 @@ class IngestionClient:
 
     async def update_source(
         self,
-        source_id: Annotated[StrictStr, Field(description="The source UUID.")],
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
         source_update: SourceUpdate,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceUpdateResponse:
         """
-        Update the source of the given sourceID.
+        Updates a source by its ID.
 
         Required API Key ACLs:
           - addObject
                   - deleteIndex
                   - editSettings
 
-        :param source_id: The source UUID. (required)
+        :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param source_update: (required)
         :type source_update: SourceUpdate
@@ -3045,15 +3135,17 @@ class IngestionClient:
 
     async def update_task_with_http_info(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         task_update: TaskUpdate,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update the task of the given taskID.
+        Updates a task by its ID.
 
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param task_update: (required)
         :type task_update: TaskUpdate
@@ -3087,15 +3179,17 @@ class IngestionClient:
 
     async def update_task(
         self,
-        task_id: Annotated[StrictStr, Field(description="The task UUID.")],
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
         task_update: TaskUpdate,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
-        Update the task of the given taskID.
+        Updates a task by its ID.
 
 
-        :param task_id: The task UUID. (required)
+        :param task_id: Unique identifier of a task. (required)
         :type task_id: str
         :param task_update: (required)
         :type task_update: TaskUpdate

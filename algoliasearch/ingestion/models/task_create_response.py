@@ -13,12 +13,14 @@ from pydantic import BaseModel, Field, StrictStr
 
 class TaskCreateResponse(BaseModel):
     """
-    The response from the API after a task creation.
+    API response for creating a task.
     """
 
-    task_id: StrictStr = Field(description="The task UUID.", alias="taskID")
+    task_id: StrictStr = Field(
+        description="Universally unique identifier (UUID) of a task.", alias="taskID"
+    )
     created_at: StrictStr = Field(
-        description="Date of creation (RFC3339 format).", alias="createdAt"
+        description="Date of creation in RFC3339 format.", alias="createdAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

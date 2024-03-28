@@ -12,7 +12,7 @@ from typing import Self
 
 class OrderKeys(str, Enum):
     """
-    Used to order a sorted request.
+    Ascending or descending sort order.
     """
 
     """

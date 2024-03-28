@@ -12,7 +12,7 @@ from typing import Self
 
 class RunType(str, Enum):
     """
-    RunType
+    Task run type.
     """
 
     """

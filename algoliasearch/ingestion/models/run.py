@@ -22,32 +22,38 @@ class Run(BaseModel):
     Run
     """
 
-    run_id: StrictStr = Field(description="The run UUID.", alias="runID")
+    run_id: StrictStr = Field(
+        description="Universally unique identifier (UUID) of a task run.", alias="runID"
+    )
     app_id: StrictStr = Field(alias="appID")
-    task_id: StrictStr = Field(description="The task UUID.", alias="taskID")
+    task_id: StrictStr = Field(
+        description="Universally unique identifier (UUID) of a task.", alias="taskID"
+    )
     status: RunStatus
     progress: Optional[RunProgress] = None
     outcome: Optional[RunOutcome] = None
     failure_threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = (
         Field(
             default=None,
-            description="A percentage representing the accepted failure threshold to determine if a `run` succeeded or not.",
+            description="Maximum accepted percentage of failures for a task run to finish successfully.",
             alias="failureThreshold",
         )
     )
     reason: Optional[StrictStr] = Field(
-        default=None, description="Explains the result of outcome."
+        default=None, description="More information about the task run's outcome."
     )
     reason_code: Optional[RunReasonCode] = Field(default=None, alias="reasonCode")
     type: RunType
     created_at: StrictStr = Field(
-        description="Date of creation (RFC3339 format).", alias="createdAt"
+        description="Date of creation in RFC3339 format.", alias="createdAt"
     )
     started_at: Optional[StrictStr] = Field(
-        default=None, description="Date of start (RFC3339 format).", alias="startedAt"
+        default=None, description="Date of start in RFC3339 format.", alias="startedAt"
     )
     finished_at: Optional[StrictStr] = Field(
-        default=None, description="Date of finish (RFC3339 format).", alias="finishedAt"
+        default=None,
+        description="Date of finish in RFC3339 format.",
+        alias="finishedAt",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

@@ -19,8 +19,12 @@ class Event(BaseModel):
     An event describe a step of the task execution flow..
     """
 
-    event_id: StrictStr = Field(description="The event UUID.", alias="eventID")
-    run_id: StrictStr = Field(description="The run UUID.", alias="runID")
+    event_id: StrictStr = Field(
+        description="Universally unique identifier (UUID) of an event.", alias="eventID"
+    )
+    run_id: StrictStr = Field(
+        description="Universally unique identifier (UUID) of a task run.", alias="runID"
+    )
     parent_id: Optional[StrictStr] = Field(
         default=None,
         description="The parent event, the cause of this event.",
@@ -33,7 +37,7 @@ class Event(BaseModel):
     )
     data: Optional[Dict[str, Any]] = None
     published_at: StrictStr = Field(
-        description="Date of publish (RFC3339 format).", alias="publishedAt"
+        description="Date of publish RFC3339 format.", alias="publishedAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

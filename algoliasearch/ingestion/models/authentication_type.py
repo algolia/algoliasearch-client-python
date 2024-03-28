@@ -12,7 +12,7 @@ from typing import Self
 
 class AuthenticationType(str, Enum):
     """
-    Type of the Authentication, defines what kind of object is stored in the input.
+    Type of authentication. This determines the type of credentials required in the `input` object.
     """
 
     """

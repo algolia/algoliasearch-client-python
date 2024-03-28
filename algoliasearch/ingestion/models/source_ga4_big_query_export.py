@@ -17,15 +17,15 @@ class SourceGA4BigQueryExport(BaseModel):
     """
 
     project_id: StrictStr = Field(
-        description="GCP project ID that the BigQuery Export writes to.",
+        description="GCP project ID that the BigQuery export writes to.",
         alias="projectID",
     )
     dataset_id: StrictStr = Field(
-        description="BigQuery dataset ID that the BigQuery Export writes to.",
+        description="BigQuery dataset ID that the BigQuery export writes to.",
         alias="datasetID",
     )
     table_prefix: StrictStr = Field(
-        description="Prefix of the tables that the BigQuery Export writes to (i.e. events_intraday_ for streaming, events_ for daily).",
+        description="Prefix of the tables that the BigQuery Export writes to.",
         alias="tablePrefix",
     )
 

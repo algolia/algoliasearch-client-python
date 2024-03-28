@@ -13,15 +13,15 @@ from pydantic import BaseModel, Field, StrictStr
 
 class Window(BaseModel):
     """
-    The window parameter represents the holds the dates used to query the Observability data from the database in a given window.
+    Time window by which to filter the observability data.
     """
 
     start_date: StrictStr = Field(
-        description="A date in format RFC3339 representing the oldest possible data in query window.",
+        description="Date in RFC3339 format representing the oldest data in the time window.",
         alias="startDate",
     )
     end_date: StrictStr = Field(
-        description="A date in format RFC3339 representing the newest possible data in query window.",
+        description="Date in RFC3339 format representing the newest data in the time window.",
         alias="endDate",
     )
 

@@ -12,7 +12,7 @@ from typing import Self
 
 class OnDemandTriggerType(str, Enum):
     """
-    A task which is manually executed via the run task endpoint.
+    Task is run manually, with the `/run` endpoint.
     """
 
     """

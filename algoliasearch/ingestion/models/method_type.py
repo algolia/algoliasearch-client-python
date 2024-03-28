@@ -12,7 +12,7 @@ from typing import Self
 
 class MethodType(str, Enum):
     """
-    MethodType
+    HTTP method to be used for retrieving your data.
     """
 
     """

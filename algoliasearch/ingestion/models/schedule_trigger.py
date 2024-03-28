@@ -15,20 +15,18 @@ from algoliasearch.ingestion.models.schedule_trigger_type import ScheduleTrigger
 
 class ScheduleTrigger(BaseModel):
     """
-    The trigger information for a task of type 'schedule'.
+    Trigger information for scheduled tasks.
     """
 
     type: ScheduleTriggerType
-    cron: StrictStr = Field(
-        description="A cron expression that represent at which regularity the task should run."
-    )
+    cron: StrictStr = Field(description="Cron expression for the task's schedule.")
     last_run: Optional[StrictStr] = Field(
         default=None,
-        description="The last time the scheduled task ran (RFC3339 format).",
+        description="The last time the scheduled task ran in RFC3339 format.",
         alias="lastRun",
     )
     next_run: StrictStr = Field(
-        description="The next scheduled run of the task (RFC3339 format).",
+        description="The next scheduled run of the task in RFC3339 format.",
         alias="nextRun",
     )
 

@@ -13,12 +13,12 @@ from pydantic import BaseModel, Field, StrictStr
 
 class AuthAlgolia(BaseModel):
     """
-    AuthAlgolia
+    Credentials for authenticating with Algolia.
     """
 
-    app_id: StrictStr = Field(description="Algolia Application ID.", alias="appID")
+    app_id: StrictStr = Field(description="Algolia application ID.", alias="appID")
     api_key: StrictStr = Field(
-        description="Algolia API Key, with the correct rights to push to an index and change settings.",
+        description="Algolia API key with the ACL: `addObject`, `deleteObject`, `settings`, `editSettings`, `listIndexes`, `deleteIndex`. This field is `null` in the API response. ",
         alias="apiKey",
     )
 

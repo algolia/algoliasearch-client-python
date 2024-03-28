@@ -16,10 +16,13 @@ class SourceCreateResponse(BaseModel):
     SourceCreateResponse
     """
 
-    source_id: StrictStr = Field(description="The source UUID.", alias="sourceID")
-    name: StrictStr
+    source_id: StrictStr = Field(
+        description="Universally uniqud identifier (UUID) of a source.",
+        alias="sourceID",
+    )
+    name: StrictStr = Field(description="Descriptive name of the source.")
     created_at: StrictStr = Field(
-        description="Date of creation (RFC3339 format).", alias="createdAt"
+        description="Date of creation in RFC3339 format.", alias="createdAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

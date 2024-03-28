@@ -8,16 +8,18 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self
 
-from pydantic import BaseModel, StrictStr
+from pydantic import BaseModel, Field, StrictStr
 
 
 class AuthBasicPartial(BaseModel):
     """
-    Authentication input for Basic login with username and password.
+    Credentials for authenticating with user name and password.
     """
 
-    username: Optional[StrictStr] = None
-    password: Optional[StrictStr] = None
+    username: Optional[StrictStr] = Field(default=None, description="Username.")
+    password: Optional[StrictStr] = Field(
+        default=None, description="Password. This field is `null` in the API response."
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

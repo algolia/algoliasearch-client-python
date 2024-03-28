@@ -12,7 +12,7 @@ from typing import Self
 
 class EventSortKeys(str, Enum):
     """
-    Used to sort the Event list endpoint.
+    Property by which to sort the list of task run events.
     """
 
     """

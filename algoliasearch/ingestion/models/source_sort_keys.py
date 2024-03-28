@@ -12,7 +12,7 @@ from typing import Self
 
 class SourceSortKeys(str, Enum):
     """
-    Used to sort the Source list endpoint.
+    Property by which to sort the list of sources.
     """
 
     """

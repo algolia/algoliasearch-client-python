@@ -16,14 +16,16 @@ from algoliasearch.ingestion.models.destination_type import DestinationType
 
 class DestinationCreate(BaseModel):
     """
-    The payload when creating a destination.
+    API request body for creating a new destination.
     """
 
     type: DestinationType
-    name: StrictStr = Field(description="An human readable name describing the object.")
+    name: StrictStr = Field(description="Descriptive name for the resource.")
     input: DestinationInput
     authentication_id: Optional[StrictStr] = Field(
-        default=None, description="The authentication UUID.", alias="authenticationID"
+        default=None,
+        description="Universally unique identifier (UUID) of an authentication resource.",
+        alias="authenticationID",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

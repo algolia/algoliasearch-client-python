@@ -12,7 +12,7 @@ from typing import Self
 
 class AuthenticationSortKeys(str, Enum):
     """
-    Used to sort the Authentication list endpoint.
+    Property by which to sort the list of authentication resources.
     """
 
     """

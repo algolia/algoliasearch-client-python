@@ -18,10 +18,10 @@ class SourceJSON(BaseModel):
     SourceJSON
     """
 
-    url: StrictStr = Field(description="The URL of the file.")
+    url: StrictStr = Field(description="URL of the file.")
     unique_id_column: Optional[StrictStr] = Field(
         default=None,
-        description="The name of the column that contains the unique ID, used as `objectID` in Algolia.",
+        description="Name of a column that contains a unique ID which will be used as `objectID` in Algolia.",
         alias="uniqueIDColumn",
     )
     method: Optional[MethodType] = None

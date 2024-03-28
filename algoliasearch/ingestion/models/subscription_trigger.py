@@ -17,7 +17,7 @@ from algoliasearch.ingestion.models.subscription_trigger_type import (
 
 class SubscriptionTrigger(BaseModel):
     """
-    The trigger input for a task of type 'subscription'.
+    Trigger input for subscription tasks.
     """
 
     type: SubscriptionTriggerType

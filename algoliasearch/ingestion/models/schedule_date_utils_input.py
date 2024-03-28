@@ -15,11 +15,11 @@ from algoliasearch.ingestion.models.mapping_input import MappingInput
 
 class ScheduleDateUtilsInput(BaseModel):
     """
-    The input for a `schedule` task whose source is of type `bigquery` and for which extracted data spans a fixed number of days.
+    Input for scheduled tasks whose source is of type `bigquery` and for which extracted data spans a fixed number of days.
     """
 
     timeframe: Annotated[int, Field(le=30, strict=True, ge=1)] = Field(
-        description="The timeframe of the extraction, in number of days from today."
+        description="Number of days in the past until the current day for which to extract Big Query data."
     )
     mapping: Optional[MappingInput] = None
 

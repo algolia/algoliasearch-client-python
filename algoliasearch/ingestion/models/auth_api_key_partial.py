@@ -8,15 +8,17 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self
 
-from pydantic import BaseModel, StrictStr
+from pydantic import BaseModel, Field, StrictStr
 
 
 class AuthAPIKeyPartial(BaseModel):
     """
-    Authentication input used for token credentials.
+    Credentials for authenticating with an API key.
     """
 
-    key: Optional[StrictStr] = None
+    key: Optional[StrictStr] = Field(
+        default=None, description="API key. This field is `null` in the API response."
+    )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

@@ -19,12 +19,14 @@ class SourceType(str, Enum):
     allowed enum values
     """
     BIGCOMMERCE = "bigcommerce"
-    COMMERCETOOLS = "commercetools"
-    JSON = "json"
-    CSV = "csv"
     BIGQUERY = "bigquery"
+    COMMERCETOOLS = "commercetools"
+    CSV = "csv"
     DOCKER = "docker"
     GA4BIGQUERYEXPORT = "ga4BigqueryExport"
+    JSON = "json"
+    SHOPIFY = "shopify"
+    SFCC = "sfcc"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

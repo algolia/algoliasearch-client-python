@@ -12,7 +12,7 @@ from typing import Self
 
 class ActionType(str, Enum):
     """
-    The action to perform on the Algolia index.
+    Action to perform on the Algolia index.
     """
 
     """

@@ -18,10 +18,14 @@ class SourceUpdate(BaseModel):
     SourceUpdate
     """
 
-    name: Optional[StrictStr] = None
+    name: Optional[StrictStr] = Field(
+        default=None, description="Descriptive name of the source."
+    )
     input: Optional[SourceUpdateInput] = None
     authentication_id: Optional[StrictStr] = Field(
-        default=None, description="The authentication UUID.", alias="authenticationID"
+        default=None,
+        description="Universally unique identifier (UUID) of an authentication resource.",
+        alias="authenticationID",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

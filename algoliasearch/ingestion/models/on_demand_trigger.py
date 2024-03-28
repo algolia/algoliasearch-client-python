@@ -15,13 +15,13 @@ from algoliasearch.ingestion.models.on_demand_trigger_type import OnDemandTrigge
 
 class OnDemandTrigger(BaseModel):
     """
-    The trigger information of a task of type `onDemand`.
+    Trigger information for manually-triggered tasks.
     """
 
     type: OnDemandTriggerType
     last_run: Optional[StrictStr] = Field(
         default=None,
-        description="The last time the scheduled task ran (RFC3339 format).",
+        description="The last time the scheduled task ran in RFC3339 format.",
         alias="lastRun",
     )
 

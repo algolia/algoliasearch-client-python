@@ -12,7 +12,7 @@ from typing import Self
 
 class RunReasonCode(str, Enum):
     """
-    An identifier that pairs with the outcome reason.
+    A code for the task run's outcome. A readable description of the code is included in the `reason` response property.
     """
 
     """

@@ -18,7 +18,7 @@ from algoliasearch.ingestion.models.subscription_trigger import SubscriptionTrig
 
 class Trigger(BaseModel):
     """
-    Trigger
+    Trigger that runs the task.
     """
 
     oneof_schema_1_validator: Optional[OnDemandTrigger] = None

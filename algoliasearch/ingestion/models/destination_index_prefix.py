@@ -17,7 +17,8 @@ class DestinationIndexPrefix(BaseModel):
     """
 
     index_prefix: StrictStr = Field(
-        description="The prefix of the final index name.", alias="indexPrefix"
+        description="String added to the beginning of all indices created by this destination.",
+        alias="indexPrefix",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

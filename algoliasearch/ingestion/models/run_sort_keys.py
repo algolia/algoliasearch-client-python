@@ -12,7 +12,7 @@ from typing import Self
 
 class RunSortKeys(str, Enum):
     """
-    Used to sort the Run list endpoint.
+    Property by which to sort the list of task runs.
     """
 
     """

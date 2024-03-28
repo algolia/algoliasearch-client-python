@@ -20,8 +20,7 @@ class SourceBigCommerce(BaseModel):
     """
 
     store_hash: StrictStr = Field(
-        description="The store hash identifying the store the shopper is signing in to.",
-        alias="storeHash",
+        description="Store hash identifying your BigCommerce store.", alias="storeHash"
     )
     channel: Optional[BigCommerceChannel] = None
     custom_fields: Optional[List[StrictStr]] = Field(default=None, alias="customFields")

@@ -17,12 +17,12 @@ from algoliasearch.ingestion.models.platform import Platform
 
 class AuthenticationUpdate(BaseModel):
     """
-    Payload to partially update an Authentication.
+    Request body for updating an authentication resource.
     """
 
     type: Optional[AuthenticationType] = None
     name: Optional[StrictStr] = Field(
-        default=None, description="An human readable name describing the object."
+        default=None, description="Descriptive name for the resource."
     )
     platform: Optional[Platform] = None
     input: Optional[AuthInputPartial] = None

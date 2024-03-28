@@ -16,16 +16,18 @@ from algoliasearch.ingestion.models.destination_type import DestinationType
 
 class DestinationUpdate(BaseModel):
     """
-    Payload to partially update a Destination.
+    API request body for updating a destination.
     """
 
     type: Optional[DestinationType] = None
     name: Optional[StrictStr] = Field(
-        default=None, description="An human readable name describing the object."
+        default=None, description="Descriptive name for the resource."
     )
     input: Optional[DestinationInput] = None
     authentication_id: Optional[StrictStr] = Field(
-        default=None, description="The authentication UUID.", alias="authenticationID"
+        default=None,
+        description="Universally unique identifier (UUID) of an authentication resource.",
+        alias="authenticationID",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

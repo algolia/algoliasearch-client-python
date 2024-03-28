@@ -12,7 +12,7 @@ from typing import Self
 
 class DockerImageType(str, Enum):
     """
-    The type of the image.
+    Image type.
     """
 
     """

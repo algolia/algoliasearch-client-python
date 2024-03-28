@@ -8,19 +8,18 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Self
 
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel
 
+from algoliasearch.ingestion.models.mapping_format_schema import MappingFormatSchema
 from algoliasearch.ingestion.models.mapping_kit_action import MappingKitAction
 
 
 class MappingInput(BaseModel):
     """
-    Transformations to apply to source, serialized as a JSON string.
+    Transformations to apply to the source, serialized as a JSON string.
     """
 
-    format: StrictStr = Field(
-        description="Name of the mapping format schema, `mappingkit/v1` is currently the only supported format."
-    )
+    format: MappingFormatSchema
     actions: List[MappingKitAction]
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

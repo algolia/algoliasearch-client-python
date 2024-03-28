@@ -19,19 +19,24 @@ class Source(BaseModel):
     Source
     """
 
-    source_id: StrictStr = Field(description="The source UUID.", alias="sourceID")
+    source_id: StrictStr = Field(
+        description="Universally uniqud identifier (UUID) of a source.",
+        alias="sourceID",
+    )
     type: SourceType
     name: StrictStr
     input: SourceInput
     authentication_id: Optional[StrictStr] = Field(
-        default=None, description="The authentication UUID.", alias="authenticationID"
+        default=None,
+        description="Universally unique identifier (UUID) of an authentication resource.",
+        alias="authenticationID",
     )
     created_at: StrictStr = Field(
-        description="Date of creation (RFC3339 format).", alias="createdAt"
+        description="Date of creation in RFC3339 format.", alias="createdAt"
     )
     updated_at: Optional[StrictStr] = Field(
         default=None,
-        description="Date of last update (RFC3339 format).",
+        description="Date of last update in RFC3339 format.",
         alias="updatedAt",
     )
 

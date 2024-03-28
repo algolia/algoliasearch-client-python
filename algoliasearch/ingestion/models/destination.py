@@ -16,25 +16,28 @@ from algoliasearch.ingestion.models.destination_type import DestinationType
 
 class Destination(BaseModel):
     """
-    A destination describe how the data is indexed on the Algolia side.
+    Destinations are Algolia resources like indices or event streams.
     """
 
     destination_id: StrictStr = Field(
-        description="The destination UUID.", alias="destinationID"
+        description="Universally unique identifier (UUID) of a destination resource.",
+        alias="destinationID",
     )
     type: DestinationType
-    name: StrictStr = Field(description="An human readable name describing the object.")
+    name: StrictStr = Field(description="Descriptive name for the resource.")
     input: DestinationInput
     created_at: StrictStr = Field(
-        description="Date of creation (RFC3339 format).", alias="createdAt"
+        description="Date of creation in RFC3339 format.", alias="createdAt"
     )
     updated_at: Optional[StrictStr] = Field(
         default=None,
-        description="Date of last update (RFC3339 format).",
+        description="Date of last update in RFC3339 format.",
         alias="updatedAt",
     )
     authentication_id: Optional[StrictStr] = Field(
-        default=None, description="The authentication UUID.", alias="authenticationID"
+        default=None,
+        description="Universally unique identifier (UUID) of an authentication resource.",
+        alias="authenticationID",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

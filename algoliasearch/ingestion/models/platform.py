@@ -12,7 +12,7 @@ from typing import Self
 
 class Platform(str, Enum):
     """
-    Describe which platform the Authentication is used for.
+    Name of an ecommerce platform with which to authenticate. This determines which authentication type you can select.
     """
 
     """
@@ -20,6 +20,7 @@ class Platform(str, Enum):
     """
     BIGCOMMERCE = "bigcommerce"
     COMMERCETOOLS = "commercetools"
+    SHOPIFY = "shopify"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

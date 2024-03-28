@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field, StrictStr
 
 class AuthenticationSearch(BaseModel):
     """
-    Payload to search for multiple authentications, based on the given `authenticationIDs`.
+    Request body for searching for authentication resources.
     """
 
     authentication_ids: List[StrictStr] = Field(alias="authenticationIDs")

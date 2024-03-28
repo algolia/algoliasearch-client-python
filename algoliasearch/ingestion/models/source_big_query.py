@@ -19,18 +19,18 @@ class SourceBigQuery(BaseModel):
     """
 
     project_id: StrictStr = Field(
-        description="Project ID of the BigQuery Source.", alias="projectID"
+        description="Project ID of the BigQuery source.", alias="projectID"
     )
     dataset_id: StrictStr = Field(
-        description="Dataset ID of the BigQuery Source.", alias="datasetID"
+        description="Dataset ID of the BigQuery source.", alias="datasetID"
     )
     data_type: Optional[BigQueryDataType] = Field(default=None, alias="dataType")
     table: Optional[StrictStr] = Field(
-        default=None, description="Table name (for default BQ)."
+        default=None, description="Table name for the BigQuery export."
     )
     table_prefix: Optional[StrictStr] = Field(
         default=None,
-        description="Table prefix (for Google Analytics).",
+        description="Table prefix for a Google Analytics 4 data export to BigQuery.",
         alias="tablePrefix",
     )
     custom_sql_request: Optional[StrictStr] = Field(
@@ -40,7 +40,7 @@ class SourceBigQuery(BaseModel):
     )
     unique_id_column: Optional[StrictStr] = Field(
         default=None,
-        description="The name of the column that contains the unique ID, used as `objectID` in Algolia.",
+        description="Name of a column that contains a unique ID which will be used as `objectID` in Algolia.",
         alias="uniqueIDColumn",
     )
 

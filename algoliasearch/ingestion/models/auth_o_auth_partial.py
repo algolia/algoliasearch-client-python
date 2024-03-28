@@ -13,14 +13,18 @@ from pydantic import BaseModel, Field, StrictStr
 
 class AuthOAuthPartial(BaseModel):
     """
-    Authentication input for OAuth login.
+    Credentials for authenticating with OAuth 2.0.
     """
 
     url: Optional[StrictStr] = Field(
-        default=None, description="The OAuth endpoint URL."
+        default=None, description="URL for the OAuth endpoint."
     )
-    client_id: Optional[StrictStr] = Field(default=None, description="The clientID.")
-    client_secret: Optional[StrictStr] = Field(default=None, description="The secret.")
+    client_id: Optional[StrictStr] = Field(default=None, description="Client ID.")
+    client_secret: Optional[StrictStr] = Field(
+        default=None,
+        description="Client secret. This field is `null` in the API response.",
+    )
+    scope: Optional[StrictStr] = Field(default="", description="OAuth scope.")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -63,6 +67,7 @@ class AuthOAuthPartial(BaseModel):
                 "url": obj.get("url"),
                 "client_id": obj.get("client_id"),
                 "client_secret": obj.get("client_secret"),
+                "scope": obj.get("scope"),
             }
         )
         return _obj
