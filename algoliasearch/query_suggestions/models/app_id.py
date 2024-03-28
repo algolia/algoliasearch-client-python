@@ -8,28 +8,18 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self
 
-from pydantic import BaseModel, Field, StrictInt, StrictStr
-
-from algoliasearch.query_suggestions.models.log_level import LogLevel
+from pydantic import BaseModel, Field, StrictStr
 
 
-class GetLogFile200Response(BaseModel):
+class AppID(BaseModel):
     """
-    GetLogFile200Response
+    AppID
     """
 
-    timestamp: Optional[StrictStr] = Field(
+    app_id: Optional[StrictStr] = Field(
         default=None,
-        description="Timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.",
-    )
-    level: Optional[LogLevel] = None
-    message: Optional[StrictStr] = Field(
-        default=None, description="Details about this log entry."
-    )
-    context_level: Optional[StrictInt] = Field(
-        default=None,
-        description="Level indicating the position of a suggestion in a hierarchy of records.  For example, a `contextLevel` of 1 indicates that this suggestion belongs to a previous suggestion with `contextLevel` 0. ",
-        alias="contextLevel",
+        description="Algolia application ID to which this Query Suggestions configuration belongs.",
+        alias="appID",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
@@ -39,7 +29,7 @@ class GetLogFile200Response(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of GetLogFile200Response from a JSON string"""
+        """Create an instance of AppID from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -61,19 +51,12 @@ class GetLogFile200Response(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of GetLogFile200Response from a dict"""
+        """Create an instance of AppID from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "timestamp": obj.get("timestamp"),
-                "level": obj.get("level"),
-                "message": obj.get("message"),
-                "contextLevel": obj.get("contextLevel"),
-            }
-        )
+        _obj = cls.model_validate({"appID": obj.get("appID")})
         return _obj

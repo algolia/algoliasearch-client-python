@@ -16,43 +16,28 @@ from algoliasearch.query_suggestions.models.source_index import SourceIndex
 
 class QuerySuggestionsConfigurationResponse(BaseModel):
     """
-    QuerySuggestionsConfigurationResponse
+    API response for retrieving Query Suggestions configurations.
     """
 
-    source_indices_api_key: Optional[StrictStr] = Field(
-        default=None,
-        description="API key used to read from your source index.",
-        alias="sourceIndicesAPIKey",
-    )
-    suggestions_indices_api_key: Optional[StrictStr] = Field(
-        default=None,
-        description="API key used to write and configure your Query Suggestions index.",
-        alias="suggestionsIndicesAPIKey",
-    )
-    external_indices_api_key: Optional[StrictStr] = Field(
-        default="",
-        description="API key used to read from external Algolia indices.",
-        alias="externalIndicesAPIKey",
+    app_id: StrictStr = Field(
+        description="Algolia application ID to which this Query Suggestions configuration belongs.",
+        alias="appID",
     )
     index_name: StrictStr = Field(
-        description="Query Suggestions index name.", alias="indexName"
+        description="Name of the Query Suggestions index.", alias="indexName"
     )
     source_indices: Annotated[List[SourceIndex], Field(min_length=1)] = Field(
         description="Algolia indices from which to get the popular searches for query suggestions.",
         alias="sourceIndices",
     )
-    languages: Optional[Languages] = None
-    exclude: Optional[List[StrictStr]] = Field(
-        default=None, description="Patterns to exclude from query suggestions."
-    )
-    enable_personalization: Optional[StrictBool] = Field(
-        default=False,
-        description="Turn on personalized query suggestions.",
+    languages: Languages
+    exclude: Optional[List[StrictStr]]
+    enable_personalization: StrictBool = Field(
+        description="Whether to turn on personalized query suggestions.",
         alias="enablePersonalization",
     )
-    allow_special_characters: Optional[StrictBool] = Field(
-        default=False,
-        description="Allow suggestions with special characters.",
+    allow_special_characters: StrictBool = Field(
+        description="Whether to include suggestions with special characters.",
         alias="allowSpecialCharacters",
     )
 
@@ -107,9 +92,7 @@ class QuerySuggestionsConfigurationResponse(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "sourceIndicesAPIKey": obj.get("sourceIndicesAPIKey"),
-                "suggestionsIndicesAPIKey": obj.get("suggestionsIndicesAPIKey"),
-                "externalIndicesAPIKey": obj.get("externalIndicesAPIKey"),
+                "appID": obj.get("appID"),
                 "indexName": obj.get("indexName"),
                 "sourceIndices": (
                     [SourceIndex.from_dict(_item) for _item in obj.get("sourceIndices")]

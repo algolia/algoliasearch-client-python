@@ -121,7 +121,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a new Query Suggestions configuration.  You can have up to 100 configurations per Algolia application.
+        Creates a new Query Suggestions configuration.  You can have up to 100 configurations per Algolia application.
 
         Required API Key ACLs:
           - editSettings
@@ -157,7 +157,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
-        Create a new Query Suggestions configuration.  You can have up to 100 configurations per Algolia application.
+        Creates a new Query Suggestions configuration.  You can have up to 100 configurations per Algolia application.
 
         Required API Key ACLs:
           - editSettings
@@ -517,7 +517,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete a Query Suggestions configuration.  Deleting only removes the configuration and stops updates to the Query Suggestions index. The Query Suggestions index itself is not deleted.
+        Deletes a Query Suggestions configuration.  Deleting only removes the configuration and stops updates to the Query Suggestions index. To delete the Query Suggestions index itself, use the Search API and the [Delete an index](/specs/search#tag/Indices/operation/deleteIndex) operation.
 
         Required API Key ACLs:
           - editSettings
@@ -552,7 +552,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
-        Delete a Query Suggestions configuration.  Deleting only removes the configuration and stops updates to the Query Suggestions index. The Query Suggestions index itself is not deleted.
+        Deletes a Query Suggestions configuration.  Deleting only removes the configuration and stops updates to the Query Suggestions index. To delete the Query Suggestions index itself, use the Search API and the [Delete an index](/specs/search#tag/Indices/operation/deleteIndex) operation.
 
         Required API Key ACLs:
           - editSettings
@@ -570,7 +570,7 @@ class QuerySuggestionsClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
-        List all Query Suggestions configurations of your Algolia application.
+        Retrieves all Query Suggestions configurations of your Algolia application.
 
         Required API Key ACLs:
           - settings
@@ -592,7 +592,7 @@ class QuerySuggestionsClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> List[QuerySuggestionsConfigurationResponse]:
         """
-        List all Query Suggestions configurations of your Algolia application.
+        Retrieves all Query Suggestions configurations of your Algolia application.
 
         Required API Key ACLs:
           - settings
@@ -612,7 +612,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get a single Query Suggestions configuration.
+        Retrieves a single Query Suggestions configuration by its index name.
 
         Required API Key ACLs:
           - settings
@@ -647,7 +647,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> QuerySuggestionsConfigurationResponse:
         """
-        Get a single Query Suggestions configuration.
+        Retrieves a single Query Suggestions configuration by its index name.
 
         Required API Key ACLs:
           - settings
@@ -669,7 +669,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Report the status of a Query Suggestions index.
+        Reports the status of a Query Suggestions index.
 
         Required API Key ACLs:
           - settings
@@ -704,7 +704,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetConfigStatus200Response:
         """
-        Report the status of a Query Suggestions index.
+        Reports the status of a Query Suggestions index.
 
         Required API Key ACLs:
           - settings
@@ -726,7 +726,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get the logs for a single Query Suggestions index.
+        Retrieves the logs for a single Query Suggestions index.
 
         Required API Key ACLs:
           - settings
@@ -761,7 +761,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetLogFile200Response:
         """
-        Get the logs for a single Query Suggestions index.
+        Retrieves the logs for a single Query Suggestions index.
 
         Required API Key ACLs:
           - settings
@@ -784,7 +784,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Update a QuerySuggestions configuration.
+        Updates a QuerySuggestions configuration.
 
         Required API Key ACLs:
           - editSettings
@@ -832,7 +832,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
-        Update a QuerySuggestions configuration.
+        Updates a QuerySuggestions configuration.
 
         Required API Key ACLs:
           - editSettings

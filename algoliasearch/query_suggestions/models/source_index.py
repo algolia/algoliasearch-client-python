@@ -24,20 +24,15 @@ class SourceIndex(BaseModel):
     )
     replicas: Optional[StrictBool] = Field(
         default=False,
-        description="If true, Query Suggestions uses all replicas of the primary index to find popular searches. If false, only the primary index is used. ",
+        description="If true, Query Suggestions uses all replica indices to find popular searches. If false, only the primary index is used. ",
     )
     analytics_tags: Optional[List[StrictStr]] = Field(
-        default=None,
-        description="[Analytics tags](https://www.algolia.com/doc/api-reference/api-parameters/analyticsTags/) for filtering the popular searches. ",
-        alias="analyticsTags",
+        default=None, alias="analyticsTags"
     )
-    facets: Optional[List[Facet]] = Field(
-        default=None,
-        description="Facets to use as top categories with your suggestions.  If provided, Query Suggestions adds the top facet values to each suggestion. ",
-    )
+    facets: Optional[List[Facet]] = None
     min_hits: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
         default=5,
-        description="Minimum number of hits required to be included as a suggestion.  A search query must at least generate `minHits` hits to be included in the Query Suggestions index. ",
+        description="Minimum number of hits required to be included as a suggestion.  A search query must at least generate `minHits` search results to be included in the Query Suggestions index. ",
         alias="minHits",
     )
     min_letters: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
@@ -46,10 +41,7 @@ class SourceIndex(BaseModel):
         alias="minLetters",
     )
     generate: Optional[List[List[StrictStr]]] = None
-    external: Optional[List[StrictStr]] = Field(
-        default=None,
-        description="Algolia indices with popular searches to use as query suggestions.  Records of these indices must have these attributes:    - `query`: search query which will be added as a suggestion   - `count`: measure of popularity of that search query  For example, you can export popular searches from an external analytics tool, such as Google Analytics or Adobe Analytics, and feed this data into an external Algolia index. You can use this external index to generate query suggestions until your Algolia analytics has collected enough data. ",
-    )
+    external: Optional[List[StrictStr]] = None
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -91,6 +83,11 @@ class SourceIndex(BaseModel):
         # and model_fields_set contains the field
         if self.facets is None and "facets" in self.model_fields_set:
             _dict["facets"] = None
+
+        # set to None if generate (nullable) is None
+        # and model_fields_set contains the field
+        if self.generate is None and "generate" in self.model_fields_set:
+            _dict["generate"] = None
 
         # set to None if external (nullable) is None
         # and model_fields_set contains the field

@@ -24,17 +24,15 @@ class QuerySuggestionsConfiguration(BaseModel):
         alias="sourceIndices",
     )
     languages: Optional[Languages] = None
-    exclude: Optional[List[StrictStr]] = Field(
-        default=None, description="Patterns to exclude from query suggestions."
-    )
+    exclude: Optional[List[StrictStr]] = None
     enable_personalization: Optional[StrictBool] = Field(
         default=False,
-        description="Turn on personalized query suggestions.",
+        description="Whether to turn on personalized query suggestions.",
         alias="enablePersonalization",
     )
     allow_special_characters: Optional[StrictBool] = Field(
         default=False,
-        description="Allow suggestions with special characters.",
+        description="Whether to include suggestions with special characters.",
         alias="allowSpecialCharacters",
     )
 

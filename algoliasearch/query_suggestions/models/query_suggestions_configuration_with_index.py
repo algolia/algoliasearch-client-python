@@ -19,26 +19,24 @@ class QuerySuggestionsConfigurationWithIndex(BaseModel):
     Query Suggestions configuration.
     """
 
-    index_name: StrictStr = Field(
-        description="Query Suggestions index name.", alias="indexName"
-    )
     source_indices: Annotated[List[SourceIndex], Field(min_length=1)] = Field(
         description="Algolia indices from which to get the popular searches for query suggestions.",
         alias="sourceIndices",
     )
     languages: Optional[Languages] = None
-    exclude: Optional[List[StrictStr]] = Field(
-        default=None, description="Patterns to exclude from query suggestions."
-    )
+    exclude: Optional[List[StrictStr]] = None
     enable_personalization: Optional[StrictBool] = Field(
         default=False,
-        description="Turn on personalized query suggestions.",
+        description="Whether to turn on personalized query suggestions.",
         alias="enablePersonalization",
     )
     allow_special_characters: Optional[StrictBool] = Field(
         default=False,
-        description="Allow suggestions with special characters.",
+        description="Whether to include suggestions with special characters.",
         alias="allowSpecialCharacters",
+    )
+    index_name: StrictStr = Field(
+        description="Name of the Query Suggestions index.", alias="indexName"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
@@ -92,7 +90,6 @@ class QuerySuggestionsConfigurationWithIndex(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "indexName": obj.get("indexName"),
                 "sourceIndices": (
                     [SourceIndex.from_dict(_item) for _item in obj.get("sourceIndices")]
                     if obj.get("sourceIndices") is not None
@@ -106,6 +103,7 @@ class QuerySuggestionsConfigurationWithIndex(BaseModel):
                 "exclude": obj.get("exclude"),
                 "enablePersonalization": obj.get("enablePersonalization"),
                 "allowSpecialCharacters": obj.get("allowSpecialCharacters"),
+                "indexName": obj.get("indexName"),
             }
         )
         return _obj

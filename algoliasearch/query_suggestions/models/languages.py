@@ -8,16 +8,28 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, StrictBool, StrictStr, ValidationError, model_serializer
+from pydantic import (
+    BaseModel,
+    Field,
+    StrictBool,
+    StrictStr,
+    ValidationError,
+    model_serializer,
+)
 
 
 class Languages(BaseModel):
     """
-    Set the language for deduplicating singular and plural suggestions. If specified, only the more popular form is included.
+    Languages for deduplicating singular and plural suggestions. If specified, only the more popular form is included.
     """
 
-    oneof_schema_1_validator: Optional[List[StrictStr]] = None
-    oneof_schema_2_validator: Optional[StrictBool] = False
+    oneof_schema_1_validator: Optional[List[StrictStr]] = Field(
+        default=None,
+        description="Languages for which to deduplicate singular and plural forms.",
+    )
+    oneof_schema_2_validator: Optional[StrictBool] = Field(
+        default=None, description="If true, deduplication is enabled for all languages."
+    )
     actual_instance: Optional[Union[List[str], bool]] = None
 
     def __init__(self, *args, **kwargs) -> None:

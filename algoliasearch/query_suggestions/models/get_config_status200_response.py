@@ -17,11 +17,13 @@ class GetConfigStatus200Response(BaseModel):
     """
 
     index_name: Optional[StrictStr] = Field(
-        default=None, description="Query Suggestions index name.", alias="indexName"
+        default=None,
+        description="Name of the Query Suggestions index.",
+        alias="indexName",
     )
     is_running: Optional[StrictBool] = Field(
         default=None,
-        description="Indicates whether the creation or update of the Query Suggestions is in progress.",
+        description="Whether the creation or update of the Query Suggestions index is in progress.",
         alias="isRunning",
     )
     last_built_at: Optional[StrictStr] = Field(
