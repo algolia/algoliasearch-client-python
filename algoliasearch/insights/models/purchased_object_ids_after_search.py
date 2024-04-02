@@ -52,10 +52,9 @@ class PurchasedObjectIDsAfterSearch(BaseModel):
         default=None,
         description="Three-letter [currency code](https://www.iso.org/iso-4217-currency-codes.html).",
     )
-    object_data: Optional[
-        Annotated[List[ObjectDataAfterSearch], Field(min_length=1, max_length=20)]
+    object_data: Annotated[
+        List[ObjectDataAfterSearch], Field(min_length=1, max_length=20)
     ] = Field(
-        default=None,
         description="Extra information about the records involved in a purchase or add-to-cart events.  If provided, it must be the same length as `objectIDs`. ",
         alias="objectData",
     )
