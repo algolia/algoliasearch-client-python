@@ -11,6 +11,7 @@ from typing import Dict, Optional, Self, Union
 from pydantic import BaseModel, ValidationError, model_serializer
 
 from algoliasearch.ingestion.models.auth_algolia import AuthAlgolia
+from algoliasearch.ingestion.models.auth_algolia_insights import AuthAlgoliaInsights
 from algoliasearch.ingestion.models.auth_api_key import AuthAPIKey
 from algoliasearch.ingestion.models.auth_basic import AuthBasic
 from algoliasearch.ingestion.models.auth_google_service_account import (
@@ -29,8 +30,16 @@ class AuthInput(BaseModel):
     oneof_schema_3_validator: Optional[AuthAPIKey] = None
     oneof_schema_4_validator: Optional[AuthOAuth] = None
     oneof_schema_5_validator: Optional[AuthAlgolia] = None
+    oneof_schema_6_validator: Optional[AuthAlgoliaInsights] = None
     actual_instance: Optional[
-        Union[AuthAPIKey, AuthAlgolia, AuthBasic, AuthGoogleServiceAccount, AuthOAuth]
+        Union[
+            AuthAPIKey,
+            AuthAlgolia,
+            AuthAlgoliaInsights,
+            AuthBasic,
+            AuthGoogleServiceAccount,
+            AuthOAuth,
+        ]
     ] = None
 
     def __init__(self, *args, **kwargs) -> None:
@@ -51,7 +60,14 @@ class AuthInput(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Optional[
-        Union[AuthAPIKey, AuthAlgolia, AuthBasic, AuthGoogleServiceAccount, AuthOAuth]
+        Union[
+            AuthAPIKey,
+            AuthAlgolia,
+            AuthAlgoliaInsights,
+            AuthBasic,
+            AuthGoogleServiceAccount,
+            AuthOAuth,
+        ]
     ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
@@ -98,9 +114,15 @@ class AuthInput(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = AuthAlgoliaInsights.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into AuthInput with oneOf schemas: AuthAPIKey, AuthAlgolia, AuthBasic, AuthGoogleServiceAccount, AuthOAuth. Details: "
+            "No match found when deserializing the JSON string into AuthInput with oneOf schemas: AuthAPIKey, AuthAlgolia, AuthAlgoliaInsights, AuthBasic, AuthGoogleServiceAccount, AuthOAuth. Details: "
             + ", ".join(error_messages)
         )
 

@@ -10,6 +10,9 @@ from typing import Dict, Optional, Self, Union
 
 from pydantic import BaseModel, ValidationError, model_serializer
 
+from algoliasearch.ingestion.models.auth_algolia_insights_partial import (
+    AuthAlgoliaInsightsPartial,
+)
 from algoliasearch.ingestion.models.auth_algolia_partial import AuthAlgoliaPartial
 from algoliasearch.ingestion.models.auth_api_key_partial import AuthAPIKeyPartial
 from algoliasearch.ingestion.models.auth_basic_partial import AuthBasicPartial
@@ -29,9 +32,11 @@ class AuthInputPartial(BaseModel):
     oneof_schema_3_validator: Optional[AuthAPIKeyPartial] = None
     oneof_schema_4_validator: Optional[AuthOAuthPartial] = None
     oneof_schema_5_validator: Optional[AuthAlgoliaPartial] = None
+    oneof_schema_6_validator: Optional[AuthAlgoliaInsightsPartial] = None
     actual_instance: Optional[
         Union[
             AuthAPIKeyPartial,
+            AuthAlgoliaInsightsPartial,
             AuthAlgoliaPartial,
             AuthBasicPartial,
             AuthGoogleServiceAccountPartial,
@@ -59,6 +64,7 @@ class AuthInputPartial(BaseModel):
     ) -> Optional[
         Union[
             AuthAPIKeyPartial,
+            AuthAlgoliaInsightsPartial,
             AuthAlgoliaPartial,
             AuthBasicPartial,
             AuthGoogleServiceAccountPartial,
@@ -112,9 +118,15 @@ class AuthInputPartial(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = AuthAlgoliaInsightsPartial.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into AuthInputPartial with oneOf schemas: AuthAPIKeyPartial, AuthAlgoliaPartial, AuthBasicPartial, AuthGoogleServiceAccountPartial, AuthOAuthPartial. Details: "
+            "No match found when deserializing the JSON string into AuthInputPartial with oneOf schemas: AuthAPIKeyPartial, AuthAlgoliaInsightsPartial, AuthAlgoliaPartial, AuthBasicPartial, AuthGoogleServiceAccountPartial, AuthOAuthPartial. Details: "
             + ", ".join(error_messages)
         )
 

@@ -23,6 +23,7 @@ class AuthenticationType(str, Enum):
     APIKEY = "apiKey"
     OAUTH = "oauth"
     ALGOLIA = "algolia"
+    ALGOLIAINSIGHTS = "algoliaInsights"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
