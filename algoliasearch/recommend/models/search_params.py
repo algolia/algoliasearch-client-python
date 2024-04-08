@@ -38,9 +38,9 @@ from algoliasearch.recommend.models.tag_filters import TagFilters
 from algoliasearch.recommend.models.typo_tolerance import TypoTolerance
 
 
-class SearchParamsObject(BaseModel):
+class SearchParams(BaseModel):
     """
-    SearchParamsObject
+    SearchParams
     """
 
     query: Optional[StrictStr] = Field(default="", description="Search query.")
@@ -382,7 +382,7 @@ class SearchParamsObject(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of SearchParamsObject from a JSON string"""
+        """Create an instance of SearchParams from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -438,7 +438,7 @@ class SearchParamsObject(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of SearchParamsObject from a dict"""
+        """Create an instance of SearchParams from a dict"""
         if obj is None:
             return None
 

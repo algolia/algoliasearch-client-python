@@ -10,10 +10,12 @@ from typing import Dict, Optional, Self, Union
 
 from pydantic import BaseModel, ValidationError, model_serializer
 
-from algoliasearch.recommend.models.recommendations_query import RecommendationsQuery
+from algoliasearch.recommend.models.bought_together_query import BoughtTogetherQuery
+from algoliasearch.recommend.models.looking_similar_query import LookingSimilarQuery
 from algoliasearch.recommend.models.recommended_for_you_query import (
     RecommendedForYouQuery,
 )
+from algoliasearch.recommend.models.related_query import RelatedQuery
 from algoliasearch.recommend.models.trending_facets_query import TrendingFacetsQuery
 from algoliasearch.recommend.models.trending_items_query import TrendingItemsQuery
 
@@ -23,14 +25,18 @@ class RecommendationsRequest(BaseModel):
     RecommendationsRequest
     """
 
-    oneof_schema_1_validator: Optional[TrendingItemsQuery] = None
-    oneof_schema_2_validator: Optional[TrendingFacetsQuery] = None
-    oneof_schema_3_validator: Optional[RecommendationsQuery] = None
-    oneof_schema_4_validator: Optional[RecommendedForYouQuery] = None
+    oneof_schema_1_validator: Optional[BoughtTogetherQuery] = None
+    oneof_schema_2_validator: Optional[RelatedQuery] = None
+    oneof_schema_3_validator: Optional[TrendingItemsQuery] = None
+    oneof_schema_4_validator: Optional[TrendingFacetsQuery] = None
+    oneof_schema_5_validator: Optional[LookingSimilarQuery] = None
+    oneof_schema_6_validator: Optional[RecommendedForYouQuery] = None
     actual_instance: Optional[
         Union[
-            RecommendationsQuery,
+            BoughtTogetherQuery,
+            LookingSimilarQuery,
             RecommendedForYouQuery,
+            RelatedQuery,
             TrendingFacetsQuery,
             TrendingItemsQuery,
         ]
@@ -55,8 +61,10 @@ class RecommendationsRequest(BaseModel):
         self,
     ) -> Optional[
         Union[
-            RecommendationsQuery,
+            BoughtTogetherQuery,
+            LookingSimilarQuery,
             RecommendedForYouQuery,
+            RelatedQuery,
             TrendingFacetsQuery,
             TrendingItemsQuery,
         ]
@@ -77,6 +85,18 @@ class RecommendationsRequest(BaseModel):
         error_messages = []
 
         try:
+            instance.actual_instance = BoughtTogetherQuery.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = RelatedQuery.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
             instance.actual_instance = TrendingItemsQuery.from_json(json_str)
 
             return instance
@@ -89,7 +109,7 @@ class RecommendationsRequest(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.actual_instance = RecommendationsQuery.from_json(json_str)
+            instance.actual_instance = LookingSimilarQuery.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
@@ -102,7 +122,7 @@ class RecommendationsRequest(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into RecommendationsRequest with oneOf schemas: RecommendationsQuery, RecommendedForYouQuery, TrendingFacetsQuery, TrendingItemsQuery. Details: "
+            "No match found when deserializing the JSON string into RecommendationsRequest with oneOf schemas: BoughtTogetherQuery, LookingSimilarQuery, RecommendedForYouQuery, RelatedQuery, TrendingFacetsQuery, TrendingItemsQuery. Details: "
             + ", ".join(error_messages)
         )
 

@@ -21,10 +21,12 @@ class TrendingFacetHit(BaseModel):
         Annotated[int, Field(le=100, strict=True, ge=0)],
     ] = Field(description="Recommendation score.", alias="_score")
     facet_name: StrictStr = Field(
-        description="Facet name for trending models.", alias="facetName"
+        description="Facet attribute. To be used in combination with `facetValue`. If specified, only recommendations matching the facet filter will be returned. ",
+        alias="facetName",
     )
     facet_value: StrictStr = Field(
-        description="Facet value for trending models.", alias="facetValue"
+        description="Facet value. To be used in combination with `facetName`. If specified, only recommendations matching the facet filter will be returned. ",
+        alias="facetValue",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

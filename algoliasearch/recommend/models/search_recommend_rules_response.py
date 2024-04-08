@@ -10,7 +10,7 @@ from typing import Annotated, Any, Dict, List, Self
 
 from pydantic import BaseModel, Field, StrictInt
 
-from algoliasearch.recommend.models.rule_response import RuleResponse
+from algoliasearch.recommend.models.recommend_rule import RecommendRule
 
 
 class SearchRecommendRulesResponse(BaseModel):
@@ -18,7 +18,9 @@ class SearchRecommendRulesResponse(BaseModel):
     SearchRecommendRulesResponse
     """
 
-    hits: List[RuleResponse] = Field(description="Fetched rules.")
+    hits: List[RecommendRule] = Field(
+        description="Recommend rules that match the search criteria."
+    )
     nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
     page: Annotated[int, Field(strict=True, ge=0)] = Field(
         description="Page of search results to retrieve."
@@ -72,7 +74,7 @@ class SearchRecommendRulesResponse(BaseModel):
         _obj = cls.model_validate(
             {
                 "hits": (
-                    [RuleResponse.from_dict(_item) for _item in obj.get("hits")]
+                    [RecommendRule.from_dict(_item) for _item in obj.get("hits")]
                     if obj.get("hits") is not None
                     else None
                 ),

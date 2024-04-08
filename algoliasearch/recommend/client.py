@@ -28,7 +28,7 @@ from algoliasearch.recommend.models.get_recommendations_response import (
     GetRecommendationsResponse,
 )
 from algoliasearch.recommend.models.recommend_models import RecommendModels
-from algoliasearch.recommend.models.rule_response import RuleResponse
+from algoliasearch.recommend.models.recommend_rule import RecommendRule
 from algoliasearch.recommend.models.search_recommend_rules_params import (
     SearchRecommendRulesParams,
 )
@@ -460,21 +460,21 @@ class RecommendClient:
         model: Annotated[
             RecommendModels,
             Field(
-                description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+        Deletes a Recommend rule from a recommendation scenario.
 
         Required API Key ACLs:
           - editSettings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
         :param object_id: Unique record identifier. (required)
         :type object_id: str
@@ -519,21 +519,21 @@ class RecommendClient:
         model: Annotated[
             RecommendModels,
             Field(
-                description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeletedAtResponse:
         """
-        Delete a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+        Deletes a Recommend rule from a recommendation scenario.
 
         Required API Key ACLs:
           - editSettings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
         :param object_id: Unique record identifier. (required)
         :type object_id: str
@@ -555,21 +555,21 @@ class RecommendClient:
         model: Annotated[
             RecommendModels,
             Field(
-                description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Return a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+        Retrieves a Recommend rule that you previously created in the Algolia dashboard.
 
         Required API Key ACLs:
           - settings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
         :param object_id: Unique record identifier. (required)
         :type object_id: str
@@ -614,32 +614,32 @@ class RecommendClient:
         model: Annotated[
             RecommendModels,
             Field(
-                description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> RuleResponse:
+    ) -> RecommendRule:
         """
-        Return a [Recommend rule](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+        Retrieves a Recommend rule that you previously created in the Algolia dashboard.
 
         Required API Key ACLs:
           - settings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
         :param object_id: Unique record identifier. (required)
         :type object_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'RuleResponse' result object.
+        :return: Returns the deserialized response in a 'RecommendRule' result object.
         """
         return (
             await self.get_recommend_rule_with_http_info(
                 index_name, model, object_id, request_options
             )
-        ).deserialize(RuleResponse)
+        ).deserialize(RecommendRule)
 
     async def get_recommend_status_with_http_info(
         self,
@@ -650,28 +650,23 @@ class RecommendClient:
         model: Annotated[
             RecommendModels,
             Field(
-                description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
-        task_id: Annotated[
-            StrictInt,
-            Field(
-                description="Unique identifier of a task. Numeric value (up to 64bits)."
-            ),
-        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Some operations, such as deleting a Recommend rule, will respond with a `taskID` value. Use this value here to check the status of that task.
+        Checks the status of a given task.  Deleting a Recommend rule is asynchronous. When you delete a rule, a task is created on a queue and completed depending on the load on the server. The API response includes a task ID that you can use to check the status.
 
         Required API Key ACLs:
           - editSettings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
-        :param task_id: Unique identifier of a task. Numeric value (up to 64bits). (required)
+        :param task_id: Unique task identifier. (required)
         :type task_id: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -714,28 +709,23 @@ class RecommendClient:
         model: Annotated[
             RecommendModels,
             Field(
-                description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
-        task_id: Annotated[
-            StrictInt,
-            Field(
-                description="Unique identifier of a task. Numeric value (up to 64bits)."
-            ),
-        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetRecommendTaskResponse:
         """
-        Some operations, such as deleting a Recommend rule, will respond with a `taskID` value. Use this value here to check the status of that task.
+        Checks the status of a given task.  Deleting a Recommend rule is asynchronous. When you delete a rule, a task is created on a queue and completed depending on the load on the server. The API response includes a task ID that you can use to check the status.
 
         Required API Key ACLs:
           - editSettings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
-        :param task_id: Unique identifier of a task. Numeric value (up to 64bits). (required)
+        :param task_id: Unique task identifier. (required)
         :type task_id: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetRecommendTaskResponse' result object.
@@ -752,7 +742,7 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Returns results from either recommendation or trending models:    - **Recommendations** are provided by the [Related Products](https://www.algolia.com/doc/guides/algolia-recommend/overview/#related-products-and-related-content) and [Frequently Bought Together](https://www.algolia.com/doc/guides/algolia-recommend/overview/#frequently-bought-together) models   - **Trending** models are [Trending Items and Trending Facet Values](https://www.algolia.com/doc/guides/algolia-recommend/overview/#trending-items-and-trending-facet-values).
+        Retrieves recommendations from selected AI models.
 
         Required API Key ACLs:
           - search
@@ -788,7 +778,7 @@ class RecommendClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetRecommendationsResponse:
         """
-        Returns results from either recommendation or trending models:    - **Recommendations** are provided by the [Related Products](https://www.algolia.com/doc/guides/algolia-recommend/overview/#related-products-and-related-content) and [Frequently Bought Together](https://www.algolia.com/doc/guides/algolia-recommend/overview/#frequently-bought-together) models   - **Trending** models are [Trending Items and Trending Facet Values](https://www.algolia.com/doc/guides/algolia-recommend/overview/#trending-items-and-trending-facet-values).
+        Retrieves recommendations from selected AI models.
 
         Required API Key ACLs:
           - search
@@ -813,21 +803,21 @@ class RecommendClient:
         model: Annotated[
             RecommendModels,
             Field(
-                description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
         search_recommend_rules_params: Optional[SearchRecommendRulesParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        List [Recommend rules](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+        Searches for Recommend rules.  Use an empty query to list all rules for this recommendation scenario.
 
         Required API Key ACLs:
           - settings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
         :param search_recommend_rules_params:
         :type search_recommend_rules_params: SearchRecommendRulesParams
@@ -870,21 +860,21 @@ class RecommendClient:
         model: Annotated[
             RecommendModels,
             Field(
-                description="[Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
             ),
         ],
         search_recommend_rules_params: Optional[SearchRecommendRulesParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRecommendRulesResponse:
         """
-        List [Recommend rules](https://www.algolia.com/doc/guides/algolia-recommend/how-to/rules/).
+        Searches for Recommend rules.  Use an empty query to list all rules for this recommendation scenario.
 
         Required API Key ACLs:
           - settings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
-        :param model: [Recommend models](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
         :type model: RecommendModels
         :param search_recommend_rules_params:
         :type search_recommend_rules_params: SearchRecommendRulesParams

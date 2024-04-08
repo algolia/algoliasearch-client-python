@@ -10,14 +10,14 @@ from typing import Annotated, Any, Dict, Optional, Self, Union
 
 from pydantic import BaseModel, Field, StrictStr
 
+from algoliasearch.recommend.models.fallback_params import FallbackParams
+from algoliasearch.recommend.models.related_model import RelatedModel
 from algoliasearch.recommend.models.search_params import SearchParams
-from algoliasearch.recommend.models.search_params_object import SearchParamsObject
-from algoliasearch.recommend.models.trending_items_model import TrendingItemsModel
 
 
-class TrendingItemsQuery(BaseModel):
+class RelatedQuery(BaseModel):
     """
-    TrendingItemsQuery
+    RelatedQuery
     """
 
     index_name: StrictStr = Field(description="Index name.", alias="indexName")
@@ -37,16 +37,11 @@ class TrendingItemsQuery(BaseModel):
     query_parameters: Optional[SearchParams] = Field(
         default=None, alias="queryParameters"
     )
-    facet_name: StrictStr = Field(
-        description="Facet attribute. To be used in combination with `facetValue`. If specified, only recommendations matching the facet filter will be returned. ",
-        alias="facetName",
+    model: RelatedModel
+    object_id: StrictStr = Field(
+        description="Unique record identifier.", alias="objectID"
     )
-    facet_value: StrictStr = Field(
-        description="Facet value. To be used in combination with `facetName`. If specified, only recommendations matching the facet filter will be returned. ",
-        alias="facetValue",
-    )
-    model: TrendingItemsModel
-    fallback_parameters: Optional[SearchParamsObject] = Field(
+    fallback_parameters: Optional[FallbackParams] = Field(
         default=None, alias="fallbackParameters"
     )
 
@@ -57,7 +52,7 @@ class TrendingItemsQuery(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of TrendingItemsQuery from a JSON string"""
+        """Create an instance of RelatedQuery from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -83,7 +78,7 @@ class TrendingItemsQuery(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of TrendingItemsQuery from a dict"""
+        """Create an instance of RelatedQuery from a dict"""
         if obj is None:
             return None
 
@@ -100,11 +95,10 @@ class TrendingItemsQuery(BaseModel):
                     if obj.get("queryParameters") is not None
                     else None
                 ),
-                "facetName": obj.get("facetName"),
-                "facetValue": obj.get("facetValue"),
                 "model": obj.get("model"),
+                "objectID": obj.get("objectID"),
                 "fallbackParameters": (
-                    SearchParamsObject.from_dict(obj.get("fallbackParameters"))
+                    FallbackParams.from_dict(obj.get("fallbackParameters"))
                     if obj.get("fallbackParameters") is not None
                     else None
                 ),

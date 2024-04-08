@@ -12,7 +12,7 @@ from typing import Self
 
 class TrendingFacetsModel(str, Enum):
     """
-    Trending facets model.
+    Trending facet values model.  This model recommends trending facet values for the specified facet attribute.
     """
 
     """

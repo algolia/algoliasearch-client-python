@@ -8,36 +8,30 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictBool
+from pydantic import BaseModel, Field
 
-from algoliasearch.recommend.models.consequence_hide import ConsequenceHide
-from algoliasearch.recommend.models.consequence_params import ConsequenceParams
-from algoliasearch.recommend.models.promote import Promote
+from algoliasearch.recommend.models.hide_consequence_object import HideConsequenceObject
+from algoliasearch.recommend.models.params_consequence import ParamsConsequence
+from algoliasearch.recommend.models.promote_consequence_object import (
+    PromoteConsequenceObject,
+)
 
 
 class Consequence(BaseModel):
     """
-    Effect of the rule.  For more information, see [Consequences](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#consequences).
+    Effect of the rule.
     """
 
-    params: Optional[ConsequenceParams] = None
-    promote: Optional[Annotated[List[Promote], Field(max_length=300)]] = Field(
+    hide: Optional[Annotated[List[HideConsequenceObject], Field(min_length=1)]] = Field(
+        default=None, description="Exclude items from recommendations."
+    )
+    promote: Optional[
+        Annotated[List[PromoteConsequenceObject], Field(min_length=1)]
+    ] = Field(
         default=None,
-        description="Records you want to pin to a specific position in the search results.  You can promote up to 300 records, either individually, or as groups of up to 100 records each. ",
+        description="Place items at specific positions in the list of recommendations.",
     )
-    filter_promotes: Optional[StrictBool] = Field(
-        default=False,
-        description='Whether promoted records must match an active filter for the consequence to be applied.  This ensures that user actions (filtering the search) are given a higher precendence. For example, if you promote a record with the `color: red` attribute, and the user filters the search for `color: blue`, the "red" record won\'t be shown. ',
-        alias="filterPromotes",
-    )
-    hide: Optional[Annotated[List[ConsequenceHide], Field(max_length=50)]] = Field(
-        default=None, description="Records you want to hide from the search results."
-    )
-    user_data: Optional[Any] = Field(
-        default=None,
-        description="A JSON object with custom data that will be appended to the `userData` array in the response. This object isn't interpreted by the API and is limited to 1&nbsp;kB of minified JSON. ",
-        alias="userData",
-    )
+    params: Optional[ParamsConsequence] = None
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -64,25 +58,20 @@ class Consequence(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        if self.params:
-            _dict["params"] = self.params.to_dict()
-        _items = []
-        if self.promote:
-            for _item in self.promote:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["promote"] = _items
         _items = []
         if self.hide:
             for _item in self.hide:
                 if _item:
                     _items.append(_item.to_dict())
             _dict["hide"] = _items
-        # set to None if user_data (nullable) is None
-        # and model_fields_set contains the field
-        if self.user_data is None and "user_data" in self.model_fields_set:
-            _dict["userData"] = None
-
+        _items = []
+        if self.promote:
+            for _item in self.promote:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict["promote"] = _items
+        if self.params:
+            _dict["params"] = self.params.to_dict()
         return _dict
 
     @classmethod
@@ -96,23 +85,27 @@ class Consequence(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "params": (
-                    ConsequenceParams.from_dict(obj.get("params"))
-                    if obj.get("params") is not None
-                    else None
-                ),
-                "promote": (
-                    [Promote.from_dict(_item) for _item in obj.get("promote")]
-                    if obj.get("promote") is not None
-                    else None
-                ),
-                "filterPromotes": obj.get("filterPromotes"),
                 "hide": (
-                    [ConsequenceHide.from_dict(_item) for _item in obj.get("hide")]
+                    [
+                        HideConsequenceObject.from_dict(_item)
+                        for _item in obj.get("hide")
+                    ]
                     if obj.get("hide") is not None
                     else None
                 ),
-                "userData": obj.get("userData"),
+                "promote": (
+                    [
+                        PromoteConsequenceObject.from_dict(_item)
+                        for _item in obj.get("promote")
+                    ]
+                    if obj.get("promote") is not None
+                    else None
+                ),
+                "params": (
+                    ParamsConsequence.from_dict(obj.get("params"))
+                    if obj.get("params") is not None
+                    else None
+                ),
             }
         )
         return _obj

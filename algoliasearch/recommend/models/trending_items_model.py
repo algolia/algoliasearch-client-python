@@ -12,7 +12,7 @@ from typing import Self
 
 class TrendingItemsModel(str, Enum):
     """
-    Trending items model.
+    Trending items model.  Trending items are determined from the number of conversion events collected on them.
     """
 
     """

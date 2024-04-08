@@ -10,17 +10,17 @@ from json import loads
 from typing import Self
 
 
-class RecommendedForYouModel(str, Enum):
+class LookingSimilarModel(str, Enum):
     """
-    \"Recommened for you\" model.
+    Looking similar model.  This model recommends items that look similar to the item with the ID `objectID` based on image attributes in your index.
     """
 
     """
     allowed enum values
     """
-    RECOMMENDED_MINUS_FOR_MINUS_YOU = "recommended-for-you"
+    LOOKING_MINUS_SIMILAR = "looking-similar"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of RecommendedForYouModel from a JSON string"""
+        """Create an instance of LookingSimilarModel from a JSON string"""
         return cls(loads(json_str))

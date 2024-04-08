@@ -10,17 +10,17 @@ from json import loads
 from typing import Self
 
 
-class RecommendedForYouModel(str, Enum):
+class FbtModel(str, Enum):
     """
-    \"Recommened for you\" model.
+    Frequently bought together model.  This model recommends items that have been purchased within 1 day with the item with the ID `objectID`.
     """
 
     """
     allowed enum values
     """
-    RECOMMENDED_MINUS_FOR_MINUS_YOU = "recommended-for-you"
+    BOUGHT_MINUS_TOGETHER = "bought-together"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of RecommendedForYouModel from a JSON string"""
+        """Create an instance of FbtModel from a JSON string"""
         return cls(loads(json_str))

@@ -135,10 +135,6 @@ class RecommendationsResults(BaseModel):
         alias="queryID",
     )
     hits: List[RecommendationsHit]
-    query: Optional[StrictStr] = Field(default="", description="Search query.")
-    params: Optional[StrictStr] = Field(
-        default=None, description="URL-encoded string of all search parameters."
-    )
 
     @field_validator("around_lat_lng")
     def around_lat_lng_validate_regular_expression(cls, value):
@@ -260,8 +256,6 @@ class RecommendationsResults(BaseModel):
                     if obj.get("hits") is not None
                     else None
                 ),
-                "query": obj.get("query"),
-                "params": obj.get("params"),
             }
         )
         return _obj
