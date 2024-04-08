@@ -12,7 +12,7 @@ from typing import Self
 
 class DestinationType(str, Enum):
     """
-    Destination type.  <dl> <dt><code>search</code></dt> <dd>Data is stored in an Algolia index.</dd> <dt><code>insights</code></dt> <dd>Data is recorded as user events in the Insights API.</dd> </dl>.
+    Destination type.  - `search`.   Data is stored in an Algolia index.  - `insights`.   Data is recorded as user events in the Insights API.
     """
 
     """

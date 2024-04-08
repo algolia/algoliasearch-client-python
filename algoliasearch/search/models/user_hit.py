@@ -20,7 +20,8 @@ class UserHit(BaseModel):
     """
 
     user_id: Annotated[str, Field(strict=True)] = Field(
-        description="User ID.", alias="userID"
+        description="Unique identifier of the user who makes the search request.",
+        alias="userID",
     )
     cluster_name: StrictStr = Field(description="Cluster name.", alias="clusterName")
     nb_records: StrictInt = Field(

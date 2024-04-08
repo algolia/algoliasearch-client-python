@@ -17,7 +17,7 @@ class DeleteApiKeyResponse(BaseModel):
     """
 
     deleted_at: StrictStr = Field(
-        description="Timestamp of deletion in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.",
+        description="Date and time when the object was deleted, in RFC 3339 format.",
         alias="deletedAt",
     )
 

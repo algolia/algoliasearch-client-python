@@ -18,7 +18,7 @@ class AddApiKeyResponse(BaseModel):
 
     key: StrictStr = Field(description="API key.")
     created_at: StrictStr = Field(
-        description="Timestamp of creation in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.",
+        description="Date and time when the object was created, in RFC 3339 format.",
         alias="createdAt",
     )
 

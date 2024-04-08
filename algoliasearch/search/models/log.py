@@ -19,7 +19,7 @@ class Log(BaseModel):
     """
 
     timestamp: StrictStr = Field(
-        description="Timestamp of the API request in ISO 8601 format."
+        description="Date and time of the API request, in RFC 3339 format."
     )
     method: StrictStr = Field(description="HTTP method of the request.")
     answer_code: StrictStr = Field(description="HTTP status code of the response.")

@@ -19,7 +19,8 @@ class GetUsage200ResponseStatisticsInner(BaseModel):
     """
 
     t: Optional[StrictInt] = Field(
-        default=None, description="Timestamp in milliseconds in Unix epoch time."
+        default=None,
+        description="Timestamp, measured in milliseconds since the Unix epoch.",
     )
     v: Optional[StatisticValue] = None
 

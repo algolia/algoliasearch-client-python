@@ -20,7 +20,7 @@ class UpdatedRuleResponse(BaseModel):
         description="Unique identifier of a rule object.", alias="objectID"
     )
     updated_at: StrictStr = Field(
-        description="Timestamp of the last update in [ISO 8601](https://wikipedia.org/wiki/ISO_8601) format.",
+        description="Date and time when the object was updated, in RFC 3339 format.",
         alias="updatedAt",
     )
     task_id: StrictInt = Field(

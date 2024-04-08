@@ -20,7 +20,7 @@ class IncidentsInner(BaseModel):
 
     t: Optional[StrictInt] = Field(
         default=None,
-        description="Timestamp in [Unix epoch time](https://wikipedia.org/wiki/Unix_time) in milliseconds.",
+        description="Timestamp, measured in milliseconds since the Unix epoch.",
     )
     v: Optional[Incident] = None
 

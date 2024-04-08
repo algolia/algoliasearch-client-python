@@ -28,12 +28,12 @@ class GetConfigStatus200Response(BaseModel):
     )
     last_built_at: Optional[StrictStr] = Field(
         default=None,
-        description="Timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format when the Query Suggestions index was last built.",
+        description="Date and time when the Query Suggestions index was last built, in RFC 3339 format.",
         alias="lastBuiltAt",
     )
     last_successful_built_at: Optional[StrictStr] = Field(
         default=None,
-        description="Timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format when the Query Suggestions index was last updated successfully.",
+        description="Date and time when the Query Suggestions index was last updated successfully.",
         alias="lastSuccessfulBuiltAt",
     )
     last_successful_build_duration: Optional[StrictStr] = Field(

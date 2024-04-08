@@ -61,7 +61,7 @@ class PurchasedObjectIDs(BaseModel):
     )
     timestamp: Optional[StrictInt] = Field(
         default=None,
-        description="Timestamp of the event in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time). By default, the Insights API uses the time it receives an event as its timestamp. ",
+        description="Timestamp of the event, measured in milliseconds since the Unix epoch. By default, the Insights API uses the time it receives an event as its timestamp. ",
     )
     value: Optional[Value] = None
 

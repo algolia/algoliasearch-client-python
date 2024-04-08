@@ -496,11 +496,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -518,9 +522,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -559,11 +563,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -581,9 +589,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -601,11 +609,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -623,9 +635,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -664,11 +676,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -686,9 +702,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -706,11 +722,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -728,9 +748,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -769,11 +789,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -791,9 +815,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -811,11 +835,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -833,9 +861,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -874,11 +902,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -896,9 +928,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -916,11 +948,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -938,9 +974,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -979,11 +1015,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1001,9 +1041,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1021,11 +1061,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1043,9 +1087,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1084,11 +1128,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1106,9 +1154,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1126,11 +1174,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1148,9 +1200,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1189,11 +1241,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1211,9 +1267,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1231,11 +1287,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1253,9 +1313,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1294,11 +1354,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1316,9 +1380,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1336,11 +1400,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1358,9 +1426,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1399,11 +1467,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1421,9 +1493,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1441,11 +1513,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1463,9 +1539,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1504,11 +1580,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1526,9 +1606,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1546,11 +1626,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -1575,9 +1659,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -1624,11 +1708,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -1653,9 +1741,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -1677,11 +1765,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -1706,9 +1798,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -1755,11 +1847,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -1784,9 +1880,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -1863,11 +1959,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -1892,9 +1992,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -1941,11 +2041,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -1970,9 +2074,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -1997,11 +2101,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -2028,9 +2136,9 @@ class AnalyticsClient:
         :type index: str
         :param search: Search query.
         :type search: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -2082,11 +2190,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -2113,9 +2225,9 @@ class AnalyticsClient:
         :type index: str
         :param search: Search query.
         :type search: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -2148,11 +2260,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -2181,9 +2297,9 @@ class AnalyticsClient:
         :type index: str
         :param search: Search query.
         :type search: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -2243,11 +2359,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -2276,9 +2396,9 @@ class AnalyticsClient:
         :type index: str
         :param search: Search query.
         :type search: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -2311,11 +2431,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -2342,9 +2466,9 @@ class AnalyticsClient:
         :type index: str
         :param search: Search query.
         :type search: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -2396,11 +2520,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -2427,9 +2555,9 @@ class AnalyticsClient:
         :type index: str
         :param search: Search query.
         :type search: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -2473,11 +2601,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -2508,9 +2640,9 @@ class AnalyticsClient:
         :type click_analytics: bool
         :param revenue_analytics: Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response.
         :type revenue_analytics: bool
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -2578,11 +2710,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         limit: Annotated[
             Optional[StrictInt], Field(description="Number of items to return.")
@@ -2613,9 +2749,9 @@ class AnalyticsClient:
         :type click_analytics: bool
         :param revenue_analytics: Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response.
         :type revenue_analytics: bool
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param limit: Number of items to return.
         :type limit: int
@@ -2658,11 +2794,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         order_by: Annotated[
             Optional[OrderBy],
@@ -2703,9 +2843,9 @@ class AnalyticsClient:
         :type click_analytics: bool
         :param revenue_analytics: Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response.
         :type revenue_analytics: bool
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param order_by: Attribute by which to order the response items.  If the `clickAnalytics` parameter is false, only `searchCount` is available.
         :type order_by: OrderBy
@@ -2776,11 +2916,15 @@ class AnalyticsClient:
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         order_by: Annotated[
             Optional[OrderBy],
@@ -2821,9 +2965,9 @@ class AnalyticsClient:
         :type click_analytics: bool
         :param revenue_analytics: Whether to include revenue-related metrics in the response.  If true, metrics related to click and conversion events are also included in the response.
         :type revenue_analytics: bool
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param order_by: Attribute by which to order the response items.  If the `clickAnalytics` parameter is false, only `searchCount` is available.
         :type order_by: OrderBy
@@ -2859,11 +3003,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2881,9 +3029,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2922,11 +3070,15 @@ class AnalyticsClient:
         index: Annotated[StrictStr, Field(description="Index name.")],
         start_date: Annotated[
             Optional[StrictStr],
-            Field(description="Start date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="Start date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
-            Field(description="End date (`YYYY-MM-DD`) of the period to analyze."),
+            Field(
+                description="End date of the period to analyze, in `YYYY-MM-DD` format."
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2944,9 +3096,9 @@ class AnalyticsClient:
 
         :param index: Index name. (required)
         :type index: str
-        :param start_date: Start date (`YYYY-MM-DD`) of the period to analyze.
+        :param start_date: Start date of the period to analyze, in `YYYY-MM-DD` format.
         :type start_date: str
-        :param end_date: End date (`YYYY-MM-DD`) of the period to analyze.
+        :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str

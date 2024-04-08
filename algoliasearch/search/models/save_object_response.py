@@ -17,7 +17,7 @@ class SaveObjectResponse(BaseModel):
     """
 
     created_at: StrictStr = Field(
-        description="Timestamp when the record was added, in ISO 8601 format.",
+        description="Date and time when the object was created, in RFC 3339 format.",
         alias="createdAt",
     )
     task_id: StrictInt = Field(

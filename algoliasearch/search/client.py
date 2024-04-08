@@ -713,7 +713,11 @@ class SearchClient:
     async def assign_user_id_with_http_info(
         self,
         x_algolia_user_id: Annotated[
-            str, Field(strict=True, description="User ID to assign.")
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
         ],
         assign_user_id_params: AssignUserIdParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -724,7 +728,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param x_algolia_user_id: User ID to assign. (required)
+        :param x_algolia_user_id: Unique identifier of the user who makes the search request. (required)
         :type x_algolia_user_id: str
         :param assign_user_id_params: (required)
         :type assign_user_id_params: AssignUserIdParams
@@ -765,7 +769,11 @@ class SearchClient:
     async def assign_user_id(
         self,
         x_algolia_user_id: Annotated[
-            str, Field(strict=True, description="User ID to assign.")
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
         ],
         assign_user_id_params: AssignUserIdParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -776,7 +784,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param x_algolia_user_id: User ID to assign. (required)
+        :param x_algolia_user_id: Unique identifier of the user who makes the search request. (required)
         :type x_algolia_user_id: str
         :param assign_user_id_params: (required)
         :type assign_user_id_params: AssignUserIdParams
@@ -863,7 +871,11 @@ class SearchClient:
     async def batch_assign_user_ids_with_http_info(
         self,
         x_algolia_user_id: Annotated[
-            str, Field(strict=True, description="User ID to assign.")
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
         ],
         batch_assign_user_ids_params: BatchAssignUserIdsParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -874,7 +886,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param x_algolia_user_id: User ID to assign. (required)
+        :param x_algolia_user_id: Unique identifier of the user who makes the search request. (required)
         :type x_algolia_user_id: str
         :param batch_assign_user_ids_params: (required)
         :type batch_assign_user_ids_params: BatchAssignUserIdsParams
@@ -915,7 +927,11 @@ class SearchClient:
     async def batch_assign_user_ids(
         self,
         x_algolia_user_id: Annotated[
-            str, Field(strict=True, description="User ID to assign.")
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
         ],
         batch_assign_user_ids_params: BatchAssignUserIdsParams,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -926,7 +942,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param x_algolia_user_id: User ID to assign. (required)
+        :param x_algolia_user_id: Unique identifier of the user who makes the search request. (required)
         :type x_algolia_user_id: str
         :param batch_assign_user_ids_params: (required)
         :type batch_assign_user_ids_params: BatchAssignUserIdsParams
@@ -2885,7 +2901,13 @@ class SearchClient:
 
     async def get_user_id_with_http_info(
         self,
-        user_id: Annotated[str, Field(strict=True, description="User ID to assign.")],
+        user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -2894,7 +2916,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param user_id: User ID to assign. (required)
+        :param user_id: Unique identifier of the user who makes the search request. (required)
         :type user_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2918,7 +2940,13 @@ class SearchClient:
 
     async def get_user_id(
         self,
-        user_id: Annotated[str, Field(strict=True, description="User ID to assign.")],
+        user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UserId:
         """
@@ -2927,7 +2955,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param user_id: User ID to assign. (required)
+        :param user_id: Unique identifier of the user who makes the search request. (required)
         :type user_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'UserId' result object.
@@ -3473,7 +3501,13 @@ class SearchClient:
 
     async def remove_user_id_with_http_info(
         self,
-        user_id: Annotated[str, Field(strict=True, description="User ID to assign.")],
+        user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3482,7 +3516,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param user_id: User ID to assign. (required)
+        :param user_id: Unique identifier of the user who makes the search request. (required)
         :type user_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -3506,7 +3540,13 @@ class SearchClient:
 
     async def remove_user_id(
         self,
-        user_id: Annotated[str, Field(strict=True, description="User ID to assign.")],
+        user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RemoveUserIdResponse:
         """
@@ -3515,7 +3555,7 @@ class SearchClient:
         Required API Key ACLs:
           - admin
 
-        :param user_id: User ID to assign. (required)
+        :param user_id: Unique identifier of the user who makes the search request. (required)
         :type user_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RemoveUserIdResponse' result object.

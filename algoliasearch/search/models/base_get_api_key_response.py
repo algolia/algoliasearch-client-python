@@ -18,7 +18,7 @@ class BaseGetApiKeyResponse(BaseModel):
 
     value: Optional[StrictStr] = Field(default=None, description="API key.")
     created_at: StrictInt = Field(
-        description="Timestamp of creation in milliseconds in [Unix epoch time](https://wikipedia.org/wiki/Unix_time).",
+        description="Timestamp when the object was created, in milliseconds since the Unix epoch.",
         alias="createdAt",
     )
 

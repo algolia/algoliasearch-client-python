@@ -18,7 +18,8 @@ class UserId(BaseModel):
     """
 
     user_id: Annotated[str, Field(strict=True)] = Field(
-        description="User ID.", alias="userID"
+        description="Unique identifier of the user who makes the search request.",
+        alias="userID",
     )
     cluster_name: StrictStr = Field(
         description="Cluster to which the user is assigned.", alias="clusterName"

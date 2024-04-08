@@ -19,8 +19,7 @@ class GetLogFile200Response(BaseModel):
     """
 
     timestamp: Optional[StrictStr] = Field(
-        default=None,
-        description="Timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.",
+        default=None, description="Date and time of the log entry, in RFC 3339 format."
     )
     level: Optional[LogLevel] = None
     message: Optional[StrictStr] = Field(

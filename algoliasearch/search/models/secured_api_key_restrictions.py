@@ -27,7 +27,7 @@ class SecuredAPIKeyRestrictions(BaseModel):
     )
     valid_until: Optional[StrictInt] = Field(
         default=None,
-        description="Timestamp in [Unix epoch time](https://en.wikipedia.org/wiki/Unix_time) when the API key should expire.",
+        description="Timestamp when the secured API key expires, measured in seconds since the Unix epoch.",
         alias="validUntil",
     )
     restrict_indices: Optional[List[StrictStr]] = Field(
