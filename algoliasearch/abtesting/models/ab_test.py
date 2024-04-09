@@ -10,6 +10,8 @@ from typing import Any, Dict, List, Optional, Self, Union
 
 from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr
 
+from algoliasearch.abtesting.models.ab_test_configuration import ABTestConfiguration
+from algoliasearch.abtesting.models.status import Status
 from algoliasearch.abtesting.models.variant import Variant
 
 
@@ -18,42 +20,42 @@ class ABTest(BaseModel):
     ABTest
     """
 
-    ab_test_id: StrictInt = Field(description="Unique A/B test ID.", alias="abTestID")
+    ab_test_id: StrictInt = Field(
+        description="Unique A/B test identifier.", alias="abTestID"
+    )
     click_significance: Optional[Union[StrictFloat, StrictInt]] = Field(
-        description="[A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on click data. A value of 0.95 or over is considered to be _significant_. ",
-        alias="clickSignificance",
+        alias="clickSignificance"
     )
     conversion_significance: Optional[Union[StrictFloat, StrictInt]] = Field(
-        description="[A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on conversion. A value of 0.95 or over is considered to be _significant_. ",
-        alias="conversionSignificance",
+        alias="conversionSignificance"
     )
     add_to_cart_significance: Optional[Union[StrictFloat, StrictInt]] = Field(
-        description="[A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on add-to-cart data. A value of 0.95 or over is considered to be _significant_. ",
-        alias="addToCartSignificance",
+        alias="addToCartSignificance"
     )
     purchase_significance: Optional[Union[StrictFloat, StrictInt]] = Field(
-        description="[A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on purchase data. A value of 0.95 or over is considered to be _significant_. ",
-        alias="purchaseSignificance",
+        alias="purchaseSignificance"
     )
     revenue_significance: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(
-        description="[A/B test significance](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing/in-depth/how-ab-test-scores-are-calculated/#statistical-significance-or-chance) based on revenue data. A value of 0.95 or over is considered to be _significant_. ",
-        alias="revenueSignificance",
+        alias="revenueSignificance"
     )
     updated_at: StrictStr = Field(
-        description="Update date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.",
+        description="Date and time when the A/B test was last updated, in RFC 3339 format.",
         alias="updatedAt",
     )
     created_at: StrictStr = Field(
-        description="Creation date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.",
+        description="Date and time when the A/B test was created, in RFC 3339 format.",
         alias="createdAt",
     )
     end_at: StrictStr = Field(
-        description="End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.",
+        description="End date and time of the A/B test, in RFC 3339 format.",
         alias="endAt",
     )
     name: StrictStr = Field(description="A/B test name.")
-    status: StrictStr = Field(description="A/B test status.")
-    variants: List[Variant] = Field(description="A/B test variants.")
+    status: Status
+    variants: List[Variant] = Field(
+        description="A/B test variants.  The first variant is your _control_ index, typically your production index. The second variant is an index with changed settings that you want to test against the control. "
+    )
+    configuration: Optional[ABTestConfiguration] = None
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 
@@ -86,6 +88,8 @@ class ABTest(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict["variants"] = _items
+        if self.configuration:
+            _dict["configuration"] = self.configuration.to_dict()
         # set to None if click_significance (nullable) is None
         # and model_fields_set contains the field
         if (
@@ -153,6 +157,11 @@ class ABTest(BaseModel):
                 "variants": (
                     [Variant.from_dict(_item) for _item in obj.get("variants")]
                     if obj.get("variants") is not None
+                    else None
+                ),
+                "configuration": (
+                    ABTestConfiguration.from_dict(obj.get("configuration"))
+                    if obj.get("configuration") is not None
                     else None
                 ),
             }

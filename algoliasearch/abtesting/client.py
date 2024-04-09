@@ -109,7 +109,7 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Creates an A/B test.
+        Creates a new A/B test.
 
         Required API Key ACLs:
           - editSettings
@@ -145,7 +145,7 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Creates an A/B test.
+        Creates a new A/B test.
 
         Required API Key ACLs:
           - editSettings
@@ -499,16 +499,16 @@ class AbtestingClient:
 
     async def delete_ab_test_with_http_info(
         self,
-        id: Annotated[StrictInt, Field(description="Unique A/B test ID.")],
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Deletes an A/B test by its ID.
 
         Required API Key ACLs:
           - editSettings
 
-        :param id: Unique A/B test ID. (required)
+        :param id: Unique A/B test identifier. (required)
         :type id: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -530,16 +530,16 @@ class AbtestingClient:
 
     async def delete_ab_test(
         self,
-        id: Annotated[StrictInt, Field(description="Unique A/B test ID.")],
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Delete an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Deletes an A/B test by its ID.
 
         Required API Key ACLs:
           - editSettings
 
-        :param id: Unique A/B test ID. (required)
+        :param id: Unique A/B test identifier. (required)
         :type id: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
@@ -550,16 +550,16 @@ class AbtestingClient:
 
     async def get_ab_test_with_http_info(
         self,
-        id: Annotated[StrictInt, Field(description="Unique A/B test ID.")],
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Get specific details for an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Retrieves the details for an A/B test by its ID.
 
         Required API Key ACLs:
           - analytics
 
-        :param id: Unique A/B test ID. (required)
+        :param id: Unique A/B test identifier. (required)
         :type id: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -579,16 +579,16 @@ class AbtestingClient:
 
     async def get_ab_test(
         self,
-        id: Annotated[StrictInt, Field(description="Unique A/B test ID.")],
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTest:
         """
-        Get specific details for an A/B test. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Retrieves the details for an A/B test by its ID.
 
         Required API Key ACLs:
           - analytics
 
-        :param id: Unique A/B test ID. (required)
+        :param id: Unique A/B test identifier. (required)
         :type id: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTest' result object.
@@ -609,19 +609,19 @@ class AbtestingClient:
         index_prefix: Annotated[
             Optional[StrictStr],
             Field(
-                description="Only return A/B tests for indices starting with this prefix."
+                description="Index name prefix. Only A/B tests for indices starting with this string are included in the response."
             ),
         ] = None,
         index_suffix: Annotated[
             Optional[StrictStr],
             Field(
-                description="Only return A/B tests for indices ending with this suffix."
+                description="Index name suffix. Only A/B tests for indices ending with this string are included in the response."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        List all A/B tests.
+        Lists all A/B tests you configured for this application.
 
         Required API Key ACLs:
           - analytics
@@ -630,9 +630,9 @@ class AbtestingClient:
         :type offset: int
         :param limit: Number of items to return.
         :type limit: int
-        :param index_prefix: Only return A/B tests for indices starting with this prefix.
+        :param index_prefix: Index name prefix. Only A/B tests for indices starting with this string are included in the response.
         :type index_prefix: str
-        :param index_suffix: Only return A/B tests for indices ending with this suffix.
+        :param index_suffix: Index name suffix. Only A/B tests for indices ending with this string are included in the response.
         :type index_suffix: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -671,19 +671,19 @@ class AbtestingClient:
         index_prefix: Annotated[
             Optional[StrictStr],
             Field(
-                description="Only return A/B tests for indices starting with this prefix."
+                description="Index name prefix. Only A/B tests for indices starting with this string are included in the response."
             ),
         ] = None,
         index_suffix: Annotated[
             Optional[StrictStr],
             Field(
-                description="Only return A/B tests for indices ending with this suffix."
+                description="Index name suffix. Only A/B tests for indices ending with this string are included in the response."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListABTestsResponse:
         """
-        List all A/B tests.
+        Lists all A/B tests you configured for this application.
 
         Required API Key ACLs:
           - analytics
@@ -692,9 +692,9 @@ class AbtestingClient:
         :type offset: int
         :param limit: Number of items to return.
         :type limit: int
-        :param index_prefix: Only return A/B tests for indices starting with this prefix.
+        :param index_prefix: Index name prefix. Only A/B tests for indices starting with this string are included in the response.
         :type index_prefix: str
-        :param index_suffix: Only return A/B tests for indices ending with this suffix.
+        :param index_suffix: Index name suffix. Only A/B tests for indices ending with this string are included in the response.
         :type index_suffix: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListABTestsResponse' result object.
@@ -707,16 +707,16 @@ class AbtestingClient:
 
     async def stop_ab_test_with_http_info(
         self,
-        id: Annotated[StrictInt, Field(description="Unique A/B test ID.")],
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        If stopped, the test is over and can't be restarted. There is now only one index, receiving 100% of all search requests. The data gathered for stopped A/B tests is retained. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Stops an A/B test by its ID.  You can't restart stopped A/B tests.
 
         Required API Key ACLs:
           - editSettings
 
-        :param id: Unique A/B test ID. (required)
+        :param id: Unique A/B test identifier. (required)
         :type id: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -736,16 +736,16 @@ class AbtestingClient:
 
     async def stop_ab_test(
         self,
-        id: Annotated[StrictInt, Field(description="Unique A/B test ID.")],
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        If stopped, the test is over and can't be restarted. There is now only one index, receiving 100% of all search requests. The data gathered for stopped A/B tests is retained. To determine the `id` for an A/B test, use the [`listABTests` operation](#tag/abtest/operation/listABTests).
+        Stops an A/B test by its ID.  You can't restart stopped A/B tests.
 
         Required API Key ACLs:
           - editSettings
 
-        :param id: Unique A/B test ID. (required)
+        :param id: Unique A/B test identifier. (required)
         :type id: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.

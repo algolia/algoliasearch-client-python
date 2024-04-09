@@ -23,7 +23,7 @@ class AddABTestsRequest(BaseModel):
         Field(description="A/B test variants.")
     )
     end_at: StrictStr = Field(
-        description="End date timestamp in [ISO-8601](https://wikipedia.org/wiki/ISO_8601) format.",
+        description="End date and time of the A/B test, in RFC 3339 format.",
         alias="endAt",
     )
 
