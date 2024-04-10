@@ -16,9 +16,9 @@ class FacetScoring(BaseModel):
     FacetScoring
     """
 
-    score: StrictInt = Field(description="The score for the event.")
+    score: StrictInt = Field(description="Event score.")
     facet_name: StrictStr = Field(
-        description="The name of the facet.", alias="facetName"
+        description="Facet attribute name.", alias="facetName"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

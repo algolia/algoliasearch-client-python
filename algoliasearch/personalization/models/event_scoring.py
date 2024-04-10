@@ -10,19 +10,17 @@ from typing import Any, Dict, Self
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr
 
+from algoliasearch.personalization.models.event_type import EventType
+
 
 class EventScoring(BaseModel):
     """
     EventScoring
     """
 
-    score: StrictInt = Field(description="The score for the event.")
-    event_name: StrictStr = Field(
-        description="The name of the event.", alias="eventName"
-    )
-    event_type: StrictStr = Field(
-        description="The type of the event.", alias="eventType"
-    )
+    score: StrictInt = Field(description="Event score.")
+    event_name: StrictStr = Field(description="Event name.", alias="eventName")
+    event_type: EventType = Field(alias="eventType")
 
     model_config = {"populate_by_name": True, "validate_assignment": True}
 

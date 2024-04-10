@@ -17,11 +17,11 @@ class DeleteUserProfileResponse(BaseModel):
     """
 
     user_token: StrictStr = Field(
-        description="userToken representing the user for which to fetch the Personalization profile.",
+        description="Unique pseudonymous or anonymous user identifier.  This helps with analytics and click and conversion events. For more information, see [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/). ",
         alias="userToken",
     )
     deleted_until: StrictStr = Field(
-        description="A date until which the data can safely be considered as deleted for the given user. Any data received after the `deletedUntil` date will start building a new user profile.",
+        description="Date and time when the user profile can be safely considered to be deleted. Any events received after the `deletedUntil` date start a new user profile. ",
         alias="deletedUntil",
     )
 
