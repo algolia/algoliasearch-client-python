@@ -36,7 +36,8 @@ class QuerySuggestionsConfigurationWithIndex(BaseModel):
         alias="allowSpecialCharacters",
     )
     index_name: StrictStr = Field(
-        description="Name of the Query Suggestions index.", alias="indexName"
+        description="Name of the Query Suggestions index (case-sensitive).",
+        alias="indexName",
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

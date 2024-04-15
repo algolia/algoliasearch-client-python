@@ -18,7 +18,9 @@ class BaseRecommendRequest(BaseModel):
     BaseRecommendRequest
     """
 
-    index_name: StrictStr = Field(description="Index name.", alias="indexName")
+    index_name: StrictStr = Field(
+        description="Index name (case-sensitive).", alias="indexName"
+    )
     threshold: Union[
         Annotated[float, Field(le=100, strict=True, ge=0)],
         Annotated[int, Field(le=100, strict=True, ge=0)],

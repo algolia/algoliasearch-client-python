@@ -16,7 +16,9 @@ class AbTestsVariantSearchParams(BaseModel):
     AbTestsVariantSearchParams
     """
 
-    index: StrictStr = Field(description="A/B test index.")
+    index: StrictStr = Field(
+        description="Index name of the A/B test variant (case-sensitive)."
+    )
     traffic_percentage: Annotated[int, Field(le=100, strict=True, ge=0)] = Field(
         description="Percentage of search requests each variant receives.",
         alias="trafficPercentage",

@@ -55,7 +55,9 @@ class Variant(BaseModel):
         alias="estimatedSampleSize",
     )
     filter_effects: Optional[FilterEffects] = Field(default=None, alias="filterEffects")
-    index: StrictStr = Field(description="A/B test index.")
+    index: StrictStr = Field(
+        description="Index name of the A/B test variant (case-sensitive)."
+    )
     no_result_count: Optional[StrictInt] = Field(
         description="Number of [searches without results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results) for this variant.",
         alias="noResultCount",

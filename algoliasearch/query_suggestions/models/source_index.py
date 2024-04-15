@@ -19,7 +19,7 @@ class SourceIndex(BaseModel):
     """
 
     index_name: StrictStr = Field(
-        description="Name of the Algolia index to use as source for query suggestions.",
+        description="Name of the Algolia index (case-sensitive) to use as source for query suggestions.",
         alias="indexName",
     )
     replicas: Optional[StrictBool] = Field(

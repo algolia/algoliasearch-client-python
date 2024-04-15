@@ -23,7 +23,7 @@ class MultipleBatchRequest(BaseModel):
         description="Operation arguments (varies with specified `action`)."
     )
     index_name: StrictStr = Field(
-        description="Index to target for this operation.", alias="indexName"
+        description="Index name (case-sensitive).", alias="indexName"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

@@ -20,7 +20,7 @@ class OperationIndexParams(BaseModel):
     """
 
     operation: OperationType
-    destination: StrictStr = Field(description="Index name.")
+    destination: StrictStr = Field(description="Index name (case-sensitive).")
     scope: Optional[List[ScopeType]] = Field(
         default=None,
         description="**Only for copying.**  If you specify a scope, only the selected scopes are copied. Records and the other scopes are left unchanged. If you omit the `scope` parameter, everything is copied: records, settings, synonyms, and rules. ",

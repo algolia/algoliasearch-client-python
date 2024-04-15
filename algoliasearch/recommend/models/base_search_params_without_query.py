@@ -8,13 +8,14 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, Field, StrictBool, StrictFloat, StrictInt, StrictStr
 
 from algoliasearch.recommend.models.around_precision import AroundPrecision
 from algoliasearch.recommend.models.around_radius import AroundRadius
 from algoliasearch.recommend.models.facet_filters import FacetFilters
 from algoliasearch.recommend.models.numeric_filters import NumericFilters
 from algoliasearch.recommend.models.optional_filters import OptionalFilters
+from algoliasearch.recommend.models.supported_language import SupportedLanguage
 from algoliasearch.recommend.models.tag_filters import TagFilters
 
 
@@ -47,7 +48,7 @@ class BaseSearchParamsWithoutQuery(BaseModel):
     )
     restrict_searchable_attributes: Optional[List[StrictStr]] = Field(
         default=None,
-        description="Restricts a search to a subset of your searchable attributes.",
+        description="Restricts a search to a subset of your searchable attributes. Attribute names are case-sensitive. ",
         alias="restrictSearchableAttributes",
     )
     facets: Optional[List[StrictStr]] = Field(
@@ -90,11 +91,8 @@ class BaseSearchParamsWithoutQuery(BaseModel):
     )
     inside_bounding_box: Optional[
         List[
-            List[
-                Union[
-                    Annotated[float, Field(strict=True)],
-                    Annotated[int, Field(strict=True)],
-                ]
+            Annotated[
+                List[Union[StrictFloat, StrictInt]], Field(min_length=4, max_length=4)
             ]
         ]
     ] = Field(
@@ -104,19 +102,17 @@ class BaseSearchParamsWithoutQuery(BaseModel):
     )
     inside_polygon: Optional[
         List[
-            List[
-                Union[
-                    Annotated[float, Field(strict=True)],
-                    Annotated[int, Field(strict=True)],
-                ]
+            Annotated[
+                List[Union[StrictFloat, StrictInt]],
+                Field(min_length=6, max_length=20000),
             ]
         ]
     ] = Field(
         default=None,
-        description="Coordinates of a polygon in which to search.  Polygons are defined by 3 to 10,000 points. Each point is represented by its latitude and longitude. Provide multiple polygons as nested arrays. For more information, see [filtering inside polygons](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas). This parameter is ignored, if you also specify `insideBoundingBox`. ",
+        description="Coordinates of a polygon in which to search.  Polygons are defined by 3 to 10,000 points. Each point is represented by its latitude and longitude. Provide multiple polygons as nested arrays. For more information, see [filtering inside polygons](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas). This parameter is ignored if you also specify `insideBoundingBox`. ",
         alias="insidePolygon",
     )
-    natural_languages: Optional[List[StrictStr]] = Field(
+    natural_languages: Optional[List[SupportedLanguage]] = Field(
         default=None,
         description="ISO language codes that adjust settings that are useful for processing natural language queries (as opposed to keyword searches):  - Sets `removeStopWords` and `ignorePlurals` to the list of provided languages. - Sets `removeWordsIfNoResults` to `allOptional`. - Adds a `natural_language` attribute to `ruleContexts` and `analyticsTags`. ",
         alias="naturalLanguages",

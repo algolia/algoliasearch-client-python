@@ -18,7 +18,7 @@ class GetConfigStatus200Response(BaseModel):
 
     index_name: Optional[StrictStr] = Field(
         default=None,
-        description="Name of the Query Suggestions index.",
+        description="Name of the Query Suggestions index (case-sensitive).",
         alias="indexName",
     )
     is_running: Optional[StrictBool] = Field(

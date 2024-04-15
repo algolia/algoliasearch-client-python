@@ -19,7 +19,9 @@ class SearchForFacetsOptions(BaseModel):
     """
 
     facet: StrictStr = Field(description="Facet name.")
-    index_name: StrictStr = Field(description="Index name.", alias="indexName")
+    index_name: StrictStr = Field(
+        description="Index name (case-sensitive).", alias="indexName"
+    )
     facet_query: Optional[StrictStr] = Field(
         default="",
         description="Text to search inside the facet's values.",

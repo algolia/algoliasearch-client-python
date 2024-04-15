@@ -24,7 +24,8 @@ class QuerySuggestionsConfigurationResponse(BaseModel):
         alias="appID",
     )
     index_name: StrictStr = Field(
-        description="Name of the Query Suggestions index.", alias="indexName"
+        description="Name of the Query Suggestions index (case-sensitive).",
+        alias="indexName",
     )
     source_indices: Annotated[List[SourceIndex], Field(min_length=1)] = Field(
         description="Algolia indices from which to get the popular searches for query suggestions.",

@@ -29,7 +29,7 @@ class AddedToCartObjectIDsAfterSearch(BaseModel):
     event_type: ConversionEvent = Field(alias="eventType")
     event_subtype: AddToCartEvent = Field(alias="eventSubtype")
     index: StrictStr = Field(
-        description="Index name to which the event's items belong."
+        description="Index name (case-sensitive) to which the event's items belong."
     )
     query_id: Annotated[str, Field(min_length=32, strict=True, max_length=32)] = Field(
         description="Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response. ",

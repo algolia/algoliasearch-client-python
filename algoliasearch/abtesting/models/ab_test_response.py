@@ -16,7 +16,9 @@ class ABTestResponse(BaseModel):
     ABTestResponse
     """
 
-    index: StrictStr = Field(description="A/B test index.")
+    index: StrictStr = Field(
+        description="Index name of the A/B test variant (case-sensitive)."
+    )
     ab_test_id: StrictInt = Field(
         description="Unique A/B test identifier.", alias="abTestID"
     )

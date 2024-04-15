@@ -18,7 +18,9 @@ class SearchForHitsOptions(BaseModel):
     SearchForHitsOptions
     """
 
-    index_name: StrictStr = Field(description="Index name.", alias="indexName")
+    index_name: StrictStr = Field(
+        description="Index name (case-sensitive).", alias="indexName"
+    )
     type: Optional[SearchTypeDefault] = None
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

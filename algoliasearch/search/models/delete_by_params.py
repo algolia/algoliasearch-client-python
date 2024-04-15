@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr
 
 from algoliasearch.search.models.around_radius import AroundRadius
 from algoliasearch.search.models.facet_filters import FacetFilters
@@ -38,11 +38,8 @@ class DeleteByParams(BaseModel):
     around_radius: Optional[AroundRadius] = Field(default=None, alias="aroundRadius")
     inside_bounding_box: Optional[
         List[
-            List[
-                Union[
-                    Annotated[float, Field(strict=True)],
-                    Annotated[int, Field(strict=True)],
-                ]
+            Annotated[
+                List[Union[StrictFloat, StrictInt]], Field(min_length=4, max_length=4)
             ]
         ]
     ] = Field(
@@ -52,16 +49,14 @@ class DeleteByParams(BaseModel):
     )
     inside_polygon: Optional[
         List[
-            List[
-                Union[
-                    Annotated[float, Field(strict=True)],
-                    Annotated[int, Field(strict=True)],
-                ]
+            Annotated[
+                List[Union[StrictFloat, StrictInt]],
+                Field(min_length=6, max_length=20000),
             ]
         ]
     ] = Field(
         default=None,
-        description="Coordinates of a polygon in which to search.  Polygons are defined by 3 to 10,000 points. Each point is represented by its latitude and longitude. Provide multiple polygons as nested arrays. For more information, see [filtering inside polygons](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas). This parameter is ignored, if you also specify `insideBoundingBox`. ",
+        description="Coordinates of a polygon in which to search.  Polygons are defined by 3 to 10,000 points. Each point is represented by its latitude and longitude. Provide multiple polygons as nested arrays. For more information, see [filtering inside polygons](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas). This parameter is ignored if you also specify `insideBoundingBox`. ",
         alias="insidePolygon",
     )
 

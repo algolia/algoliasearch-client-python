@@ -18,7 +18,9 @@ class DestinationIndexName(BaseModel):
     DestinationIndexName
     """
 
-    index_name: StrictStr = Field(description="Algolia index name.", alias="indexName")
+    index_name: StrictStr = Field(
+        description="Algolia index name (case-sensitive).", alias="indexName"
+    )
     record_type: Optional[RecordType] = Field(default=None, alias="recordType")
     attributes_to_exclude: Optional[List[StrictStr]] = Field(
         default=None,

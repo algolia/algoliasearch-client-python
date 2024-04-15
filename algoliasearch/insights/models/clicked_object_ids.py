@@ -25,7 +25,7 @@ class ClickedObjectIDs(BaseModel):
     )
     event_type: ClickEvent = Field(alias="eventType")
     index: StrictStr = Field(
-        description="Index name to which the event's items belong."
+        description="Index name (case-sensitive) to which the event's items belong."
     )
     object_ids: Annotated[List[StrictStr], Field(min_length=1, max_length=20)] = Field(
         description="Object IDs of the records that are part of the event.",
