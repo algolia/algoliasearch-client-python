@@ -16,6 +16,7 @@ from algoliasearch.ingestion.models.on_demand_date_utils_input import (
 from algoliasearch.ingestion.models.schedule_date_utils_input import (
     ScheduleDateUtilsInput,
 )
+from algoliasearch.ingestion.models.shopify_input import ShopifyInput
 from algoliasearch.ingestion.models.streaming_utils_input import StreamingUtilsInput
 
 
@@ -27,8 +28,14 @@ class TaskInput(BaseModel):
     oneof_schema_1_validator: Optional[OnDemandDateUtilsInput] = None
     oneof_schema_2_validator: Optional[ScheduleDateUtilsInput] = None
     oneof_schema_3_validator: Optional[StreamingUtilsInput] = None
+    oneof_schema_4_validator: Optional[ShopifyInput] = None
     actual_instance: Optional[
-        Union[OnDemandDateUtilsInput, ScheduleDateUtilsInput, StreamingUtilsInput]
+        Union[
+            OnDemandDateUtilsInput,
+            ScheduleDateUtilsInput,
+            ShopifyInput,
+            StreamingUtilsInput,
+        ]
     ] = None
 
     def __init__(self, *args, **kwargs) -> None:
@@ -49,7 +56,12 @@ class TaskInput(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Optional[
-        Union[OnDemandDateUtilsInput, ScheduleDateUtilsInput, StreamingUtilsInput]
+        Union[
+            OnDemandDateUtilsInput,
+            ScheduleDateUtilsInput,
+            ShopifyInput,
+            StreamingUtilsInput,
+        ]
     ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
@@ -84,9 +96,15 @@ class TaskInput(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = ShopifyInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into TaskInput with oneOf schemas: OnDemandDateUtilsInput, ScheduleDateUtilsInput, StreamingUtilsInput. Details: "
+            "No match found when deserializing the JSON string into TaskInput with oneOf schemas: OnDemandDateUtilsInput, ScheduleDateUtilsInput, ShopifyInput, StreamingUtilsInput. Details: "
             + ", ".join(error_messages)
         )
 

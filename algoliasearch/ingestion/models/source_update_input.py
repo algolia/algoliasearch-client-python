@@ -20,6 +20,7 @@ from algoliasearch.ingestion.models.source_update_commercetools import (
     SourceUpdateCommercetools,
 )
 from algoliasearch.ingestion.models.source_update_docker import SourceUpdateDocker
+from algoliasearch.ingestion.models.source_update_shopify import SourceUpdateShopify
 
 
 class SourceUpdateInput(BaseModel):
@@ -33,6 +34,7 @@ class SourceUpdateInput(BaseModel):
     oneof_schema_4_validator: Optional[SourceBigQuery] = None
     oneof_schema_5_validator: Optional[SourceGA4BigQueryExport] = None
     oneof_schema_6_validator: Optional[SourceUpdateDocker] = None
+    oneof_schema_7_validator: Optional[SourceUpdateShopify] = None
     actual_instance: Optional[
         Union[
             SourceBigQuery,
@@ -41,6 +43,7 @@ class SourceUpdateInput(BaseModel):
             SourceJSON,
             SourceUpdateCommercetools,
             SourceUpdateDocker,
+            SourceUpdateShopify,
         ]
     ] = None
 
@@ -69,6 +72,7 @@ class SourceUpdateInput(BaseModel):
             SourceJSON,
             SourceUpdateCommercetools,
             SourceUpdateDocker,
+            SourceUpdateShopify,
         ]
     ]:
         """
@@ -122,9 +126,15 @@ class SourceUpdateInput(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = SourceUpdateShopify.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into SourceUpdateInput with oneOf schemas: SourceBigQuery, SourceCSV, SourceGA4BigQueryExport, SourceJSON, SourceUpdateCommercetools, SourceUpdateDocker. Details: "
+            "No match found when deserializing the JSON string into SourceUpdateInput with oneOf schemas: SourceBigQuery, SourceCSV, SourceGA4BigQueryExport, SourceJSON, SourceUpdateCommercetools, SourceUpdateDocker, SourceUpdateShopify. Details: "
             + ", ".join(error_messages)
         )
 

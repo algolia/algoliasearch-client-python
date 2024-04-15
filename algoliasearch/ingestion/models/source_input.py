@@ -19,6 +19,7 @@ from algoliasearch.ingestion.models.source_ga4_big_query_export import (
     SourceGA4BigQueryExport,
 )
 from algoliasearch.ingestion.models.source_json import SourceJSON
+from algoliasearch.ingestion.models.source_shopify import SourceShopify
 
 
 class SourceInput(BaseModel):
@@ -33,6 +34,7 @@ class SourceInput(BaseModel):
     oneof_schema_5_validator: Optional[SourceBigQuery] = None
     oneof_schema_6_validator: Optional[SourceGA4BigQueryExport] = None
     oneof_schema_7_validator: Optional[SourceDocker] = None
+    oneof_schema_8_validator: Optional[SourceShopify] = None
     actual_instance: Optional[
         Union[
             SourceBigCommerce,
@@ -42,6 +44,7 @@ class SourceInput(BaseModel):
             SourceDocker,
             SourceGA4BigQueryExport,
             SourceJSON,
+            SourceShopify,
         ]
     ] = None
 
@@ -71,6 +74,7 @@ class SourceInput(BaseModel):
             SourceDocker,
             SourceGA4BigQueryExport,
             SourceJSON,
+            SourceShopify,
         ]
     ]:
         """
@@ -130,9 +134,15 @@ class SourceInput(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = SourceShopify.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into SourceInput with oneOf schemas: SourceBigCommerce, SourceBigQuery, SourceCSV, SourceCommercetools, SourceDocker, SourceGA4BigQueryExport, SourceJSON. Details: "
+            "No match found when deserializing the JSON string into SourceInput with oneOf schemas: SourceBigCommerce, SourceBigQuery, SourceCSV, SourceCommercetools, SourceDocker, SourceGA4BigQueryExport, SourceJSON, SourceShopify. Details: "
             + ", ".join(error_messages)
         )
 
