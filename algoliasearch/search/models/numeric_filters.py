@@ -10,17 +10,15 @@ from typing import Dict, List, Optional, Self, Union
 
 from pydantic import BaseModel, StrictStr, ValidationError, model_serializer
 
-from algoliasearch.search.models.mixed_search_filters import MixedSearchFilters
-
 
 class NumericFilters(BaseModel):
     """
     Filter by numeric facets.  **Prefer using the `filters` parameter, which supports all filter types and combinations with boolean operators.**  You can use numeric comparison operators: `<`, `<=`, `=`, `!=`, `>`, `>=`. Comparsions are precise up to 3 decimals. You can also provide ranges: `facet:<lower> TO <upper>`. The range includes the lower and upper boundaries. The same combination rules apply as for `facetFilters`.
     """
 
-    oneof_schema_1_validator: Optional[List[MixedSearchFilters]] = None
+    oneof_schema_1_validator: Optional[List[NumericFilters]] = None
     oneof_schema_2_validator: Optional[StrictStr] = None
-    actual_instance: Optional[Union[List[MixedSearchFilters], str]] = None
+    actual_instance: Optional[Union[List[NumericFilters], str]] = None
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -37,7 +35,7 @@ class NumericFilters(BaseModel):
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[List[MixedSearchFilters], str]]:
+    def unwrap_actual_instance(self) -> Optional[Union[List[NumericFilters], str]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -69,7 +67,7 @@ class NumericFilters(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into NumericFilters with oneOf schemas: List[MixedSearchFilters], str. Details: "
+            "No match found when deserializing the JSON string into NumericFilters with oneOf schemas: List[NumericFilters], str. Details: "
             + ", ".join(error_messages)
         )
 

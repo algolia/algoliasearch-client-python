@@ -10,17 +10,15 @@ from typing import Dict, List, Optional, Self, Union
 
 from pydantic import BaseModel, StrictStr, ValidationError, model_serializer
 
-from algoliasearch.recommend.models.mixed_search_filters import MixedSearchFilters
-
 
 class OptionalFilters(BaseModel):
     """
     Filters to promote or demote records in the search results.  Optional filters work like facet filters, but they don't exclude records from the search results. Records that match the optional filter rank before records that don't match. If you're using a negative filter `facet:-value`, matching records rank after records that don't match.  - Optional filters don't work on virtual replicas. - Optional filters are applied _after_ sort-by attributes. - Optional filters don't work with numeric attributes.
     """
 
-    oneof_schema_1_validator: Optional[List[MixedSearchFilters]] = None
+    oneof_schema_1_validator: Optional[List[OptionalFilters]] = None
     oneof_schema_2_validator: Optional[StrictStr] = None
-    actual_instance: Optional[Union[List[MixedSearchFilters], str]] = None
+    actual_instance: Optional[Union[List[OptionalFilters], str]] = None
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -37,7 +35,7 @@ class OptionalFilters(BaseModel):
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[List[MixedSearchFilters], str]]:
+    def unwrap_actual_instance(self) -> Optional[Union[List[OptionalFilters], str]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -69,7 +67,7 @@ class OptionalFilters(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into OptionalFilters with oneOf schemas: List[MixedSearchFilters], str. Details: "
+            "No match found when deserializing the JSON string into OptionalFilters with oneOf schemas: List[OptionalFilters], str. Details: "
             + ", ".join(error_messages)
         )
 

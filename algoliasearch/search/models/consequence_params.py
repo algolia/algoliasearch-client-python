@@ -435,14 +435,6 @@ class ConsequenceParams(BaseModel):
             _dict["automaticOptionalFacetFilters"] = (
                 self.automatic_optional_facet_filters.to_dict()
             )
-        # set to None if re_ranking_apply_filter (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.re_ranking_apply_filter is None
-            and "re_ranking_apply_filter" in self.model_fields_set
-        ):
-            _dict["reRankingApplyFilter"] = None
-
         return _dict
 
     @classmethod

@@ -10,17 +10,15 @@ from typing import Dict, List, Optional, Self, Union
 
 from pydantic import BaseModel, StrictStr, ValidationError, model_serializer
 
-from algoliasearch.search.models.mixed_search_filters import MixedSearchFilters
-
 
 class ReRankingApplyFilter(BaseModel):
     """
     Restrict [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) to records that match these filters.
     """
 
-    oneof_schema_1_validator: Optional[List[MixedSearchFilters]] = None
+    oneof_schema_1_validator: Optional[List[ReRankingApplyFilter]] = None
     oneof_schema_2_validator: Optional[StrictStr] = None
-    actual_instance: Optional[Union[List[MixedSearchFilters], str]] = None
+    actual_instance: Optional[Union[List[ReRankingApplyFilter], str]] = None
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -37,7 +35,9 @@ class ReRankingApplyFilter(BaseModel):
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[List[MixedSearchFilters], str]]:
+    def unwrap_actual_instance(
+        self,
+    ) -> Optional[Union[List[ReRankingApplyFilter], str]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -51,9 +51,6 @@ class ReRankingApplyFilter(BaseModel):
     def from_json(cls, json_str: str) -> Self:
         """Returns the object represented by the json string"""
         instance = cls.model_construct()
-        if json_str is None:
-            return instance
-
         error_messages = []
 
         try:
@@ -72,7 +69,7 @@ class ReRankingApplyFilter(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into ReRankingApplyFilter with oneOf schemas: List[MixedSearchFilters], str. Details: "
+            "No match found when deserializing the JSON string into ReRankingApplyFilter with oneOf schemas: List[ReRankingApplyFilter], str. Details: "
             + ", ".join(error_messages)
         )
 

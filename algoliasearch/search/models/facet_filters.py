@@ -10,17 +10,15 @@ from typing import Dict, List, Optional, Self, Union
 
 from pydantic import BaseModel, StrictStr, ValidationError, model_serializer
 
-from algoliasearch.search.models.mixed_search_filters import MixedSearchFilters
-
 
 class FacetFilters(BaseModel):
     """
     Filter the search by facet values, so that only records with the same facet values are retrieved.  **Prefer using the `filters` parameter, which supports all filter types and combinations with boolean operators.**  - `[filter1, filter2]` is interpreted as `filter1 AND filter2`. - `[[filter1, filter2], filter3]` is interpreted as `filter1 OR filter2 AND filter3`. - `facet:-value` is interpreted as `NOT facet:value`.  While it's best to avoid attributes that start with a `-`, you can still filter them by escaping with a backslash: `facet:\\-value`.
     """
 
-    oneof_schema_1_validator: Optional[List[MixedSearchFilters]] = None
+    oneof_schema_1_validator: Optional[List[FacetFilters]] = None
     oneof_schema_2_validator: Optional[StrictStr] = None
-    actual_instance: Optional[Union[List[MixedSearchFilters], str]] = None
+    actual_instance: Optional[Union[List[FacetFilters], str]] = None
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -37,7 +35,7 @@ class FacetFilters(BaseModel):
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[List[MixedSearchFilters], str]]:
+    def unwrap_actual_instance(self) -> Optional[Union[List[FacetFilters], str]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -69,7 +67,7 @@ class FacetFilters(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into FacetFilters with oneOf schemas: List[MixedSearchFilters], str. Details: "
+            "No match found when deserializing the JSON string into FacetFilters with oneOf schemas: List[FacetFilters], str. Details: "
             + ", ".join(error_messages)
         )
 
