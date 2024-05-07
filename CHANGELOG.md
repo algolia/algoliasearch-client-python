@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # Release Notes
 
-## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v3.0.0...master)
+## [Unreleased](https://github.com/algolia/algoliasearch-client-python/compare/v3.1.0...master)
+
+## [v3.1.0](https://github.com/algolia/algoliasearch-client-python/compare/v3.0.0...v3.1.0)
+
+### Added
+
+- Add `py.typed` to python package ([PEP 561](https://www.python.org/dev/peps/pep-0561/)) so downstream packages can use type annotations. ([#566](https://github.com/algolia/algoliasearch-client-python/pull/566))
 
 ## [v3.0.0](https://github.com/algolia/algoliasearch-client-python/compare/v2.6.3...v3.0.0)
 
