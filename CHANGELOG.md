@@ -1,3 +1,9 @@
+## [4.0.0b17](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b16...4.0.0b17)
+
+- [2b70d9ea5](https://github.com/algolia/api-clients-automation/commit/2b70d9ea5) fix(specs): exhaustiveFacetsCount is not deprecated for sffv ([#3089](https://github.com/algolia/api-clients-automation/pull/3089)) by [@kai687](https://github.com/kai687/)
+- [1c6364c20](https://github.com/algolia/api-clients-automation/commit/1c6364c20) fix(python): properly remove existing codegen ([#3056](https://github.com/algolia/api-clients-automation/pull/3056)) by [@millotp](https://github.com/millotp/)
+- [1250c2b3c](https://github.com/algolia/api-clients-automation/commit/1250c2b3c) fix(specs): simplify filter types ([#3042](https://github.com/algolia/api-clients-automation/pull/3042)) by [@millotp](https://github.com/millotp/)
+
 ## [4.0.0b16](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b15...4.0.0b16)
 
 - [b621988bc](https://github.com/algolia/api-clients-automation/commit/b621988bc) feat(specs): promote @kai687 to code owner ([#3014](https://github.com/algolia/api-clients-automation/pull/3014)) by [@Fluf22](https://github.com/Fluf22/)
