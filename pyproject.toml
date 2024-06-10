@@ -22,11 +22,11 @@ async-timeout = ">= 4.0.3"
 pydantic = ">= 2"
 
 [tool.poetry.group.dev.dependencies]
-flake8 = "6.1.0"
-autoflake = "2.2.1"
-autopep8 = "2.0.4"
-black = "24.3.0"
-isort = "5.13.0"
+flake8 = "7.0.0"
+autoflake = "2.3.1"
+autopep8 = "2.2.0"
+black = "24.4.2"
+isort = "5.13.2"
 
 [tool.flake8]
 max-line-length = 88
