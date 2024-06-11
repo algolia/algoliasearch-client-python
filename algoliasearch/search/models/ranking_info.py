@@ -19,8 +19,8 @@ class RankingInfo(BaseModel):
     Object with detailed information about the record's ranking.
     """
 
-    filters: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Whether a filter matched the query."
+    filters: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
+        default=None, description="Whether a filter matched the query."
     )
     first_matched_word: Annotated[int, Field(strict=True, ge=0)] = Field(
         description="Position of the first matched word in the best matching attribute of the record.",
@@ -46,8 +46,8 @@ class RankingInfo(BaseModel):
         description="Number of typos encountered when matching the record.",
         alias="nbTypos",
     )
-    promoted: StrictBool = Field(
-        description="Whether the record was promoted by a rule."
+    promoted: Optional[StrictBool] = Field(
+        default=None, description="Whether the record was promoted by a rule."
     )
     proximity_distance: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
         default=None,
@@ -58,8 +58,8 @@ class RankingInfo(BaseModel):
         description="Overall ranking of the record, expressed as a single integer. This attribute is internal.",
         alias="userScore",
     )
-    words: Annotated[int, Field(strict=True, ge=1)] = Field(
-        description="Number of matched words."
+    words: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
+        default=None, description="Number of matched words."
     )
     promoted_by_re_ranking: Optional[StrictBool] = Field(
         default=None,
