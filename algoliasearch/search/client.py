@@ -429,7 +429,7 @@ class SearchClient:
         responses: List[BatchResponse] = []
         for i, obj in enumerate(objects):
             requests.append(BatchRequest(action=action, body=obj))
-            if i % batch_size == 0:
+            if len(requests) == batch_size or i == len(objects) - 1:
                 responses.append(
                     await self.batch(
                         index_name=index_name,
