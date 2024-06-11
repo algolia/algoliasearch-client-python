@@ -2,7 +2,7 @@
 name = "algoliasearch"
 version = "4.0.0b18"
 description = "A fully-featured and blazing-fast Python API client to interact with Algolia."
-authors = ["Algolia Team <https://alg.li/support>"]
+authors = ["Algolia Team"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://www.algolia.com"

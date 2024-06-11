@@ -19,7 +19,7 @@
   <a href="http://stackoverflow.com/questions/tagged/algolia" target="_blank">Stack Overflow</a>  •
   <a href="https://github.com/algolia/algoliasearch-client-python/issues" target="_blank">Report a bug</a>  •
   <a href="https://www.algolia.com/doc/api-client/troubleshooting/faq/python/" target="_blank">FAQ</a>  •
-  <a href="https://www.algolia.com/support" target="_blank">Support</a>
+  <a href="https://alg.li/support" target="_blank">Support</a>
 </p>
 
 ## ✨ Features
