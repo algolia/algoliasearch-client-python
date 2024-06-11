@@ -2202,6 +2202,57 @@ class SearchClient:
             await self.get_api_key_with_http_info(key, request_options)
         ).deserialize(GetApiKeyResponse)
 
+    async def get_app_task_with_http_info(
+        self,
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Checks the status of a given application task.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `get_app_task`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/1/task/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_app_task(
+        self,
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetTaskResponse:
+        """
+        Checks the status of a given application task.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetTaskResponse' result object.
+        """
+        return (
+            await self.get_app_task_with_http_info(task_id, request_options)
+        ).deserialize(GetTaskResponse)
+
     async def get_dictionary_languages_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
