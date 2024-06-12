@@ -481,25 +481,27 @@ class SearchClient:
     ) -> List[ApiResponse[str]]:
         """
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
+
+        See https://api-clients-automation.netlify.app/docs/contributing/add-new-api-client#5-helpers for implementation details.
         """
         tmp_index_name = self.create_temporary_name(index_name)
 
-        copy_operation_response = await self.operation_index(
-            index_name=index_name,
-            operation_index_params=OperationIndexParams(
-                operation="copy",
-                destination=tmp_index_name,
-                scope=[
-                    ScopeType("settings"),
-                    ScopeType("synonyms"),
-                    ScopeType("rules"),
-                ],
-            ),
-            request_options=request_options,
-        )
-        await self.wait_for_task(
-            index_name=index_name, task_id=copy_operation_response.task_id
-        )
+        async def _copy() -> UpdatedAtResponse:
+            return await self.operation_index(
+                index_name=index_name,
+                operation_index_params=OperationIndexParams(
+                    operation="copy",
+                    destination=tmp_index_name,
+                    scope=[
+                        ScopeType("settings"),
+                        ScopeType("synonyms"),
+                        ScopeType("rules"),
+                    ],
+                ),
+                request_options=request_options,
+            )
+
+        copy_operation_response = await _copy()
 
         batch_responses = await self.chunked_batch(
             index_name=tmp_index_name,
@@ -507,6 +509,15 @@ class SearchClient:
             wait_for_tasks=True,
             batch_size=batch_size,
             request_options=request_options,
+        )
+
+        await self.wait_for_task(
+            index_name=tmp_index_name, task_id=copy_operation_response.task_id
+        )
+
+        copy_operation_response = await _copy()
+        await self.wait_for_task(
+            index_name=tmp_index_name, task_id=copy_operation_response.task_id
         )
 
         move_operation_response = await self.operation_index(
