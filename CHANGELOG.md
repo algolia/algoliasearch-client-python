@@ -1,3 +1,9 @@
+## [4.0.0b19](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b18...4.0.0b19)
+
+- [b2a464a2b](https://github.com/algolia/api-clients-automation/commit/b2a464a2b) feat(clients): add generate_secured_api_key to ruby ([#3166](https://github.com/algolia/api-clients-automation/pull/3166)) by [@millotp](https://github.com/millotp/)
+- [de4090789](https://github.com/algolia/api-clients-automation/commit/de4090789) fix(clients): safer replaceAllObjects + metis compliant ([#3164](https://github.com/algolia/api-clients-automation/pull/3164)) by [@shortcuts](https://github.com/shortcuts/)
+- [9e0cec726](https://github.com/algolia/api-clients-automation/commit/9e0cec726) fix(python): remove contact ([#3161](https://github.com/algolia/api-clients-automation/pull/3161)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0b18](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b17...4.0.0b18)
 
 - [072c38b9a](https://github.com/algolia/api-clients-automation/commit/072c38b9a) fix(clients): remove unused models from lite clients ([#3159](https://github.com/algolia/api-clients-automation/pull/3159)) by [@shortcuts](https://github.com/shortcuts/)
