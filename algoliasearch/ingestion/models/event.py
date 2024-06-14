@@ -37,7 +37,7 @@ class Event(BaseModel):
     )
     data: Optional[Dict[str, Any]] = None
     published_at: StrictStr = Field(
-        description="Date of publish RFC3339 format.", alias="publishedAt"
+        description="Date of publish RFC 3339 format.", alias="publishedAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

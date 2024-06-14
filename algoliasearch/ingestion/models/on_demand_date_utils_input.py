@@ -19,11 +19,11 @@ class OnDemandDateUtilsInput(BaseModel):
     """
 
     start_date: StrictStr = Field(
-        description="Earliest date in RFC3339 format of the extracted data from Big Query.",
+        description="Earliest date in RFC 3339 format of the extracted data from Big Query.",
         alias="startDate",
     )
     end_date: StrictStr = Field(
-        description="Latest date in RFC3339 format of the extracted data from Big Query.",
+        description="Latest date in RFC 3339 format of the extracted data from Big Query.",
         alias="endDate",
     )
     mapping: Optional[MappingInput] = None

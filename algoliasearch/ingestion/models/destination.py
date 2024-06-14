@@ -27,11 +27,11 @@ class Destination(BaseModel):
     name: StrictStr = Field(description="Descriptive name for the resource.")
     input: DestinationInput
     created_at: StrictStr = Field(
-        description="Date of creation in RFC3339 format.", alias="createdAt"
+        description="Date of creation in RFC 3339 format.", alias="createdAt"
     )
     updated_at: Optional[StrictStr] = Field(
         default=None,
-        description="Date of last update in RFC3339 format.",
+        description="Date of last update in RFC 3339 format.",
         alias="updatedAt",
     )
     authentication_id: Optional[StrictStr] = Field(

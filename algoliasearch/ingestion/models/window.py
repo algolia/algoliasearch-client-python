@@ -17,11 +17,11 @@ class Window(BaseModel):
     """
 
     start_date: StrictStr = Field(
-        description="Date in RFC3339 format representing the oldest data in the time window.",
+        description="Date in RFC 3339 format representing the oldest data in the time window.",
         alias="startDate",
     )
     end_date: StrictStr = Field(
-        description="Date in RFC3339 format representing the newest data in the time window.",
+        description="Date in RFC 3339 format representing the newest data in the time window.",
         alias="endDate",
     )
 

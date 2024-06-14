@@ -45,14 +45,14 @@ class Run(BaseModel):
     reason_code: Optional[RunReasonCode] = Field(default=None, alias="reasonCode")
     type: RunType
     created_at: StrictStr = Field(
-        description="Date of creation in RFC3339 format.", alias="createdAt"
+        description="Date of creation in RFC 3339 format.", alias="createdAt"
     )
     started_at: Optional[StrictStr] = Field(
-        default=None, description="Date of start in RFC3339 format.", alias="startedAt"
+        default=None, description="Date of start in RFC 3339 format.", alias="startedAt"
     )
     finished_at: Optional[StrictStr] = Field(
         default=None,
-        description="Date of finish in RFC3339 format.",
+        description="Date of finish in RFC 3339 format.",
         alias="finishedAt",
     )
 

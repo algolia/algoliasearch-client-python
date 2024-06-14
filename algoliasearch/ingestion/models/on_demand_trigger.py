@@ -21,7 +21,7 @@ class OnDemandTrigger(BaseModel):
     type: OnDemandTriggerType
     last_run: Optional[StrictStr] = Field(
         default=None,
-        description="The last time the scheduled task ran in RFC3339 format.",
+        description="The last time the scheduled task ran in RFC 3339 format.",
         alias="lastRun",
     )
 

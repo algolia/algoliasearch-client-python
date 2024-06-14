@@ -22,11 +22,11 @@ class ScheduleTrigger(BaseModel):
     cron: StrictStr = Field(description="Cron expression for the task's schedule.")
     last_run: Optional[StrictStr] = Field(
         default=None,
-        description="The last time the scheduled task ran in RFC3339 format.",
+        description="The last time the scheduled task ran in RFC 3339 format.",
         alias="lastRun",
     )
     next_run: StrictStr = Field(
-        description="The next scheduled run of the task in RFC3339 format.",
+        description="The next scheduled run of the task in RFC 3339 format.",
         alias="nextRun",
     )
 

@@ -20,7 +20,7 @@ class DockerSourceDiscover(BaseModel):
         description="Universally unique identifier (UUID) of a task run.", alias="runID"
     )
     created_at: StrictStr = Field(
-        description="Date of creation in RFC3339 format.", alias="createdAt"
+        description="Date of creation in RFC 3339 format.", alias="createdAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

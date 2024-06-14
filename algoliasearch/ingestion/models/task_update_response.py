@@ -20,7 +20,7 @@ class TaskUpdateResponse(BaseModel):
         description="Universally unique identifier (UUID) of a task.", alias="taskID"
     )
     updated_at: StrictStr = Field(
-        description="Date of last update in RFC3339 format.", alias="updatedAt"
+        description="Date of last update in RFC 3339 format.", alias="updatedAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

@@ -22,7 +22,7 @@ class AuthenticationCreateResponse(BaseModel):
     )
     name: StrictStr = Field(description="Descriptive name for the resource.")
     created_at: StrictStr = Field(
-        description="Date of creation in RFC3339 format.", alias="createdAt"
+        description="Date of creation in RFC 3339 format.", alias="createdAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

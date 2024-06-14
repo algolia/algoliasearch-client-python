@@ -17,7 +17,7 @@ class DeleteResponse(BaseModel):
     """
 
     deleted_at: StrictStr = Field(
-        description="Date of deletion in RFC3339 format.", alias="deletedAt"
+        description="Date of deletion in RFC 3339 format.", alias="deletedAt"
     )
 
     model_config = {"populate_by_name": True, "validate_assignment": True}

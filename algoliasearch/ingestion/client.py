@@ -1678,13 +1678,13 @@ class IngestionClient:
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date and time in RFC3339 format for the earliest events to retrieve. By default, the current time minus three hours is used."
+                description="Date and time in RFC 3339 format for the earliest events to retrieve. By default, the current time minus three hours is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date and time in RFC3339 format for the latest events to retrieve. By default, the current time is used."
+                description="Date and time in RFC 3339 format for the latest events to retrieve. By default, the current time is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -1711,9 +1711,9 @@ class IngestionClient:
         :type sort: EventSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: Date and time in RFC3339 format for the earliest events to retrieve. By default, the current time minus three hours is used.
+        :param start_date: Date and time in RFC 3339 format for the earliest events to retrieve. By default, the current time minus three hours is used.
         :type start_date: str
-        :param end_date: Date and time in RFC3339 format for the latest events to retrieve. By default, the current time is used.
+        :param end_date: Date and time in RFC 3339 format for the latest events to retrieve. By default, the current time is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1787,13 +1787,13 @@ class IngestionClient:
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date and time in RFC3339 format for the earliest events to retrieve. By default, the current time minus three hours is used."
+                description="Date and time in RFC 3339 format for the earliest events to retrieve. By default, the current time minus three hours is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date and time in RFC3339 format for the latest events to retrieve. By default, the current time is used."
+                description="Date and time in RFC 3339 format for the latest events to retrieve. By default, the current time is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -1820,9 +1820,9 @@ class IngestionClient:
         :type sort: EventSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: Date and time in RFC3339 format for the earliest events to retrieve. By default, the current time minus three hours is used.
+        :param start_date: Date and time in RFC 3339 format for the earliest events to retrieve. By default, the current time minus three hours is used.
         :type start_date: str
-        :param end_date: Date and time in RFC3339 format for the latest events to retrieve. By default, the current time is used.
+        :param end_date: Date and time in RFC 3339 format for the latest events to retrieve. By default, the current time is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListEventsResponse' result object.
@@ -1928,13 +1928,13 @@ class IngestionClient:
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
+                description="Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC3339 format for the latest run to retrieve. By default, the current day is used."
+                description="Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -1959,9 +1959,9 @@ class IngestionClient:
         :type sort: RunSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: Date in RFC3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
+        :param start_date: Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
         :type start_date: str
-        :param end_date: Date in RFC3339 format for the latest run to retrieve. By default, the current day is used.
+        :param end_date: Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2025,13 +2025,13 @@ class IngestionClient:
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
+                description="Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC3339 format for the latest run to retrieve. By default, the current day is used."
+                description="Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -2056,9 +2056,9 @@ class IngestionClient:
         :type sort: RunSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: Date in RFC3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
+        :param start_date: Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
         :type start_date: str
-        :param end_date: Date in RFC3339 format for the latest run to retrieve. By default, the current day is used.
+        :param end_date: Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunListResponse' result object.
