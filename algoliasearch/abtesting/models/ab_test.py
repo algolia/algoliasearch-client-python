@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 
 from algoliasearch.abtesting.models.ab_test_configuration import ABTestConfiguration
 from algoliasearch.abtesting.models.status import Status
@@ -57,7 +57,9 @@ class ABTest(BaseModel):
     )
     configuration: Optional[ABTestConfiguration] = None
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -90,46 +92,6 @@ class ABTest(BaseModel):
             _dict["variants"] = _items
         if self.configuration:
             _dict["configuration"] = self.configuration.to_dict()
-        # set to None if click_significance (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.click_significance is None
-            and "click_significance" in self.model_fields_set
-        ):
-            _dict["clickSignificance"] = None
-
-        # set to None if conversion_significance (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.conversion_significance is None
-            and "conversion_significance" in self.model_fields_set
-        ):
-            _dict["conversionSignificance"] = None
-
-        # set to None if add_to_cart_significance (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.add_to_cart_significance is None
-            and "add_to_cart_significance" in self.model_fields_set
-        ):
-            _dict["addToCartSignificance"] = None
-
-        # set to None if purchase_significance (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.purchase_significance is None
-            and "purchase_significance" in self.model_fields_set
-        ):
-            _dict["purchaseSignificance"] = None
-
-        # set to None if revenue_significance (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.revenue_significance is None
-            and "revenue_significance" in self.model_fields_set
-        ):
-            _dict["revenueSignificance"] = None
-
         return _dict
 
     @classmethod

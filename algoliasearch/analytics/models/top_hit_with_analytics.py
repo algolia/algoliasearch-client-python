@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 
 
 class TopHitWithAnalytics(BaseModel):
@@ -49,7 +49,9 @@ class TopHitWithAnalytics(BaseModel):
         description="Number of conversions from this search.", alias="conversionCount"
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -74,19 +76,6 @@ class TopHitWithAnalytics(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # set to None if click_through_rate (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.click_through_rate is None
-            and "click_through_rate" in self.model_fields_set
-        ):
-            _dict["clickThroughRate"] = None
-
-        # set to None if conversion_rate (nullable) is None
-        # and model_fields_set contains the field
-        if self.conversion_rate is None and "conversion_rate" in self.model_fields_set:
-            _dict["conversionRate"] = None
-
         return _dict
 
     @classmethod

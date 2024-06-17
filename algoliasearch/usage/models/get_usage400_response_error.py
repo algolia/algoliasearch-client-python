@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictStr
 
 from algoliasearch.usage.models.get_usage400_response_error_errors_inner import (
     GetUsage400ResponseErrorErrorsInner,
@@ -24,7 +24,9 @@ class GetUsage400ResponseError(BaseModel):
     message: Optional[StrictStr] = None
     errors: Optional[List[GetUsage400ResponseErrorErrorsInner]] = None
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

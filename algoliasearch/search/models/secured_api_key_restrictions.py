@@ -8,14 +8,14 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 
 from algoliasearch.search.models.search_params_object import SearchParamsObject
 
 
-class SecuredAPIKeyRestrictions(BaseModel):
+class SecuredApiKeyRestrictions(BaseModel):
     """
-    SecuredAPIKeyRestrictions
+    SecuredApiKeyRestrictions
     """
 
     search_params: Optional[SearchParamsObject] = Field(
@@ -46,14 +46,16 @@ class SecuredAPIKeyRestrictions(BaseModel):
         alias="userToken",
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of SecuredAPIKeyRestrictions from a JSON string"""
+        """Create an instance of SecuredApiKeyRestrictions from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,7 +79,7 @@ class SecuredAPIKeyRestrictions(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of SecuredAPIKeyRestrictions from a dict"""
+        """Create an instance of SecuredApiKeyRestrictions from a dict"""
         if obj is None:
             return None
 

@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 
 from algoliasearch.analytics.models.click_positions_inner import ClickPositionsInner
 from algoliasearch.analytics.models.currencies_value import CurrenciesValue
@@ -94,7 +94,9 @@ class TopSearchWithRevenueAnalytics(BaseModel):
         description="Number of purchase events from this search.", alias="purchaseCount"
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -131,40 +133,6 @@ class TopSearchWithRevenueAnalytics(BaseModel):
                 if self.currencies[_key]:
                     _field_dict[_key] = self.currencies[_key].to_dict()
             _dict["currencies"] = _field_dict
-        # set to None if click_through_rate (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.click_through_rate is None
-            and "click_through_rate" in self.model_fields_set
-        ):
-            _dict["clickThroughRate"] = None
-
-        # set to None if average_click_position (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.average_click_position is None
-            and "average_click_position" in self.model_fields_set
-        ):
-            _dict["averageClickPosition"] = None
-
-        # set to None if conversion_rate (nullable) is None
-        # and model_fields_set contains the field
-        if self.conversion_rate is None and "conversion_rate" in self.model_fields_set:
-            _dict["conversionRate"] = None
-
-        # set to None if add_to_cart_rate (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.add_to_cart_rate is None
-            and "add_to_cart_rate" in self.model_fields_set
-        ):
-            _dict["addToCartRate"] = None
-
-        # set to None if purchase_rate (nullable) is None
-        # and model_fields_set contains the field
-        if self.purchase_rate is None and "purchase_rate" in self.model_fields_set:
-            _dict["purchaseRate"] = None
-
         return _dict
 
     @classmethod

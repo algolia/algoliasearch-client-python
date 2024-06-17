@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self
 
-from pydantic import BaseModel, Field, StrictBool
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
 
 
 class Outliers(BaseModel):
@@ -21,7 +21,9 @@ class Outliers(BaseModel):
         description="Whether to exclude outliers when calculating A/B test results.",
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

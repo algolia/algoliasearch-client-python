@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 
 from algoliasearch.search.models.edit import Edit
 
@@ -25,7 +25,9 @@ class ConsequenceQueryObject(BaseModel):
         default=None, description="Changes to make to the search query."
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

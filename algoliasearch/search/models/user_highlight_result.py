@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Self
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from algoliasearch.search.models.highlight_result import HighlightResult
 
@@ -21,7 +21,9 @@ class UserHighlightResult(BaseModel):
     user_id: HighlightResult = Field(alias="userID")
     cluster_name: HighlightResult = Field(alias="clusterName")
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self
 
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 
 from algoliasearch.ingestion.models.auth_input_partial import AuthInputPartial
 from algoliasearch.ingestion.models.authentication_type import AuthenticationType
@@ -37,7 +37,9 @@ class Authentication(BaseModel):
         alias="updatedAt",
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -64,11 +66,6 @@ class Authentication(BaseModel):
         )
         if self.input:
             _dict["input"] = self.input.to_dict()
-        # set to None if platform (nullable) is None
-        # and model_fields_set contains the field
-        if self.platform is None and "platform" in self.model_fields_set:
-            _dict["platform"] = None
-
         return _dict
 
     @classmethod

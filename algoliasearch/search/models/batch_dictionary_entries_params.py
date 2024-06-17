@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictBool
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
 
 from algoliasearch.search.models.batch_dictionary_entries_request import (
     BatchDictionaryEntriesRequest,
@@ -29,7 +29,9 @@ class BatchDictionaryEntriesParams(BaseModel):
         description="List of additions and deletions to your dictionaries."
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

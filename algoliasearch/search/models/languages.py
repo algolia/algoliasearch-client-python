@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from algoliasearch.search.models.dictionary_language import DictionaryLanguage
 
@@ -22,7 +22,9 @@ class Languages(BaseModel):
     stopwords: Optional[DictionaryLanguage]
     compounds: Optional[DictionaryLanguage]
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -53,21 +55,6 @@ class Languages(BaseModel):
             _dict["stopwords"] = self.stopwords.to_dict()
         if self.compounds:
             _dict["compounds"] = self.compounds.to_dict()
-        # set to None if plurals (nullable) is None
-        # and model_fields_set contains the field
-        if self.plurals is None and "plurals" in self.model_fields_set:
-            _dict["plurals"] = None
-
-        # set to None if stopwords (nullable) is None
-        # and model_fields_set contains the field
-        if self.stopwords is None and "stopwords" in self.model_fields_set:
-            _dict["stopwords"] = None
-
-        # set to None if compounds (nullable) is None
-        # and model_fields_set contains the field
-        if self.compounds is None and "compounds" in self.model_fields_set:
-            _dict["compounds"] = None
-
         return _dict
 
     @classmethod

@@ -9,7 +9,7 @@ from json import loads
 from re import match
 from typing import Annotated, Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
 
 from algoliasearch.insights.models.conversion_event import ConversionEvent
 from algoliasearch.insights.models.object_data_after_search import ObjectDataAfterSearch
@@ -94,7 +94,9 @@ class PurchasedObjectIDsAfterSearch(BaseModel):
             )
         return value
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

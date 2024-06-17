@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 
 
 class SemanticSearch(BaseModel):
@@ -22,7 +22,9 @@ class SemanticSearch(BaseModel):
         alias="eventSources",
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -47,11 +49,6 @@ class SemanticSearch(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # set to None if event_sources (nullable) is None
-        # and model_fields_set contains the field
-        if self.event_sources is None and "event_sources" in self.model_fields_set:
-            _dict["eventSources"] = None
-
         return _dict
 
     @classmethod

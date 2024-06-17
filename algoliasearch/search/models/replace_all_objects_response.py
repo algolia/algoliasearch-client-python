@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Self
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from algoliasearch.search.models.batch_response import BatchResponse
 from algoliasearch.search.models.updated_at_response import UpdatedAtResponse
@@ -25,7 +25,9 @@ class ReplaceAllObjectsResponse(BaseModel):
     )
     move_operation_response: UpdatedAtResponse = Field(alias="moveOperationResponse")
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

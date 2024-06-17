@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 
 
 class DailyAverageClicks(BaseModel):
@@ -31,7 +31,9 @@ class DailyAverageClicks(BaseModel):
         description="Date in the format YYYY-MM-DD.", alias="date"
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -56,11 +58,6 @@ class DailyAverageClicks(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # set to None if average (nullable) is None
-        # and model_fields_set contains the field
-        if self.average is None and "average" in self.model_fields_set:
-            _dict["average"] = None
-
         return _dict
 
     @classmethod

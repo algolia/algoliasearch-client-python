@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Self, Union
 
-from pydantic import BaseModel, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
 
 from algoliasearch.analytics.models.daily_no_results_rates import DailyNoResultsRates
 
@@ -30,7 +30,9 @@ class GetNoResultsRateResponse(BaseModel):
     )
     dates: List[DailyNoResultsRates] = Field(description="Daily no results rates.")
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

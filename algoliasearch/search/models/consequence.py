@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictBool
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
 
 from algoliasearch.search.models.consequence_hide import ConsequenceHide
 from algoliasearch.search.models.consequence_params import ConsequenceParams
@@ -39,7 +39,9 @@ class Consequence(BaseModel):
         alias="userData",
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -78,11 +80,6 @@ class Consequence(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict["hide"] = _items
-        # set to None if user_data (nullable) is None
-        # and model_fields_set contains the field
-        if self.user_data is None and "user_data" in self.model_fields_set:
-            _dict["userData"] = None
-
         return _dict
 
     @classmethod

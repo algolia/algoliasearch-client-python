@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 
 
 class DailyClickThroughRates(BaseModel):
@@ -35,7 +35,9 @@ class DailyClickThroughRates(BaseModel):
         description="Date in the format YYYY-MM-DD.", alias="date"
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -60,11 +62,6 @@ class DailyClickThroughRates(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # set to None if rate (nullable) is None
-        # and model_fields_set contains the field
-        if self.rate is None and "rate" in self.model_fields_set:
-            _dict["rate"] = None
-
         return _dict
 
     @classmethod

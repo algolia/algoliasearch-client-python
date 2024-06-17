@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, ClassVar, Dict, List, Optional, Self
 
-from pydantic import BaseModel, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictStr
 
 
 class ErrorBase(BaseModel):
@@ -20,7 +20,9 @@ class ErrorBase(BaseModel):
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["message"]
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

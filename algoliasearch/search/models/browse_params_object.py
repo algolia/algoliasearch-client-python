@@ -8,7 +8,15 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictBool, StrictFloat, StrictInt, StrictStr
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    StrictBool,
+    StrictFloat,
+    StrictInt,
+    StrictStr,
+)
 
 from algoliasearch.search.models.advanced_syntax_features import AdvancedSyntaxFeatures
 from algoliasearch.search.models.alternatives_as_exact import AlternativesAsExact
@@ -372,7 +380,9 @@ class BrowseParamsObject(BaseModel):
         description="Cursor to get the next page of the response.  The parameter must match the value returned in the response of a previous request. The last page of the response does not return a `cursor` attribute. ",
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -423,14 +433,6 @@ class BrowseParamsObject(BaseModel):
             _dict["renderingContent"] = self.rendering_content.to_dict()
         if self.re_ranking_apply_filter:
             _dict["reRankingApplyFilter"] = self.re_ranking_apply_filter.to_dict()
-        # set to None if re_ranking_apply_filter (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.re_ranking_apply_filter is None
-            and "re_ranking_apply_filter" in self.model_fields_set
-        ):
-            _dict["reRankingApplyFilter"] = None
-
         return _dict
 
     @classmethod

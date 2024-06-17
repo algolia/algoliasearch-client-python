@@ -1,5 +1,6 @@
 from json import dumps
 from typing import Any, Dict
+from urllib.parse import urlencode
 
 PRIMITIVE_TYPES = (float, bool, bytes, str, int)
 
@@ -12,21 +13,30 @@ class QueryParametersSerializer:
     query_parameters: Dict[str, Any] = {}
 
     def parse(self, value) -> Any:
-        if isinstance(value, dict):
-            return dumps(value)
-        elif isinstance(value, list):
+        if isinstance(value, list):
             return ",".join([self.parse(item) for item in value])
+        elif isinstance(value, dict):
+            return dumps(value)
         elif isinstance(value, bool):
             return "true" if value else "false"
         else:
             return str(value)
+
+    def encoded(self) -> str:
+        return urlencode(
+            dict(sorted(self.query_parameters.items(), key=lambda val: val[0]))
+        ).replace("+", "%20")
 
     def __init__(self, query_parameters: Dict[str, Any]) -> None:
         self.query_parameters = {}
         if query_parameters is None:
             return
         for key, value in query_parameters.items():
-            self.query_parameters[key] = self.parse(value)
+            if isinstance(value, dict):
+                for dkey, dvalue in value.items():
+                    self.query_parameters[dkey] = self.parse(dvalue)
+            else:
+                self.query_parameters[key] = self.parse(value)
 
 
 def bodySerializer(obj: Any) -> dict:

@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Self
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from algoliasearch.search.models.standard_entries import StandardEntries
 
@@ -20,7 +20,9 @@ class DictionarySettingsParams(BaseModel):
 
     disable_standard_entries: StandardEntries = Field(alias="disableStandardEntries")
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

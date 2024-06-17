@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 
 from algoliasearch.query_suggestions.models.facet import Facet
 
@@ -43,7 +43,9 @@ class SourceIndex(BaseModel):
     generate: Optional[List[List[StrictStr]]] = None
     external: Optional[List[StrictStr]] = None
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -74,26 +76,6 @@ class SourceIndex(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict["facets"] = _items
-        # set to None if analytics_tags (nullable) is None
-        # and model_fields_set contains the field
-        if self.analytics_tags is None and "analytics_tags" in self.model_fields_set:
-            _dict["analyticsTags"] = None
-
-        # set to None if facets (nullable) is None
-        # and model_fields_set contains the field
-        if self.facets is None and "facets" in self.model_fields_set:
-            _dict["facets"] = None
-
-        # set to None if generate (nullable) is None
-        # and model_fields_set contains the field
-        if self.generate is None and "generate" in self.model_fields_set:
-            _dict["generate"] = None
-
-        # set to None if external (nullable) is None
-        # and model_fields_set contains the field
-        if self.external is None and "external" in self.model_fields_set:
-            _dict["external"] = None
-
         return _dict
 
     @classmethod

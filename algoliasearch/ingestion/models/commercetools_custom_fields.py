@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 
 
 class CommercetoolsCustomFields(BaseModel):
@@ -26,7 +26,9 @@ class CommercetoolsCustomFields(BaseModel):
         default=None, description="Category custom fields."
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -51,21 +53,6 @@ class CommercetoolsCustomFields(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # set to None if inventory (nullable) is None
-        # and model_fields_set contains the field
-        if self.inventory is None and "inventory" in self.model_fields_set:
-            _dict["inventory"] = None
-
-        # set to None if price (nullable) is None
-        # and model_fields_set contains the field
-        if self.price is None and "price" in self.model_fields_set:
-            _dict["price"] = None
-
-        # set to None if category (nullable) is None
-        # and model_fields_set contains the field
-        if self.category is None and "category" in self.model_fields_set:
-            _dict["category"] = None
-
         return _dict
 
     @classmethod

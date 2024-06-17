@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from algoliasearch.analytics.models.get_top_filters_no_results_values import (
     GetTopFiltersNoResultsValues,
@@ -24,7 +24,9 @@ class GetTopFiltersNoResultsResponse(BaseModel):
         description="Filters for searches without any results. If null, the search term specified with the `search` parameter is not a search without results, or the `search` parameter is absent from the request. "
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -55,11 +57,6 @@ class GetTopFiltersNoResultsResponse(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict["values"] = _items
-        # set to None if values (nullable) is None
-        # and model_fields_set contains the field
-        if self.values is None and "values" in self.model_fields_set:
-            _dict["values"] = None
-
         return _dict
 
     @classmethod

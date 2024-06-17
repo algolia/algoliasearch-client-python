@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from algoliasearch.recommend.models.fallback_params import FallbackParams
 from algoliasearch.recommend.models.trending_facets_model import TrendingFacetsModel
@@ -28,7 +28,9 @@ class TrendingFacets(BaseModel):
         default=None, alias="fallbackParameters"
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -55,11 +57,6 @@ class TrendingFacets(BaseModel):
         )
         if self.fallback_parameters:
             _dict["fallbackParameters"] = self.fallback_parameters.to_dict()
-        # set to None if facet_name (nullable) is None
-        # and model_fields_set contains the field
-        if self.facet_name is None and "facet_name" in self.model_fields_set:
-            _dict["facetName"] = None
-
         return _dict
 
     @classmethod

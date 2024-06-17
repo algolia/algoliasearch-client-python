@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 
 from algoliasearch.abtesting.models.currency import Currency
 from algoliasearch.abtesting.models.filter_effects import FilterEffects
@@ -90,7 +90,9 @@ class Variant(BaseModel):
         alias="trackedUserCount",
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -123,63 +125,6 @@ class Variant(BaseModel):
             _dict["currencies"] = _field_dict
         if self.filter_effects:
             _dict["filterEffects"] = self.filter_effects.to_dict()
-        # set to None if add_to_cart_rate (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.add_to_cart_rate is None
-            and "add_to_cart_rate" in self.model_fields_set
-        ):
-            _dict["addToCartRate"] = None
-
-        # set to None if average_click_position (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.average_click_position is None
-            and "average_click_position" in self.model_fields_set
-        ):
-            _dict["averageClickPosition"] = None
-
-        # set to None if click_through_rate (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.click_through_rate is None
-            and "click_through_rate" in self.model_fields_set
-        ):
-            _dict["clickThroughRate"] = None
-
-        # set to None if conversion_rate (nullable) is None
-        # and model_fields_set contains the field
-        if self.conversion_rate is None and "conversion_rate" in self.model_fields_set:
-            _dict["conversionRate"] = None
-
-        # set to None if no_result_count (nullable) is None
-        # and model_fields_set contains the field
-        if self.no_result_count is None and "no_result_count" in self.model_fields_set:
-            _dict["noResultCount"] = None
-
-        # set to None if purchase_rate (nullable) is None
-        # and model_fields_set contains the field
-        if self.purchase_rate is None and "purchase_rate" in self.model_fields_set:
-            _dict["purchaseRate"] = None
-
-        # set to None if search_count (nullable) is None
-        # and model_fields_set contains the field
-        if self.search_count is None and "search_count" in self.model_fields_set:
-            _dict["searchCount"] = None
-
-        # set to None if user_count (nullable) is None
-        # and model_fields_set contains the field
-        if self.user_count is None and "user_count" in self.model_fields_set:
-            _dict["userCount"] = None
-
-        # set to None if tracked_user_count (nullable) is None
-        # and model_fields_set contains the field
-        if (
-            self.tracked_user_count is None
-            and "tracked_user_count" in self.model_fields_set
-        ):
-            _dict["trackedUserCount"] = None
-
         return _dict
 
     @classmethod

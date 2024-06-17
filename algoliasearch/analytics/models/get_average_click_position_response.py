@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from algoliasearch.analytics.models.daily_average_clicks import DailyAverageClicks
 
@@ -33,7 +33,9 @@ class GetAverageClickPositionResponse(BaseModel):
         description="Daily average click positions."
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -64,11 +66,6 @@ class GetAverageClickPositionResponse(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict["dates"] = _items
-        # set to None if average (nullable) is None
-        # and model_fields_set contains the field
-        if self.average is None and "average" in self.model_fields_set:
-            _dict["average"] = None
-
         return _dict
 
     @classmethod

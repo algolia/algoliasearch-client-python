@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, List, Optional, Self
 
-from pydantic import BaseModel, Field, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 
 from algoliasearch.query_suggestions.models.languages import Languages
 from algoliasearch.query_suggestions.models.source_index import SourceIndex
@@ -40,7 +40,9 @@ class QuerySuggestionsConfigurationWithIndex(BaseModel):
         alias="indexName",
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -73,11 +75,6 @@ class QuerySuggestionsConfigurationWithIndex(BaseModel):
             _dict["sourceIndices"] = _items
         if self.languages:
             _dict["languages"] = self.languages.to_dict()
-        # set to None if exclude (nullable) is None
-        # and model_fields_set contains the field
-        if self.exclude is None and "exclude" in self.model_fields_set:
-            _dict["exclude"] = None
-
         return _dict
 
     @classmethod

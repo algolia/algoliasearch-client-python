@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Self
 
-from pydantic import BaseModel, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 
 from algoliasearch.search.models.built_in_operation_type import BuiltInOperationType
 
@@ -23,7 +23,9 @@ class BuiltInOperation(BaseModel):
         description="Value that corresponds to the operation, for example an `Increment` or `Decrement` step, or an `Add` or `Remove` value."
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)

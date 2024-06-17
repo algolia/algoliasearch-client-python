@@ -8,7 +8,7 @@ from __future__ import annotations
 from json import loads
 from typing import Annotated, Any, Dict, Optional, Self
 
-from pydantic import BaseModel, Field, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 
 from algoliasearch.search.models.anchoring import Anchoring
 
@@ -37,7 +37,9 @@ class SearchRulesParams(BaseModel):
         description="If `true`, return only enabled rules. If `false`, return only inactive rules. By default, _all_ rules are returned. ",
     )
 
-    model_config = {"populate_by_name": True, "validate_assignment": True}
+    model_config = ConfigDict(
+        use_enum_values=True, populate_by_name=True, validate_assignment=True
+    )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
@@ -62,11 +64,6 @@ class SearchRulesParams(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # set to None if enabled (nullable) is None
-        # and model_fields_set contains the field
-        if self.enabled is None and "enabled" in self.model_fields_set:
-            _dict["enabled"] = None
-
         return _dict
 
     @classmethod

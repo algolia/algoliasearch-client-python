@@ -102,7 +102,7 @@ from algoliasearch.search.models.search_synonyms_response import SearchSynonymsR
 from algoliasearch.search.models.search_user_ids_params import SearchUserIdsParams
 from algoliasearch.search.models.search_user_ids_response import SearchUserIdsResponse
 from algoliasearch.search.models.secured_api_key_restrictions import (
-    SecuredAPIKeyRestrictions,
+    SecuredApiKeyRestrictions,
 )
 from algoliasearch.search.models.source import Source
 from algoliasearch.search.models.synonym_hit import SynonymHit
@@ -394,18 +394,22 @@ class SearchClient:
     def generate_secured_api_key(
         self,
         parent_api_key: str,
-        restrictions: Optional[SecuredAPIKeyRestrictions] = SecuredAPIKeyRestrictions(),
+        restrictions: Optional[SecuredApiKeyRestrictions] = SecuredApiKeyRestrictions(),
     ) -> str:
         """
         Helper: Generates a secured API key based on the given `parent_api_key` and given `restrictions`.
         """
-        query_parameters = dumps(
-            QueryParametersSerializer(
-                restrictions.to_dict()
-                if isinstance(restrictions, SecuredAPIKeyRestrictions)
-                else restrictions
-            ).query_parameters
-        )
+        if not isinstance(restrictions, SecuredApiKeyRestrictions):
+            restrictions = SecuredApiKeyRestrictions.from_dict(restrictions)
+
+        restrictions = restrictions.to_dict()
+        if "searchParams" in restrictions:
+            restrictions = {**restrictions, **restrictions["searchParams"]}
+            del restrictions["searchParams"]
+
+        query_parameters = QueryParametersSerializer(
+            dict(sorted(restrictions.items()))
+        ).encoded()
 
         secured_key = hmac.new(
             parent_api_key.encode(encoding="utf-8"),
@@ -421,14 +425,12 @@ class SearchClient:
 
     def get_secured_api_key_remaining_validity(self, secured_api_key: str) -> int:
         """
-        Helper: Retrieves the remaining validity of the previous generated `secured_api_key`, the `ValidUntil` parameter must have been provided.
+        Helper: Retrieves the remaining validity of the previous generated `secured_api_key`, the `validUntil` parameter must have been provided.
         """
-        validity = search(
-            r'"valid_until": "(\d+)"', str(base64.b64decode(secured_api_key))
-        )
+        validity = search(r"validUntil=(\d+)", str(base64.b64decode(secured_api_key)))
 
         if validity is None:
-            raise ValidUntilNotFoundException("valid_until not found in api key.")
+            raise ValidUntilNotFoundException("validUntil not found in api key.")
 
         return int(validity.group(1)) - int(round(time()))
 
