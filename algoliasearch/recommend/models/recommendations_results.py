@@ -126,7 +126,7 @@ class RecommendationsResults(BaseModel):
     )
     user_data: Optional[Dict[str, Any]] = Field(
         default=None,
-        description="An object with custom data.  You can store up to 32&nbsp;kB as custom data. ",
+        description="An object with custom data.  You can store up to 32kB as custom data. ",
         alias="userData",
     )
     query_id: Optional[StrictStr] = Field(

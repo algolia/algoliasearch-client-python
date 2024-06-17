@@ -39,7 +39,7 @@ class TrendingFacetsQuery(BaseModel):
     query_parameters: Optional[SearchParams] = Field(
         default=None, alias="queryParameters"
     )
-    facet_name: Dict[str, Any] = Field(
+    facet_name: Optional[Any] = Field(
         description="Facet attribute for which to retrieve trending facet values.",
         alias="facetName",
     )
@@ -77,6 +77,11 @@ class TrendingFacetsQuery(BaseModel):
             _dict["queryParameters"] = self.query_parameters.to_dict()
         if self.fallback_parameters:
             _dict["fallbackParameters"] = self.fallback_parameters.to_dict()
+        # set to None if facet_name (nullable) is None
+        # and model_fields_set contains the field
+        if self.facet_name is None and "facet_name" in self.model_fields_set:
+            _dict["facetName"] = None
+
         return _dict
 
     @classmethod

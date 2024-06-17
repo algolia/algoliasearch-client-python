@@ -123,9 +123,9 @@ class BaseSearchResponse(BaseModel):
         description="Host name of the server that processed the request.",
         alias="serverUsed",
     )
-    user_data: Optional[Any] = Field(
+    user_data: Optional[Dict[str, Any]] = Field(
         default=None,
-        description="An object with custom data.  You can store up to 32&nbsp;kB as custom data. ",
+        description="An object with custom data.  You can store up to 32kB as custom data. ",
         alias="userData",
     )
     query_id: Optional[StrictStr] = Field(
@@ -221,11 +221,6 @@ class BaseSearchResponse(BaseModel):
         if self.additional_properties is not None:
             for _key, _value in self.additional_properties.items():
                 _dict[_key] = _value
-
-        # set to None if user_data (nullable) is None
-        # and model_fields_set contains the field
-        if self.user_data is None and "user_data" in self.model_fields_set:
-            _dict["userData"] = None
 
         return _dict
 

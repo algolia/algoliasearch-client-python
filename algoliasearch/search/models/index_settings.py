@@ -108,7 +108,7 @@ class IndexSettings(BaseModel):
     )
     user_data: Optional[Dict[str, Any]] = Field(
         default=None,
-        description="An object with custom data.  You can store up to 32&nbsp;kB as custom data. ",
+        description="An object with custom data.  You can store up to 32kB as custom data. ",
         alias="userData",
     )
     custom_normalization: Optional[Dict[str, Dict[str, StrictStr]]] = Field(
@@ -344,6 +344,14 @@ class IndexSettings(BaseModel):
             _dict["renderingContent"] = self.rendering_content.to_dict()
         if self.re_ranking_apply_filter:
             _dict["reRankingApplyFilter"] = self.re_ranking_apply_filter.to_dict()
+        # set to None if re_ranking_apply_filter (nullable) is None
+        # and model_fields_set contains the field
+        if (
+            self.re_ranking_apply_filter is None
+            and "re_ranking_apply_filter" in self.model_fields_set
+        ):
+            _dict["reRankingApplyFilter"] = None
+
         return _dict
 
     @classmethod

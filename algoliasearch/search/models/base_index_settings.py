@@ -89,9 +89,9 @@ class BaseIndexSettings(BaseModel):
         description='Attributes used for searching. Attribute names are case-sensitive.  By default, all attributes are searchable and the [Attribute](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#attribute) ranking criterion is turned off. With a non-empty list, Algolia only returns results with matches in the selected attributes. In addition, the Attribute ranking criterion is turned on: matches in attributes that are higher in the list of `searchableAttributes` rank first. To make matches in two attributes rank equally, include them in a comma-separated string, such as `"title,alternate_title"`. Attributes with the same priority are always unordered.  For more information, see [Searchable attributes](https://www.algolia.com/doc/guides/sending-and-managing-data/prepare-your-data/how-to/setting-searchable-attributes/).  **Modifier**  - `unordered("ATTRIBUTE")`.   Ignore the position of a match within the attribute.  Without modifier, matches at the beginning of an attribute rank higer than matches at the end. ',
         alias="searchableAttributes",
     )
-    user_data: Optional[Any] = Field(
+    user_data: Optional[Dict[str, Any]] = Field(
         default=None,
-        description="An object with custom data.  You can store up to 32&nbsp;kB as custom data. ",
+        description="An object with custom data.  You can store up to 32kB as custom data. ",
         alias="userData",
     )
     custom_normalization: Optional[Dict[str, Dict[str, StrictStr]]] = Field(
@@ -130,11 +130,6 @@ class BaseIndexSettings(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        # set to None if user_data (nullable) is None
-        # and model_fields_set contains the field
-        if self.user_data is None and "user_data" in self.model_fields_set:
-            _dict["userData"] = None
-
         return _dict
 
     @classmethod
