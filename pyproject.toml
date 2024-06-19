@@ -22,22 +22,20 @@ async-timeout = ">= 4.0.3"
 pydantic = ">= 2"
 
 [tool.poetry.group.dev.dependencies]
-flake8 = "7.0.0"
-autoflake = "2.3.1"
-autopep8 = "2.2.0"
-black = "24.4.2"
-isort = "5.13.2"
+ruff = "0.4.9"
 
-[tool.flake8]
-max-line-length = 88
-ignore = ['E501']
+[tool.ruff]
+line-length = 88
 
-[tool.isort]
-line_length=88
-include_trailing_comma=true
-multi_line_output=3
-force_grid_wrap=0
-combine_as_imports=true
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+
+[tool.ruff.format]
+quote-style = "double"
 
 [build-system]
 requires = ["poetry-core"]
