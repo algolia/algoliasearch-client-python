@@ -76,6 +76,9 @@ from algoliasearch.ingestion.models.source_sort_keys import SourceSortKeys
 from algoliasearch.ingestion.models.source_type import SourceType
 from algoliasearch.ingestion.models.source_update import SourceUpdate
 from algoliasearch.ingestion.models.source_update_response import SourceUpdateResponse
+from algoliasearch.ingestion.models.source_validate_response import (
+    SourceValidateResponse,
+)
 from algoliasearch.ingestion.models.task import Task
 from algoliasearch.ingestion.models.task_create import TaskCreate
 from algoliasearch.ingestion.models.task_create_response import TaskCreateResponse
@@ -3200,3 +3203,137 @@ class IngestionClient:
         return (
             await self.update_task_with_http_info(task_id, task_update, request_options)
         ).deserialize(TaskUpdateResponse)
+
+    async def validate_source_with_http_info(
+        self,
+        source_create: Optional[SourceCreate] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Validates a source payload to ensure it can be created and that the data source can be reached by Algolia.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_create:
+        :type source_create: SourceCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _data = {}
+        if source_create is not None:
+            _data = source_create
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/sources/validate",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def validate_source(
+        self,
+        source_create: Optional[SourceCreate] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SourceValidateResponse:
+        """
+        Validates a source payload to ensure it can be created and that the data source can be reached by Algolia.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_create:
+        :type source_create: SourceCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SourceValidateResponse' result object.
+        """
+        return (
+            await self.validate_source_with_http_info(source_create, request_options)
+        ).deserialize(SourceValidateResponse)
+
+    async def validate_source_before_update_with_http_info(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        source_update: SourceUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Validates an update of a source payload to ensure it can be created and that the data source can be reached by Algolia.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param source_update: (required)
+        :type source_update: SourceUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `validate_source_before_update`."
+            )
+
+        if source_update is None:
+            raise ValueError(
+                "Parameter `source_update` is required when calling `validate_source_before_update`."
+            )
+
+        _data = {}
+        if source_update is not None:
+            _data = source_update
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/sources/{sourceID}/validate".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def validate_source_before_update(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        source_update: SourceUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SourceValidateResponse:
+        """
+        Validates an update of a source payload to ensure it can be created and that the data source can be reached by Algolia.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param source_update: (required)
+        :type source_update: SourceUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SourceValidateResponse' result object.
+        """
+        return (
+            await self.validate_source_before_update_with_http_info(
+                source_id, source_update, request_options
+            )
+        ).deserialize(SourceValidateResponse)
