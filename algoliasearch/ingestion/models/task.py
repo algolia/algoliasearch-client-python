@@ -43,6 +43,9 @@ class Task(BaseModel):
         )
     )
     action: ActionType
+    cursor: Optional[StrictStr] = Field(
+        default=None, description="Date of the last cursor in RFC 3339 format."
+    )
     created_at: StrictStr = Field(
         description="Date of creation in RFC 3339 format.", alias="createdAt"
     )
@@ -112,6 +115,7 @@ class Task(BaseModel):
                 "enabled": obj.get("enabled"),
                 "failureThreshold": obj.get("failureThreshold"),
                 "action": obj.get("action"),
+                "cursor": obj.get("cursor"),
                 "createdAt": obj.get("createdAt"),
                 "updatedAt": obj.get("updatedAt"),
             }

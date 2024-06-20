@@ -42,6 +42,9 @@ class TaskCreate(BaseModel):
         )
     )
     input: Optional[TaskInput] = None
+    cursor: Optional[StrictStr] = Field(
+        default=None, description="Date of the last cursor in RFC 3339 format."
+    )
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -102,6 +105,7 @@ class TaskCreate(BaseModel):
                     if obj.get("input") is not None
                     else None
                 ),
+                "cursor": obj.get("cursor"),
             }
         )
         return _obj
