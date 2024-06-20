@@ -14,9 +14,9 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from algoliasearch.ingestion.models.event import Event
 
 
-class SourceValidateResponse(BaseModel):
+class SourceWatchResponse(BaseModel):
     """
-    SourceValidateResponse
+    SourceWatchResponse
     """
 
     run_id: Optional[StrictStr] = Field(
@@ -45,7 +45,7 @@ class SourceValidateResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of SourceValidateResponse from a JSON string"""
+        """Create an instance of SourceWatchResponse from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,7 +73,7 @@ class SourceValidateResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of SourceValidateResponse from a dict"""
+        """Create an instance of SourceWatchResponse from a dict"""
         if obj is None:
             return None
 

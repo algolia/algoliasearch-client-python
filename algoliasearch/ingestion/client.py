@@ -46,8 +46,6 @@ from algoliasearch.ingestion.models.destination_update import DestinationUpdate
 from algoliasearch.ingestion.models.destination_update_response import (
     DestinationUpdateResponse,
 )
-from algoliasearch.ingestion.models.docker_source_discover import DockerSourceDiscover
-from algoliasearch.ingestion.models.docker_source_streams import DockerSourceStreams
 from algoliasearch.ingestion.models.event import Event
 from algoliasearch.ingestion.models.event_sort_keys import EventSortKeys
 from algoliasearch.ingestion.models.event_status import EventStatus
@@ -76,9 +74,7 @@ from algoliasearch.ingestion.models.source_sort_keys import SourceSortKeys
 from algoliasearch.ingestion.models.source_type import SourceType
 from algoliasearch.ingestion.models.source_update import SourceUpdate
 from algoliasearch.ingestion.models.source_update_response import SourceUpdateResponse
-from algoliasearch.ingestion.models.source_validate_response import (
-    SourceValidateResponse,
-)
+from algoliasearch.ingestion.models.source_watch_response import SourceWatchResponse
 from algoliasearch.ingestion.models.task import Task
 from algoliasearch.ingestion.models.task_create import TaskCreate
 from algoliasearch.ingestion.models.task_create_response import TaskCreateResponse
@@ -1513,69 +1509,6 @@ class IngestionClient:
             )
         ).deserialize(ListDestinationsResponse)
 
-    async def get_docker_source_streams_with_http_info(
-        self,
-        source_id: Annotated[
-            StrictStr, Field(description="Unique identifier of a source.")
-        ],
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> ApiResponse[str]:
-        """
-        Retrieves a stream listing for a source.  Listing streams only works with sources with `type: docker` and `imageType: singer`.
-
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
-
-        :param source_id: Unique identifier of a source. (required)
-        :type source_id: str
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the raw algoliasearch 'APIResponse' object.
-        """
-
-        if source_id is None:
-            raise ValueError(
-                "Parameter `source_id` is required when calling `get_docker_source_streams`."
-            )
-
-        return await self._transporter.request(
-            verb=Verb.GET,
-            path="/1/sources/{sourceID}/discover".replace(
-                "{sourceID}", quote(str(source_id), safe="")
-            ),
-            request_options=self._request_options.merge(
-                user_request_options=request_options,
-            ),
-            use_read_transporter=False,
-        )
-
-    async def get_docker_source_streams(
-        self,
-        source_id: Annotated[
-            StrictStr, Field(description="Unique identifier of a source.")
-        ],
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> DockerSourceStreams:
-        """
-        Retrieves a stream listing for a source.  Listing streams only works with sources with `type: docker` and `imageType: singer`.
-
-        Required API Key ACLs:
-          - addObject
-                  - deleteIndex
-                  - editSettings
-
-        :param source_id: Unique identifier of a source. (required)
-        :type source_id: str
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'DockerSourceStreams' result object.
-        """
-        return (
-            await self.get_docker_source_streams_with_http_info(
-                source_id, request_options
-            )
-        ).deserialize(DockerSourceStreams)
-
     async def get_event_with_http_info(
         self,
         run_id: Annotated[
@@ -2878,7 +2811,7 @@ class IngestionClient:
             StrictStr, Field(description="Unique identifier of a source.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> DockerSourceDiscover:
+    ) -> SourceWatchResponse:
         """
         Triggers a stream-listing request for a source. Triggering stream-listing requests only works with sources with `type: docker` and `imageType: singer`.
 
@@ -2890,13 +2823,13 @@ class IngestionClient:
         :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'DockerSourceDiscover' result object.
+        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
         """
         return (
             await self.trigger_docker_source_discover_with_http_info(
                 source_id, request_options
             )
-        ).deserialize(DockerSourceDiscover)
+        ).deserialize(SourceWatchResponse)
 
     async def update_authentication_with_http_info(
         self,
@@ -3241,7 +3174,7 @@ class IngestionClient:
         self,
         source_create: Optional[SourceCreate] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> SourceValidateResponse:
+    ) -> SourceWatchResponse:
         """
         Validates a source payload to ensure it can be created and that the data source can be reached by Algolia.
 
@@ -3253,11 +3186,11 @@ class IngestionClient:
         :param source_create:
         :type source_create: SourceCreate
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'SourceValidateResponse' result object.
+        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
         """
         return (
             await self.validate_source_with_http_info(source_create, request_options)
-        ).deserialize(SourceValidateResponse)
+        ).deserialize(SourceWatchResponse)
 
     async def validate_source_before_update_with_http_info(
         self,
@@ -3316,7 +3249,7 @@ class IngestionClient:
         ],
         source_update: SourceUpdate,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> SourceValidateResponse:
+    ) -> SourceWatchResponse:
         """
         Validates an update of a source payload to ensure it can be created and that the data source can be reached by Algolia.
 
@@ -3330,10 +3263,10 @@ class IngestionClient:
         :param source_update: (required)
         :type source_update: SourceUpdate
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'SourceValidateResponse' result object.
+        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
         """
         return (
             await self.validate_source_before_update_with_http_info(
                 source_id, source_update, request_options
             )
-        ).deserialize(SourceValidateResponse)
+        ).deserialize(SourceWatchResponse)
