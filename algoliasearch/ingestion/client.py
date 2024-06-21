@@ -59,6 +59,9 @@ from algoliasearch.ingestion.models.list_destinations_response import (
 from algoliasearch.ingestion.models.list_events_response import ListEventsResponse
 from algoliasearch.ingestion.models.list_sources_response import ListSourcesResponse
 from algoliasearch.ingestion.models.list_tasks_response import ListTasksResponse
+from algoliasearch.ingestion.models.list_transformations_response import (
+    ListTransformationsResponse,
+)
 from algoliasearch.ingestion.models.order_keys import OrderKeys
 from algoliasearch.ingestion.models.platform_with_none import PlatformWithNone
 from algoliasearch.ingestion.models.run import Run
@@ -66,6 +69,7 @@ from algoliasearch.ingestion.models.run_list_response import RunListResponse
 from algoliasearch.ingestion.models.run_response import RunResponse
 from algoliasearch.ingestion.models.run_sort_keys import RunSortKeys
 from algoliasearch.ingestion.models.run_status import RunStatus
+from algoliasearch.ingestion.models.sort_keys import SortKeys
 from algoliasearch.ingestion.models.source import Source
 from algoliasearch.ingestion.models.source_create import SourceCreate
 from algoliasearch.ingestion.models.source_create_response import SourceCreateResponse
@@ -82,6 +86,19 @@ from algoliasearch.ingestion.models.task_search import TaskSearch
 from algoliasearch.ingestion.models.task_sort_keys import TaskSortKeys
 from algoliasearch.ingestion.models.task_update import TaskUpdate
 from algoliasearch.ingestion.models.task_update_response import TaskUpdateResponse
+from algoliasearch.ingestion.models.transformation import Transformation
+from algoliasearch.ingestion.models.transformation_create import TransformationCreate
+from algoliasearch.ingestion.models.transformation_create_response import (
+    TransformationCreateResponse,
+)
+from algoliasearch.ingestion.models.transformation_search import TransformationSearch
+from algoliasearch.ingestion.models.transformation_try import TransformationTry
+from algoliasearch.ingestion.models.transformation_try_response import (
+    TransformationTryResponse,
+)
+from algoliasearch.ingestion.models.transformation_update_response import (
+    TransformationUpdateResponse,
+)
 from algoliasearch.ingestion.models.trigger_type import TriggerType
 
 
@@ -404,6 +421,66 @@ class IngestionClient:
         return (
             await self.create_task_with_http_info(task_create, request_options)
         ).deserialize(TaskCreateResponse)
+
+    async def create_transformation_with_http_info(
+        self,
+        transformation_create: Annotated[
+            TransformationCreate,
+            Field(description="Request body for creating a transformation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new transformation.
+
+
+        :param transformation_create: Request body for creating a transformation. (required)
+        :type transformation_create: TransformationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_create is None:
+            raise ValueError(
+                "Parameter `transformation_create` is required when calling `create_transformation`."
+            )
+
+        _data = {}
+        if transformation_create is not None:
+            _data = transformation_create
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def create_transformation(
+        self,
+        transformation_create: Annotated[
+            TransformationCreate,
+            Field(description="Request body for creating a transformation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TransformationCreateResponse:
+        """
+        Creates a new transformation.
+
+
+        :param transformation_create: Request body for creating a transformation. (required)
+        :type transformation_create: TransformationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationCreateResponse' result object.
+        """
+        return (
+            await self.create_transformation_with_http_info(
+                transformation_create, request_options
+            )
+        ).deserialize(TransformationCreateResponse)
 
     async def custom_delete_with_http_info(
         self,
@@ -979,6 +1056,61 @@ class IngestionClient:
         """
         return (
             await self.delete_task_with_http_info(task_id, request_options)
+        ).deserialize(DeleteResponse)
+
+    async def delete_transformation_with_http_info(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a transformation by its ID.
+
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `delete_transformation`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/transformations/{transformationID}".replace(
+                "{transformationID}", quote(str(transformation_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def delete_transformation(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteResponse:
+        """
+        Deletes a transformation by its ID.
+
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteResponse' result object.
+        """
+        return (
+            await self.delete_transformation_with_http_info(
+                transformation_id, request_options
+            )
         ).deserialize(DeleteResponse)
 
     async def disable_task_with_http_info(
@@ -2465,6 +2597,143 @@ class IngestionClient:
             )
         ).deserialize(ListTasksResponse)
 
+    async def get_transformation_with_http_info(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a transformation by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `get_transformation`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/1/transformations/{transformationID}".replace(
+                "{transformationID}", quote(str(transformation_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_transformation(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Transformation:
+        """
+        Retrieves a transformation by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Transformation' result object.
+        """
+        return (
+            await self.get_transformation_with_http_info(
+                transformation_id, request_options
+            )
+        ).deserialize(Transformation)
+
+    async def get_transformations_with_http_info(
+        self,
+        sort: Annotated[
+            Optional[SortKeys], Field(description="Property by which to sort the list.")
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param sort: Property by which to sort the list.
+        :type sort: SortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if sort is not None:
+            _query_parameters.append(("sort", sort))
+        if order is not None:
+            _query_parameters.append(("order", order))
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/1/transformations",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_transformations(
+        self,
+        sort: Annotated[
+            Optional[SortKeys], Field(description="Property by which to sort the list.")
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListTransformationsResponse:
+        """
+        Retrieves a list of transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param sort: Property by which to sort the list.
+        :type sort: SortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListTransformationsResponse' result object.
+        """
+        return (
+            await self.get_transformations_with_http_info(sort, order, request_options)
+        ).deserialize(ListTransformationsResponse)
+
     async def run_task_with_http_info(
         self,
         task_id: Annotated[
@@ -2768,6 +3037,68 @@ class IngestionClient:
             await self.search_tasks_with_http_info(task_search, request_options)
         ).deserialize(List[Task])
 
+    async def search_transformations_with_http_info(
+        self,
+        transformation_search: TransformationSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_search: (required)
+        :type transformation_search: TransformationSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_search is None:
+            raise ValueError(
+                "Parameter `transformation_search` is required when calling `search_transformations`."
+            )
+
+        _data = {}
+        if transformation_search is not None:
+            _data = transformation_search
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations/search",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def search_transformations(
+        self,
+        transformation_search: TransformationSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[Transformation]:
+        """
+        Searches for transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_search: (required)
+        :type transformation_search: TransformationSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'List[Transformation]' result object.
+        """
+        return (
+            await self.search_transformations_with_http_info(
+                transformation_search, request_options
+            )
+        ).deserialize(List[Transformation])
+
     async def trigger_docker_source_discover_with_http_info(
         self,
         source_id: Annotated[
@@ -2830,6 +3161,68 @@ class IngestionClient:
                 source_id, request_options
             )
         ).deserialize(SourceWatchResponse)
+
+    async def try_transformations_with_http_info(
+        self,
+        transformation_try: TransformationTry,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_try: (required)
+        :type transformation_try: TransformationTry
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_try is None:
+            raise ValueError(
+                "Parameter `transformation_try` is required when calling `try_transformations`."
+            )
+
+        _data = {}
+        if transformation_try is not None:
+            _data = transformation_try
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations/try",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def try_transformations(
+        self,
+        transformation_try: TransformationTry,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TransformationTryResponse:
+        """
+        Searches for transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_try: (required)
+        :type transformation_try: TransformationTry
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationTryResponse' result object.
+        """
+        return (
+            await self.try_transformations_with_http_info(
+                transformation_try, request_options
+            )
+        ).deserialize(TransformationTryResponse)
 
     async def update_authentication_with_http_info(
         self,
@@ -3136,6 +3529,77 @@ class IngestionClient:
         return (
             await self.update_task_with_http_info(task_id, task_update, request_options)
         ).deserialize(TaskUpdateResponse)
+
+    async def update_transformation_with_http_info(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        transformation_create: TransformationCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Updates a transformation by its ID.
+
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param transformation_create: (required)
+        :type transformation_create: TransformationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `update_transformation`."
+            )
+
+        if transformation_create is None:
+            raise ValueError(
+                "Parameter `transformation_create` is required when calling `update_transformation`."
+            )
+
+        _data = {}
+        if transformation_create is not None:
+            _data = transformation_create
+
+        return await self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/transformations/{transformationID}".replace(
+                "{transformationID}", quote(str(transformation_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def update_transformation(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        transformation_create: TransformationCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TransformationUpdateResponse:
+        """
+        Updates a transformation by its ID.
+
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param transformation_create: (required)
+        :type transformation_create: TransformationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationUpdateResponse' result object.
+        """
+        return (
+            await self.update_transformation_with_http_info(
+                transformation_id, transformation_create, request_options
+            )
+        ).deserialize(TransformationUpdateResponse)
 
     async def validate_source_with_http_info(
         self,
