@@ -10,9 +10,8 @@ import base64
 import hashlib
 import hmac
 from json import dumps
-from random import choice
+from random import randint
 from re import search
-from string import ascii_letters
 from time import time
 from typing import Annotated, Any, Callable, Dict, List, Optional, Self, Tuple, Union
 from urllib.parse import quote
@@ -75,6 +74,9 @@ from algoliasearch.search.models.log_type import LogType
 from algoliasearch.search.models.multiple_batch_response import MultipleBatchResponse
 from algoliasearch.search.models.operation_index_params import OperationIndexParams
 from algoliasearch.search.models.remove_user_id_response import RemoveUserIdResponse
+from algoliasearch.search.models.replace_all_objects_response import (
+    ReplaceAllObjectsResponse,
+)
 from algoliasearch.search.models.replace_source_response import ReplaceSourceResponse
 from algoliasearch.search.models.rule import Rule
 from algoliasearch.search.models.save_object_response import SaveObjectResponse
@@ -439,9 +441,7 @@ class SearchClient:
         """
         Helper: Creates a temporary index name from the given `index_name`.
         """
-        return "{}_tmp_{}".format(
-            index_name, "".join(choice(ascii_letters) for i in range(10))
-        )
+        return "{}_tmp_{}".format(index_name, randint(1000000, 9999999))
 
     async def chunked_batch(
         self,
@@ -535,11 +535,11 @@ class SearchClient:
             index_name=tmp_index_name, task_id=move_operation_response.task_id
         )
 
-        return {
-            "copy_operation_response": copy_operation_response,
-            "batch_responses": batch_responses,
-            "move_operation_response": move_operation_response,
-        }
+        return ReplaceAllObjectsResponse(
+            copy_operation_response=copy_operation_response,
+            batch_responses=batch_responses,
+            move_operation_response=move_operation_response,
+        )
 
     async def add_api_key_with_http_info(
         self,
