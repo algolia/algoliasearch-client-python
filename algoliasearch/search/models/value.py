@@ -26,6 +26,9 @@ class Value(BaseModel):
     sort_remaining_by: Optional[SortRemainingBy] = Field(
         default=None, alias="sortRemainingBy"
     )
+    hide: Optional[List[StrictStr]] = Field(
+        default=None, description="Hide facet values."
+    )
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -66,6 +69,10 @@ class Value(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate(
-            {"order": obj.get("order"), "sortRemainingBy": obj.get("sortRemainingBy")}
+            {
+                "order": obj.get("order"),
+                "sortRemainingBy": obj.get("sortRemainingBy"),
+                "hide": obj.get("hide"),
+            }
         )
         return _obj
