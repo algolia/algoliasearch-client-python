@@ -443,11 +443,54 @@ class SearchClient:
         """
         return "{}_tmp_{}".format(index_name, randint(1000000, 9999999))
 
+    async def save_objects(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+    ) -> List[BatchResponse]:
+        """
+        Helper: Saves the given array of objects in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
+        """
+        return await self.chunked_batch(
+            index_name=index_name, objects=objects, action=Action.ADDOBJECT
+        )
+
+    async def delete_objects(
+        self,
+        index_name: str,
+        object_ids: List[str],
+    ) -> List[BatchResponse]:
+        """
+        Helper: Deletes every records for the given objectIDs. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objectIDs in it.
+        """
+        return await self.chunked_batch(
+            index_name=index_name,
+            objects=[{"objectID": id} for id in object_ids],
+            action=Action.DELETEOBJECT,
+        )
+
+    async def partial_update_objects(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        create_if_not_exists: Optional[bool] = False,
+    ) -> List[BatchResponse]:
+        """
+        Helper: Replaces object content of all the given objects according to their respective `objectID` field. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
+        """
+        return await self.chunked_batch(
+            index_name=index_name,
+            objects=objects,
+            action=Action.PARTIALUPDATEOBJECT
+            and create_if_not_exists
+            or Action.PARTIALUPDATEOBJECTNOCREATE,
+        )
+
     async def chunked_batch(
         self,
         index_name: str,
         objects: List[Dict[str, Any]],
-        action: Action = "addObject",
+        action: Action = Action.ADDOBJECT,
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
