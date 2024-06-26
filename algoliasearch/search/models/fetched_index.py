@@ -52,6 +52,10 @@ class FetchedIndex(BaseModel):
         default=None,
         description="Only present if the index is a primary index with replicas. Contains the names of all linked replicas.",
     )
+    virtual: Optional[StrictBool] = Field(
+        default=None,
+        description="Only present if the index is a [virtual replica](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/sort-an-index-alphabetically/#virtual-replicas).",
+    )
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -104,6 +108,7 @@ class FetchedIndex(BaseModel):
                 "pendingTask": obj.get("pendingTask"),
                 "primary": obj.get("primary"),
                 "replicas": obj.get("replicas"),
+                "virtual": obj.get("virtual"),
             }
         )
         return _obj

@@ -28,10 +28,6 @@ class BaseIndexSettings(BaseModel):
         default=None,
         description="Creates [replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/).  Replicas are copies of a primary index with the same records but different settings, synonyms, or rules. If you want to offer a different ranking or sorting of your search results, you'll use replica indices. All index operations on a primary index are automatically forwarded to its replicas. To add a replica index, you must provide the complete set of replicas to this parameter. If you omit a replica from this list, the replica turns into a regular, standalone index that will no longer by synced with the primary index.  **Modifier**  - `virtual(\"REPLICA\")`.   Create a virtual replica,   Virtual replicas don't increase the number of records and are optimized for [Relevant sorting](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/relevant-sort/). ",
     )
-    virtual: Optional[StrictBool] = Field(
-        default=None,
-        description="Only present if the index is a [virtual replica](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/sort-an-index-alphabetically/#virtual-replicas).",
-    )
     pagination_limited_to: Optional[Annotated[int, Field(le=20000, strict=True)]] = (
         Field(
             default=1000,
@@ -152,7 +148,6 @@ class BaseIndexSettings(BaseModel):
             {
                 "attributesForFaceting": obj.get("attributesForFaceting"),
                 "replicas": obj.get("replicas"),
-                "virtual": obj.get("virtual"),
                 "paginationLimitedTo": obj.get("paginationLimitedTo"),
                 "unretrievableAttributes": obj.get("unretrievableAttributes"),
                 "disableTypoToleranceOnWords": obj.get("disableTypoToleranceOnWords"),
