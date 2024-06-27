@@ -15,7 +15,7 @@ from algoliasearch.query_suggestions.models.languages import Languages
 from algoliasearch.query_suggestions.models.source_index import SourceIndex
 
 
-class QuerySuggestionsConfiguration(BaseModel):
+class Configuration(BaseModel):
     """
     Query Suggestions configuration.
     """
@@ -46,7 +46,7 @@ class QuerySuggestionsConfiguration(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of QuerySuggestionsConfiguration from a JSON string"""
+        """Create an instance of Configuration from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,7 +76,7 @@ class QuerySuggestionsConfiguration(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of QuerySuggestionsConfiguration from a dict"""
+        """Create an instance of Configuration from a dict"""
         if obj is None:
             return None
 

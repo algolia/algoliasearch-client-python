@@ -19,20 +19,18 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
 from algoliasearch.query_suggestions.config import QuerySuggestionsConfig
 from algoliasearch.query_suggestions.models.base_response import BaseResponse
+from algoliasearch.query_suggestions.models.configuration import Configuration
+from algoliasearch.query_suggestions.models.configuration_response import (
+    ConfigurationResponse,
+)
+from algoliasearch.query_suggestions.models.configuration_with_index import (
+    ConfigurationWithIndex,
+)
 from algoliasearch.query_suggestions.models.get_config_status200_response import (
     GetConfigStatus200Response,
 )
 from algoliasearch.query_suggestions.models.get_log_file200_response import (
     GetLogFile200Response,
-)
-from algoliasearch.query_suggestions.models.query_suggestions_configuration import (
-    QuerySuggestionsConfiguration,
-)
-from algoliasearch.query_suggestions.models.query_suggestions_configuration_response import (
-    QuerySuggestionsConfigurationResponse,
-)
-from algoliasearch.query_suggestions.models.query_suggestions_configuration_with_index import (
-    QuerySuggestionsConfigurationWithIndex,
 )
 
 
@@ -118,7 +116,7 @@ class QuerySuggestionsClient:
 
     async def create_config_with_http_info(
         self,
-        query_suggestions_configuration_with_index: QuerySuggestionsConfigurationWithIndex,
+        configuration_with_index: ConfigurationWithIndex,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -127,20 +125,20 @@ class QuerySuggestionsClient:
         Required API Key ACLs:
           - editSettings
 
-        :param query_suggestions_configuration_with_index: (required)
-        :type query_suggestions_configuration_with_index: QuerySuggestionsConfigurationWithIndex
+        :param configuration_with_index: (required)
+        :type configuration_with_index: ConfigurationWithIndex
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        if query_suggestions_configuration_with_index is None:
+        if configuration_with_index is None:
             raise ValueError(
-                "Parameter `query_suggestions_configuration_with_index` is required when calling `create_config`."
+                "Parameter `configuration_with_index` is required when calling `create_config`."
             )
 
         _data = {}
-        if query_suggestions_configuration_with_index is not None:
-            _data = query_suggestions_configuration_with_index
+        if configuration_with_index is not None:
+            _data = configuration_with_index
 
         return await self._transporter.request(
             verb=Verb.POST,
@@ -154,7 +152,7 @@ class QuerySuggestionsClient:
 
     async def create_config(
         self,
-        query_suggestions_configuration_with_index: QuerySuggestionsConfigurationWithIndex,
+        configuration_with_index: ConfigurationWithIndex,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
@@ -163,14 +161,14 @@ class QuerySuggestionsClient:
         Required API Key ACLs:
           - editSettings
 
-        :param query_suggestions_configuration_with_index: (required)
-        :type query_suggestions_configuration_with_index: QuerySuggestionsConfigurationWithIndex
+        :param configuration_with_index: (required)
+        :type configuration_with_index: ConfigurationWithIndex
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'BaseResponse' result object.
         """
         return (
             await self.create_config_with_http_info(
-                query_suggestions_configuration_with_index, request_options
+                configuration_with_index, request_options
             )
         ).deserialize(BaseResponse)
 
@@ -591,7 +589,7 @@ class QuerySuggestionsClient:
 
     async def get_all_configs(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
-    ) -> List[QuerySuggestionsConfigurationResponse]:
+    ) -> List[ConfigurationResponse]:
         """
         Retrieves all Query Suggestions configurations of your Algolia application.
 
@@ -599,10 +597,10 @@ class QuerySuggestionsClient:
           - settings
 
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'List[QuerySuggestionsConfigurationResponse]' result object.
+        :return: Returns the deserialized response in a 'List[ConfigurationResponse]' result object.
         """
         return (await self.get_all_configs_with_http_info(request_options)).deserialize(
-            List[QuerySuggestionsConfigurationResponse]
+            List[ConfigurationResponse]
         )
 
     async def get_config_with_http_info(
@@ -646,7 +644,7 @@ class QuerySuggestionsClient:
             StrictStr, Field(description="Query Suggestions index name.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> QuerySuggestionsConfigurationResponse:
+    ) -> ConfigurationResponse:
         """
         Retrieves a single Query Suggestions configuration by its index name.
 
@@ -656,11 +654,11 @@ class QuerySuggestionsClient:
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'QuerySuggestionsConfigurationResponse' result object.
+        :return: Returns the deserialized response in a 'ConfigurationResponse' result object.
         """
         return (
             await self.get_config_with_http_info(index_name, request_options)
-        ).deserialize(QuerySuggestionsConfigurationResponse)
+        ).deserialize(ConfigurationResponse)
 
     async def get_config_status_with_http_info(
         self,
@@ -781,7 +779,7 @@ class QuerySuggestionsClient:
         index_name: Annotated[
             StrictStr, Field(description="Query Suggestions index name.")
         ],
-        query_suggestions_configuration: QuerySuggestionsConfiguration,
+        configuration: Configuration,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -792,8 +790,8 @@ class QuerySuggestionsClient:
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
-        :param query_suggestions_configuration: (required)
-        :type query_suggestions_configuration: QuerySuggestionsConfiguration
+        :param configuration: (required)
+        :type configuration: Configuration
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -803,14 +801,14 @@ class QuerySuggestionsClient:
                 "Parameter `index_name` is required when calling `update_config`."
             )
 
-        if query_suggestions_configuration is None:
+        if configuration is None:
             raise ValueError(
-                "Parameter `query_suggestions_configuration` is required when calling `update_config`."
+                "Parameter `configuration` is required when calling `update_config`."
             )
 
         _data = {}
-        if query_suggestions_configuration is not None:
-            _data = query_suggestions_configuration
+        if configuration is not None:
+            _data = configuration
 
         return await self._transporter.request(
             verb=Verb.PUT,
@@ -829,7 +827,7 @@ class QuerySuggestionsClient:
         index_name: Annotated[
             StrictStr, Field(description="Query Suggestions index name.")
         ],
-        query_suggestions_configuration: QuerySuggestionsConfiguration,
+        configuration: Configuration,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
@@ -840,13 +838,13 @@ class QuerySuggestionsClient:
 
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
-        :param query_suggestions_configuration: (required)
-        :type query_suggestions_configuration: QuerySuggestionsConfiguration
+        :param configuration: (required)
+        :type configuration: Configuration
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'BaseResponse' result object.
         """
         return (
             await self.update_config_with_http_info(
-                index_name, query_suggestions_configuration, request_options
+                index_name, configuration, request_options
             )
         ).deserialize(BaseResponse)
