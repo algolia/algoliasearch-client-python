@@ -3168,7 +3168,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Searches for transformations.
+        Try a transformation.
 
         Required API Key ACLs:
           - addObject
@@ -3206,7 +3206,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationTryResponse:
         """
-        Searches for transformations.
+        Try a transformation.
 
         Required API Key ACLs:
           - addObject
