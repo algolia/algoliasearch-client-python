@@ -18,7 +18,7 @@ from algoliasearch.search.models.redirect_rule_index_metadata import (
 
 class Redirect(BaseModel):
     """
-    [Redirect results to a URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/).
+    [Redirect results to a URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/), this this parameter is for internal use only.
     """
 
     index: Optional[List[RedirectRuleIndexMetadata]] = None

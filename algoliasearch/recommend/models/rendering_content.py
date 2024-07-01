@@ -12,6 +12,7 @@ from typing import Any, Dict, Optional, Self
 from pydantic import BaseModel, ConfigDict, Field
 
 from algoliasearch.recommend.models.facet_ordering import FacetOrdering
+from algoliasearch.recommend.models.redirect_url import RedirectURL
 
 
 class RenderingContent(BaseModel):
@@ -20,6 +21,7 @@ class RenderingContent(BaseModel):
     """
 
     facet_ordering: Optional[FacetOrdering] = Field(default=None, alias="facetOrdering")
+    redirect: Optional[RedirectURL] = None
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -50,6 +52,8 @@ class RenderingContent(BaseModel):
         )
         if self.facet_ordering:
             _dict["facetOrdering"] = self.facet_ordering.to_dict()
+        if self.redirect:
+            _dict["redirect"] = self.redirect.to_dict()
         return _dict
 
     @classmethod
@@ -67,7 +71,12 @@ class RenderingContent(BaseModel):
                     FacetOrdering.from_dict(obj.get("facetOrdering"))
                     if obj.get("facetOrdering") is not None
                     else None
-                )
+                ),
+                "redirect": (
+                    RedirectURL.from_dict(obj.get("redirect"))
+                    if obj.get("redirect") is not None
+                    else None
+                ),
             }
         )
         return _obj
