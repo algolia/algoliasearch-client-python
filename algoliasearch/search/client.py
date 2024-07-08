@@ -482,8 +482,8 @@ class SearchClient:
             index_name=index_name,
             objects=objects,
             action=Action.PARTIALUPDATEOBJECT
-            and create_if_not_exists
-            or Action.PARTIALUPDATEOBJECTNOCREATE,
+            if create_if_not_exists
+            else Action.PARTIALUPDATEOBJECTNOCREATE,
         )
 
     async def chunked_batch(
@@ -540,8 +540,8 @@ class SearchClient:
                     destination=tmp_index_name,
                     scope=[
                         ScopeType("settings"),
-                        ScopeType("synonyms"),
                         ScopeType("rules"),
+                        ScopeType("synonyms"),
                     ],
                 ),
                 request_options=request_options,
