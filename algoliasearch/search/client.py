@@ -42,6 +42,7 @@ from algoliasearch.search.models.batch_request import BatchRequest
 from algoliasearch.search.models.batch_response import BatchResponse
 from algoliasearch.search.models.batch_write_params import BatchWriteParams
 from algoliasearch.search.models.browse_params import BrowseParams
+from algoliasearch.search.models.browse_params_object import BrowseParamsObject
 from algoliasearch.search.models.browse_response import BrowseResponse
 from algoliasearch.search.models.created_at_response import CreatedAtResponse
 from algoliasearch.search.models.delete_api_key_response import DeleteApiKeyResponse
@@ -313,7 +314,7 @@ class SearchClient:
         self,
         index_name: str,
         aggregator: Optional[Callable[[BrowseResponse], None]],
-        browse_params: Optional[BrowseParams] = None,
+        browse_params: Optional[BrowseParamsObject] = BrowseParamsObject(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
         """

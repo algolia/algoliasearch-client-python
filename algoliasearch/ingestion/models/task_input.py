@@ -11,14 +11,9 @@ from typing import Dict, Optional, Self, Union
 
 from pydantic import BaseModel, ValidationError, model_serializer
 
-from algoliasearch.ingestion.models.on_demand_date_utils_input import (
-    OnDemandDateUtilsInput,
-)
-from algoliasearch.ingestion.models.schedule_date_utils_input import (
-    ScheduleDateUtilsInput,
-)
+from algoliasearch.ingestion.models.docker_streams_input import DockerStreamsInput
 from algoliasearch.ingestion.models.shopify_input import ShopifyInput
-from algoliasearch.ingestion.models.streaming_utils_input import StreamingUtilsInput
+from algoliasearch.ingestion.models.streaming_input import StreamingInput
 
 
 class TaskInput(BaseModel):
@@ -26,17 +21,11 @@ class TaskInput(BaseModel):
     Configuration of the task, depending on its type.
     """
 
-    oneof_schema_1_validator: Optional[OnDemandDateUtilsInput] = None
-    oneof_schema_2_validator: Optional[ScheduleDateUtilsInput] = None
-    oneof_schema_3_validator: Optional[StreamingUtilsInput] = None
-    oneof_schema_4_validator: Optional[ShopifyInput] = None
+    oneof_schema_1_validator: Optional[StreamingInput] = None
+    oneof_schema_2_validator: Optional[DockerStreamsInput] = None
+    oneof_schema_3_validator: Optional[ShopifyInput] = None
     actual_instance: Optional[
-        Union[
-            OnDemandDateUtilsInput,
-            ScheduleDateUtilsInput,
-            ShopifyInput,
-            StreamingUtilsInput,
-        ]
+        Union[DockerStreamsInput, ShopifyInput, StreamingInput]
     ] = None
 
     def __init__(self, *args, **kwargs) -> None:
@@ -56,14 +45,7 @@ class TaskInput(BaseModel):
     @model_serializer
     def unwrap_actual_instance(
         self,
-    ) -> Optional[
-        Union[
-            OnDemandDateUtilsInput,
-            ScheduleDateUtilsInput,
-            ShopifyInput,
-            StreamingUtilsInput,
-        ]
-    ]:
+    ) -> Optional[Union[DockerStreamsInput, ShopifyInput, StreamingInput]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -80,19 +62,13 @@ class TaskInput(BaseModel):
         error_messages = []
 
         try:
-            instance.actual_instance = OnDemandDateUtilsInput.from_json(json_str)
+            instance.actual_instance = StreamingInput.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.actual_instance = ScheduleDateUtilsInput.from_json(json_str)
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        try:
-            instance.actual_instance = StreamingUtilsInput.from_json(json_str)
+            instance.actual_instance = DockerStreamsInput.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
@@ -105,7 +81,7 @@ class TaskInput(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into TaskInput with oneOf schemas: OnDemandDateUtilsInput, ScheduleDateUtilsInput, ShopifyInput, StreamingUtilsInput. Details: "
+            "No match found when deserializing the JSON string into TaskInput with oneOf schemas: DockerStreamsInput, ShopifyInput, StreamingInput. Details: "
             + ", ".join(error_messages)
         )
 

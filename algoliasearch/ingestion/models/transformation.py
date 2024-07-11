@@ -25,8 +25,9 @@ class Transformation(BaseModel):
     name: StrictStr = Field(
         description="The uniquely identified name of your transformation."
     )
-    description: StrictStr = Field(
-        description="A descriptive name for your transformation of what it does."
+    description: Optional[StrictStr] = Field(
+        default=None,
+        description="A descriptive name for your transformation of what it does.",
     )
     created_at: StrictStr = Field(
         description="Date of creation in RFC 3339 format.", alias="createdAt"
