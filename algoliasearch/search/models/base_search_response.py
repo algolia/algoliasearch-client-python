@@ -73,9 +73,6 @@ class BaseSearchResponse(BaseModel):
     facets_stats: Optional[Dict[str, FacetsStats]] = Field(
         default=None, description="Statistics for numerical facets."
     )
-    hits_per_page: Annotated[int, Field(le=1000, strict=True, ge=1)] = Field(
-        description="Number of hits per page.", alias="hitsPerPage"
-    )
     index: Optional[StrictStr] = Field(
         default=None, description="Index name used for the query."
     )
@@ -87,17 +84,10 @@ class BaseSearchResponse(BaseModel):
     message: Optional[StrictStr] = Field(
         default=None, description="Warnings about the query."
     )
-    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
-    nb_pages: StrictInt = Field(
-        description="Number of pages of results.", alias="nbPages"
-    )
     nb_sorted_hits: Optional[StrictInt] = Field(
         default=None,
         description="Number of hits selected and sorted by the relevant sort algorithm.",
         alias="nbSortedHits",
-    )
-    page: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Page of search results to retrieve."
     )
     parsed_query: Optional[StrictStr] = Field(
         default=None,
@@ -154,14 +144,10 @@ class BaseSearchResponse(BaseModel):
         "exhaustiveTypo",
         "facets",
         "facets_stats",
-        "hitsPerPage",
         "index",
         "indexUsed",
         "message",
-        "nbHits",
-        "nbPages",
         "nbSortedHits",
-        "page",
         "parsedQuery",
         "processingTimeMS",
         "processingTimingsMS",
@@ -267,14 +253,10 @@ class BaseSearchResponse(BaseModel):
                     if obj.get("facets_stats") is not None
                     else None
                 ),
-                "hitsPerPage": obj.get("hitsPerPage"),
                 "index": obj.get("index"),
                 "indexUsed": obj.get("indexUsed"),
                 "message": obj.get("message"),
-                "nbHits": obj.get("nbHits"),
-                "nbPages": obj.get("nbPages"),
                 "nbSortedHits": obj.get("nbSortedHits"),
-                "page": obj.get("page"),
                 "parsedQuery": obj.get("parsedQuery"),
                 "processingTimeMS": obj.get("processingTimeMS"),
                 "processingTimingsMS": obj.get("processingTimingsMS"),

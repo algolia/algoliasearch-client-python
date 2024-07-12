@@ -74,9 +74,6 @@ class SearchResponse(BaseModel):
     facets_stats: Optional[Dict[str, FacetsStats]] = Field(
         default=None, description="Statistics for numerical facets."
     )
-    hits_per_page: Annotated[int, Field(le=1000, strict=True, ge=1)] = Field(
-        description="Number of hits per page.", alias="hitsPerPage"
-    )
     index: Optional[StrictStr] = Field(
         default=None, description="Index name used for the query."
     )
@@ -88,17 +85,10 @@ class SearchResponse(BaseModel):
     message: Optional[StrictStr] = Field(
         default=None, description="Warnings about the query."
     )
-    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
-    nb_pages: StrictInt = Field(
-        description="Number of pages of results.", alias="nbPages"
-    )
     nb_sorted_hits: Optional[StrictInt] = Field(
         default=None,
         description="Number of hits selected and sorted by the relevant sort algorithm.",
         alias="nbSortedHits",
-    )
-    page: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Page of search results to retrieve."
     )
     parsed_query: Optional[StrictStr] = Field(
         default=None,
@@ -143,6 +133,16 @@ class SearchResponse(BaseModel):
         description="Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics/).",
         alias="queryID",
     )
+    page: Annotated[int, Field(strict=True, ge=0)] = Field(
+        description="Page of search results to retrieve."
+    )
+    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
+    nb_pages: StrictInt = Field(
+        description="Number of pages of results.", alias="nbPages"
+    )
+    hits_per_page: Annotated[int, Field(le=1000, strict=True, ge=1)] = Field(
+        description="Number of hits per page.", alias="hitsPerPage"
+    )
     hits: List[Hit] = Field(
         description="Search results (hits).  Hits are records from your index that match the search criteria, augmented with additional attributes, such as, for highlighting. "
     )
@@ -162,14 +162,10 @@ class SearchResponse(BaseModel):
         "exhaustiveTypo",
         "facets",
         "facets_stats",
-        "hitsPerPage",
         "index",
         "indexUsed",
         "message",
-        "nbHits",
-        "nbPages",
         "nbSortedHits",
-        "page",
         "parsedQuery",
         "processingTimeMS",
         "processingTimingsMS",
@@ -180,6 +176,10 @@ class SearchResponse(BaseModel):
         "serverUsed",
         "userData",
         "queryID",
+        "page",
+        "nbHits",
+        "nbPages",
+        "hitsPerPage",
         "hits",
         "query",
         "params",
@@ -284,14 +284,10 @@ class SearchResponse(BaseModel):
                     if obj.get("facets_stats") is not None
                     else None
                 ),
-                "hitsPerPage": obj.get("hitsPerPage"),
                 "index": obj.get("index"),
                 "indexUsed": obj.get("indexUsed"),
                 "message": obj.get("message"),
-                "nbHits": obj.get("nbHits"),
-                "nbPages": obj.get("nbPages"),
                 "nbSortedHits": obj.get("nbSortedHits"),
-                "page": obj.get("page"),
                 "parsedQuery": obj.get("parsedQuery"),
                 "processingTimeMS": obj.get("processingTimeMS"),
                 "processingTimingsMS": obj.get("processingTimingsMS"),
@@ -310,6 +306,10 @@ class SearchResponse(BaseModel):
                 "serverUsed": obj.get("serverUsed"),
                 "userData": obj.get("userData"),
                 "queryID": obj.get("queryID"),
+                "page": obj.get("page"),
+                "nbHits": obj.get("nbHits"),
+                "nbPages": obj.get("nbPages"),
+                "hitsPerPage": obj.get("hitsPerPage"),
                 "hits": (
                     [Hit.from_dict(_item) for _item in obj.get("hits")]
                     if obj.get("hits") is not None
