@@ -40,11 +40,13 @@ class TrendingItemsQuery(BaseModel):
     query_parameters: Optional[SearchParams] = Field(
         default=None, alias="queryParameters"
     )
-    facet_name: StrictStr = Field(
+    facet_name: Optional[StrictStr] = Field(
+        default=None,
         description="Facet attribute. To be used in combination with `facetValue`. If specified, only recommendations matching the facet filter will be returned. ",
         alias="facetName",
     )
-    facet_value: StrictStr = Field(
+    facet_value: Optional[StrictStr] = Field(
+        default=None,
         description="Facet value. To be used in combination with `facetName`. If specified, only recommendations matching the facet filter will be returned. ",
         alias="facetValue",
     )
