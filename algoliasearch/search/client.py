@@ -254,13 +254,13 @@ class SearchClient:
 
     async def wait_for_api_key(
         self,
-        operation: str,
         key: str,
+        operation: str,
         api_key: Optional[ApiKey] = None,
         max_retries: int = 50,
         timeout: RetryTimeout = RetryTimeout(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> GetApiKeyResponse:
+    ) -> GetApiKeyResponse | None:
         """
         Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
         """
@@ -271,7 +271,7 @@ class SearchClient:
                 "`apiKey` is required when waiting for an `update` operation."
             )
 
-        async def _func(_prev: GetApiKeyResponse) -> GetApiKeyResponse:
+        async def _func(_prev: GetApiKeyResponse | None) -> GetApiKeyResponse | None:
             try:
                 return await self.get_api_key(key=key, request_options=request_options)
             except RequestException as e:
@@ -281,20 +281,25 @@ class SearchClient:
                     return None
                 raise e
 
-        def _aggregator(_: GetApiKeyResponse) -> None:
+        def _aggregator(_: GetApiKeyResponse | None) -> None:
             self._retry_count += 1
 
-        def _validate(_resp: GetApiKeyResponse) -> bool:
+        def _validate(_resp: GetApiKeyResponse | None) -> bool:
             if operation == "update":
-                for field in api_key:
-                    if isinstance(api_key[field], list) and isinstance(
-                        _resp[field], list
+                resp_dict = _resp.to_dict()
+                api_key_dict = (
+                    api_key.to_dict() if isinstance(api_key, ApiKey) else api_key
+                )
+                for field in api_key_dict:
+                    if isinstance(api_key_dict[field], list) and isinstance(
+                        resp_dict[field], list
                     ):
-                        if len(api_key[field]) != len(_resp[field]) or any(
-                            v != _resp[field][i] for i, v in enumerate(api_key[field])
+                        if len(api_key_dict[field]) != len(resp_dict[field]) or any(
+                            v != resp_dict[field][i]
+                            for i, v in enumerate(api_key_dict[field])
                         ):
                             return False
-                    elif api_key[field] != _resp[field]:
+                    elif api_key_dict[field] != resp_dict[field]:
                         return False
                 return True
             elif operation == "add":
