@@ -12,17 +12,15 @@ from typing import Annotated, Any, Dict, Optional, Self
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 
 from algoliasearch.ingestion.models.action_type import ActionType
+from algoliasearch.ingestion.models.task_create_trigger import TaskCreateTrigger
 from algoliasearch.ingestion.models.task_input import TaskInput
 
 
-class Task(BaseModel):
+class TaskCreateV1(BaseModel):
     """
-    Task
+    API request body for creating a task using the V1 shape, please use methods and types that don't contain the V1 suffix.
     """
 
-    task_id: StrictStr = Field(
-        description="Universally unique identifier (UUID) of a task.", alias="taskID"
-    )
     source_id: StrictStr = Field(
         description="Universally uniqud identifier (UUID) of a source.",
         alias="sourceID",
@@ -31,21 +29,11 @@ class Task(BaseModel):
         description="Universally unique identifier (UUID) of a destination resource.",
         alias="destinationID",
     )
-    cron: Optional[StrictStr] = Field(
-        default=None, description="Cron expression for the task's schedule."
+    trigger: TaskCreateTrigger
+    action: ActionType
+    enabled: Optional[StrictBool] = Field(
+        default=None, description="Whether the task is enabled."
     )
-    last_run: Optional[StrictStr] = Field(
-        default=None,
-        description="The last time the scheduled task ran in RFC 3339 format.",
-        alias="lastRun",
-    )
-    next_run: Optional[StrictStr] = Field(
-        default=None,
-        description="The next scheduled run of the task in RFC 3339 format.",
-        alias="nextRun",
-    )
-    input: Optional[TaskInput] = None
-    enabled: StrictBool = Field(description="Whether the task is enabled.")
     failure_threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = (
         Field(
             default=None,
@@ -53,17 +41,9 @@ class Task(BaseModel):
             alias="failureThreshold",
         )
     )
-    action: ActionType
+    input: Optional[TaskInput] = None
     cursor: Optional[StrictStr] = Field(
         default=None, description="Date of the last cursor in RFC 3339 format."
-    )
-    created_at: StrictStr = Field(
-        description="Date of creation in RFC 3339 format.", alias="createdAt"
-    )
-    updated_at: Optional[StrictStr] = Field(
-        default=None,
-        description="Date of last update in RFC 3339 format.",
-        alias="updatedAt",
     )
 
     model_config = ConfigDict(
@@ -75,7 +55,7 @@ class Task(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Task from a JSON string"""
+        """Create an instance of TaskCreateV1 from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -93,13 +73,15 @@ class Task(BaseModel):
             exclude={},
             exclude_none=True,
         )
+        if self.trigger:
+            _dict["trigger"] = self.trigger.to_dict()
         if self.input:
             _dict["input"] = self.input.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of Task from a dict"""
+        """Create an instance of TaskCreateV1 from a dict"""
         if obj is None:
             return None
 
@@ -108,23 +90,22 @@ class Task(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "taskID": obj.get("taskID"),
                 "sourceID": obj.get("sourceID"),
                 "destinationID": obj.get("destinationID"),
-                "cron": obj.get("cron"),
-                "lastRun": obj.get("lastRun"),
-                "nextRun": obj.get("nextRun"),
+                "trigger": (
+                    TaskCreateTrigger.from_dict(obj.get("trigger"))
+                    if obj.get("trigger") is not None
+                    else None
+                ),
+                "action": obj.get("action"),
+                "enabled": obj.get("enabled"),
+                "failureThreshold": obj.get("failureThreshold"),
                 "input": (
                     TaskInput.from_dict(obj.get("input"))
                     if obj.get("input") is not None
                     else None
                 ),
-                "enabled": obj.get("enabled"),
-                "failureThreshold": obj.get("failureThreshold"),
-                "action": obj.get("action"),
                 "cursor": obj.get("cursor"),
-                "createdAt": obj.get("createdAt"),
-                "updatedAt": obj.get("updatedAt"),
             }
         )
         return _obj

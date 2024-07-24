@@ -12,7 +12,6 @@ from typing import Annotated, Any, Dict, Optional, Self
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 
 from algoliasearch.ingestion.models.task_input import TaskInput
-from algoliasearch.ingestion.models.trigger_update_input import TriggerUpdateInput
 
 
 class TaskUpdate(BaseModel):
@@ -25,7 +24,9 @@ class TaskUpdate(BaseModel):
         description="Universally unique identifier (UUID) of a destination resource.",
         alias="destinationID",
     )
-    trigger: Optional[TriggerUpdateInput] = None
+    cron: Optional[StrictStr] = Field(
+        default=None, description="Cron expression for the task's schedule."
+    )
     input: Optional[TaskInput] = None
     enabled: Optional[StrictBool] = Field(
         default=None, description="Whether the task is enabled."
@@ -65,8 +66,6 @@ class TaskUpdate(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        if self.trigger:
-            _dict["trigger"] = self.trigger.to_dict()
         if self.input:
             _dict["input"] = self.input.to_dict()
         return _dict
@@ -83,11 +82,7 @@ class TaskUpdate(BaseModel):
         _obj = cls.model_validate(
             {
                 "destinationID": obj.get("destinationID"),
-                "trigger": (
-                    TriggerUpdateInput.from_dict(obj.get("trigger"))
-                    if obj.get("trigger") is not None
-                    else None
-                ),
+                "cron": obj.get("cron"),
                 "input": (
                     TaskInput.from_dict(obj.get("input"))
                     if obj.get("input") is not None

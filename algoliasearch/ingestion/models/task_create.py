@@ -12,7 +12,6 @@ from typing import Annotated, Any, Dict, Optional, Self
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 
 from algoliasearch.ingestion.models.action_type import ActionType
-from algoliasearch.ingestion.models.task_create_trigger import TaskCreateTrigger
 from algoliasearch.ingestion.models.task_input import TaskInput
 
 
@@ -29,8 +28,10 @@ class TaskCreate(BaseModel):
         description="Universally unique identifier (UUID) of a destination resource.",
         alias="destinationID",
     )
-    trigger: TaskCreateTrigger
     action: ActionType
+    cron: Optional[StrictStr] = Field(
+        default=None, description="Cron expression for the task's schedule."
+    )
     enabled: Optional[StrictBool] = Field(
         default=None, description="Whether the task is enabled."
     )
@@ -73,8 +74,6 @@ class TaskCreate(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        if self.trigger:
-            _dict["trigger"] = self.trigger.to_dict()
         if self.input:
             _dict["input"] = self.input.to_dict()
         return _dict
@@ -92,12 +91,8 @@ class TaskCreate(BaseModel):
             {
                 "sourceID": obj.get("sourceID"),
                 "destinationID": obj.get("destinationID"),
-                "trigger": (
-                    TaskCreateTrigger.from_dict(obj.get("trigger"))
-                    if obj.get("trigger") is not None
-                    else None
-                ),
                 "action": obj.get("action"),
+                "cron": obj.get("cron"),
                 "enabled": obj.get("enabled"),
                 "failureThreshold": obj.get("failureThreshold"),
                 "input": (
