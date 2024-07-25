@@ -108,6 +108,7 @@ from algoliasearch.search.models.search_user_ids_response import SearchUserIdsRe
 from algoliasearch.search.models.secured_api_key_restrictions import (
     SecuredApiKeyRestrictions,
 )
+from algoliasearch.search.models.settings_response import SettingsResponse
 from algoliasearch.search.models.source import Source
 from algoliasearch.search.models.synonym_hit import SynonymHit
 from algoliasearch.search.models.update_api_key_response import UpdateApiKeyResponse
@@ -2804,7 +2805,7 @@ class SearchClient:
             Field(description="Name of the index on which to perform the operation."),
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> IndexSettings:
+    ) -> SettingsResponse:
         """
         Retrieves an object with non-null index settings.
 
@@ -2814,11 +2815,11 @@ class SearchClient:
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'IndexSettings' result object.
+        :return: Returns the deserialized response in a 'SettingsResponse' result object.
         """
         return (
             await self.get_settings_with_http_info(index_name, request_options)
-        ).deserialize(IndexSettings)
+        ).deserialize(SettingsResponse)
 
     async def get_sources_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
