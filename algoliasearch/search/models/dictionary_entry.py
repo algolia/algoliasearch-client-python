@@ -23,7 +23,7 @@ class DictionaryEntry(BaseModel):
     object_id: StrictStr = Field(
         description="Unique identifier for the dictionary entry.", alias="objectID"
     )
-    language: SupportedLanguage
+    language: Optional[SupportedLanguage] = None
     word: Optional[StrictStr] = Field(
         default=None,
         description="Matching dictionary word for `stopwords` and `compounds` dictionaries.",
