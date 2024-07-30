@@ -2606,7 +2606,7 @@ class SearchClient:
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> Dict[str, str]:
+    ) -> object:
         """
         Retrieves one record by its object ID.  To retrieve more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
 
@@ -2620,13 +2620,13 @@ class SearchClient:
         :param attributes_to_retrieve: Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned.  `objectID` is always retrieved.  Attributes included in `unretrievableAttributes` won't be retrieved unless the request is authenticated with the admin API key.
         :type attributes_to_retrieve: List[str]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'Dict[str, str]' result object.
+        :return: Returns the deserialized response in a 'object' result object.
         """
         return (
             await self.get_object_with_http_info(
                 index_name, object_id, attributes_to_retrieve, request_options
             )
-        ).deserialize(Dict[str, str])
+        ).deserialize(object)
 
     async def get_objects_with_http_info(
         self,
