@@ -11,9 +11,7 @@ from typing import Any, Dict, Optional, Self
 
 from pydantic import BaseModel, ConfigDict
 
-from algoliasearch.monitoring.models.latency_response_metrics import (
-    LatencyResponseMetrics,
-)
+from algoliasearch.monitoring.models.latency_metric import LatencyMetric
 
 
 class LatencyResponse(BaseModel):
@@ -21,7 +19,7 @@ class LatencyResponse(BaseModel):
     LatencyResponse
     """
 
-    metrics: Optional[LatencyResponseMetrics] = None
+    metrics: Optional[LatencyMetric] = None
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -66,7 +64,7 @@ class LatencyResponse(BaseModel):
         _obj = cls.model_validate(
             {
                 "metrics": (
-                    LatencyResponseMetrics.from_dict(obj.get("metrics"))
+                    LatencyMetric.from_dict(obj.get("metrics"))
                     if obj.get("metrics") is not None
                     else None
                 )

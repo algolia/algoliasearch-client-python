@@ -9,21 +9,18 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
-
-from algoliasearch.monitoring.models.incident import Incident
+from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
 
 
-class IncidentsInner(BaseModel):
+class ErrorItem(BaseModel):
     """
-    IncidentsInner
+    ErrorItem
     """
 
-    t: Optional[StrictInt] = Field(
-        default=None,
-        description="Timestamp, measured in milliseconds since the Unix epoch.",
-    )
-    v: Optional[Incident] = None
+    code: Optional[StrictStr] = None
+    message: StrictStr
+    line: Optional[StrictInt] = None
+    position: Optional[StrictInt] = None
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -34,7 +31,7 @@ class IncidentsInner(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of IncidentsInner from a JSON string"""
+        """Create an instance of ErrorItem from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -52,13 +49,11 @@ class IncidentsInner(BaseModel):
             exclude={},
             exclude_none=True,
         )
-        if self.v:
-            _dict["v"] = self.v.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of IncidentsInner from a dict"""
+        """Create an instance of ErrorItem from a dict"""
         if obj is None:
             return None
 
@@ -67,12 +62,10 @@ class IncidentsInner(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "t": obj.get("t"),
-                "v": (
-                    Incident.from_dict(obj.get("v"))
-                    if obj.get("v") is not None
-                    else None
-                ),
+                "code": obj.get("code"),
+                "message": obj.get("message"),
+                "line": obj.get("line"),
+                "position": obj.get("position"),
             }
         )
         return _obj

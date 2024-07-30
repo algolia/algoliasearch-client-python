@@ -14,9 +14,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from algoliasearch.monitoring.models.probes_metric import ProbesMetric
 
 
-class InfrastructureResponseMetrics(BaseModel):
+class Metrics(BaseModel):
     """
-    InfrastructureResponseMetrics
+    Metrics
     """
 
     cpu_usage: Optional[Dict[str, List[ProbesMetric]]] = Field(
@@ -45,7 +45,7 @@ class InfrastructureResponseMetrics(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of InfrastructureResponseMetrics from a JSON string"""
+        """Create an instance of Metrics from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -107,7 +107,7 @@ class InfrastructureResponseMetrics(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of InfrastructureResponseMetrics from a dict"""
+        """Create an instance of Metrics from a dict"""
         if obj is None:
             return None
 

@@ -14,7 +14,7 @@ from pydantic import BaseModel, ConfigDict
 
 class DockerStreamsInput(BaseModel):
     """
-    DockerStreamsInput
+    The selected streams of a singer or airbyte connector.
     """
 
     streams: Dict[str, Any]

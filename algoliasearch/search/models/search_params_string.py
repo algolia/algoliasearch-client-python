@@ -14,7 +14,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictStr
 
 class SearchParamsString(BaseModel):
     """
-    SearchParamsString
+    Search parameters as query string.
     """
 
     params: Optional[StrictStr] = Field(

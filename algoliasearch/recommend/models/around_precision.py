@@ -11,9 +11,7 @@ from typing import Dict, List, Optional, Self, Union
 
 from pydantic import BaseModel, Field, StrictInt, ValidationError, model_serializer
 
-from algoliasearch.recommend.models.around_precision_from_value_inner import (
-    AroundPrecisionFromValueInner,
-)
+from algoliasearch.recommend.models.range import Range
 
 
 class AroundPrecision(BaseModel):
@@ -25,8 +23,8 @@ class AroundPrecision(BaseModel):
         default=10,
         description="Distance in meters to group results by similar distances.  For example, if you set `aroundPrecision` to 100, records wihin 100 meters to the central coordinate are considered to have the same distance, as are records between 100 and 199 meters. ",
     )
-    oneof_schema_2_validator: Optional[List[AroundPrecisionFromValueInner]] = None
-    actual_instance: Optional[Union[List[AroundPrecisionFromValueInner], int]] = None
+    oneof_schema_2_validator: Optional[List[Range]] = None
+    actual_instance: Optional[Union[List[Range], int]] = None
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -43,9 +41,7 @@ class AroundPrecision(BaseModel):
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(
-        self,
-    ) -> Optional[Union[List[AroundPrecisionFromValueInner], int]]:
+    def unwrap_actual_instance(self) -> Optional[Union[List[Range], int]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -77,7 +73,7 @@ class AroundPrecision(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into AroundPrecision with oneOf schemas: List[AroundPrecisionFromValueInner], int. Details: "
+            "No match found when deserializing the JSON string into AroundPrecision with oneOf schemas: List[Range], int. Details: "
             + ", ".join(error_messages)
         )
 

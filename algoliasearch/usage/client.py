@@ -18,8 +18,8 @@ from algoliasearch.http.serializer import bodySerializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
 from algoliasearch.usage.config import UsageConfig
-from algoliasearch.usage.models.get_usage200_response import GetUsage200Response
 from algoliasearch.usage.models.granularity import Granularity
+from algoliasearch.usage.models.index_usage import IndexUsage
 from algoliasearch.usage.models.statistic import Statistic
 
 
@@ -559,7 +559,7 @@ class UsageClient:
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> GetUsage200Response:
+    ) -> IndexUsage:
         """
         Retrieves the selected usage statistics for one index.
 
@@ -575,7 +575,7 @@ class UsageClient:
         :param granularity: Granularity of the aggregated metrics.  - `hourly`: the maximum time range for hourly metrics is 7 days. - `daily`: the maximum time range for daily metrics is 365 days.
         :type granularity: Granularity
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'GetUsage200Response' result object.
+        :return: Returns the deserialized response in a 'IndexUsage' result object.
         """
         return (
             await self.get_index_usage_with_http_info(
@@ -586,7 +586,7 @@ class UsageClient:
                 granularity,
                 request_options,
             )
-        ).deserialize(GetUsage200Response)
+        ).deserialize(IndexUsage)
 
     async def get_usage_with_http_info(
         self,
@@ -695,7 +695,7 @@ class UsageClient:
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> GetUsage200Response:
+    ) -> IndexUsage:
         """
         Retrieves usage statistics evaluated over a specified period.
 
@@ -709,10 +709,10 @@ class UsageClient:
         :param granularity: Granularity of the aggregated metrics.  - `hourly`: the maximum time range for hourly metrics is 7 days. - `daily`: the maximum time range for daily metrics is 365 days.
         :type granularity: Granularity
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'GetUsage200Response' result object.
+        :return: Returns the deserialized response in a 'IndexUsage' result object.
         """
         return (
             await self.get_usage_with_http_info(
                 statistic, start_date, end_date, granularity, request_options
             )
-        ).deserialize(GetUsage200Response)
+        ).deserialize(IndexUsage)

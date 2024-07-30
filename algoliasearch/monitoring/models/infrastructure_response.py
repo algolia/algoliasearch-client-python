@@ -11,9 +11,7 @@ from typing import Any, Dict, Optional, Self
 
 from pydantic import BaseModel, ConfigDict
 
-from algoliasearch.monitoring.models.infrastructure_response_metrics import (
-    InfrastructureResponseMetrics,
-)
+from algoliasearch.monitoring.models.metrics import Metrics
 
 
 class InfrastructureResponse(BaseModel):
@@ -21,7 +19,7 @@ class InfrastructureResponse(BaseModel):
     InfrastructureResponse
     """
 
-    metrics: Optional[InfrastructureResponseMetrics] = None
+    metrics: Optional[Metrics] = None
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -66,7 +64,7 @@ class InfrastructureResponse(BaseModel):
         _obj = cls.model_validate(
             {
                 "metrics": (
-                    InfrastructureResponseMetrics.from_dict(obj.get("metrics"))
+                    Metrics.from_dict(obj.get("metrics"))
                     if obj.get("metrics") is not None
                     else None
                 )

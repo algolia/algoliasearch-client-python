@@ -9,20 +9,21 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
+
+from algoliasearch.monitoring.models.incident import Incident
 
 
-class TransformationTryResponseError(BaseModel):
+class IncidentEntry(BaseModel):
     """
-    The error if the transformation failed.
+    IncidentEntry
     """
 
-    code: Optional[StrictInt] = Field(
-        default=None, description="The error status code."
+    t: Optional[StrictInt] = Field(
+        default=None,
+        description="Timestamp, measured in milliseconds since the Unix epoch.",
     )
-    message: Optional[StrictStr] = Field(
-        default=None, description="A descriptive message explaining the failure."
-    )
+    v: Optional[Incident] = None
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -33,7 +34,7 @@ class TransformationTryResponseError(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of TransformationTryResponseError from a JSON string"""
+        """Create an instance of IncidentEntry from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -51,11 +52,13 @@ class TransformationTryResponseError(BaseModel):
             exclude={},
             exclude_none=True,
         )
+        if self.v:
+            _dict["v"] = self.v.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of TransformationTryResponseError from a dict"""
+        """Create an instance of IncidentEntry from a dict"""
         if obj is None:
             return None
 
@@ -63,6 +66,13 @@ class TransformationTryResponseError(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate(
-            {"code": obj.get("code"), "message": obj.get("message")}
+            {
+                "t": obj.get("t"),
+                "v": (
+                    Incident.from_dict(obj.get("v"))
+                    if obj.get("v") is not None
+                    else None
+                ),
+            }
         )
         return _obj

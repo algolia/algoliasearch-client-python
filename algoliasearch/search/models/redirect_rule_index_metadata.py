@@ -11,9 +11,7 @@ from typing import Any, Dict, Self
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 
-from algoliasearch.search.models.redirect_rule_index_metadata_data import (
-    RedirectRuleIndexMetadataData,
-)
+from algoliasearch.search.models.redirect_rule_index_data import RedirectRuleIndexData
 
 
 class RedirectRuleIndexMetadata(BaseModel):
@@ -25,7 +23,7 @@ class RedirectRuleIndexMetadata(BaseModel):
     dest: StrictStr = Field(description="Destination index for the redirect rule.")
     reason: StrictStr = Field(description="Reason for the redirect rule.")
     succeed: StrictBool = Field(description="Redirect rule status.")
-    data: RedirectRuleIndexMetadataData
+    data: RedirectRuleIndexData
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -74,7 +72,7 @@ class RedirectRuleIndexMetadata(BaseModel):
                 "reason": obj.get("reason"),
                 "succeed": obj.get("succeed"),
                 "data": (
-                    RedirectRuleIndexMetadataData.from_dict(obj.get("data"))
+                    RedirectRuleIndexData.from_dict(obj.get("data"))
                     if obj.get("data") is not None
                     else None
                 ),

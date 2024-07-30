@@ -12,19 +12,20 @@ from typing import Any, Dict, Optional, Self
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 
 
-class AroundPrecisionFromValueInner(BaseModel):
+class EmptySearchFilter(BaseModel):
     """
-    Range object with lower and upper values in meters to define custom ranges.
+    Empty searches removed from the A/B test as a result of configuration settings.
     """
 
-    var_from: Optional[StrictInt] = Field(
+    users_count: Optional[StrictInt] = Field(
         default=None,
-        description="Lower boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.",
-        alias="from",
+        description="Number of users removed from the A/B test.",
+        alias="usersCount",
     )
-    value: Optional[StrictInt] = Field(
+    tracked_searches_count: Optional[StrictInt] = Field(
         default=None,
-        description="Upper boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.",
+        description="Number of tracked searches removed from the A/B test.",
+        alias="trackedSearchesCount",
     )
 
     model_config = ConfigDict(
@@ -36,7 +37,7 @@ class AroundPrecisionFromValueInner(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of AroundPrecisionFromValueInner from a JSON string"""
+        """Create an instance of EmptySearchFilter from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -58,12 +59,17 @@ class AroundPrecisionFromValueInner(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of AroundPrecisionFromValueInner from a dict"""
+        """Create an instance of EmptySearchFilter from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"from": obj.get("from"), "value": obj.get("value")})
+        _obj = cls.model_validate(
+            {
+                "usersCount": obj.get("usersCount"),
+                "trackedSearchesCount": obj.get("trackedSearchesCount"),
+            }
+        )
         return _obj

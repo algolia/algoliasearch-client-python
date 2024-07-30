@@ -19,6 +19,7 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.verb import Verb
 from algoliasearch.query_suggestions.config import QuerySuggestionsConfig
 from algoliasearch.query_suggestions.models.base_response import BaseResponse
+from algoliasearch.query_suggestions.models.config_status import ConfigStatus
 from algoliasearch.query_suggestions.models.configuration import Configuration
 from algoliasearch.query_suggestions.models.configuration_response import (
     ConfigurationResponse,
@@ -26,12 +27,7 @@ from algoliasearch.query_suggestions.models.configuration_response import (
 from algoliasearch.query_suggestions.models.configuration_with_index import (
     ConfigurationWithIndex,
 )
-from algoliasearch.query_suggestions.models.get_config_status200_response import (
-    GetConfigStatus200Response,
-)
-from algoliasearch.query_suggestions.models.get_log_file200_response import (
-    GetLogFile200Response,
-)
+from algoliasearch.query_suggestions.models.log_file import LogFile
 
 
 class QuerySuggestionsClient:
@@ -701,7 +697,7 @@ class QuerySuggestionsClient:
             StrictStr, Field(description="Query Suggestions index name.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> GetConfigStatus200Response:
+    ) -> ConfigStatus:
         """
         Reports the status of a Query Suggestions index.
 
@@ -711,11 +707,11 @@ class QuerySuggestionsClient:
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'GetConfigStatus200Response' result object.
+        :return: Returns the deserialized response in a 'ConfigStatus' result object.
         """
         return (
             await self.get_config_status_with_http_info(index_name, request_options)
-        ).deserialize(GetConfigStatus200Response)
+        ).deserialize(ConfigStatus)
 
     async def get_log_file_with_http_info(
         self,
@@ -758,7 +754,7 @@ class QuerySuggestionsClient:
             StrictStr, Field(description="Query Suggestions index name.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> GetLogFile200Response:
+    ) -> LogFile:
         """
         Retrieves the logs for a single Query Suggestions index.
 
@@ -768,11 +764,11 @@ class QuerySuggestionsClient:
         :param index_name: Query Suggestions index name. (required)
         :type index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'GetLogFile200Response' result object.
+        :return: Returns the deserialized response in a 'LogFile' result object.
         """
         return (
             await self.get_log_file_with_http_info(index_name, request_options)
-        ).deserialize(GetLogFile200Response)
+        ).deserialize(LogFile)
 
     async def update_config_with_http_info(
         self,

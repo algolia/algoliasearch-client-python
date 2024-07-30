@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Optional, Self
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from algoliasearch.ingestion.models.transformation_try_response_error import (
-    TransformationTryResponseError,
-)
+from algoliasearch.ingestion.models.transformation_error import TransformationError
 
 
 class TransformationTryResponse(BaseModel):
@@ -24,7 +22,7 @@ class TransformationTryResponse(BaseModel):
     payloads: List[Dict[str, Any]] = Field(
         description="The array of records returned by the transformation service."
     )
-    error: Optional[TransformationTryResponseError] = None
+    error: Optional[TransformationError] = None
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -70,7 +68,7 @@ class TransformationTryResponse(BaseModel):
             {
                 "payloads": obj.get("payloads"),
                 "error": (
-                    TransformationTryResponseError.from_dict(obj.get("error"))
+                    TransformationError.from_dict(obj.get("error"))
                     if obj.get("error") is not None
                     else None
                 ),

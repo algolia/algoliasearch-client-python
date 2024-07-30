@@ -13,7 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 
 from algoliasearch.recommend.models.condition import Condition
 from algoliasearch.recommend.models.consequence import Consequence
-from algoliasearch.recommend.models.recommend_rule_metadata import RecommendRuleMetadata
+from algoliasearch.recommend.models.rule_metadata import RuleMetadata
 
 
 class RecommendRule(BaseModel):
@@ -21,7 +21,7 @@ class RecommendRule(BaseModel):
     Recommend rule.
     """
 
-    metadata: Optional[RecommendRuleMetadata] = Field(default=None, alias="_metadata")
+    metadata: Optional[RuleMetadata] = Field(default=None, alias="_metadata")
     object_id: Optional[StrictStr] = Field(
         default=None,
         description="Unique identifier of a rule object.",
@@ -85,7 +85,7 @@ class RecommendRule(BaseModel):
         _obj = cls.model_validate(
             {
                 "_metadata": (
-                    RecommendRuleMetadata.from_dict(obj.get("_metadata"))
+                    RuleMetadata.from_dict(obj.get("_metadata"))
                     if obj.get("_metadata") is not None
                     else None
                 ),

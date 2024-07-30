@@ -12,9 +12,9 @@ from typing import Any, Dict, Optional, Self
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 
 
-class GetConfigStatus200Response(BaseModel):
+class ConfigStatus(BaseModel):
     """
-    GetConfigStatus200Response
+    ConfigStatus
     """
 
     index_name: Optional[StrictStr] = Field(
@@ -52,7 +52,7 @@ class GetConfigStatus200Response(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of GetConfigStatus200Response from a JSON string"""
+        """Create an instance of ConfigStatus from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,7 +74,7 @@ class GetConfigStatus200Response(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of GetConfigStatus200Response from a dict"""
+        """Create an instance of ConfigStatus from a dict"""
         if obj is None:
             return None
 

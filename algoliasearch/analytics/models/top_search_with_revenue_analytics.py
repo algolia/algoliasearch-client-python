@@ -11,7 +11,7 @@ from typing import Annotated, Any, Dict, List, Optional, Self, Union
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 
-from algoliasearch.analytics.models.click_positions_inner import ClickPositionsInner
+from algoliasearch.analytics.models.click_position import ClickPosition
 from algoliasearch.analytics.models.currencies_value import CurrenciesValue
 
 
@@ -41,7 +41,7 @@ class TopSearchWithRevenueAnalytics(BaseModel):
         alias="averageClickPosition",
     )
     click_positions: Annotated[
-        List[ClickPositionsInner], Field(min_length=12, max_length=12)
+        List[ClickPosition], Field(min_length=12, max_length=12)
     ] = Field(
         description="List of positions in the search results and clicks associated with this search.",
         alias="clickPositions",
@@ -153,7 +153,7 @@ class TopSearchWithRevenueAnalytics(BaseModel):
                 "averageClickPosition": obj.get("averageClickPosition"),
                 "clickPositions": (
                     [
-                        ClickPositionsInner.from_dict(_item)
+                        ClickPosition.from_dict(_item)
                         for _item in obj.get("clickPositions")
                     ]
                     if obj.get("clickPositions") is not None

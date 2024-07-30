@@ -11,9 +11,7 @@ from typing import Any, Dict, Optional, Self
 
 from pydantic import BaseModel, ConfigDict
 
-from algoliasearch.monitoring.models.indexing_time_response_metrics import (
-    IndexingTimeResponseMetrics,
-)
+from algoliasearch.monitoring.models.indexing_metric import IndexingMetric
 
 
 class IndexingTimeResponse(BaseModel):
@@ -21,7 +19,7 @@ class IndexingTimeResponse(BaseModel):
     IndexingTimeResponse
     """
 
-    metrics: Optional[IndexingTimeResponseMetrics] = None
+    metrics: Optional[IndexingMetric] = None
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -66,7 +64,7 @@ class IndexingTimeResponse(BaseModel):
         _obj = cls.model_validate(
             {
                 "metrics": (
-                    IndexingTimeResponseMetrics.from_dict(obj.get("metrics"))
+                    IndexingMetric.from_dict(obj.get("metrics"))
                     if obj.get("metrics") is not None
                     else None
                 )

@@ -12,20 +12,19 @@ from typing import Any, Dict, Optional, Self
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 
 
-class FilterEffectsOutliers(BaseModel):
+class Range(BaseModel):
     """
-    Outliers removed from the A/B test as a result of configuration settings.
+    Range object with lower and upper values in meters to define custom ranges.
     """
 
-    users_count: Optional[StrictInt] = Field(
+    var_from: Optional[StrictInt] = Field(
         default=None,
-        description="Number of users removed from the A/B test.",
-        alias="usersCount",
+        description="Lower boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.",
+        alias="from",
     )
-    tracked_searches_count: Optional[StrictInt] = Field(
+    value: Optional[StrictInt] = Field(
         default=None,
-        description="Number of tracked searches removed from the A/B test.",
-        alias="trackedSearchesCount",
+        description="Upper boundary of a range in meters. The Geo ranking criterion considers all records within the range to be equal.",
     )
 
     model_config = ConfigDict(
@@ -37,7 +36,7 @@ class FilterEffectsOutliers(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of FilterEffectsOutliers from a JSON string"""
+        """Create an instance of Range from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -59,17 +58,12 @@ class FilterEffectsOutliers(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of FilterEffectsOutliers from a dict"""
+        """Create an instance of Range from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "usersCount": obj.get("usersCount"),
-                "trackedSearchesCount": obj.get("trackedSearchesCount"),
-            }
-        )
+        _obj = cls.model_validate({"from": obj.get("from"), "value": obj.get("value")})
         return _obj

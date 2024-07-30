@@ -11,10 +11,8 @@ from typing import Any, Dict, Optional, Self
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from algoliasearch.abtesting.models.filter_effects_empty_search import (
-    FilterEffectsEmptySearch,
-)
-from algoliasearch.abtesting.models.filter_effects_outliers import FilterEffectsOutliers
+from algoliasearch.abtesting.models.empty_search_filter import EmptySearchFilter
+from algoliasearch.abtesting.models.outliers_filter import OutliersFilter
 
 
 class FilterEffects(BaseModel):
@@ -22,10 +20,8 @@ class FilterEffects(BaseModel):
     A/B test filter effects resulting from configuration settings.
     """
 
-    outliers: Optional[FilterEffectsOutliers] = None
-    empty_search: Optional[FilterEffectsEmptySearch] = Field(
-        default=None, alias="emptySearch"
-    )
+    outliers: Optional[OutliersFilter] = None
+    empty_search: Optional[EmptySearchFilter] = Field(default=None, alias="emptySearch")
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -72,12 +68,12 @@ class FilterEffects(BaseModel):
         _obj = cls.model_validate(
             {
                 "outliers": (
-                    FilterEffectsOutliers.from_dict(obj.get("outliers"))
+                    OutliersFilter.from_dict(obj.get("outliers"))
                     if obj.get("outliers") is not None
                     else None
                 ),
                 "emptySearch": (
-                    FilterEffectsEmptySearch.from_dict(obj.get("emptySearch"))
+                    EmptySearchFilter.from_dict(obj.get("emptySearch"))
                     if obj.get("emptySearch") is not None
                     else None
                 ),

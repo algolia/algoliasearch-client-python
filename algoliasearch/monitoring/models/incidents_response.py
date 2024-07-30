@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional, Self
 
 from pydantic import BaseModel, ConfigDict
 
-from algoliasearch.monitoring.models.incidents_inner import IncidentsInner
+from algoliasearch.monitoring.models.incident_entry import IncidentEntry
 
 
 class IncidentsResponse(BaseModel):
@@ -19,7 +19,7 @@ class IncidentsResponse(BaseModel):
     IncidentsResponse
     """
 
-    incidents: Optional[Dict[str, List[IncidentsInner]]] = None
+    incidents: Optional[Dict[str, List[IncidentEntry]]] = None
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -72,7 +72,7 @@ class IncidentsResponse(BaseModel):
                 "incidents": dict(
                     (
                         _k,
-                        [IncidentsInner.from_dict(_item) for _item in _v]
+                        [IncidentEntry.from_dict(_item) for _item in _v]
                         if _v is not None
                         else None,
                     )
