@@ -9,9 +9,10 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Self
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 from algoliasearch.search.models.built_in_operation_type import BuiltInOperationType
+from algoliasearch.search.models.built_in_operation_value import BuiltInOperationValue
 
 
 class BuiltInOperation(BaseModel):
@@ -20,9 +21,7 @@ class BuiltInOperation(BaseModel):
     """
 
     operation: BuiltInOperationType = Field(alias="_operation")
-    value: StrictStr = Field(
-        description="Value that corresponds to the operation, for example an `Increment` or `Decrement` step, or an `Add` or `Remove` value."
-    )
+    value: BuiltInOperationValue
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -51,6 +50,8 @@ class BuiltInOperation(BaseModel):
             exclude={},
             exclude_none=True,
         )
+        if self.value:
+            _dict["value"] = self.value.to_dict()
         return _dict
 
     @classmethod
@@ -63,6 +64,13 @@ class BuiltInOperation(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate(
-            {"_operation": obj.get("_operation"), "value": obj.get("value")}
+            {
+                "_operation": obj.get("_operation"),
+                "value": (
+                    BuiltInOperationValue.from_dict(obj.get("value"))
+                    if obj.get("value") is not None
+                    else None
+                ),
+            }
         )
         return _obj
