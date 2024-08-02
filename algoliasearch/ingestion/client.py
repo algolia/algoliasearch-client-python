@@ -71,6 +71,8 @@ from algoliasearch.ingestion.models.run import Run
 from algoliasearch.ingestion.models.run_list_response import RunListResponse
 from algoliasearch.ingestion.models.run_response import RunResponse
 from algoliasearch.ingestion.models.run_sort_keys import RunSortKeys
+from algoliasearch.ingestion.models.run_source_payload import RunSourcePayload
+from algoliasearch.ingestion.models.run_source_response import RunSourceResponse
 from algoliasearch.ingestion.models.run_status import RunStatus
 from algoliasearch.ingestion.models.sort_keys import SortKeys
 from algoliasearch.ingestion.models.source import Source
@@ -3309,6 +3311,80 @@ class IngestionClient:
                 task_id, batch_write_params, request_options
             )
         ).deserialize(RunResponse)
+
+    async def run_source_with_http_info(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        run_source_payload: Optional[RunSourcePayload] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Runs all tasks linked to a source, only available for Shopify sources. It will create 1 run per task.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param run_source_payload:
+        :type run_source_payload: RunSourcePayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `run_source`."
+            )
+
+        _data = {}
+        if run_source_payload is not None:
+            _data = run_source_payload
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/sources/{sourceID}/run".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def run_source(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        run_source_payload: Optional[RunSourcePayload] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RunSourceResponse:
+        """
+        Runs all tasks linked to a source, only available for Shopify sources. It will create 1 run per task.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param run_source_payload:
+        :type run_source_payload: RunSourcePayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RunSourceResponse' result object.
+        """
+        return (
+            await self.run_source_with_http_info(
+                source_id, run_source_payload, request_options
+            )
+        ).deserialize(RunSourceResponse)
 
     async def run_task_with_http_info(
         self,
