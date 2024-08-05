@@ -12,6 +12,7 @@ from typing import Any, ClassVar, Dict, List, Optional, Self
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
 
 from algoliasearch.search.models.dictionary_entry_state import DictionaryEntryState
+from algoliasearch.search.models.dictionary_entry_type import DictionaryEntryType
 from algoliasearch.search.models.supported_language import SupportedLanguage
 
 
@@ -37,6 +38,7 @@ class DictionaryEntry(BaseModel):
         description="Invividual components of a compound word in the `compounds` dictionary.",
     )
     state: Optional[DictionaryEntryState] = None
+    type: Optional[DictionaryEntryType] = None
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = [
         "objectID",
@@ -45,6 +47,7 @@ class DictionaryEntry(BaseModel):
         "words",
         "decomposition",
         "state",
+        "type",
     ]
 
     model_config = ConfigDict(
@@ -101,6 +104,7 @@ class DictionaryEntry(BaseModel):
                 "words": obj.get("words"),
                 "decomposition": obj.get("decomposition"),
                 "state": obj.get("state"),
+                "type": obj.get("type"),
             }
         )
         # store additional fields in additional_properties
