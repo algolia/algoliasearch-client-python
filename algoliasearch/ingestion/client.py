@@ -3151,6 +3151,14 @@ class IngestionClient:
 
     async def list_transformations_with_http_info(
         self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
         sort: Annotated[
             Optional[SortKeys], Field(description="Property by which to sort the list.")
         ] = None,
@@ -3168,6 +3176,10 @@ class IngestionClient:
                   - deleteIndex
                   - editSettings
 
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
         :param sort: Property by which to sort the list.
         :type sort: SortKeys
         :param order: Sort order of the response, ascending or descending.
@@ -3178,6 +3190,10 @@ class IngestionClient:
 
         _query_parameters: List[Tuple[str, str]] = []
 
+        if items_per_page is not None:
+            _query_parameters.append(("itemsPerPage", items_per_page))
+        if page is not None:
+            _query_parameters.append(("page", page))
         if sort is not None:
             _query_parameters.append(("sort", sort))
         if order is not None:
@@ -3195,6 +3211,14 @@ class IngestionClient:
 
     async def list_transformations(
         self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
         sort: Annotated[
             Optional[SortKeys], Field(description="Property by which to sort the list.")
         ] = None,
@@ -3212,6 +3236,10 @@ class IngestionClient:
                   - deleteIndex
                   - editSettings
 
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
         :param sort: Property by which to sort the list.
         :type sort: SortKeys
         :param order: Sort order of the response, ascending or descending.
@@ -3220,7 +3248,9 @@ class IngestionClient:
         :return: Returns the deserialized response in a 'ListTransformationsResponse' result object.
         """
         return (
-            await self.list_transformations_with_http_info(sort, order, request_options)
+            await self.list_transformations_with_http_info(
+                items_per_page, page, sort, order, request_options
+            )
         ).deserialize(ListTransformationsResponse)
 
     async def push_task_with_http_info(
