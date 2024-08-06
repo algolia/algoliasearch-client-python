@@ -99,6 +99,7 @@ from algoliasearch.ingestion.models.transformation_create import TransformationC
 from algoliasearch.ingestion.models.transformation_create_response import (
     TransformationCreateResponse,
 )
+from algoliasearch.ingestion.models.transformation_models import TransformationModels
 from algoliasearch.ingestion.models.transformation_search import TransformationSearch
 from algoliasearch.ingestion.models.transformation_try import TransformationTry
 from algoliasearch.ingestion.models.transformation_try_response import (
@@ -3148,6 +3149,48 @@ class IngestionClient:
                 request_options,
             )
         ).deserialize(ListTasksResponseV1)
+
+    async def list_transformation_models_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of existing LLM transformation helpers.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/1/transformations/copilot",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def list_transformation_models(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> TransformationModels:
+        """
+        Retrieves a list of existing LLM transformation helpers.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationModels' result object.
+        """
+        return (
+            await self.list_transformation_models_with_http_info(request_options)
+        ).deserialize(TransformationModels)
 
     async def list_transformations_with_http_info(
         self,
