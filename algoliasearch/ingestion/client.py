@@ -4008,7 +4008,7 @@ class IngestionClient:
             )
         ).deserialize(SourceWatchResponse)
 
-    async def try_transformations_with_http_info(
+    async def try_transformation_with_http_info(
         self,
         transformation_try: TransformationTry,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -4029,7 +4029,7 @@ class IngestionClient:
 
         if transformation_try is None:
             raise ValueError(
-                "Parameter `transformation_try` is required when calling `try_transformations`."
+                "Parameter `transformation_try` is required when calling `try_transformation`."
             )
 
         _data = {}
@@ -4046,7 +4046,7 @@ class IngestionClient:
             use_read_transporter=False,
         )
 
-    async def try_transformations(
+    async def try_transformation(
         self,
         transformation_try: TransformationTry,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -4065,7 +4065,7 @@ class IngestionClient:
         :return: Returns the deserialized response in a 'TransformationTryResponse' result object.
         """
         return (
-            await self.try_transformations_with_http_info(
+            await self.try_transformation_with_http_info(
                 transformation_try, request_options
             )
         ).deserialize(TransformationTryResponse)
