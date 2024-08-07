@@ -52,6 +52,12 @@ from algoliasearch.ingestion.models.event import Event
 from algoliasearch.ingestion.models.event_sort_keys import EventSortKeys
 from algoliasearch.ingestion.models.event_status import EventStatus
 from algoliasearch.ingestion.models.event_type import EventType
+from algoliasearch.ingestion.models.generate_transformation_code_payload import (
+    GenerateTransformationCodePayload,
+)
+from algoliasearch.ingestion.models.generate_transformation_code_response import (
+    GenerateTransformationCodeResponse,
+)
 from algoliasearch.ingestion.models.list_authentications_response import (
     ListAuthenticationsResponse,
 )
@@ -1476,6 +1482,68 @@ class IngestionClient:
         return (
             await self.enable_task_v1_with_http_info(task_id, request_options)
         ).deserialize(TaskUpdateResponse)
+
+    async def generate_transformation_code_with_http_info(
+        self,
+        generate_transformation_code_payload: GenerateTransformationCodePayload,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Generates code for the selected model based on the given prompt.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param generate_transformation_code_payload: (required)
+        :type generate_transformation_code_payload: GenerateTransformationCodePayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if generate_transformation_code_payload is None:
+            raise ValueError(
+                "Parameter `generate_transformation_code_payload` is required when calling `generate_transformation_code`."
+            )
+
+        _data = {}
+        if generate_transformation_code_payload is not None:
+            _data = generate_transformation_code_payload
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations/models",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def generate_transformation_code(
+        self,
+        generate_transformation_code_payload: GenerateTransformationCodePayload,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GenerateTransformationCodeResponse:
+        """
+        Generates code for the selected model based on the given prompt.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param generate_transformation_code_payload: (required)
+        :type generate_transformation_code_payload: GenerateTransformationCodePayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GenerateTransformationCodeResponse' result object.
+        """
+        return (
+            await self.generate_transformation_code_with_http_info(
+                generate_transformation_code_payload, request_options
+            )
+        ).deserialize(GenerateTransformationCodeResponse)
 
     async def get_authentication_with_http_info(
         self,
@@ -3167,7 +3235,7 @@ class IngestionClient:
 
         return await self._transporter.request(
             verb=Verb.GET,
-            path="/1/transformations/copilot",
+            path="/1/transformations/models",
             request_options=self._request_options.merge(
                 user_request_options=request_options,
             ),
