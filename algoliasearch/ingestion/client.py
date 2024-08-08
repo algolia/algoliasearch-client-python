@@ -4082,7 +4082,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Try a transformation.
+        Try a transformation before creating it.
 
         Required API Key ACLs:
           - addObject
@@ -4120,7 +4120,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationTryResponse:
         """
-        Try a transformation.
+        Try a transformation before creating it.
 
         Required API Key ACLs:
           - addObject
@@ -4135,6 +4135,85 @@ class IngestionClient:
         return (
             await self.try_transformation_with_http_info(
                 transformation_try, request_options
+            )
+        ).deserialize(TransformationTryResponse)
+
+    async def try_transformation_before_update_with_http_info(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        transformation_try: TransformationTry,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Try a transformation before updating it.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param transformation_try: (required)
+        :type transformation_try: TransformationTry
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `try_transformation_before_update`."
+            )
+
+        if transformation_try is None:
+            raise ValueError(
+                "Parameter `transformation_try` is required when calling `try_transformation_before_update`."
+            )
+
+        _data = {}
+        if transformation_try is not None:
+            _data = transformation_try
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations/{transformationID}/try".replace(
+                "{transformationID}", quote(str(transformation_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def try_transformation_before_update(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        transformation_try: TransformationTry,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TransformationTryResponse:
+        """
+        Try a transformation before updating it.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param transformation_try: (required)
+        :type transformation_try: TransformationTry
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationTryResponse' result object.
+        """
+        return (
+            await self.try_transformation_before_update_with_http_info(
+                transformation_id, transformation_try, request_options
             )
         ).deserialize(TransformationTryResponse)
 
