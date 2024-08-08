@@ -1,3 +1,7 @@
+## [4.0.0b30](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b29...4.0.0b30)
+
+- [7d2ab99ce](https://github.com/algolia/api-clients-automation/commit/7d2ab99ce) feat(specs): add authentications to ingestion transformations ([#3494](https://github.com/algolia/api-clients-automation/pull/3494)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0b29](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b28...4.0.0b29)
 
 - [2c6147ee7](https://github.com/algolia/api-clients-automation/commit/2c6147ee7) feat(specs): add generate code endpoint to ingestion specs ([#3489](https://github.com/algolia/api-clients-automation/pull/3489)) by [@shortcuts](https://github.com/shortcuts/)
