@@ -19,18 +19,23 @@ class HighlightResult(BaseModel):
     HighlightResult
     """
 
-    oneof_schema_1_validator: Optional[HighlightResultOption] = None
-    oneof_schema_2_validator: Optional[Dict[str, HighlightResultOption]] = Field(
+    oneof_schema_1_validator: Optional[Dict[str, HighlightResult]] = Field(
         default=None,
         description="Surround words that match the query with HTML tags for highlighting.",
     )
-    oneof_schema_3_validator: Optional[List[HighlightResultOption]] = Field(
+    oneof_schema_2_validator: Optional[HighlightResultOption] = None
+    oneof_schema_3_validator: Optional[Dict[str, HighlightResultOption]] = Field(
+        default=None,
+        description="Surround words that match the query with HTML tags for highlighting.",
+    )
+    oneof_schema_4_validator: Optional[List[HighlightResultOption]] = Field(
         default=None,
         description="Surround words that match the query with HTML tags for highlighting.",
     )
     actual_instance: Optional[
         Union[
             Dict[str, HighlightResultOption],
+            Dict[str, HighlightResult],
             HighlightResultOption,
             List[HighlightResultOption],
         ]
@@ -56,6 +61,7 @@ class HighlightResult(BaseModel):
     ) -> Optional[
         Union[
             Dict[str, HighlightResultOption],
+            Dict[str, HighlightResult],
             HighlightResultOption,
             List[HighlightResultOption],
         ]
@@ -63,7 +69,7 @@ class HighlightResult(BaseModel):
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
-        return self.actual_instance
+        return self.actual_instance if hasattr(self, "actual_instance") else self
 
     @classmethod
     def from_dict(cls, obj: dict) -> Self:
@@ -76,14 +82,14 @@ class HighlightResult(BaseModel):
         error_messages = []
 
         try:
-            instance.actual_instance = HighlightResultOption.from_json(json_str)
+            instance.oneof_schema_1_validator = loads(json_str)
+            instance.actual_instance = instance.oneof_schema_1_validator
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.oneof_schema_2_validator = loads(json_str)
-            instance.actual_instance = instance.oneof_schema_2_validator
+            instance.actual_instance = HighlightResultOption.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
@@ -95,9 +101,16 @@ class HighlightResult(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.oneof_schema_4_validator = loads(json_str)
+            instance.actual_instance = instance.oneof_schema_4_validator
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into HighlightResult with oneOf schemas: Dict[str, HighlightResultOption], HighlightResultOption, List[HighlightResultOption]. Details: "
+            "No match found when deserializing the JSON string into HighlightResult with oneOf schemas: Dict[str, HighlightResultOption], Dict[str, HighlightResult], HighlightResultOption, List[HighlightResultOption]. Details: "
             + ", ".join(error_messages)
         )
 
@@ -106,8 +119,7 @@ class HighlightResult(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        to_json = getattr(self.actual_instance, "to_json", None)
-        if callable(to_json):
+        if hasattr(self.actual_instance, "to_json"):
             return self.actual_instance.to_json()
         else:
             return dumps(self.actual_instance)
@@ -117,8 +129,7 @@ class HighlightResult(BaseModel):
         if self.actual_instance is None:
             return None
 
-        to_dict = getattr(self.actual_instance, "to_dict", None)
-        if callable(to_dict):
+        if hasattr(self.actual_instance, "to_dict"):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance

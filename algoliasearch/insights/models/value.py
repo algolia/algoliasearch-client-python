@@ -47,7 +47,7 @@ class Value(BaseModel):
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
-        return self.actual_instance
+        return self.actual_instance if hasattr(self, "actual_instance") else self
 
     @classmethod
     def from_dict(cls, obj: dict) -> Self:
@@ -84,8 +84,7 @@ class Value(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        to_json = getattr(self.actual_instance, "to_json", None)
-        if callable(to_json):
+        if hasattr(self.actual_instance, "to_json"):
             return self.actual_instance.to_json()
         else:
             return dumps(self.actual_instance)
@@ -95,8 +94,7 @@ class Value(BaseModel):
         if self.actual_instance is None:
             return None
 
-        to_dict = getattr(self.actual_instance, "to_dict", None)
-        if callable(to_dict):
+        if hasattr(self.actual_instance, "to_dict"):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance
