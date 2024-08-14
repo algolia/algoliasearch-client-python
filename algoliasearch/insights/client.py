@@ -452,7 +452,7 @@ class InsightsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Deletes all events related to the specified user token from events metrics and analytics. To delete a personalization user profile, see [Delete a user profile](/specs/personalization#tag/profiles/operation/deleteUserProfile).
+        Deletes all events related to the specified user token from events metrics and analytics. The deletion is asynchronous, and processed within 48 hours. To delete a personalization user profile, see [Delete a user profile](/specs/personalization#tag/profiles/operation/deleteUserProfile).
 
 
         :param user_token: User token for which to delete all associated events. (required)
@@ -491,7 +491,7 @@ class InsightsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> None:
         """
-        Deletes all events related to the specified user token from events metrics and analytics. To delete a personalization user profile, see [Delete a user profile](/specs/personalization#tag/profiles/operation/deleteUserProfile).
+        Deletes all events related to the specified user token from events metrics and analytics. The deletion is asynchronous, and processed within 48 hours. To delete a personalization user profile, see [Delete a user profile](/specs/personalization#tag/profiles/operation/deleteUserProfile).
 
 
         :param user_token: User token for which to delete all associated events. (required)
