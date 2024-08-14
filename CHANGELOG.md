@@ -1,3 +1,9 @@
+## [4.0.0](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b31...4.0.0)
+
+New major version released! Browse [our documentation](https://www.algolia.com/doc/libraries/python)
+
+- [22348001a](https://github.com/algolia/api-clients-automation/commit/22348001a) fix(specs): required ingestion search params ([#3516](https://github.com/algolia/api-clients-automation/pull/3516)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.0.0b31](https://github.com/algolia/algoliasearch-client-python/compare/4.0.0b30...4.0.0b31)
 
 - [4c052002e](https://github.com/algolia/api-clients-automation/commit/4c052002e) feat(specs): recursive snippets and highlights result ([#3497](https://github.com/algolia/api-clients-automation/pull/3497)) by [@shortcuts](https://github.com/shortcuts/)
