@@ -535,7 +535,7 @@ class SearchClient:
         """
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
 
-        See https://api-clients-automation.netlify.app/docs/contributing/add-new-api-client#5-helpers for implementation details.
+        See https://api-clients-automation.netlify.app/docs/add-new-api-client#5-helpers for implementation details.
         """
         tmp_index_name = self.create_temporary_name(index_name)
 
