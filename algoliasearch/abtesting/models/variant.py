@@ -25,10 +25,12 @@ class Variant(BaseModel):
         alias="addToCartCount",
     )
     add_to_cart_rate: Optional[Union[StrictFloat, StrictInt]] = Field(
+        default=None,
         description="[Add-to-cart rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#add-to-cart-rate) for this variant. ",
         alias="addToCartRate",
     )
     average_click_position: Optional[StrictInt] = Field(
+        default=None,
         description="[Average click position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position) for this variant. ",
         alias="averageClickPosition",
     )
@@ -36,6 +38,7 @@ class Variant(BaseModel):
         description="Number of click events for this variant.", alias="clickCount"
     )
     click_through_rate: Optional[Union[StrictFloat, StrictInt]] = Field(
+        default=None,
         description="[Click-through rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate) for this variant. ",
         alias="clickThroughRate",
     )
@@ -43,6 +46,7 @@ class Variant(BaseModel):
         description="Number of click events for this variant.", alias="conversionCount"
     )
     conversion_rate: Optional[Union[StrictFloat, StrictInt]] = Field(
+        default=None,
         description="[Conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate) for this variant. ",
         alias="conversionRate",
     )
@@ -67,6 +71,7 @@ class Variant(BaseModel):
         description="Number of purchase events for this variant.", alias="purchaseCount"
     )
     purchase_rate: Optional[Union[StrictFloat, StrictInt]] = Field(
+        default=None,
         description="[Purchase rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#purchase-rate) for this variant. ",
         alias="purchaseRate",
     )

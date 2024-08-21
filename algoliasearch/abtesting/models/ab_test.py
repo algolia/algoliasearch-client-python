@@ -25,19 +25,19 @@ class ABTest(BaseModel):
         description="Unique A/B test identifier.", alias="abTestID"
     )
     click_significance: Optional[Union[StrictFloat, StrictInt]] = Field(
-        alias="clickSignificance"
+        default=None, alias="clickSignificance"
     )
     conversion_significance: Optional[Union[StrictFloat, StrictInt]] = Field(
-        alias="conversionSignificance"
+        default=None, alias="conversionSignificance"
     )
     add_to_cart_significance: Optional[Union[StrictFloat, StrictInt]] = Field(
-        alias="addToCartSignificance"
+        default=None, alias="addToCartSignificance"
     )
     purchase_significance: Optional[Union[StrictFloat, StrictInt]] = Field(
-        alias="purchaseSignificance"
+        default=None, alias="purchaseSignificance"
     )
     revenue_significance: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = Field(
-        alias="revenueSignificance"
+        default=None, alias="revenueSignificance"
     )
     updated_at: StrictStr = Field(
         description="Date and time when the A/B test was last updated, in RFC 3339 format.",
