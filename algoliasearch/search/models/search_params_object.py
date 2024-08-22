@@ -93,7 +93,7 @@ class SearchParamsObject(BaseModel):
     offset: Optional[StrictInt] = Field(
         default=None, description="Position of the first hit to retrieve."
     )
-    length: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
+    length: Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]] = Field(
         default=None,
         description="Number of hits to retrieve (used in combination with `offset`).",
     )
