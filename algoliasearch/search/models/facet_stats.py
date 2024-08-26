@@ -9,18 +9,25 @@ from __future__ import annotations
 from json import loads
 from typing import Any, Dict, Optional, Self, Union
 
-from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
 
 
-class CurrenciesValue(BaseModel):
+class FacetStats(BaseModel):
     """
-    Currency code.
+    FacetStats
     """
 
-    currency: Optional[StrictStr] = Field(default=None, description="Currency code.")
-    revenue: Optional[Union[StrictFloat, StrictInt]] = Field(
-        default=None,
-        description="Revenue associated with this search in this currency.",
+    min: Optional[Union[StrictFloat, StrictInt]] = Field(
+        default=None, description="Minimum value in the results."
+    )
+    max: Optional[Union[StrictFloat, StrictInt]] = Field(
+        default=None, description="Maximum value in the results."
+    )
+    avg: Optional[Union[StrictFloat, StrictInt]] = Field(
+        default=None, description="Average facet value in the results."
+    )
+    sum: Optional[Union[StrictFloat, StrictInt]] = Field(
+        default=None, description="Sum of all values in the results."
     )
 
     model_config = ConfigDict(
@@ -32,7 +39,7 @@ class CurrenciesValue(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of CurrenciesValue from a JSON string"""
+        """Create an instance of FacetStats from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -54,7 +61,7 @@ class CurrenciesValue(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of CurrenciesValue from a dict"""
+        """Create an instance of FacetStats from a dict"""
         if obj is None:
             return None
 
@@ -62,6 +69,11 @@ class CurrenciesValue(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate(
-            {"currency": obj.get("currency"), "revenue": obj.get("revenue")}
+            {
+                "min": obj.get("min"),
+                "max": obj.get("max"),
+                "avg": obj.get("avg"),
+                "sum": obj.get("sum"),
+            }
         )
         return _obj

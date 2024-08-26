@@ -21,7 +21,7 @@ from pydantic import (
 )
 
 from algoliasearch.recommend.models.exhaustive import Exhaustive
-from algoliasearch.recommend.models.facets_stats import FacetsStats
+from algoliasearch.recommend.models.facet_stats import FacetStats
 from algoliasearch.recommend.models.recommendations_hit import RecommendationsHit
 from algoliasearch.recommend.models.redirect import Redirect
 from algoliasearch.recommend.models.rendering_content import RenderingContent
@@ -71,7 +71,7 @@ class RecommendationsResults(BaseModel):
     facets: Optional[Dict[str, Dict[str, StrictInt]]] = Field(
         default=None, description="Facet counts."
     )
-    facets_stats: Optional[Dict[str, FacetsStats]] = Field(
+    facets_stats: Optional[Dict[str, FacetStats]] = Field(
         default=None, description="Statistics for numerical facets."
     )
     index: Optional[StrictStr] = Field(
@@ -230,7 +230,7 @@ class RecommendationsResults(BaseModel):
                 "facets": obj.get("facets"),
                 "facets_stats": (
                     dict(
-                        (_k, FacetsStats.from_dict(_v))
+                        (_k, FacetStats.from_dict(_v))
                         for _k, _v in obj.get("facets_stats").items()
                     )
                     if obj.get("facets_stats") is not None

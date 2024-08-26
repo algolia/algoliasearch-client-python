@@ -21,7 +21,7 @@ from pydantic import (
 )
 
 from algoliasearch.search.models.exhaustive import Exhaustive
-from algoliasearch.search.models.facets_stats import FacetsStats
+from algoliasearch.search.models.facet_stats import FacetStats
 from algoliasearch.search.models.hit import Hit
 from algoliasearch.search.models.redirect import Redirect
 from algoliasearch.search.models.rendering_content import RenderingContent
@@ -71,7 +71,7 @@ class SearchResponse(BaseModel):
     facets: Optional[Dict[str, Dict[str, StrictInt]]] = Field(
         default=None, description="Facet counts."
     )
-    facets_stats: Optional[Dict[str, FacetsStats]] = Field(
+    facets_stats: Optional[Dict[str, FacetStats]] = Field(
         default=None, description="Statistics for numerical facets."
     )
     index: Optional[StrictStr] = Field(
@@ -278,7 +278,7 @@ class SearchResponse(BaseModel):
                 "facets": obj.get("facets"),
                 "facets_stats": (
                     dict(
-                        (_k, FacetsStats.from_dict(_v))
+                        (_k, FacetStats.from_dict(_v))
                         for _k, _v in obj.get("facets_stats").items()
                     )
                     if obj.get("facets_stats") is not None

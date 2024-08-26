@@ -11,7 +11,7 @@ from typing import Annotated, Any, Dict, Optional, Self, Union
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 
-from algoliasearch.analytics.models.currencies_value import CurrenciesValue
+from algoliasearch.analytics.models.currency_code import CurrencyCode
 
 
 class TopHitWithRevenueAnalytics(BaseModel):
@@ -76,7 +76,7 @@ class TopHitWithRevenueAnalytics(BaseModel):
     purchase_count: StrictInt = Field(
         description="Number of purchase events from this search.", alias="purchaseCount"
     )
-    currencies: Dict[str, CurrenciesValue] = Field(
+    currencies: Dict[str, CurrencyCode] = Field(
         description="Revenue associated with this search, broken-down by currencies."
     )
 
@@ -139,7 +139,7 @@ class TopHitWithRevenueAnalytics(BaseModel):
                 "purchaseCount": obj.get("purchaseCount"),
                 "currencies": (
                     dict(
-                        (_k, CurrenciesValue.from_dict(_v))
+                        (_k, CurrencyCode.from_dict(_v))
                         for _k, _v in obj.get("currencies").items()
                     )
                     if obj.get("currencies") is not None

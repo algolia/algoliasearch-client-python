@@ -12,7 +12,7 @@ from typing import Annotated, Any, Dict, List, Optional, Self, Union
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 
 from algoliasearch.analytics.models.click_position import ClickPosition
-from algoliasearch.analytics.models.currencies_value import CurrenciesValue
+from algoliasearch.analytics.models.currency_code import CurrencyCode
 
 
 class TopSearchWithRevenueAnalytics(BaseModel):
@@ -66,7 +66,7 @@ class TopSearchWithRevenueAnalytics(BaseModel):
         description="Number of conversions from this search.", alias="conversionCount"
     )
     nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
-    currencies: Dict[str, CurrenciesValue] = Field(
+    currencies: Dict[str, CurrencyCode] = Field(
         description="Revenue associated with this search, broken-down by currencies."
     )
     add_to_cart_rate: Optional[
@@ -166,7 +166,7 @@ class TopSearchWithRevenueAnalytics(BaseModel):
                 "nbHits": obj.get("nbHits"),
                 "currencies": (
                     dict(
-                        (_k, CurrenciesValue.from_dict(_v))
+                        (_k, CurrencyCode.from_dict(_v))
                         for _k, _v in obj.get("currencies").items()
                     )
                     if obj.get("currencies") is not None

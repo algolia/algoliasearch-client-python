@@ -12,9 +12,9 @@ from typing import Any, Dict, Optional, Self, Union
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt
 
 
-class FacetsStats(BaseModel):
+class FacetStats(BaseModel):
     """
-    FacetsStats
+    FacetStats
     """
 
     min: Optional[Union[StrictFloat, StrictInt]] = Field(
@@ -39,7 +39,7 @@ class FacetsStats(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of FacetsStats from a JSON string"""
+        """Create an instance of FacetStats from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -61,7 +61,7 @@ class FacetsStats(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of FacetsStats from a dict"""
+        """Create an instance of FacetStats from a dict"""
         if obj is None:
             return None
 

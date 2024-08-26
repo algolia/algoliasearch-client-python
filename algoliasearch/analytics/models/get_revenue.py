@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Self
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from algoliasearch.analytics.models.currencies_value import CurrenciesValue
+from algoliasearch.analytics.models.currency_code import CurrencyCode
 from algoliasearch.analytics.models.daily_revenue import DailyRevenue
 
 
@@ -20,7 +20,7 @@ class GetRevenue(BaseModel):
     GetRevenue
     """
 
-    currencies: Dict[str, CurrenciesValue] = Field(
+    currencies: Dict[str, CurrencyCode] = Field(
         description="Revenue associated with this search, broken-down by currencies."
     )
     dates: List[DailyRevenue] = Field(description="Daily revenue.")
@@ -79,7 +79,7 @@ class GetRevenue(BaseModel):
             {
                 "currencies": (
                     dict(
-                        (_k, CurrenciesValue.from_dict(_v))
+                        (_k, CurrencyCode.from_dict(_v))
                         for _k, _v in obj.get("currencies").items()
                     )
                     if obj.get("currencies") is not None
