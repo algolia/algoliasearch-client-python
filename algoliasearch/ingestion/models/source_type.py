@@ -28,6 +28,7 @@ class SourceType(str, Enum):
     JSON = "json"
     SHOPIFY = "shopify"
     SFCC = "sfcc"
+    PUSH = "push"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

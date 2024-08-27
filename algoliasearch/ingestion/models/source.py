@@ -26,7 +26,7 @@ class Source(BaseModel):
     )
     type: SourceType
     name: StrictStr
-    input: SourceInput
+    input: Optional[SourceInput] = None
     authentication_id: Optional[StrictStr] = Field(
         default=None,
         description="Universally unique identifier (UUID) of an authentication resource.",

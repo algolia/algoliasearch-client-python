@@ -22,7 +22,7 @@ class SourceCreate(BaseModel):
 
     type: SourceType
     name: StrictStr = Field(description="Descriptive name of the source.")
-    input: SourceInput
+    input: Optional[SourceInput] = None
     authentication_id: Optional[StrictStr] = Field(
         default=None,
         description="Universally unique identifier (UUID) of an authentication resource.",
