@@ -22,6 +22,8 @@ class RunType(str, Enum):
     REINDEX = "reindex"
     UPDATE = "update"
     DISCOVER = "discover"
+    VALIDATE = "validate"
+    PUSH = "push"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

@@ -80,6 +80,7 @@ from algoliasearch.ingestion.models.run_sort_keys import RunSortKeys
 from algoliasearch.ingestion.models.run_source_payload import RunSourcePayload
 from algoliasearch.ingestion.models.run_source_response import RunSourceResponse
 from algoliasearch.ingestion.models.run_status import RunStatus
+from algoliasearch.ingestion.models.run_type import RunType
 from algoliasearch.ingestion.models.sort_keys import SortKeys
 from algoliasearch.ingestion.models.source import Source
 from algoliasearch.ingestion.models.source_create import SourceCreate
@@ -2532,6 +2533,10 @@ class IngestionClient:
             Optional[List[RunStatus]],
             Field(description="Run status for filtering the list of task runs."),
         ] = None,
+        type: Annotated[
+            Optional[List[RunType]],
+            Field(description="Run type for filtering the list of task runs."),
+        ] = None,
         task_id: Annotated[
             Optional[StrictStr],
             Field(description="Task ID for filtering the list of task runs."),
@@ -2572,6 +2577,8 @@ class IngestionClient:
         :type page: int
         :param status: Run status for filtering the list of task runs.
         :type status: List[RunStatus]
+        :param type: Run type for filtering the list of task runs.
+        :type type: List[RunType]
         :param task_id: Task ID for filtering the list of task runs.
         :type task_id: str
         :param sort: Property by which to sort the list of task runs.
@@ -2594,6 +2601,8 @@ class IngestionClient:
             _query_parameters.append(("page", page))
         if status is not None:
             _query_parameters.append(("status", status))
+        if type is not None:
+            _query_parameters.append(("type", type))
         if task_id is not None:
             _query_parameters.append(("taskID", task_id))
         if sort is not None:
@@ -2628,6 +2637,10 @@ class IngestionClient:
         status: Annotated[
             Optional[List[RunStatus]],
             Field(description="Run status for filtering the list of task runs."),
+        ] = None,
+        type: Annotated[
+            Optional[List[RunType]],
+            Field(description="Run type for filtering the list of task runs."),
         ] = None,
         task_id: Annotated[
             Optional[StrictStr],
@@ -2669,6 +2682,8 @@ class IngestionClient:
         :type page: int
         :param status: Run status for filtering the list of task runs.
         :type status: List[RunStatus]
+        :param type: Run type for filtering the list of task runs.
+        :type type: List[RunType]
         :param task_id: Task ID for filtering the list of task runs.
         :type task_id: str
         :param sort: Property by which to sort the list of task runs.
@@ -2687,6 +2702,7 @@ class IngestionClient:
                 items_per_page,
                 page,
                 status,
+                type,
                 task_id,
                 sort,
                 order,
