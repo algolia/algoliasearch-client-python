@@ -30,7 +30,6 @@ from algoliasearch.search.models.action import Action
 from algoliasearch.search.models.add_api_key_response import AddApiKeyResponse
 from algoliasearch.search.models.api_key import ApiKey
 from algoliasearch.search.models.assign_user_id_params import AssignUserIdParams
-from algoliasearch.search.models.attribute_to_update import AttributeToUpdate
 from algoliasearch.search.models.batch_assign_user_ids_params import (
     BatchAssignUserIdsParams,
 )
@@ -3533,8 +3532,7 @@ class SearchClient:
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         attributes_to_update: Annotated[
-            Dict[str, AttributeToUpdate],
-            Field(description="Attributes with their values."),
+            Dict[str, Any], Field(description="Attributes with their values.")
         ],
         create_if_not_exists: Annotated[
             Optional[StrictBool],
@@ -3543,7 +3541,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Adds new attributes to a record, or update existing ones.  - If a record with the specified object ID doesn't exist,   a new record is added to the index **if** `createIfNotExists` is true. - If the index doesn't exist yet, this method creates a new index. - You can use any first-level attribute but not nested attributes.   If you specify a nested attribute, the engine treats it as a replacement for its first-level ancestor.
+        Adds new attributes to a record, or update existing ones.  - If a record with the specified object ID doesn't exist,   a new record is added to the index **if** `createIfNotExists` is true. - If the index doesn't exist yet, this method creates a new index. - You can use any first-level attribute but not nested attributes.   If you specify a nested attribute, the engine treats it as a replacement for its first-level ancestor.  To update an attribute without pushing the entire record, you can use these built-in operations. These operations can be helpful if you don't have access to your initial data.  - Increment: increment a numeric attribute - Decrement: decrement a numeric attribute - Add: append a number or string element to an array attribute - Remove: remove all matching number or string elements from an array attribute made of numbers or strings - AddUnique: add a number or string element to an array attribute made of numbers or strings only if it's not already present - IncrementFrom: increment a numeric integer attribute only if the provided value matches the current value, and otherwise ignore the whole object update. For example, if you pass an IncrementFrom value of 2 for the version attribute, but the current value of the attribute is 1, the engine ignores the update. If the object doesn't exist, the engine only creates it if you pass an IncrementFrom value of 0. - IncrementSet: increment a numeric integer attribute only if the provided value is greater than the current value, and otherwise ignore the whole object update. For example, if you pass an IncrementSet value of 2 for the version attribute, and the current value of the attribute is 1, the engine updates the object. If the object doesn't exist yet, the engine only creates it if you pass an IncrementSet value that's greater than 0.  You can specify an operation by providing an object with the attribute to update as the key and its value being an object with the following properties:  - _operation: the operation to apply on the attribute - value: the right-hand side argument to the operation, for example, increment or decrement step, value to add or remove.
 
         Required API Key ACLs:
           - addObject
@@ -3553,7 +3551,7 @@ class SearchClient:
         :param object_id: Unique record identifier. (required)
         :type object_id: str
         :param attributes_to_update: Attributes with their values. (required)
-        :type attributes_to_update: Dict[str, AttributeToUpdate]
+        :type attributes_to_update: object
         :param create_if_not_exists: Whether to create a new record if it doesn't exist.
         :type create_if_not_exists: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -3605,8 +3603,7 @@ class SearchClient:
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         attributes_to_update: Annotated[
-            Dict[str, AttributeToUpdate],
-            Field(description="Attributes with their values."),
+            Dict[str, Any], Field(description="Attributes with their values.")
         ],
         create_if_not_exists: Annotated[
             Optional[StrictBool],
@@ -3615,7 +3612,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtWithObjectIdResponse:
         """
-        Adds new attributes to a record, or update existing ones.  - If a record with the specified object ID doesn't exist,   a new record is added to the index **if** `createIfNotExists` is true. - If the index doesn't exist yet, this method creates a new index. - You can use any first-level attribute but not nested attributes.   If you specify a nested attribute, the engine treats it as a replacement for its first-level ancestor.
+        Adds new attributes to a record, or update existing ones.  - If a record with the specified object ID doesn't exist,   a new record is added to the index **if** `createIfNotExists` is true. - If the index doesn't exist yet, this method creates a new index. - You can use any first-level attribute but not nested attributes.   If you specify a nested attribute, the engine treats it as a replacement for its first-level ancestor.  To update an attribute without pushing the entire record, you can use these built-in operations. These operations can be helpful if you don't have access to your initial data.  - Increment: increment a numeric attribute - Decrement: decrement a numeric attribute - Add: append a number or string element to an array attribute - Remove: remove all matching number or string elements from an array attribute made of numbers or strings - AddUnique: add a number or string element to an array attribute made of numbers or strings only if it's not already present - IncrementFrom: increment a numeric integer attribute only if the provided value matches the current value, and otherwise ignore the whole object update. For example, if you pass an IncrementFrom value of 2 for the version attribute, but the current value of the attribute is 1, the engine ignores the update. If the object doesn't exist, the engine only creates it if you pass an IncrementFrom value of 0. - IncrementSet: increment a numeric integer attribute only if the provided value is greater than the current value, and otherwise ignore the whole object update. For example, if you pass an IncrementSet value of 2 for the version attribute, and the current value of the attribute is 1, the engine updates the object. If the object doesn't exist yet, the engine only creates it if you pass an IncrementSet value that's greater than 0.  You can specify an operation by providing an object with the attribute to update as the key and its value being an object with the following properties:  - _operation: the operation to apply on the attribute - value: the right-hand side argument to the operation, for example, increment or decrement step, value to add or remove.
 
         Required API Key ACLs:
           - addObject
@@ -3625,7 +3622,7 @@ class SearchClient:
         :param object_id: Unique record identifier. (required)
         :type object_id: str
         :param attributes_to_update: Attributes with their values. (required)
-        :type attributes_to_update: Dict[str, AttributeToUpdate]
+        :type attributes_to_update: object
         :param create_if_not_exists: Whether to create a new record if it doesn't exist.
         :type create_if_not_exists: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)

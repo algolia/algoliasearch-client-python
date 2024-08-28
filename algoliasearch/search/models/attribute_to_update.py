@@ -9,7 +9,7 @@ from __future__ import annotations
 from json import dumps, loads
 from typing import Dict, Optional, Self, Union
 
-from pydantic import BaseModel, Field, StrictStr, ValidationError, model_serializer
+from pydantic import BaseModel, StrictStr, ValidationError, model_serializer
 
 from algoliasearch.search.models.built_in_operation import BuiltInOperation
 
@@ -19,9 +19,7 @@ class AttributeToUpdate(BaseModel):
     AttributeToUpdate
     """
 
-    oneof_schema_1_validator: Optional[StrictStr] = Field(
-        default=None, description="Value of the attribute to update."
-    )
+    oneof_schema_1_validator: Optional[StrictStr] = None
     oneof_schema_2_validator: Optional[BuiltInOperation] = None
     actual_instance: Optional[Union[BuiltInOperation, str]] = None
 
