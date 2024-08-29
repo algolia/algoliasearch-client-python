@@ -11,15 +11,17 @@ from typing import Any, Dict, List, Self
 
 from pydantic import BaseModel, ConfigDict
 
-from algoliasearch.ingestion.models.batch_request import BatchRequest
+from algoliasearch.ingestion.models.action import Action
+from algoliasearch.ingestion.models.push_task_records import PushTaskRecords
 
 
-class BatchWriteParams(BaseModel):
+class PushTaskPayload(BaseModel):
     """
-    Batch parameters.
+    PushTaskPayload
     """
 
-    requests: List[BatchRequest]
+    action: Action
+    records: List[PushTaskRecords]
 
     model_config = ConfigDict(
         use_enum_values=True, populate_by_name=True, validate_assignment=True
@@ -30,7 +32,7 @@ class BatchWriteParams(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of BatchWriteParams from a JSON string"""
+        """Create an instance of PushTaskPayload from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -49,16 +51,16 @@ class BatchWriteParams(BaseModel):
             exclude_none=True,
         )
         _items = []
-        if self.requests:
-            for _item in self.requests:
+        if self.records:
+            for _item in self.records:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict["requests"] = _items
+            _dict["records"] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of BatchWriteParams from a dict"""
+        """Create an instance of PushTaskPayload from a dict"""
         if obj is None:
             return None
 
@@ -67,11 +69,12 @@ class BatchWriteParams(BaseModel):
 
         _obj = cls.model_validate(
             {
-                "requests": (
-                    [BatchRequest.from_dict(_item) for _item in obj.get("requests")]
-                    if obj.get("requests") is not None
+                "action": obj.get("action"),
+                "records": (
+                    [PushTaskRecords.from_dict(_item) for _item in obj.get("records")]
+                    if obj.get("records") is not None
                     else None
-                )
+                ),
             }
         )
         return _obj

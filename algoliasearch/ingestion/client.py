@@ -34,7 +34,6 @@ from algoliasearch.ingestion.models.authentication_update import AuthenticationU
 from algoliasearch.ingestion.models.authentication_update_response import (
     AuthenticationUpdateResponse,
 )
-from algoliasearch.ingestion.models.batch_write_params import BatchWriteParams
 from algoliasearch.ingestion.models.delete_response import DeleteResponse
 from algoliasearch.ingestion.models.destination import Destination
 from algoliasearch.ingestion.models.destination_create import DestinationCreate
@@ -73,6 +72,7 @@ from algoliasearch.ingestion.models.list_transformations_response import (
 )
 from algoliasearch.ingestion.models.order_keys import OrderKeys
 from algoliasearch.ingestion.models.platform_with_none import PlatformWithNone
+from algoliasearch.ingestion.models.push_task_payload import PushTaskPayload
 from algoliasearch.ingestion.models.run import Run
 from algoliasearch.ingestion.models.run_list_response import RunListResponse
 from algoliasearch.ingestion.models.run_response import RunResponse
@@ -3385,8 +3385,8 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        batch_write_params: Annotated[
-            BatchWriteParams,
+        push_task_payload: Annotated[
+            PushTaskPayload,
             Field(
                 description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
             ),
@@ -3403,8 +3403,8 @@ class IngestionClient:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
-        :param batch_write_params: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
-        :type batch_write_params: BatchWriteParams
+        :param push_task_payload: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
+        :type push_task_payload: PushTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -3414,14 +3414,14 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `push_task`."
             )
 
-        if batch_write_params is None:
+        if push_task_payload is None:
             raise ValueError(
-                "Parameter `batch_write_params` is required when calling `push_task`."
+                "Parameter `push_task_payload` is required when calling `push_task`."
             )
 
         _data = {}
-        if batch_write_params is not None:
-            _data = batch_write_params
+        if push_task_payload is not None:
+            _data = push_task_payload
 
         return await self._transporter.request(
             verb=Verb.POST,
@@ -3440,8 +3440,8 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        batch_write_params: Annotated[
-            BatchWriteParams,
+        push_task_payload: Annotated[
+            PushTaskPayload,
             Field(
                 description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
             ),
@@ -3458,14 +3458,14 @@ class IngestionClient:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
-        :param batch_write_params: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
-        :type batch_write_params: BatchWriteParams
+        :param push_task_payload: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
+        :type push_task_payload: PushTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunResponse' result object.
         """
         return (
             await self.push_task_with_http_info(
-                task_id, batch_write_params, request_options
+                task_id, push_task_payload, request_options
             )
         ).deserialize(RunResponse)
 
