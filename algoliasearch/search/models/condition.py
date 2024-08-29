@@ -8,7 +8,8 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, Dict, Optional, Self
+from sys import version_info
+from typing import Any, Dict, Optional
 
 from pydantic import (
     BaseModel,
@@ -18,6 +19,12 @@ from pydantic import (
     StrictStr,
     field_validator,
 )
+
+if version_info >= (3, 11):
+    from typing import Annotated, Self
+else:
+    from typing_extensions import Annotated, Self
+
 
 from algoliasearch.search.models.anchoring import Anchoring
 

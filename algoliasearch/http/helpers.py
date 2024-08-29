@@ -1,12 +1,12 @@
 # coding: utf-8
 
 from asyncio import sleep
-from typing import Callable, Protocol, TypeVar
+from typing import Callable, TypeVar
 
 T = TypeVar("T")
 
 
-class Timeout(Protocol):
+class Timeout:
     def __call__(self) -> int:
         return 0
 
@@ -16,10 +16,7 @@ class Timeout(Protocol):
 
 class RetryTimeout(Timeout):
     def __call__(self, retry_count: int) -> int:
-        return min(retry_count * 0.2, 5)
-
-    def __init__(self) -> None:
-        pass
+        return int(min(retry_count * 0.2, 5))
 
 
 async def create_iterable(

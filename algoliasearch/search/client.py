@@ -12,11 +12,17 @@ import hmac
 from json import dumps
 from random import randint
 from re import search
+from sys import version_info
 from time import time
-from typing import Annotated, Any, Callable, Dict, List, Optional, Self, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
+
+if version_info >= (3, 11):
+    from typing import Annotated, Self
+else:
+    from typing_extensions import Annotated, Self
 
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.exceptions import RequestException, ValidUntilNotFoundException

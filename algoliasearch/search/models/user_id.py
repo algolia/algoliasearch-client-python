@@ -8,9 +8,15 @@ from __future__ import annotations
 
 from json import loads
 from re import match
-from typing import Annotated, Any, Dict, Self
+from sys import version_info
+from typing import Any, Dict
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
+
+if version_info >= (3, 11):
+    from typing import Annotated, Self
+else:
+    from typing_extensions import Annotated, Self
 
 
 class UserId(BaseModel):

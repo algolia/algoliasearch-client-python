@@ -1,13 +1,14 @@
 from copy import deepcopy
+from sys import version_info
 from typing import Any, Dict, List, Optional, Tuple, Union
 from urllib.parse import quote
 
 from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.serializer import QueryParametersSerializer
 
-try:
+if version_info >= (3, 11):
     from typing import Self
-except ImportError:
+else:
     from typing_extensions import Self
 
 

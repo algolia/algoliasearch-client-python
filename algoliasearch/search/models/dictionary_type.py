@@ -8,7 +8,12 @@ from __future__ import annotations
 
 from enum import Enum
 from json import loads
-from typing import Self
+from sys import version_info
+
+if version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 
 class DictionaryType(str, Enum):

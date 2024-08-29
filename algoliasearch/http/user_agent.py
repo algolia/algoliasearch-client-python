@@ -1,5 +1,11 @@
 from platform import python_version
-from typing import Optional, Self
+from sys import version_info
+from typing import Optional
+
+if version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 from algoliasearch import __version__
 
