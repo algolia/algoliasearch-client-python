@@ -18,6 +18,7 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.search.models.boolean_string import BooleanString
 from algoliasearch.search.models.supported_language import SupportedLanguage
 
 
@@ -30,11 +31,14 @@ class IgnorePlurals(BaseModel):
         default=None,
         description="ISO code for languages for which this feature should be active. This overrides languages you set with `queryLanguages`. ",
     )
-    oneof_schema_2_validator: Optional[StrictBool] = Field(
+    oneof_schema_2_validator: Optional[BooleanString] = None
+    oneof_schema_3_validator: Optional[StrictBool] = Field(
         default=False,
         description="If true, `ignorePlurals` is active for all languages included in `queryLanguages`, or for all supported languages, if `queryLanguges` is empty. If false, singulars, plurals, and other declensions won't be considered equivalent. ",
     )
-    actual_instance: Optional[Union[List[SupportedLanguage], bool]] = None
+    actual_instance: Optional[Union[BooleanString, List[SupportedLanguage], bool]] = (
+        None
+    )
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -51,7 +55,9 @@ class IgnorePlurals(BaseModel):
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[List[SupportedLanguage], bool]]:
+    def unwrap_actual_instance(
+        self,
+    ) -> Optional[Union[BooleanString, List[SupportedLanguage], bool]]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -75,15 +81,21 @@ class IgnorePlurals(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.oneof_schema_2_validator = loads(json_str)
-            instance.actual_instance = instance.oneof_schema_2_validator
+            instance.actual_instance = BooleanString.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.oneof_schema_3_validator = loads(json_str)
+            instance.actual_instance = instance.oneof_schema_3_validator
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into IgnorePlurals with oneOf schemas: List[SupportedLanguage], bool. Details: "
+            "No match found when deserializing the JSON string into IgnorePlurals with oneOf schemas: BooleanString, List[SupportedLanguage], bool. Details: "
             + ", ".join(error_messages)
         )
 
