@@ -2,7 +2,7 @@ from os import environ
 from typing import Optional
 
 from algoliasearch.http.base_config import BaseConfig
-from algoliasearch.http.hosts import CallType, Host, HostsCollection
+from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.user_agent import UserAgent
 
 
@@ -32,19 +32,7 @@ class UsageConfig(BaseConfig):
 
         self.hosts = HostsCollection(
             [
-                Host(
-                    url="{}-dsn.algolia.net".format(self.app_id),
-                    priority=10,
-                    accept=CallType.READ,
-                ),
-                Host(
-                    url="{}.algolia.net".format(self.app_id),
-                    priority=10,
-                    accept=CallType.WRITE,
-                ),
-                Host("{}-1.algolianet.com".format(self.app_id)),
-                Host("{}-2.algolianet.com".format(self.app_id)),
-                Host("{}-3.algolianet.com".format(self.app_id)),
-            ],
-            reorder_hosts=True,
+                Host("usage.algolia.com"),
+                Host("usage-dev.algolia.com"),
+            ]
         )
