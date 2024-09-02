@@ -33,6 +33,5 @@ class UsageConfig(BaseConfig):
         self.hosts = HostsCollection(
             [
                 Host("usage.algolia.com"),
-                Host("usage-dev.algolia.com"),
             ]
         )
