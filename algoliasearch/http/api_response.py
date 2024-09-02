@@ -85,7 +85,7 @@ class ApiResponse(Generic[T]):
                 return str(data)
             except TypeError:
                 return data
-        if klass == object:
+        if klass is object:
             if isinstance(data, str):
                 return json.loads(data)
             return data
