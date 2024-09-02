@@ -1,3 +1,8 @@
+## [4.2.3](https://github.com/algolia/algoliasearch-client-python/compare/4.2.2...4.2.3)
+
+- [3d07a1e4f](https://github.com/algolia/api-clients-automation/commit/3d07a1e4f) fix(specs): ignorePlurals can be a boolean string ([#3620](https://github.com/algolia/api-clients-automation/pull/3620)) by [@millotp](https://github.com/millotp/)
+- [c0675ff6b](https://github.com/algolia/api-clients-automation/commit/c0675ff6b) fix(clients): correly parse usage hosts ([#3622](https://github.com/algolia/api-clients-automation/pull/3622)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.2.2](https://github.com/algolia/algoliasearch-client-python/compare/4.2.1...4.2.2)
 
 - [036f9ac95](https://github.com/algolia/api-clients-automation/commit/036f9ac95) fix(python): 3.8 compatibility and CI multi-version [skip-bc] ([#3613](https://github.com/algolia/api-clients-automation/pull/3613)) by [@shortcuts](https://github.com/shortcuts/)
