@@ -596,6 +596,19 @@ class SearchClient:
             move_operation_response=move_operation_response,
         )
 
+    async def index_exists(self, index_name: str) -> bool:
+        """
+        Helper: Checks if the given `index_name` exists.
+        """
+        try:
+            await self.get_settings(index_name)
+        except Exception as e:
+            if isinstance(e, RequestException) and e.status_code == 404:
+                return False
+            raise e
+
+        return True
+
     async def add_api_key_with_http_info(
         self,
         api_key: ApiKey,
