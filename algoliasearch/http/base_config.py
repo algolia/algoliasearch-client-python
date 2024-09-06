@@ -40,3 +40,8 @@ class BaseConfig:
         self.headers = None
         self.proxies = None
         self.hosts = None
+
+    def set_client_api_key(self, api_key: str) -> None:
+        """Sets a new API key to authenticate requests."""
+        self.api_key = api_key
+        self.headers["x-algolia-api-key"] = api_key

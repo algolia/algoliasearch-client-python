@@ -203,6 +203,10 @@ class SearchClient:
         """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
+    def set_client_api_key(self, api_key: str) -> None:
+        """Sets a new API key to authenticate requests."""
+        self._transporter._config.set_client_api_key(api_key)
+
     async def wait_for_task(
         self,
         index_name: str,
