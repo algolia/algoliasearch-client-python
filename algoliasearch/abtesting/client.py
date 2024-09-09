@@ -33,6 +33,7 @@ from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import bodySerializer
 from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 
 
@@ -116,7 +117,7 @@ class AbtestingClient:
         """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
-    def set_client_api_key(self, api_key: str) -> None:
+    async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self._transporter._config.set_client_api_key(api_key)
 
@@ -828,3 +829,790 @@ class AbtestingClient:
         return (
             await self.stop_ab_test_with_http_info(id, request_options)
         ).deserialize(ABTestResponse)
+
+
+class AbtestingClientSync:
+    """The Algolia 'AbtestingClientSync' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+    region ("de" | "us"): The region of your Algolia application.
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = AbtestingClientSync("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY", region="'de' or 'us'")
+    _client_with_named_args = AbtestingClientSync(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY", region="'de' or 'us'")
+
+    See `AbtestingClientSync.create_with_config` for advanced configuration.
+    """
+
+    _transporter: TransporterSync
+    _config: AbtestingConfig
+    _request_options: RequestOptions
+
+    def __init__(
+        self,
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        region: Optional[str] = None,
+        transporter: Optional[TransporterSync] = None,
+        config: Optional[AbtestingConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
+
+        if config is None:
+            config = AbtestingConfig(app_id, api_key, region)
+        self._config = config
+        self._request_options = RequestOptions(config)
+
+        if transporter is None:
+            transporter = TransporterSync(config)
+        self._transporter = transporter
+
+    def create_with_config(
+        config: AbtestingConfig, transporter: Optional[TransporterSync] = None
+    ) -> Self:
+        """Allows creating a client with a customized `AbtestingConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (AbtestingConfig): The config of the API client.
+        transporter (TransporterSync): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = AbtestingClientSync.create_with_config(config=AbtestingConfig(...))
+        _client_with_custom_config_and_transporter = AbtestingClientSync.create_with_config(config=AbtestingConfig(...), transporter=TransporterSync(...))
+        """
+        if transporter is None:
+            transporter = TransporterSync(config)
+
+        return AbtestingClientSync(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            region=config.region,
+            transporter=transporter,
+            config=config,
+        )
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        self.close()
+
+    def close(self) -> None:
+        return self._transporter.close()
+
+    def set_client_api_key(self, api_key: str) -> None:
+        """Sets a new API key to authenticate requests."""
+        self._transporter._config.set_client_api_key(api_key)
+
+    def add_ab_tests_with_http_info(
+        self,
+        add_ab_tests_request: AddABTestsRequest,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new A/B test.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param add_ab_tests_request: (required)
+        :type add_ab_tests_request: AddABTestsRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if add_ab_tests_request is None:
+            raise ValueError(
+                "Parameter `add_ab_tests_request` is required when calling `add_ab_tests`."
+            )
+
+        _data = {}
+        if add_ab_tests_request is not None:
+            _data = add_ab_tests_request
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/2/abtests",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def add_ab_tests(
+        self,
+        add_ab_tests_request: AddABTestsRequest,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ABTestResponse:
+        """
+        Creates a new A/B test.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param add_ab_tests_request: (required)
+        :type add_ab_tests_request: AddABTestsRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ABTestResponse' result object.
+        """
+        return (
+            self.add_ab_tests_with_http_info(add_ab_tests_request, request_options)
+        ).deserialize(ABTestResponse)
+
+    def custom_delete_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_delete(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_get_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_get(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_post_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_post(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_post_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def custom_put_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_put(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_put_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def delete_ab_test_with_http_info(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes an A/B test by its ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if id is None:
+            raise ValueError(
+                "Parameter `id` is required when calling `delete_ab_test`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_ab_test(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ABTestResponse:
+        """
+        Deletes an A/B test by its ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ABTestResponse' result object.
+        """
+        return (self.delete_ab_test_with_http_info(id, request_options)).deserialize(
+            ABTestResponse
+        )
+
+    def get_ab_test_with_http_info(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the details for an A/B test by its ID.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if id is None:
+            raise ValueError("Parameter `id` is required when calling `get_ab_test`.")
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/2/abtests/{id}".replace("{id}", quote(str(id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_ab_test(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ABTest:
+        """
+        Retrieves the details for an A/B test by its ID.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ABTest' result object.
+        """
+        return (self.get_ab_test_with_http_info(id, request_options)).deserialize(
+            ABTest
+        )
+
+    def list_ab_tests_with_http_info(
+        self,
+        offset: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
+        ] = None,
+        limit: Annotated[
+            Optional[StrictInt], Field(description="Number of items to return.")
+        ] = None,
+        index_prefix: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Index name prefix. Only A/B tests for indices starting with this string are included in the response."
+            ),
+        ] = None,
+        index_suffix: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Index name suffix. Only A/B tests for indices ending with this string are included in the response."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Lists all A/B tests you configured for this application.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param offset: Position of the first item to return.
+        :type offset: int
+        :param limit: Number of items to return.
+        :type limit: int
+        :param index_prefix: Index name prefix. Only A/B tests for indices starting with this string are included in the response.
+        :type index_prefix: str
+        :param index_suffix: Index name suffix. Only A/B tests for indices ending with this string are included in the response.
+        :type index_suffix: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if offset is not None:
+            _query_parameters.append(("offset", offset))
+        if limit is not None:
+            _query_parameters.append(("limit", limit))
+        if index_prefix is not None:
+            _query_parameters.append(("indexPrefix", index_prefix))
+        if index_suffix is not None:
+            _query_parameters.append(("indexSuffix", index_suffix))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/2/abtests",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_ab_tests(
+        self,
+        offset: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(description="Position of the first item to return."),
+        ] = None,
+        limit: Annotated[
+            Optional[StrictInt], Field(description="Number of items to return.")
+        ] = None,
+        index_prefix: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Index name prefix. Only A/B tests for indices starting with this string are included in the response."
+            ),
+        ] = None,
+        index_suffix: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Index name suffix. Only A/B tests for indices ending with this string are included in the response."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListABTestsResponse:
+        """
+        Lists all A/B tests you configured for this application.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param offset: Position of the first item to return.
+        :type offset: int
+        :param limit: Number of items to return.
+        :type limit: int
+        :param index_prefix: Index name prefix. Only A/B tests for indices starting with this string are included in the response.
+        :type index_prefix: str
+        :param index_suffix: Index name suffix. Only A/B tests for indices ending with this string are included in the response.
+        :type index_suffix: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListABTestsResponse' result object.
+        """
+        return (
+            self.list_ab_tests_with_http_info(
+                offset, limit, index_prefix, index_suffix, request_options
+            )
+        ).deserialize(ListABTestsResponse)
+
+    def schedule_ab_test_with_http_info(
+        self,
+        schedule_ab_tests_request: ScheduleABTestsRequest,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Schedule an A/B test to be started at a later time.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param schedule_ab_tests_request: (required)
+        :type schedule_ab_tests_request: ScheduleABTestsRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if schedule_ab_tests_request is None:
+            raise ValueError(
+                "Parameter `schedule_ab_tests_request` is required when calling `schedule_ab_test`."
+            )
+
+        _data = {}
+        if schedule_ab_tests_request is not None:
+            _data = schedule_ab_tests_request
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/2/abtests/schedule",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def schedule_ab_test(
+        self,
+        schedule_ab_tests_request: ScheduleABTestsRequest,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ScheduleABTestResponse:
+        """
+        Schedule an A/B test to be started at a later time.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param schedule_ab_tests_request: (required)
+        :type schedule_ab_tests_request: ScheduleABTestsRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ScheduleABTestResponse' result object.
+        """
+        return (
+            self.schedule_ab_test_with_http_info(
+                schedule_ab_tests_request, request_options
+            )
+        ).deserialize(ScheduleABTestResponse)
+
+    def stop_ab_test_with_http_info(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Stops an A/B test by its ID.  You can't restart stopped A/B tests.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if id is None:
+            raise ValueError("Parameter `id` is required when calling `stop_ab_test`.")
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/2/abtests/{id}/stop".replace("{id}", quote(str(id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def stop_ab_test(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ABTestResponse:
+        """
+        Stops an A/B test by its ID.  You can't restart stopped A/B tests.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ABTestResponse' result object.
+        """
+        return (self.stop_ab_test_with_http_info(id, request_options)).deserialize(
+            ABTestResponse
+        )

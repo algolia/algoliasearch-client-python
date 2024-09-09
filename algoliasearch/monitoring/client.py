@@ -22,6 +22,7 @@ from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import bodySerializer
 from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.monitoring.config import MonitoringConfig
 from algoliasearch.monitoring.models.incidents_response import IncidentsResponse
@@ -114,7 +115,7 @@ class MonitoringClient:
         """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
-    def set_client_api_key(self, api_key: str) -> None:
+    async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self._transporter._config.set_client_api_key(api_key)
 
@@ -898,5 +899,866 @@ class MonitoringClient:
         :return: Returns the deserialized response in a 'StatusResponse' result object.
         """
         return (await self.get_status_with_http_info(request_options)).deserialize(
+            StatusResponse
+        )
+
+
+class MonitoringClientSync:
+    """The Algolia 'MonitoringClientSync' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = MonitoringClientSync("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY")
+    _client_with_named_args = MonitoringClientSync(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY")
+
+    See `MonitoringClientSync.create_with_config` for advanced configuration.
+    """
+
+    _transporter: TransporterSync
+    _config: MonitoringConfig
+    _request_options: RequestOptions
+
+    def __init__(
+        self,
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        transporter: Optional[TransporterSync] = None,
+        config: Optional[MonitoringConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
+
+        if config is None:
+            config = MonitoringConfig(app_id, api_key)
+        self._config = config
+        self._request_options = RequestOptions(config)
+
+        if transporter is None:
+            transporter = TransporterSync(config)
+        self._transporter = transporter
+
+    def create_with_config(
+        config: MonitoringConfig, transporter: Optional[TransporterSync] = None
+    ) -> Self:
+        """Allows creating a client with a customized `MonitoringConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (MonitoringConfig): The config of the API client.
+        transporter (TransporterSync): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = MonitoringClientSync.create_with_config(config=MonitoringConfig(...))
+        _client_with_custom_config_and_transporter = MonitoringClientSync.create_with_config(config=MonitoringConfig(...), transporter=TransporterSync(...))
+        """
+        if transporter is None:
+            transporter = TransporterSync(config)
+
+        return MonitoringClientSync(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            transporter=transporter,
+            config=config,
+        )
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        self.close()
+
+    def close(self) -> None:
+        return self._transporter.close()
+
+    def set_client_api_key(self, api_key: str) -> None:
+        """Sets a new API key to authenticate requests."""
+        self._transporter._config.set_client_api_key(api_key)
+
+    def custom_delete_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_delete(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_get_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_get(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_post_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_post(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_post_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def custom_put_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_put(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_put_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def get_cluster_incidents_with_http_info(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves known incidents for the selected clusters.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_cluster_incidents`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/incidents/{clusters}".replace(
+                "{clusters}", quote(str(clusters), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_cluster_incidents(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> IncidentsResponse:
+        """
+        Retrieves known incidents for the selected clusters.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'IncidentsResponse' result object.
+        """
+        return (
+            self.get_cluster_incidents_with_http_info(clusters, request_options)
+        ).deserialize(IncidentsResponse)
+
+    def get_cluster_status_with_http_info(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the status of selected clusters.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_cluster_status`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/status/{clusters}".replace(
+                "{clusters}", quote(str(clusters), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_cluster_status(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> StatusResponse:
+        """
+        Retrieves the status of selected clusters.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'StatusResponse' result object.
+        """
+        return (
+            self.get_cluster_status_with_http_info(clusters, request_options)
+        ).deserialize(StatusResponse)
+
+    def get_incidents_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Retrieves known incidents for all clusters.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/incidents",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_incidents(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> IncidentsResponse:
+        """
+        Retrieves known incidents for all clusters.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'IncidentsResponse' result object.
+        """
+        return (self.get_incidents_with_http_info(request_options)).deserialize(
+            IncidentsResponse
+        )
+
+    def get_indexing_time_with_http_info(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves average times for indexing operations for selected clusters.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_indexing_time`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/indexing/{clusters}".replace(
+                "{clusters}", quote(str(clusters), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_indexing_time(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> IndexingTimeResponse:
+        """
+        Retrieves average times for indexing operations for selected clusters.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'IndexingTimeResponse' result object.
+        """
+        return (
+            self.get_indexing_time_with_http_info(clusters, request_options)
+        ).deserialize(IndexingTimeResponse)
+
+    def get_latency_with_http_info(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the average latency for search requests for selected clusters.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_latency`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/latency/{clusters}".replace(
+                "{clusters}", quote(str(clusters), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_latency(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> LatencyResponse:
+        """
+        Retrieves the average latency for search requests for selected clusters.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'LatencyResponse' result object.
+        """
+        return (self.get_latency_with_http_info(clusters, request_options)).deserialize(
+            LatencyResponse
+        )
+
+    def get_metrics_with_http_info(
+        self,
+        metric: Annotated[
+            Metric,
+            Field(
+                description="Metric to report.  For more information about the individual metrics, see the description of the API response. To include all metrics, use `*`. "
+            ),
+        ],
+        period: Annotated[
+            Period,
+            Field(
+                description="Period over which to aggregate the metrics:  - `minute`. Aggregate the last minute. 1 data point per 10 seconds. - `hour`. Aggregate the last hour. 1 data point per minute. - `day`. Aggregate the last day. 1 data point per 10 minutes. - `week`. Aggregate the last week. 1 data point per hour. - `month`. Aggregate the last month. 1 data point per day. "
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves metrics related to your Algolia infrastructure, aggregated over a selected time window.  Access to this API is available as part of the [Premium or Elevate plans](https://www.algolia.com/pricing). You must authenticate requests with the `x-algolia-application-id` and `x-algolia-api-key` headers (using the Monitoring API key).
+
+
+        :param metric: Metric to report.  For more information about the individual metrics, see the description of the API response. To include all metrics, use `*`.  (required)
+        :type metric: Metric
+        :param period: Period over which to aggregate the metrics:  - `minute`. Aggregate the last minute. 1 data point per 10 seconds. - `hour`. Aggregate the last hour. 1 data point per minute. - `day`. Aggregate the last day. 1 data point per 10 minutes. - `week`. Aggregate the last week. 1 data point per hour. - `month`. Aggregate the last month. 1 data point per day.  (required)
+        :type period: Period
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if metric is None:
+            raise ValueError(
+                "Parameter `metric` is required when calling `get_metrics`."
+            )
+
+        if period is None:
+            raise ValueError(
+                "Parameter `period` is required when calling `get_metrics`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/infrastructure/{metric}/period/{period}".replace(
+                "{metric}", quote(str(metric), safe="")
+            ).replace("{period}", quote(str(period), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_metrics(
+        self,
+        metric: Annotated[
+            Metric,
+            Field(
+                description="Metric to report.  For more information about the individual metrics, see the description of the API response. To include all metrics, use `*`. "
+            ),
+        ],
+        period: Annotated[
+            Period,
+            Field(
+                description="Period over which to aggregate the metrics:  - `minute`. Aggregate the last minute. 1 data point per 10 seconds. - `hour`. Aggregate the last hour. 1 data point per minute. - `day`. Aggregate the last day. 1 data point per 10 minutes. - `week`. Aggregate the last week. 1 data point per hour. - `month`. Aggregate the last month. 1 data point per day. "
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> InfrastructureResponse:
+        """
+        Retrieves metrics related to your Algolia infrastructure, aggregated over a selected time window.  Access to this API is available as part of the [Premium or Elevate plans](https://www.algolia.com/pricing). You must authenticate requests with the `x-algolia-application-id` and `x-algolia-api-key` headers (using the Monitoring API key).
+
+
+        :param metric: Metric to report.  For more information about the individual metrics, see the description of the API response. To include all metrics, use `*`.  (required)
+        :type metric: Metric
+        :param period: Period over which to aggregate the metrics:  - `minute`. Aggregate the last minute. 1 data point per 10 seconds. - `hour`. Aggregate the last hour. 1 data point per minute. - `day`. Aggregate the last day. 1 data point per 10 minutes. - `week`. Aggregate the last week. 1 data point per hour. - `month`. Aggregate the last month. 1 data point per day.  (required)
+        :type period: Period
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'InfrastructureResponse' result object.
+        """
+        return (
+            self.get_metrics_with_http_info(metric, period, request_options)
+        ).deserialize(InfrastructureResponse)
+
+    def get_reachability_with_http_info(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Test whether clusters are reachable or not.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_reachability`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/reachability/{clusters}/probes".replace(
+                "{clusters}", quote(str(clusters), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_reachability(
+        self,
+        clusters: Annotated[
+            StrictStr, Field(description="Subset of clusters, separated by comma.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Dict[str, Dict[str, bool]]:
+        """
+        Test whether clusters are reachable or not.
+
+
+        :param clusters: Subset of clusters, separated by comma. (required)
+        :type clusters: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Dict[str, Dict[str, bool]]' result object.
+        """
+        return (
+            self.get_reachability_with_http_info(clusters, request_options)
+        ).deserialize(Dict[str, Dict[str, bool]])
+
+    def get_servers_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the servers that belong to clusters.  The response depends on whether you authenticate your API request:  - With authentication, the response lists the servers assigned to your Algolia application's cluster.  - Without authentication, the response lists the servers for all Algolia clusters.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/inventory/servers",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_servers(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> InventoryResponse:
+        """
+        Retrieves the servers that belong to clusters.  The response depends on whether you authenticate your API request:  - With authentication, the response lists the servers assigned to your Algolia application's cluster.  - Without authentication, the response lists the servers for all Algolia clusters.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'InventoryResponse' result object.
+        """
+        return (self.get_servers_with_http_info(request_options)).deserialize(
+            InventoryResponse
+        )
+
+    def get_status_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the status of all Algolia clusters and instances.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/status",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_status(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> StatusResponse:
+        """
+        Retrieves the status of all Algolia clusters and instances.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'StatusResponse' result object.
+        """
+        return (self.get_status_with_http_info(request_options)).deserialize(
             StatusResponse
         )

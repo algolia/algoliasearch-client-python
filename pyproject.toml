@@ -17,6 +17,7 @@ classifiers = [
 python = "^3.8.1"
 urllib3 = ">= 1.25.3"
 aiohttp = ">= 3.9.2"
+requests = ">=2.32.3"
 python-dateutil = ">= 2.8.2"
 async-timeout = ">= 4.0.3"
 pydantic = ">= 2"

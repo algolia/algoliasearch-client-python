@@ -23,6 +23,7 @@ from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import bodySerializer
 from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.ingestion.config import IngestionConfig
 from algoliasearch.ingestion.models.action_type import ActionType
@@ -204,7 +205,7 @@ class IngestionClient:
         """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
-    def set_client_api_key(self, api_key: str) -> None:
+    async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self._transporter._config.set_client_api_key(api_key)
 
@@ -4819,6 +4820,4681 @@ class IngestionClient:
         """
         return (
             await self.validate_source_before_update_with_http_info(
+                source_id, source_update, request_options
+            )
+        ).deserialize(SourceWatchResponse)
+
+
+class IngestionClientSync:
+    """The Algolia 'IngestionClientSync' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+    region ("eu" | "us"): The region of your Algolia application.
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = IngestionClientSync("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY", region="'eu' or 'us'")
+    _client_with_named_args = IngestionClientSync(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY", region="'eu' or 'us'")
+
+    See `IngestionClientSync.create_with_config` for advanced configuration.
+    """
+
+    _transporter: TransporterSync
+    _config: IngestionConfig
+    _request_options: RequestOptions
+
+    def __init__(
+        self,
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        region: str = None,
+        transporter: Optional[TransporterSync] = None,
+        config: Optional[IngestionConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
+
+        if config is None:
+            config = IngestionConfig(app_id, api_key, region)
+        self._config = config
+        self._request_options = RequestOptions(config)
+
+        if transporter is None:
+            transporter = TransporterSync(config)
+        self._transporter = transporter
+
+    def create_with_config(
+        config: IngestionConfig, transporter: Optional[TransporterSync] = None
+    ) -> Self:
+        """Allows creating a client with a customized `IngestionConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (IngestionConfig): The config of the API client.
+        transporter (TransporterSync): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = IngestionClientSync.create_with_config(config=IngestionConfig(...))
+        _client_with_custom_config_and_transporter = IngestionClientSync.create_with_config(config=IngestionConfig(...), transporter=TransporterSync(...))
+        """
+        if transporter is None:
+            transporter = TransporterSync(config)
+
+        return IngestionClientSync(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            region=config.region,
+            transporter=transporter,
+            config=config,
+        )
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        self.close()
+
+    def close(self) -> None:
+        return self._transporter.close()
+
+    def set_client_api_key(self, api_key: str) -> None:
+        """Sets a new API key to authenticate requests."""
+        self._transporter._config.set_client_api_key(api_key)
+
+    def create_authentication_with_http_info(
+        self,
+        authentication_create: AuthenticationCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new authentication resource.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_create:  (required)
+        :type authentication_create: AuthenticationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if authentication_create is None:
+            raise ValueError(
+                "Parameter `authentication_create` is required when calling `create_authentication`."
+            )
+
+        _data = {}
+        if authentication_create is not None:
+            _data = authentication_create
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/authentications",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def create_authentication(
+        self,
+        authentication_create: AuthenticationCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> AuthenticationCreateResponse:
+        """
+        Creates a new authentication resource.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_create:  (required)
+        :type authentication_create: AuthenticationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'AuthenticationCreateResponse' result object.
+        """
+        return (
+            self.create_authentication_with_http_info(
+                authentication_create, request_options
+            )
+        ).deserialize(AuthenticationCreateResponse)
+
+    def create_destination_with_http_info(
+        self,
+        destination_create: DestinationCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new destination.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_create:  (required)
+        :type destination_create: DestinationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if destination_create is None:
+            raise ValueError(
+                "Parameter `destination_create` is required when calling `create_destination`."
+            )
+
+        _data = {}
+        if destination_create is not None:
+            _data = destination_create
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/destinations",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def create_destination(
+        self,
+        destination_create: DestinationCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DestinationCreateResponse:
+        """
+        Creates a new destination.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_create:  (required)
+        :type destination_create: DestinationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DestinationCreateResponse' result object.
+        """
+        return (
+            self.create_destination_with_http_info(destination_create, request_options)
+        ).deserialize(DestinationCreateResponse)
+
+    def create_source_with_http_info(
+        self,
+        source_create: SourceCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new source.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_create:  (required)
+        :type source_create: SourceCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_create is None:
+            raise ValueError(
+                "Parameter `source_create` is required when calling `create_source`."
+            )
+
+        _data = {}
+        if source_create is not None:
+            _data = source_create
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/sources",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def create_source(
+        self,
+        source_create: SourceCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SourceCreateResponse:
+        """
+        Creates a new source.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_create:  (required)
+        :type source_create: SourceCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SourceCreateResponse' result object.
+        """
+        return (
+            self.create_source_with_http_info(source_create, request_options)
+        ).deserialize(SourceCreateResponse)
+
+    def create_task_with_http_info(
+        self,
+        task_create: Annotated[
+            TaskCreate, Field(description="Request body for creating a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new task.
+
+
+        :param task_create: Request body for creating a task. (required)
+        :type task_create: TaskCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_create is None:
+            raise ValueError(
+                "Parameter `task_create` is required when calling `create_task`."
+            )
+
+        _data = {}
+        if task_create is not None:
+            _data = task_create
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/2/tasks",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def create_task(
+        self,
+        task_create: Annotated[
+            TaskCreate, Field(description="Request body for creating a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskCreateResponse:
+        """
+        Creates a new task.
+
+
+        :param task_create: Request body for creating a task. (required)
+        :type task_create: TaskCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskCreateResponse' result object.
+        """
+        return (
+            self.create_task_with_http_info(task_create, request_options)
+        ).deserialize(TaskCreateResponse)
+
+    def create_task_v1_with_http_info(
+        self,
+        task_create: Annotated[
+            TaskCreateV1, Field(description="Request body for creating a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new task using the v1 endpoint, please use `createTask` instead.
+
+
+        :param task_create: Request body for creating a task. (required)
+        :type task_create: TaskCreateV1
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_create is None:
+            raise ValueError(
+                "Parameter `task_create` is required when calling `create_task_v1`."
+            )
+
+        _data = {}
+        if task_create is not None:
+            _data = task_create
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/tasks",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def create_task_v1(
+        self,
+        task_create: Annotated[
+            TaskCreateV1, Field(description="Request body for creating a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskCreateResponse:
+        """
+        Creates a new task using the v1 endpoint, please use `createTask` instead.
+
+
+        :param task_create: Request body for creating a task. (required)
+        :type task_create: TaskCreateV1
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskCreateResponse' result object.
+        """
+        return (
+            self.create_task_v1_with_http_info(task_create, request_options)
+        ).deserialize(TaskCreateResponse)
+
+    def create_transformation_with_http_info(
+        self,
+        transformation_create: Annotated[
+            TransformationCreate,
+            Field(description="Request body for creating a transformation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new transformation.
+
+
+        :param transformation_create: Request body for creating a transformation. (required)
+        :type transformation_create: TransformationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_create is None:
+            raise ValueError(
+                "Parameter `transformation_create` is required when calling `create_transformation`."
+            )
+
+        _data = {}
+        if transformation_create is not None:
+            _data = transformation_create
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def create_transformation(
+        self,
+        transformation_create: Annotated[
+            TransformationCreate,
+            Field(description="Request body for creating a transformation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TransformationCreateResponse:
+        """
+        Creates a new transformation.
+
+
+        :param transformation_create: Request body for creating a transformation. (required)
+        :type transformation_create: TransformationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationCreateResponse' result object.
+        """
+        return (
+            self.create_transformation_with_http_info(
+                transformation_create, request_options
+            )
+        ).deserialize(TransformationCreateResponse)
+
+    def custom_delete_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_delete(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_get_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_get(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_post_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_post(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_post_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def custom_put_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_put(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_put_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def delete_authentication_with_http_info(
+        self,
+        authentication_id: Annotated[
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes an authentication resource. You can't delete authentication resources that are used by a source or a destination.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_id: Unique identifier of an authentication resource. (required)
+        :type authentication_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if authentication_id is None:
+            raise ValueError(
+                "Parameter `authentication_id` is required when calling `delete_authentication`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/authentications/{authenticationID}".replace(
+                "{authenticationID}", quote(str(authentication_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_authentication(
+        self,
+        authentication_id: Annotated[
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteResponse:
+        """
+        Deletes an authentication resource. You can't delete authentication resources that are used by a source or a destination.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_id: Unique identifier of an authentication resource. (required)
+        :type authentication_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteResponse' result object.
+        """
+        return (
+            self.delete_authentication_with_http_info(
+                authentication_id, request_options
+            )
+        ).deserialize(DeleteResponse)
+
+    def delete_destination_with_http_info(
+        self,
+        destination_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a destination.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a destination by its ID. You can't delete destinations that are referenced in tasks.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_id: Unique identifier of a destination. (required)
+        :type destination_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if destination_id is None:
+            raise ValueError(
+                "Parameter `destination_id` is required when calling `delete_destination`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/destinations/{destinationID}".replace(
+                "{destinationID}", quote(str(destination_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_destination(
+        self,
+        destination_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a destination.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteResponse:
+        """
+        Deletes a destination by its ID. You can't delete destinations that are referenced in tasks.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_id: Unique identifier of a destination. (required)
+        :type destination_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteResponse' result object.
+        """
+        return (
+            self.delete_destination_with_http_info(destination_id, request_options)
+        ).deserialize(DeleteResponse)
+
+    def delete_source_with_http_info(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a source by its ID. You can't delete sources that are referenced in tasks.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `delete_source`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/sources/{sourceID}".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_source(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteResponse:
+        """
+        Deletes a source by its ID. You can't delete sources that are referenced in tasks.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteResponse' result object.
+        """
+        return (
+            self.delete_source_with_http_info(source_id, request_options)
+        ).deserialize(DeleteResponse)
+
+    def delete_task_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a task by its ID.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `delete_task`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/2/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_task(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteResponse:
+        """
+        Deletes a task by its ID.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteResponse' result object.
+        """
+        return (self.delete_task_with_http_info(task_id, request_options)).deserialize(
+            DeleteResponse
+        )
+
+    def delete_task_v1_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `delete_task_v1`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_task_v1(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteResponse:
+        """
+        Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteResponse' result object.
+        """
+        return (
+            self.delete_task_v1_with_http_info(task_id, request_options)
+        ).deserialize(DeleteResponse)
+
+    def delete_transformation_with_http_info(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a transformation by its ID.
+
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `delete_transformation`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/transformations/{transformationID}".replace(
+                "{transformationID}", quote(str(transformation_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_transformation(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteResponse:
+        """
+        Deletes a transformation by its ID.
+
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteResponse' result object.
+        """
+        return (
+            self.delete_transformation_with_http_info(
+                transformation_id, request_options
+            )
+        ).deserialize(DeleteResponse)
+
+    def disable_task_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Disables a task.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `disable_task`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/2/tasks/{taskID}/disable".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def disable_task(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskUpdateResponse:
+        """
+        Disables a task.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
+        """
+        return (self.disable_task_with_http_info(task_id, request_options)).deserialize(
+            TaskUpdateResponse
+        )
+
+    def disable_task_v1_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        (Deprecated) disable_task_v1
+        Disables a task using the v1 endpoint, please use `disableTask` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        warn("PUT /1/tasks/{taskID}/disable is deprecated.", DeprecationWarning)
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `disable_task_v1`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/tasks/{taskID}/disable".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def disable_task_v1(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskUpdateResponse:
+        """
+        (Deprecated) disable_task_v1
+        Disables a task using the v1 endpoint, please use `disableTask` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
+        """
+        return (
+            self.disable_task_v1_with_http_info(task_id, request_options)
+        ).deserialize(TaskUpdateResponse)
+
+    def enable_task_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Enables a task.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `enable_task`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/2/tasks/{taskID}/enable".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def enable_task(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskUpdateResponse:
+        """
+        Enables a task.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
+        """
+        return (self.enable_task_with_http_info(task_id, request_options)).deserialize(
+            TaskUpdateResponse
+        )
+
+    def enable_task_v1_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Enables a task using the v1 endpoint, please use `enableTask` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `enable_task_v1`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/tasks/{taskID}/enable".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def enable_task_v1(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskUpdateResponse:
+        """
+        Enables a task using the v1 endpoint, please use `enableTask` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
+        """
+        return (
+            self.enable_task_v1_with_http_info(task_id, request_options)
+        ).deserialize(TaskUpdateResponse)
+
+    def generate_transformation_code_with_http_info(
+        self,
+        generate_transformation_code_payload: GenerateTransformationCodePayload,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Generates code for the selected model based on the given prompt.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param generate_transformation_code_payload: (required)
+        :type generate_transformation_code_payload: GenerateTransformationCodePayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if generate_transformation_code_payload is None:
+            raise ValueError(
+                "Parameter `generate_transformation_code_payload` is required when calling `generate_transformation_code`."
+            )
+
+        _data = {}
+        if generate_transformation_code_payload is not None:
+            _data = generate_transformation_code_payload
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations/models",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def generate_transformation_code(
+        self,
+        generate_transformation_code_payload: GenerateTransformationCodePayload,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GenerateTransformationCodeResponse:
+        """
+        Generates code for the selected model based on the given prompt.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param generate_transformation_code_payload: (required)
+        :type generate_transformation_code_payload: GenerateTransformationCodePayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GenerateTransformationCodeResponse' result object.
+        """
+        return (
+            self.generate_transformation_code_with_http_info(
+                generate_transformation_code_payload, request_options
+            )
+        ).deserialize(GenerateTransformationCodeResponse)
+
+    def get_authentication_with_http_info(
+        self,
+        authentication_id: Annotated[
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves an authentication resource by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_id: Unique identifier of an authentication resource. (required)
+        :type authentication_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if authentication_id is None:
+            raise ValueError(
+                "Parameter `authentication_id` is required when calling `get_authentication`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/authentications/{authenticationID}".replace(
+                "{authenticationID}", quote(str(authentication_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_authentication(
+        self,
+        authentication_id: Annotated[
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Authentication:
+        """
+        Retrieves an authentication resource by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_id: Unique identifier of an authentication resource. (required)
+        :type authentication_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Authentication' result object.
+        """
+        return (
+            self.get_authentication_with_http_info(authentication_id, request_options)
+        ).deserialize(Authentication)
+
+    def get_destination_with_http_info(
+        self,
+        destination_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a destination.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a destination by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_id: Unique identifier of a destination. (required)
+        :type destination_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if destination_id is None:
+            raise ValueError(
+                "Parameter `destination_id` is required when calling `get_destination`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/destinations/{destinationID}".replace(
+                "{destinationID}", quote(str(destination_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_destination(
+        self,
+        destination_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a destination.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Destination:
+        """
+        Retrieves a destination by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_id: Unique identifier of a destination. (required)
+        :type destination_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Destination' result object.
+        """
+        return (
+            self.get_destination_with_http_info(destination_id, request_options)
+        ).deserialize(Destination)
+
+    def get_event_with_http_info(
+        self,
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
+        event_id: Annotated[
+            StrictStr, Field(description="Unique identifier of an event.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a single task run event by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param run_id: Unique identifier of a task run. (required)
+        :type run_id: str
+        :param event_id: Unique identifier of an event. (required)
+        :type event_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if run_id is None:
+            raise ValueError("Parameter `run_id` is required when calling `get_event`.")
+
+        if event_id is None:
+            raise ValueError(
+                "Parameter `event_id` is required when calling `get_event`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/runs/{runID}/events/{eventID}".replace(
+                "{runID}", quote(str(run_id), safe="")
+            ).replace("{eventID}", quote(str(event_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_event(
+        self,
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
+        event_id: Annotated[
+            StrictStr, Field(description="Unique identifier of an event.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Event:
+        """
+        Retrieves a single task run event by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param run_id: Unique identifier of a task run. (required)
+        :type run_id: str
+        :param event_id: Unique identifier of an event. (required)
+        :type event_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Event' result object.
+        """
+        return (
+            self.get_event_with_http_info(run_id, event_id, request_options)
+        ).deserialize(Event)
+
+    def get_run_with_http_info(
+        self,
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieve a single task run by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param run_id: Unique identifier of a task run. (required)
+        :type run_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if run_id is None:
+            raise ValueError("Parameter `run_id` is required when calling `get_run`.")
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/runs/{runID}".replace("{runID}", quote(str(run_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_run(
+        self,
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Run:
+        """
+        Retrieve a single task run by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param run_id: Unique identifier of a task run. (required)
+        :type run_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Run' result object.
+        """
+        return (self.get_run_with_http_info(run_id, request_options)).deserialize(Run)
+
+    def get_source_with_http_info(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieve a source by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `get_source`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/sources/{sourceID}".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_source(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Source:
+        """
+        Retrieve a source by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Source' result object.
+        """
+        return (self.get_source_with_http_info(source_id, request_options)).deserialize(
+            Source
+        )
+
+    def get_task_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a task by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError("Parameter `task_id` is required when calling `get_task`.")
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/2/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_task(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Task:
+        """
+        Retrieves a task by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Task' result object.
+        """
+        return (self.get_task_with_http_info(task_id, request_options)).deserialize(
+            Task
+        )
+
+    def get_task_v1_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `get_task_v1`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_task_v1(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskV1:
+        """
+        Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskV1' result object.
+        """
+        return (self.get_task_v1_with_http_info(task_id, request_options)).deserialize(
+            TaskV1
+        )
+
+    def get_transformation_with_http_info(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a transformation by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `get_transformation`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/transformations/{transformationID}".replace(
+                "{transformationID}", quote(str(transformation_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_transformation(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Transformation:
+        """
+        Retrieves a transformation by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Transformation' result object.
+        """
+        return (
+            self.get_transformation_with_http_info(transformation_id, request_options)
+        ).deserialize(Transformation)
+
+    def list_authentications_with_http_info(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        type: Annotated[
+            Optional[List[AuthenticationType]],
+            Field(description="Type of authentication resource to retrieve."),
+        ] = None,
+        platform: Annotated[
+            Optional[List[PlatformWithNone]],
+            Field(
+                description="Ecommerce platform for which to retrieve authentication resources."
+            ),
+        ] = None,
+        sort: Annotated[
+            Optional[AuthenticationSortKeys],
+            Field(
+                description="Property by which to sort the list of authentication resources."
+            ),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of all authentication resources.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param type: Type of authentication resource to retrieve.
+        :type type: List[AuthenticationType]
+        :param platform: Ecommerce platform for which to retrieve authentication resources.
+        :type platform: List[PlatformWithNone]
+        :param sort: Property by which to sort the list of authentication resources.
+        :type sort: AuthenticationSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if items_per_page is not None:
+            _query_parameters.append(("itemsPerPage", items_per_page))
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if type is not None:
+            _query_parameters.append(("type", type))
+        if platform is not None:
+            _query_parameters.append(("platform", platform))
+        if sort is not None:
+            _query_parameters.append(("sort", sort))
+        if order is not None:
+            _query_parameters.append(("order", order))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/authentications",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_authentications(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        type: Annotated[
+            Optional[List[AuthenticationType]],
+            Field(description="Type of authentication resource to retrieve."),
+        ] = None,
+        platform: Annotated[
+            Optional[List[PlatformWithNone]],
+            Field(
+                description="Ecommerce platform for which to retrieve authentication resources."
+            ),
+        ] = None,
+        sort: Annotated[
+            Optional[AuthenticationSortKeys],
+            Field(
+                description="Property by which to sort the list of authentication resources."
+            ),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListAuthenticationsResponse:
+        """
+        Retrieves a list of all authentication resources.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param type: Type of authentication resource to retrieve.
+        :type type: List[AuthenticationType]
+        :param platform: Ecommerce platform for which to retrieve authentication resources.
+        :type platform: List[PlatformWithNone]
+        :param sort: Property by which to sort the list of authentication resources.
+        :type sort: AuthenticationSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListAuthenticationsResponse' result object.
+        """
+        return (
+            self.list_authentications_with_http_info(
+                items_per_page, page, type, platform, sort, order, request_options
+            )
+        ).deserialize(ListAuthenticationsResponse)
+
+    def list_destinations_with_http_info(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        type: Annotated[
+            Optional[List[DestinationType]], Field(description="Destination type.")
+        ] = None,
+        authentication_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Authentication ID used by destinations."),
+        ] = None,
+        sort: Annotated[
+            Optional[DestinationSortKeys],
+            Field(description="Property by which to sort the destinations."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of destinations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param type: Destination type.
+        :type type: List[DestinationType]
+        :param authentication_id: Authentication ID used by destinations.
+        :type authentication_id: List[str]
+        :param sort: Property by which to sort the destinations.
+        :type sort: DestinationSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if items_per_page is not None:
+            _query_parameters.append(("itemsPerPage", items_per_page))
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if type is not None:
+            _query_parameters.append(("type", type))
+        if authentication_id is not None:
+            _query_parameters.append(("authenticationID", authentication_id))
+        if sort is not None:
+            _query_parameters.append(("sort", sort))
+        if order is not None:
+            _query_parameters.append(("order", order))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/destinations",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_destinations(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        type: Annotated[
+            Optional[List[DestinationType]], Field(description="Destination type.")
+        ] = None,
+        authentication_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Authentication ID used by destinations."),
+        ] = None,
+        sort: Annotated[
+            Optional[DestinationSortKeys],
+            Field(description="Property by which to sort the destinations."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListDestinationsResponse:
+        """
+        Retrieves a list of destinations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param type: Destination type.
+        :type type: List[DestinationType]
+        :param authentication_id: Authentication ID used by destinations.
+        :type authentication_id: List[str]
+        :param sort: Property by which to sort the destinations.
+        :type sort: DestinationSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListDestinationsResponse' result object.
+        """
+        return (
+            self.list_destinations_with_http_info(
+                items_per_page,
+                page,
+                type,
+                authentication_id,
+                sort,
+                order,
+                request_options,
+            )
+        ).deserialize(ListDestinationsResponse)
+
+    def list_events_with_http_info(
+        self,
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        status: Annotated[
+            Optional[List[EventStatus]],
+            Field(description="Event status for filtering the list of task runs."),
+        ] = None,
+        type: Annotated[
+            Optional[List[EventType]],
+            Field(description="Event type for filtering the list of task runs."),
+        ] = None,
+        sort: Annotated[
+            Optional[EventSortKeys],
+            Field(description="Property by which to sort the list of task run events."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Date and time in RFC 3339 format for the earliest events to retrieve. By default, the current time minus three hours is used."
+            ),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Date and time in RFC 3339 format for the latest events to retrieve. By default, the current time is used."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of events for a task run, identified by it's ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param run_id: Unique identifier of a task run. (required)
+        :type run_id: str
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param status: Event status for filtering the list of task runs.
+        :type status: List[EventStatus]
+        :param type: Event type for filtering the list of task runs.
+        :type type: List[EventType]
+        :param sort: Property by which to sort the list of task run events.
+        :type sort: EventSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param start_date: Date and time in RFC 3339 format for the earliest events to retrieve. By default, the current time minus three hours is used.
+        :type start_date: str
+        :param end_date: Date and time in RFC 3339 format for the latest events to retrieve. By default, the current time is used.
+        :type end_date: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if run_id is None:
+            raise ValueError(
+                "Parameter `run_id` is required when calling `list_events`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if items_per_page is not None:
+            _query_parameters.append(("itemsPerPage", items_per_page))
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if status is not None:
+            _query_parameters.append(("status", status))
+        if type is not None:
+            _query_parameters.append(("type", type))
+        if sort is not None:
+            _query_parameters.append(("sort", sort))
+        if order is not None:
+            _query_parameters.append(("order", order))
+        if start_date is not None:
+            _query_parameters.append(("startDate", start_date))
+        if end_date is not None:
+            _query_parameters.append(("endDate", end_date))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/runs/{runID}/events".replace(
+                "{runID}", quote(str(run_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_events(
+        self,
+        run_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task run.")
+        ],
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        status: Annotated[
+            Optional[List[EventStatus]],
+            Field(description="Event status for filtering the list of task runs."),
+        ] = None,
+        type: Annotated[
+            Optional[List[EventType]],
+            Field(description="Event type for filtering the list of task runs."),
+        ] = None,
+        sort: Annotated[
+            Optional[EventSortKeys],
+            Field(description="Property by which to sort the list of task run events."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Date and time in RFC 3339 format for the earliest events to retrieve. By default, the current time minus three hours is used."
+            ),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Date and time in RFC 3339 format for the latest events to retrieve. By default, the current time is used."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListEventsResponse:
+        """
+        Retrieves a list of events for a task run, identified by it's ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param run_id: Unique identifier of a task run. (required)
+        :type run_id: str
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param status: Event status for filtering the list of task runs.
+        :type status: List[EventStatus]
+        :param type: Event type for filtering the list of task runs.
+        :type type: List[EventType]
+        :param sort: Property by which to sort the list of task run events.
+        :type sort: EventSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param start_date: Date and time in RFC 3339 format for the earliest events to retrieve. By default, the current time minus three hours is used.
+        :type start_date: str
+        :param end_date: Date and time in RFC 3339 format for the latest events to retrieve. By default, the current time is used.
+        :type end_date: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListEventsResponse' result object.
+        """
+        return (
+            self.list_events_with_http_info(
+                run_id,
+                items_per_page,
+                page,
+                status,
+                type,
+                sort,
+                order,
+                start_date,
+                end_date,
+                request_options,
+            )
+        ).deserialize(ListEventsResponse)
+
+    def list_runs_with_http_info(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        status: Annotated[
+            Optional[List[RunStatus]],
+            Field(description="Run status for filtering the list of task runs."),
+        ] = None,
+        type: Annotated[
+            Optional[List[RunType]],
+            Field(description="Run type for filtering the list of task runs."),
+        ] = None,
+        task_id: Annotated[
+            Optional[StrictStr],
+            Field(description="Task ID for filtering the list of task runs."),
+        ] = None,
+        sort: Annotated[
+            Optional[RunSortKeys],
+            Field(description="Property by which to sort the list of task runs."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
+            ),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieve a list of task runs.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param status: Run status for filtering the list of task runs.
+        :type status: List[RunStatus]
+        :param type: Run type for filtering the list of task runs.
+        :type type: List[RunType]
+        :param task_id: Task ID for filtering the list of task runs.
+        :type task_id: str
+        :param sort: Property by which to sort the list of task runs.
+        :type sort: RunSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param start_date: Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
+        :type start_date: str
+        :param end_date: Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used.
+        :type end_date: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if items_per_page is not None:
+            _query_parameters.append(("itemsPerPage", items_per_page))
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if status is not None:
+            _query_parameters.append(("status", status))
+        if type is not None:
+            _query_parameters.append(("type", type))
+        if task_id is not None:
+            _query_parameters.append(("taskID", task_id))
+        if sort is not None:
+            _query_parameters.append(("sort", sort))
+        if order is not None:
+            _query_parameters.append(("order", order))
+        if start_date is not None:
+            _query_parameters.append(("startDate", start_date))
+        if end_date is not None:
+            _query_parameters.append(("endDate", end_date))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/runs",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_runs(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        status: Annotated[
+            Optional[List[RunStatus]],
+            Field(description="Run status for filtering the list of task runs."),
+        ] = None,
+        type: Annotated[
+            Optional[List[RunType]],
+            Field(description="Run type for filtering the list of task runs."),
+        ] = None,
+        task_id: Annotated[
+            Optional[StrictStr],
+            Field(description="Task ID for filtering the list of task runs."),
+        ] = None,
+        sort: Annotated[
+            Optional[RunSortKeys],
+            Field(description="Property by which to sort the list of task runs."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        start_date: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
+            ),
+        ] = None,
+        end_date: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RunListResponse:
+        """
+        Retrieve a list of task runs.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param status: Run status for filtering the list of task runs.
+        :type status: List[RunStatus]
+        :param type: Run type for filtering the list of task runs.
+        :type type: List[RunType]
+        :param task_id: Task ID for filtering the list of task runs.
+        :type task_id: str
+        :param sort: Property by which to sort the list of task runs.
+        :type sort: RunSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param start_date: Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
+        :type start_date: str
+        :param end_date: Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used.
+        :type end_date: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RunListResponse' result object.
+        """
+        return (
+            self.list_runs_with_http_info(
+                items_per_page,
+                page,
+                status,
+                type,
+                task_id,
+                sort,
+                order,
+                start_date,
+                end_date,
+                request_options,
+            )
+        ).deserialize(RunListResponse)
+
+    def list_sources_with_http_info(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        type: Annotated[
+            Optional[List[SourceType]],
+            Field(description="Source type. Some sources require authentication."),
+        ] = None,
+        authentication_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication resource. "
+            ),
+        ] = None,
+        sort: Annotated[
+            Optional[SourceSortKeys],
+            Field(description="Property by which to sort the list of sources."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of sources.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param type: Source type. Some sources require authentication.
+        :type type: List[SourceType]
+        :param authentication_id: Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication resource.
+        :type authentication_id: List[str]
+        :param sort: Property by which to sort the list of sources.
+        :type sort: SourceSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if items_per_page is not None:
+            _query_parameters.append(("itemsPerPage", items_per_page))
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if type is not None:
+            _query_parameters.append(("type", type))
+        if authentication_id is not None:
+            _query_parameters.append(("authenticationID", authentication_id))
+        if sort is not None:
+            _query_parameters.append(("sort", sort))
+        if order is not None:
+            _query_parameters.append(("order", order))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/sources",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_sources(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        type: Annotated[
+            Optional[List[SourceType]],
+            Field(description="Source type. Some sources require authentication."),
+        ] = None,
+        authentication_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication resource. "
+            ),
+        ] = None,
+        sort: Annotated[
+            Optional[SourceSortKeys],
+            Field(description="Property by which to sort the list of sources."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListSourcesResponse:
+        """
+        Retrieves a list of sources.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param type: Source type. Some sources require authentication.
+        :type type: List[SourceType]
+        :param authentication_id: Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication resource.
+        :type authentication_id: List[str]
+        :param sort: Property by which to sort the list of sources.
+        :type sort: SourceSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListSourcesResponse' result object.
+        """
+        return (
+            self.list_sources_with_http_info(
+                items_per_page,
+                page,
+                type,
+                authentication_id,
+                sort,
+                order,
+                request_options,
+            )
+        ).deserialize(ListSourcesResponse)
+
+    def list_tasks_with_http_info(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        action: Annotated[
+            Optional[List[ActionType]],
+            Field(description="Actions for filtering the list of tasks."),
+        ] = None,
+        enabled: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to filter the list of tasks by the `enabled` status."
+            ),
+        ] = None,
+        source_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Source IDs for filtering the list of tasks."),
+        ] = None,
+        destination_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Destination IDs for filtering the list of tasks."),
+        ] = None,
+        trigger_type: Annotated[
+            Optional[List[TriggerType]],
+            Field(description="Type of task trigger for filtering the list of tasks."),
+        ] = None,
+        sort: Annotated[
+            Optional[TaskSortKeys],
+            Field(description="Property by which to sort the list of tasks."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of tasks.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param action: Actions for filtering the list of tasks.
+        :type action: List[ActionType]
+        :param enabled: Whether to filter the list of tasks by the `enabled` status.
+        :type enabled: bool
+        :param source_id: Source IDs for filtering the list of tasks.
+        :type source_id: List[str]
+        :param destination_id: Destination IDs for filtering the list of tasks.
+        :type destination_id: List[str]
+        :param trigger_type: Type of task trigger for filtering the list of tasks.
+        :type trigger_type: List[TriggerType]
+        :param sort: Property by which to sort the list of tasks.
+        :type sort: TaskSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if items_per_page is not None:
+            _query_parameters.append(("itemsPerPage", items_per_page))
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if action is not None:
+            _query_parameters.append(("action", action))
+        if enabled is not None:
+            _query_parameters.append(("enabled", enabled))
+        if source_id is not None:
+            _query_parameters.append(("sourceID", source_id))
+        if destination_id is not None:
+            _query_parameters.append(("destinationID", destination_id))
+        if trigger_type is not None:
+            _query_parameters.append(("triggerType", trigger_type))
+        if sort is not None:
+            _query_parameters.append(("sort", sort))
+        if order is not None:
+            _query_parameters.append(("order", order))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/2/tasks",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_tasks(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        action: Annotated[
+            Optional[List[ActionType]],
+            Field(description="Actions for filtering the list of tasks."),
+        ] = None,
+        enabled: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to filter the list of tasks by the `enabled` status."
+            ),
+        ] = None,
+        source_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Source IDs for filtering the list of tasks."),
+        ] = None,
+        destination_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Destination IDs for filtering the list of tasks."),
+        ] = None,
+        trigger_type: Annotated[
+            Optional[List[TriggerType]],
+            Field(description="Type of task trigger for filtering the list of tasks."),
+        ] = None,
+        sort: Annotated[
+            Optional[TaskSortKeys],
+            Field(description="Property by which to sort the list of tasks."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListTasksResponse:
+        """
+        Retrieves a list of tasks.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param action: Actions for filtering the list of tasks.
+        :type action: List[ActionType]
+        :param enabled: Whether to filter the list of tasks by the `enabled` status.
+        :type enabled: bool
+        :param source_id: Source IDs for filtering the list of tasks.
+        :type source_id: List[str]
+        :param destination_id: Destination IDs for filtering the list of tasks.
+        :type destination_id: List[str]
+        :param trigger_type: Type of task trigger for filtering the list of tasks.
+        :type trigger_type: List[TriggerType]
+        :param sort: Property by which to sort the list of tasks.
+        :type sort: TaskSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListTasksResponse' result object.
+        """
+        return (
+            self.list_tasks_with_http_info(
+                items_per_page,
+                page,
+                action,
+                enabled,
+                source_id,
+                destination_id,
+                trigger_type,
+                sort,
+                order,
+                request_options,
+            )
+        ).deserialize(ListTasksResponse)
+
+    def list_tasks_v1_with_http_info(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        action: Annotated[
+            Optional[List[ActionType]],
+            Field(description="Actions for filtering the list of tasks."),
+        ] = None,
+        enabled: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to filter the list of tasks by the `enabled` status."
+            ),
+        ] = None,
+        source_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Source IDs for filtering the list of tasks."),
+        ] = None,
+        destination_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Destination IDs for filtering the list of tasks."),
+        ] = None,
+        trigger_type: Annotated[
+            Optional[List[TriggerType]],
+            Field(description="Type of task trigger for filtering the list of tasks."),
+        ] = None,
+        sort: Annotated[
+            Optional[TaskSortKeys],
+            Field(description="Property by which to sort the list of tasks."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param action: Actions for filtering the list of tasks.
+        :type action: List[ActionType]
+        :param enabled: Whether to filter the list of tasks by the `enabled` status.
+        :type enabled: bool
+        :param source_id: Source IDs for filtering the list of tasks.
+        :type source_id: List[str]
+        :param destination_id: Destination IDs for filtering the list of tasks.
+        :type destination_id: List[str]
+        :param trigger_type: Type of task trigger for filtering the list of tasks.
+        :type trigger_type: List[TriggerType]
+        :param sort: Property by which to sort the list of tasks.
+        :type sort: TaskSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if items_per_page is not None:
+            _query_parameters.append(("itemsPerPage", items_per_page))
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if action is not None:
+            _query_parameters.append(("action", action))
+        if enabled is not None:
+            _query_parameters.append(("enabled", enabled))
+        if source_id is not None:
+            _query_parameters.append(("sourceID", source_id))
+        if destination_id is not None:
+            _query_parameters.append(("destinationID", destination_id))
+        if trigger_type is not None:
+            _query_parameters.append(("triggerType", trigger_type))
+        if sort is not None:
+            _query_parameters.append(("sort", sort))
+        if order is not None:
+            _query_parameters.append(("order", order))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/tasks",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_tasks_v1(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        action: Annotated[
+            Optional[List[ActionType]],
+            Field(description="Actions for filtering the list of tasks."),
+        ] = None,
+        enabled: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to filter the list of tasks by the `enabled` status."
+            ),
+        ] = None,
+        source_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Source IDs for filtering the list of tasks."),
+        ] = None,
+        destination_id: Annotated[
+            Optional[List[StrictStr]],
+            Field(description="Destination IDs for filtering the list of tasks."),
+        ] = None,
+        trigger_type: Annotated[
+            Optional[List[TriggerType]],
+            Field(description="Type of task trigger for filtering the list of tasks."),
+        ] = None,
+        sort: Annotated[
+            Optional[TaskSortKeys],
+            Field(description="Property by which to sort the list of tasks."),
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListTasksResponseV1:
+        """
+        Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param action: Actions for filtering the list of tasks.
+        :type action: List[ActionType]
+        :param enabled: Whether to filter the list of tasks by the `enabled` status.
+        :type enabled: bool
+        :param source_id: Source IDs for filtering the list of tasks.
+        :type source_id: List[str]
+        :param destination_id: Destination IDs for filtering the list of tasks.
+        :type destination_id: List[str]
+        :param trigger_type: Type of task trigger for filtering the list of tasks.
+        :type trigger_type: List[TriggerType]
+        :param sort: Property by which to sort the list of tasks.
+        :type sort: TaskSortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListTasksResponseV1' result object.
+        """
+        return (
+            self.list_tasks_v1_with_http_info(
+                items_per_page,
+                page,
+                action,
+                enabled,
+                source_id,
+                destination_id,
+                trigger_type,
+                sort,
+                order,
+                request_options,
+            )
+        ).deserialize(ListTasksResponseV1)
+
+    def list_transformation_models_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of existing LLM transformation helpers.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/transformations/models",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_transformation_models(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> TransformationModels:
+        """
+        Retrieves a list of existing LLM transformation helpers.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationModels' result object.
+        """
+        return (
+            self.list_transformation_models_with_http_info(request_options)
+        ).deserialize(TransformationModels)
+
+    def list_transformations_with_http_info(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        sort: Annotated[
+            Optional[SortKeys], Field(description="Property by which to sort the list.")
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a list of transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param sort: Property by which to sort the list.
+        :type sort: SortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if items_per_page is not None:
+            _query_parameters.append(("itemsPerPage", items_per_page))
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if sort is not None:
+            _query_parameters.append(("sort", sort))
+        if order is not None:
+            _query_parameters.append(("order", order))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/transformations",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_transformations(
+        self,
+        items_per_page: Annotated[
+            Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
+            Field(description="Number of items per page."),
+        ] = None,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=1)]],
+            Field(description="Page number of the paginated API response."),
+        ] = None,
+        sort: Annotated[
+            Optional[SortKeys], Field(description="Property by which to sort the list.")
+        ] = None,
+        order: Annotated[
+            Optional[OrderKeys],
+            Field(description="Sort order of the response, ascending or descending."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListTransformationsResponse:
+        """
+        Retrieves a list of transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param items_per_page: Number of items per page.
+        :type items_per_page: int
+        :param page: Page number of the paginated API response.
+        :type page: int
+        :param sort: Property by which to sort the list.
+        :type sort: SortKeys
+        :param order: Sort order of the response, ascending or descending.
+        :type order: OrderKeys
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListTransformationsResponse' result object.
+        """
+        return (
+            self.list_transformations_with_http_info(
+                items_per_page, page, sort, order, request_options
+            )
+        ).deserialize(ListTransformationsResponse)
+
+    def push_task_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        push_task_payload: Annotated[
+            PushTaskPayload,
+            Field(
+                description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Push a `batch` request payload through the Pipeline. You can check the status of task pushes with the observability endpoints.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param push_task_payload: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
+        :type push_task_payload: PushTaskPayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `push_task`."
+            )
+
+        if push_task_payload is None:
+            raise ValueError(
+                "Parameter `push_task_payload` is required when calling `push_task`."
+            )
+
+        _data = {}
+        if push_task_payload is not None:
+            _data = push_task_payload
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/2/tasks/{taskID}/push".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def push_task(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        push_task_payload: Annotated[
+            PushTaskPayload,
+            Field(
+                description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RunResponse:
+        """
+        Push a `batch` request payload through the Pipeline. You can check the status of task pushes with the observability endpoints.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param push_task_payload: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
+        :type push_task_payload: PushTaskPayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RunResponse' result object.
+        """
+        return (
+            self.push_task_with_http_info(task_id, push_task_payload, request_options)
+        ).deserialize(RunResponse)
+
+    def run_source_with_http_info(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        run_source_payload: Optional[RunSourcePayload] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Runs all tasks linked to a source, only available for Shopify sources. It will create 1 run per task.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param run_source_payload:
+        :type run_source_payload: RunSourcePayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `run_source`."
+            )
+
+        _data = {}
+        if run_source_payload is not None:
+            _data = run_source_payload
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/sources/{sourceID}/run".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def run_source(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        run_source_payload: Optional[RunSourcePayload] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RunSourceResponse:
+        """
+        Runs all tasks linked to a source, only available for Shopify sources. It will create 1 run per task.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param run_source_payload:
+        :type run_source_payload: RunSourcePayload
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RunSourceResponse' result object.
+        """
+        return (
+            self.run_source_with_http_info(
+                source_id, run_source_payload, request_options
+            )
+        ).deserialize(RunSourceResponse)
+
+    def run_task_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Runs a task. You can check the status of task runs with the observability endpoints.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError("Parameter `task_id` is required when calling `run_task`.")
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/2/tasks/{taskID}/run".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def run_task(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RunResponse:
+        """
+        Runs a task. You can check the status of task runs with the observability endpoints.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RunResponse' result object.
+        """
+        return (self.run_task_with_http_info(task_id, request_options)).deserialize(
+            RunResponse
+        )
+
+    def run_task_v1_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `run_task_v1`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/tasks/{taskID}/run".replace(
+                "{taskID}", quote(str(task_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def run_task_v1(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RunResponse:
+        """
+        Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RunResponse' result object.
+        """
+        return (self.run_task_v1_with_http_info(task_id, request_options)).deserialize(
+            RunResponse
+        )
+
+    def search_authentications_with_http_info(
+        self,
+        authentication_search: AuthenticationSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for authentication resources.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_search: (required)
+        :type authentication_search: AuthenticationSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if authentication_search is None:
+            raise ValueError(
+                "Parameter `authentication_search` is required when calling `search_authentications`."
+            )
+
+        _data = {}
+        if authentication_search is not None:
+            _data = authentication_search
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/authentications/search",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def search_authentications(
+        self,
+        authentication_search: AuthenticationSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[Authentication]:
+        """
+        Searches for authentication resources.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_search: (required)
+        :type authentication_search: AuthenticationSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'List[Authentication]' result object.
+        """
+        return (
+            self.search_authentications_with_http_info(
+                authentication_search, request_options
+            )
+        ).deserialize(List[Authentication])
+
+    def search_destinations_with_http_info(
+        self,
+        destination_search: DestinationSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for destinations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_search: (required)
+        :type destination_search: DestinationSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if destination_search is None:
+            raise ValueError(
+                "Parameter `destination_search` is required when calling `search_destinations`."
+            )
+
+        _data = {}
+        if destination_search is not None:
+            _data = destination_search
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/destinations/search",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def search_destinations(
+        self,
+        destination_search: DestinationSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[Destination]:
+        """
+        Searches for destinations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_search: (required)
+        :type destination_search: DestinationSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'List[Destination]' result object.
+        """
+        return (
+            self.search_destinations_with_http_info(destination_search, request_options)
+        ).deserialize(List[Destination])
+
+    def search_sources_with_http_info(
+        self,
+        source_search: SourceSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for sources.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_search: (required)
+        :type source_search: SourceSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_search is None:
+            raise ValueError(
+                "Parameter `source_search` is required when calling `search_sources`."
+            )
+
+        _data = {}
+        if source_search is not None:
+            _data = source_search
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/sources/search",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def search_sources(
+        self,
+        source_search: SourceSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[Source]:
+        """
+        Searches for sources.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_search: (required)
+        :type source_search: SourceSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'List[Source]' result object.
+        """
+        return (
+            self.search_sources_with_http_info(source_search, request_options)
+        ).deserialize(List[Source])
+
+    def search_tasks_with_http_info(
+        self,
+        task_search: TaskSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for tasks.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_search: (required)
+        :type task_search: TaskSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_search is None:
+            raise ValueError(
+                "Parameter `task_search` is required when calling `search_tasks`."
+            )
+
+        _data = {}
+        if task_search is not None:
+            _data = task_search
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/2/tasks/search",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def search_tasks(
+        self,
+        task_search: TaskSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[Task]:
+        """
+        Searches for tasks.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_search: (required)
+        :type task_search: TaskSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'List[Task]' result object.
+        """
+        return (
+            self.search_tasks_with_http_info(task_search, request_options)
+        ).deserialize(List[Task])
+
+    def search_tasks_v1_with_http_info(
+        self,
+        task_search: TaskSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_search: (required)
+        :type task_search: TaskSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_search is None:
+            raise ValueError(
+                "Parameter `task_search` is required when calling `search_tasks_v1`."
+            )
+
+        _data = {}
+        if task_search is not None:
+            _data = task_search
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/tasks/search",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def search_tasks_v1(
+        self,
+        task_search: TaskSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[TaskV1]:
+        """
+        Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param task_search: (required)
+        :type task_search: TaskSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'List[TaskV1]' result object.
+        """
+        return (
+            self.search_tasks_v1_with_http_info(task_search, request_options)
+        ).deserialize(List[TaskV1])
+
+    def search_transformations_with_http_info(
+        self,
+        transformation_search: TransformationSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_search: (required)
+        :type transformation_search: TransformationSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_search is None:
+            raise ValueError(
+                "Parameter `transformation_search` is required when calling `search_transformations`."
+            )
+
+        _data = {}
+        if transformation_search is not None:
+            _data = transformation_search
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations/search",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def search_transformations(
+        self,
+        transformation_search: TransformationSearch,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[Transformation]:
+        """
+        Searches for transformations.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_search: (required)
+        :type transformation_search: TransformationSearch
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'List[Transformation]' result object.
+        """
+        return (
+            self.search_transformations_with_http_info(
+                transformation_search, request_options
+            )
+        ).deserialize(List[Transformation])
+
+    def trigger_docker_source_discover_with_http_info(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Triggers a stream-listing request for a source. Triggering stream-listing requests only works with sources with `type: docker` and `imageType: singer`.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `trigger_docker_source_discover`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/sources/{sourceID}/discover".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def trigger_docker_source_discover(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SourceWatchResponse:
+        """
+        Triggers a stream-listing request for a source. Triggering stream-listing requests only works with sources with `type: docker` and `imageType: singer`.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
+        """
+        return (
+            self.trigger_docker_source_discover_with_http_info(
+                source_id, request_options
+            )
+        ).deserialize(SourceWatchResponse)
+
+    def try_transformation_with_http_info(
+        self,
+        transformation_try: TransformationTry,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Try a transformation before creating it.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_try: (required)
+        :type transformation_try: TransformationTry
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_try is None:
+            raise ValueError(
+                "Parameter `transformation_try` is required when calling `try_transformation`."
+            )
+
+        _data = {}
+        if transformation_try is not None:
+            _data = transformation_try
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations/try",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def try_transformation(
+        self,
+        transformation_try: TransformationTry,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TransformationTryResponse:
+        """
+        Try a transformation before creating it.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_try: (required)
+        :type transformation_try: TransformationTry
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationTryResponse' result object.
+        """
+        return (
+            self.try_transformation_with_http_info(transformation_try, request_options)
+        ).deserialize(TransformationTryResponse)
+
+    def try_transformation_before_update_with_http_info(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        transformation_try: TransformationTry,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Try a transformation before updating it.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param transformation_try: (required)
+        :type transformation_try: TransformationTry
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `try_transformation_before_update`."
+            )
+
+        if transformation_try is None:
+            raise ValueError(
+                "Parameter `transformation_try` is required when calling `try_transformation_before_update`."
+            )
+
+        _data = {}
+        if transformation_try is not None:
+            _data = transformation_try
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/transformations/{transformationID}/try".replace(
+                "{transformationID}", quote(str(transformation_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def try_transformation_before_update(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        transformation_try: TransformationTry,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TransformationTryResponse:
+        """
+        Try a transformation before updating it.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param transformation_try: (required)
+        :type transformation_try: TransformationTry
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationTryResponse' result object.
+        """
+        return (
+            self.try_transformation_before_update_with_http_info(
+                transformation_id, transformation_try, request_options
+            )
+        ).deserialize(TransformationTryResponse)
+
+    def update_authentication_with_http_info(
+        self,
+        authentication_id: Annotated[
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
+        ],
+        authentication_update: AuthenticationUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Updates an authentication resource.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_id: Unique identifier of an authentication resource. (required)
+        :type authentication_id: str
+        :param authentication_update: (required)
+        :type authentication_update: AuthenticationUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if authentication_id is None:
+            raise ValueError(
+                "Parameter `authentication_id` is required when calling `update_authentication`."
+            )
+
+        if authentication_update is None:
+            raise ValueError(
+                "Parameter `authentication_update` is required when calling `update_authentication`."
+            )
+
+        _data = {}
+        if authentication_update is not None:
+            _data = authentication_update
+
+        return self._transporter.request(
+            verb=Verb.PATCH,
+            path="/1/authentications/{authenticationID}".replace(
+                "{authenticationID}", quote(str(authentication_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def update_authentication(
+        self,
+        authentication_id: Annotated[
+            StrictStr,
+            Field(description="Unique identifier of an authentication resource."),
+        ],
+        authentication_update: AuthenticationUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> AuthenticationUpdateResponse:
+        """
+        Updates an authentication resource.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param authentication_id: Unique identifier of an authentication resource. (required)
+        :type authentication_id: str
+        :param authentication_update: (required)
+        :type authentication_update: AuthenticationUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'AuthenticationUpdateResponse' result object.
+        """
+        return (
+            self.update_authentication_with_http_info(
+                authentication_id, authentication_update, request_options
+            )
+        ).deserialize(AuthenticationUpdateResponse)
+
+    def update_destination_with_http_info(
+        self,
+        destination_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a destination.")
+        ],
+        destination_update: DestinationUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Updates the destination by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_id: Unique identifier of a destination. (required)
+        :type destination_id: str
+        :param destination_update: (required)
+        :type destination_update: DestinationUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if destination_id is None:
+            raise ValueError(
+                "Parameter `destination_id` is required when calling `update_destination`."
+            )
+
+        if destination_update is None:
+            raise ValueError(
+                "Parameter `destination_update` is required when calling `update_destination`."
+            )
+
+        _data = {}
+        if destination_update is not None:
+            _data = destination_update
+
+        return self._transporter.request(
+            verb=Verb.PATCH,
+            path="/1/destinations/{destinationID}".replace(
+                "{destinationID}", quote(str(destination_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def update_destination(
+        self,
+        destination_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a destination.")
+        ],
+        destination_update: DestinationUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DestinationUpdateResponse:
+        """
+        Updates the destination by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param destination_id: Unique identifier of a destination. (required)
+        :type destination_id: str
+        :param destination_update: (required)
+        :type destination_update: DestinationUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DestinationUpdateResponse' result object.
+        """
+        return (
+            self.update_destination_with_http_info(
+                destination_id, destination_update, request_options
+            )
+        ).deserialize(DestinationUpdateResponse)
+
+    def update_source_with_http_info(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        source_update: SourceUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Updates a source by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param source_update: (required)
+        :type source_update: SourceUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `update_source`."
+            )
+
+        if source_update is None:
+            raise ValueError(
+                "Parameter `source_update` is required when calling `update_source`."
+            )
+
+        _data = {}
+        if source_update is not None:
+            _data = source_update
+
+        return self._transporter.request(
+            verb=Verb.PATCH,
+            path="/1/sources/{sourceID}".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def update_source(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        source_update: SourceUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SourceUpdateResponse:
+        """
+        Updates a source by its ID.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param source_update: (required)
+        :type source_update: SourceUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SourceUpdateResponse' result object.
+        """
+        return (
+            self.update_source_with_http_info(source_id, source_update, request_options)
+        ).deserialize(SourceUpdateResponse)
+
+    def update_task_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        task_update: TaskUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Updates a task by its ID.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param task_update: (required)
+        :type task_update: TaskUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `update_task`."
+            )
+
+        if task_update is None:
+            raise ValueError(
+                "Parameter `task_update` is required when calling `update_task`."
+            )
+
+        _data = {}
+        if task_update is not None:
+            _data = task_update
+
+        return self._transporter.request(
+            verb=Verb.PATCH,
+            path="/2/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def update_task(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        task_update: TaskUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskUpdateResponse:
+        """
+        Updates a task by its ID.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param task_update: (required)
+        :type task_update: TaskUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
+        """
+        return (
+            self.update_task_with_http_info(task_id, task_update, request_options)
+        ).deserialize(TaskUpdateResponse)
+
+    def update_task_v1_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        task_update: TaskUpdateV1,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param task_update: (required)
+        :type task_update: TaskUpdateV1
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `update_task_v1`."
+            )
+
+        if task_update is None:
+            raise ValueError(
+                "Parameter `task_update` is required when calling `update_task_v1`."
+            )
+
+        _data = {}
+        if task_update is not None:
+            _data = task_update
+
+        return self._transporter.request(
+            verb=Verb.PATCH,
+            path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def update_task_v1(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        task_update: TaskUpdateV1,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskUpdateResponse:
+        """
+        Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param task_update: (required)
+        :type task_update: TaskUpdateV1
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
+        """
+        return (
+            self.update_task_v1_with_http_info(task_id, task_update, request_options)
+        ).deserialize(TaskUpdateResponse)
+
+    def update_transformation_with_http_info(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        transformation_create: TransformationCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Updates a transformation by its ID.
+
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param transformation_create: (required)
+        :type transformation_create: TransformationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `update_transformation`."
+            )
+
+        if transformation_create is None:
+            raise ValueError(
+                "Parameter `transformation_create` is required when calling `update_transformation`."
+            )
+
+        _data = {}
+        if transformation_create is not None:
+            _data = transformation_create
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/transformations/{transformationID}".replace(
+                "{transformationID}", quote(str(transformation_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def update_transformation(
+        self,
+        transformation_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a transformation.")
+        ],
+        transformation_create: TransformationCreate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TransformationUpdateResponse:
+        """
+        Updates a transformation by its ID.
+
+
+        :param transformation_id: Unique identifier of a transformation. (required)
+        :type transformation_id: str
+        :param transformation_create: (required)
+        :type transformation_create: TransformationCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TransformationUpdateResponse' result object.
+        """
+        return (
+            self.update_transformation_with_http_info(
+                transformation_id, transformation_create, request_options
+            )
+        ).deserialize(TransformationUpdateResponse)
+
+    def validate_source_with_http_info(
+        self,
+        source_create: Optional[SourceCreate] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Validates a source payload to ensure it can be created and that the data source can be reached by Algolia.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_create:
+        :type source_create: SourceCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _data = {}
+        if source_create is not None:
+            _data = source_create
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/sources/validate",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def validate_source(
+        self,
+        source_create: Optional[SourceCreate] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SourceWatchResponse:
+        """
+        Validates a source payload to ensure it can be created and that the data source can be reached by Algolia.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_create:
+        :type source_create: SourceCreate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
+        """
+        return (
+            self.validate_source_with_http_info(source_create, request_options)
+        ).deserialize(SourceWatchResponse)
+
+    def validate_source_before_update_with_http_info(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        source_update: SourceUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Validates an update of a source payload to ensure it can be created and that the data source can be reached by Algolia.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param source_update: (required)
+        :type source_update: SourceUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `validate_source_before_update`."
+            )
+
+        if source_update is None:
+            raise ValueError(
+                "Parameter `source_update` is required when calling `validate_source_before_update`."
+            )
+
+        _data = {}
+        if source_update is not None:
+            _data = source_update
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/sources/{sourceID}/validate".replace(
+                "{sourceID}", quote(str(source_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def validate_source_before_update(
+        self,
+        source_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a source.")
+        ],
+        source_update: SourceUpdate,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SourceWatchResponse:
+        """
+        Validates an update of a source payload to ensure it can be created and that the data source can be reached by Algolia.
+
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
+
+        :param source_id: Unique identifier of a source. (required)
+        :type source_id: str
+        :param source_update: (required)
+        :type source_update: SourceUpdate
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
+        """
+        return (
+            self.validate_source_before_update_with_http_info(
                 source_id, source_update, request_options
             )
         ).deserialize(SourceWatchResponse)

@@ -22,6 +22,7 @@ from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import bodySerializer
 from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.personalization.config import PersonalizationConfig
 from algoliasearch.personalization.models.delete_user_profile_response import (
@@ -118,7 +119,7 @@ class PersonalizationClient:
         """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
-    def set_client_api_key(self, api_key: str) -> None:
+    async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self._transporter._config.set_client_api_key(api_key)
 
@@ -678,6 +679,644 @@ class PersonalizationClient:
         """
         return (
             await self.set_personalization_strategy_with_http_info(
+                personalization_strategy_params, request_options
+            )
+        ).deserialize(SetPersonalizationStrategyResponse)
+
+
+class PersonalizationClientSync:
+    """The Algolia 'PersonalizationClientSync' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+    region ("eu" | "us"): The region of your Algolia application.
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = PersonalizationClientSync("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY", region="'eu' or 'us'")
+    _client_with_named_args = PersonalizationClientSync(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY", region="'eu' or 'us'")
+
+    See `PersonalizationClientSync.create_with_config` for advanced configuration.
+    """
+
+    _transporter: TransporterSync
+    _config: PersonalizationConfig
+    _request_options: RequestOptions
+
+    def __init__(
+        self,
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        region: str = None,
+        transporter: Optional[TransporterSync] = None,
+        config: Optional[PersonalizationConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
+
+        if config is None:
+            config = PersonalizationConfig(app_id, api_key, region)
+        self._config = config
+        self._request_options = RequestOptions(config)
+
+        if transporter is None:
+            transporter = TransporterSync(config)
+        self._transporter = transporter
+
+    def create_with_config(
+        config: PersonalizationConfig, transporter: Optional[TransporterSync] = None
+    ) -> Self:
+        """Allows creating a client with a customized `PersonalizationConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (PersonalizationConfig): The config of the API client.
+        transporter (TransporterSync): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = PersonalizationClientSync.create_with_config(config=PersonalizationConfig(...))
+        _client_with_custom_config_and_transporter = PersonalizationClientSync.create_with_config(config=PersonalizationConfig(...), transporter=TransporterSync(...))
+        """
+        if transporter is None:
+            transporter = TransporterSync(config)
+
+        return PersonalizationClientSync(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            region=config.region,
+            transporter=transporter,
+            config=config,
+        )
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        self.close()
+
+    def close(self) -> None:
+        return self._transporter.close()
+
+    def set_client_api_key(self, api_key: str) -> None:
+        """Sets a new API key to authenticate requests."""
+        self._transporter._config.set_client_api_key(api_key)
+
+    def custom_delete_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_delete(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_get_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_get(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_post_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_post(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_post_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def custom_put_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_put(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_put_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def delete_user_profile_with_http_info(
+        self,
+        user_token: Annotated[
+            StrictStr,
+            Field(
+                description="Unique identifier representing a user for which to fetch the personalization profile."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a user profile.  The response includes a date and time when the user profile can safely be considered deleted.
+
+        Required API Key ACLs:
+          - recommendation
+
+        :param user_token: Unique identifier representing a user for which to fetch the personalization profile. (required)
+        :type user_token: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if user_token is None:
+            raise ValueError(
+                "Parameter `user_token` is required when calling `delete_user_profile`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/profiles/{userToken}".replace(
+                "{userToken}", quote(str(user_token), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_user_profile(
+        self,
+        user_token: Annotated[
+            StrictStr,
+            Field(
+                description="Unique identifier representing a user for which to fetch the personalization profile."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteUserProfileResponse:
+        """
+        Deletes a user profile.  The response includes a date and time when the user profile can safely be considered deleted.
+
+        Required API Key ACLs:
+          - recommendation
+
+        :param user_token: Unique identifier representing a user for which to fetch the personalization profile. (required)
+        :type user_token: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteUserProfileResponse' result object.
+        """
+        return (
+            self.delete_user_profile_with_http_info(user_token, request_options)
+        ).deserialize(DeleteUserProfileResponse)
+
+    def get_personalization_strategy_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the current personalization strategy.
+
+        Required API Key ACLs:
+          - recommendation
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/strategies/personalization",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_personalization_strategy(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> PersonalizationStrategyParams:
+        """
+        Retrieves the current personalization strategy.
+
+        Required API Key ACLs:
+          - recommendation
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'PersonalizationStrategyParams' result object.
+        """
+        return (
+            self.get_personalization_strategy_with_http_info(request_options)
+        ).deserialize(PersonalizationStrategyParams)
+
+    def get_user_token_profile_with_http_info(
+        self,
+        user_token: Annotated[
+            StrictStr,
+            Field(
+                description="Unique identifier representing a user for which to fetch the personalization profile."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a user profile and their affinities for different facets.
+
+        Required API Key ACLs:
+          - recommendation
+
+        :param user_token: Unique identifier representing a user for which to fetch the personalization profile. (required)
+        :type user_token: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if user_token is None:
+            raise ValueError(
+                "Parameter `user_token` is required when calling `get_user_token_profile`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/profiles/personalization/{userToken}".replace(
+                "{userToken}", quote(str(user_token), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_user_token_profile(
+        self,
+        user_token: Annotated[
+            StrictStr,
+            Field(
+                description="Unique identifier representing a user for which to fetch the personalization profile."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetUserTokenResponse:
+        """
+        Retrieves a user profile and their affinities for different facets.
+
+        Required API Key ACLs:
+          - recommendation
+
+        :param user_token: Unique identifier representing a user for which to fetch the personalization profile. (required)
+        :type user_token: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetUserTokenResponse' result object.
+        """
+        return (
+            self.get_user_token_profile_with_http_info(user_token, request_options)
+        ).deserialize(GetUserTokenResponse)
+
+    def set_personalization_strategy_with_http_info(
+        self,
+        personalization_strategy_params: PersonalizationStrategyParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new personalization strategy.
+
+        Required API Key ACLs:
+          - recommendation
+
+        :param personalization_strategy_params: (required)
+        :type personalization_strategy_params: PersonalizationStrategyParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if personalization_strategy_params is None:
+            raise ValueError(
+                "Parameter `personalization_strategy_params` is required when calling `set_personalization_strategy`."
+            )
+
+        _data = {}
+        if personalization_strategy_params is not None:
+            _data = personalization_strategy_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/strategies/personalization",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def set_personalization_strategy(
+        self,
+        personalization_strategy_params: PersonalizationStrategyParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SetPersonalizationStrategyResponse:
+        """
+        Creates a new personalization strategy.
+
+        Required API Key ACLs:
+          - recommendation
+
+        :param personalization_strategy_params: (required)
+        :type personalization_strategy_params: PersonalizationStrategyParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SetPersonalizationStrategyResponse' result object.
+        """
+        return (
+            self.set_personalization_strategy_with_http_info(
                 personalization_strategy_params, request_options
             )
         ).deserialize(SetPersonalizationStrategyResponse)

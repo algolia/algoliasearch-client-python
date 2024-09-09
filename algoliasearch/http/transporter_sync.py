@@ -1,8 +1,15 @@
-from asyncio import TimeoutError
 from json import loads
+from sys import version_info
 
-from aiohttp import ClientSession, TCPConnector
-from async_timeout import timeout
+from requests import Request, Session, Timeout
+
+if version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
+
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.base_config import BaseConfig
@@ -16,8 +23,8 @@ from algoliasearch.http.retry import RetryOutcome, RetryStrategy
 from algoliasearch.http.verb import Verb
 
 
-class Transporter(BaseTransporter):
-    _session: ClientSession
+class TransporterSync(BaseTransporter):
+    _session: Session
 
     def __init__(self, config: BaseConfig) -> None:
         self._session = None
@@ -25,7 +32,20 @@ class Transporter(BaseTransporter):
         self._retry_strategy = RetryStrategy()
         self._hosts = []
 
-    async def request(
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        pass
+
+    def close(self) -> None:
+        if self._session is not None:
+            _session = self._session
+            self._session = None
+
+            _session.close()
+
+    def request(
         self,
         verb: Verb,
         path: str,
@@ -33,9 +53,8 @@ class Transporter(BaseTransporter):
         use_read_transporter: bool,
     ) -> ApiResponse:
         if self._session is None:
-            self._session = ClientSession(
-                connector=TCPConnector(use_dns_cache=False), trust_env=True
-            )
+            self._session = Session()
+            self._session.mount("https://", HTTPAdapter(max_retries=Retry(connect=0)))
 
         query_parameters = self.prepare(
             request_options, verb == Verb.GET or use_read_transporter
@@ -47,30 +66,32 @@ class Transporter(BaseTransporter):
             url = self.build_url(host, path)
             proxy = self.get_proxy(url)
 
+            req = Request(
+                method=verb,
+                url=url,
+                headers=request_options.headers,
+                data=request_options.data,
+            ).prepare()
+
             try:
-                async with timeout(self._timeout / 1000):
-                    resp = await self._session.request(
-                        method=verb,
-                        url=url,
-                        headers=request_options.headers,
-                        data=request_options.data,
-                        proxy=proxy,
-                    )
+                resp = self._session.send(
+                    req,
+                    timeout=self._timeout / 1000,
+                    proxies=proxy,
+                )
 
-                    _raw_data = await resp.text()
-                    response = ApiResponse(
-                        verb=verb,
-                        path=path,
-                        url=url,
-                        host=host.url,
-                        status_code=resp.status,
-                        headers=resp.headers,
-                        data=_raw_data,
-                        raw_data=_raw_data,
-                        error_message=str(resp.reason),
-                    )
-
-            except TimeoutError as e:
+                response = ApiResponse(
+                    verb=verb,
+                    path=path,
+                    url=url,
+                    host=host.url,
+                    status_code=resp.status_code,
+                    headers=resp.headers,  # type: ignore -- insensitive dict is still a dict
+                    data=resp.text,
+                    raw_data=resp.text,
+                    error_message=str(resp.reason),
+                )
+            except Timeout as e:
                 response = ApiResponse(
                     verb=verb,
                     path=path,
@@ -94,12 +115,12 @@ class Transporter(BaseTransporter):
         raise AlgoliaUnreachableHostException("Unreachable hosts")
 
 
-class EchoTransporter(Transporter):
+class EchoTransporterSync(TransporterSync):
     def __init__(self, config: BaseConfig) -> None:
         self._config = config
         self._retry_strategy = RetryStrategy()
 
-    async def request(
+    def request(
         self,
         verb: Verb,
         path: str,

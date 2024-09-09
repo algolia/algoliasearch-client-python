@@ -1,5 +1,4 @@
 from os import environ
-from typing import Optional
 
 from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.hosts import Host, HostsCollection
@@ -7,12 +6,7 @@ from algoliasearch.http.user_agent import UserAgent
 
 
 class PersonalizationConfig(BaseConfig):
-    def __init__(
-        self,
-        app_id: Optional[str] = None,
-        api_key: Optional[str] = None,
-        region: str = None,
-    ) -> None:
+    def __init__(self, app_id: str, api_key: str, region: str = None) -> None:
         super().__init__(app_id, api_key)
 
         user_agent = UserAgent().add("Personalization")
@@ -24,14 +18,15 @@ class PersonalizationConfig(BaseConfig):
             "content-type": "application/json",
         }
 
-        self.proxies = {
-            "http": environ.get("HTTP_PROXY"),
-            "https": environ.get("HTTPS_PROXY"),
-        }
-        if self.proxies["http"] is None:
-            del self.proxies["http"]
-        if self.proxies["https"] is None:
-            del self.proxies["https"]
+        http_proxy = environ.get("HTTP_PROXY")
+        https_proxy = environ.get("HTTPS_PROXY")
+
+        self.proxies = {}
+
+        if http_proxy is not None:
+            self.proxies["http"] = http_proxy
+        if https_proxy is not None:
+            self.proxies["https"] = https_proxy
 
         self.region = region
         _regions = ["eu", "us"]

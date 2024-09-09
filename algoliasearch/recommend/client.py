@@ -22,6 +22,7 @@ from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import bodySerializer
 from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.recommend.config import RecommendConfig
 from algoliasearch.recommend.models.deleted_at_response import DeletedAtResponse
@@ -122,7 +123,7 @@ class RecommendClient:
         """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
-    def set_client_api_key(self, api_key: str) -> None:
+    async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self._transporter._config.set_client_api_key(api_key)
 
@@ -894,6 +895,856 @@ class RecommendClient:
         """
         return (
             await self.search_recommend_rules_with_http_info(
+                index_name, model, search_recommend_rules_params, request_options
+            )
+        ).deserialize(SearchRecommendRulesResponse)
+
+
+class RecommendClientSync:
+    """The Algolia 'RecommendClientSync' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = RecommendClientSync("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY")
+    _client_with_named_args = RecommendClientSync(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY")
+
+    See `RecommendClientSync.create_with_config` for advanced configuration.
+    """
+
+    _transporter: TransporterSync
+    _config: RecommendConfig
+    _request_options: RequestOptions
+
+    def __init__(
+        self,
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        transporter: Optional[TransporterSync] = None,
+        config: Optional[RecommendConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
+
+        if config is None:
+            config = RecommendConfig(app_id, api_key)
+        self._config = config
+        self._request_options = RequestOptions(config)
+
+        if transporter is None:
+            transporter = TransporterSync(config)
+        self._transporter = transporter
+
+    def create_with_config(
+        config: RecommendConfig, transporter: Optional[TransporterSync] = None
+    ) -> Self:
+        """Allows creating a client with a customized `RecommendConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (RecommendConfig): The config of the API client.
+        transporter (TransporterSync): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = RecommendClientSync.create_with_config(config=RecommendConfig(...))
+        _client_with_custom_config_and_transporter = RecommendClientSync.create_with_config(config=RecommendConfig(...), transporter=TransporterSync(...))
+        """
+        if transporter is None:
+            transporter = TransporterSync(config)
+
+        return RecommendClientSync(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            transporter=transporter,
+            config=config,
+        )
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        self.close()
+
+    def close(self) -> None:
+        return self._transporter.close()
+
+    def set_client_api_key(self, api_key: str) -> None:
+        """Sets a new API key to authenticate requests."""
+        self._transporter._config.set_client_api_key(api_key)
+
+    def custom_delete_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_delete(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_get_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_get(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_post_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_post(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_post_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def custom_put_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_put(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_put_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def delete_recommend_rule_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a Recommend rule from a recommendation scenario.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_recommend_rule`."
+            )
+
+        if model is None:
+            raise ValueError(
+                "Parameter `model` is required when calling `delete_recommend_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_recommend_rule`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            )
+            .replace("{model}", quote(str(model), safe=""))
+            .replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_recommend_rule(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeletedAtResponse:
+        """
+        Deletes a Recommend rule from a recommendation scenario.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
+        """
+        return (
+            self.delete_recommend_rule_with_http_info(
+                index_name, model, object_id, request_options
+            )
+        ).deserialize(DeletedAtResponse)
+
+    def get_recommend_rule_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a Recommend rule that you previously created in the Algolia dashboard.
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_recommend_rule`."
+            )
+
+        if model is None:
+            raise ValueError(
+                "Parameter `model` is required when calling `get_recommend_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_recommend_rule`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/indexes/{indexName}/{model}/recommend/rules/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            )
+            .replace("{model}", quote(str(model), safe=""))
+            .replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_recommend_rule(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RecommendRule:
+        """
+        Retrieves a Recommend rule that you previously created in the Algolia dashboard.
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RecommendRule' result object.
+        """
+        return (
+            self.get_recommend_rule_with_http_info(
+                index_name, model, object_id, request_options
+            )
+        ).deserialize(RecommendRule)
+
+    def get_recommend_status_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Checks the status of a given task.  Deleting a Recommend rule is asynchronous. When you delete a rule, a task is created on a queue and completed depending on the load on the server. The API response includes a task ID that you can use to check the status.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_recommend_status`."
+            )
+
+        if model is None:
+            raise ValueError(
+                "Parameter `model` is required when calling `get_recommend_status`."
+            )
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `get_recommend_status`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/indexes/{indexName}/{model}/task/{taskID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            )
+            .replace("{model}", quote(str(model), safe=""))
+            .replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_recommend_status(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetRecommendTaskResponse:
+        """
+        Checks the status of a given task.  Deleting a Recommend rule is asynchronous. When you delete a rule, a task is created on a queue and completed depending on the load on the server. The API response includes a task ID that you can use to check the status.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetRecommendTaskResponse' result object.
+        """
+        return (
+            self.get_recommend_status_with_http_info(
+                index_name, model, task_id, request_options
+            )
+        ).deserialize(GetRecommendTaskResponse)
+
+    def get_recommendations_with_http_info(
+        self,
+        get_recommendations_params: GetRecommendationsParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves recommendations from selected AI models.
+
+        Required API Key ACLs:
+          - search
+
+        :param get_recommendations_params: (required)
+        :type get_recommendations_params: GetRecommendationsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if get_recommendations_params is None:
+            raise ValueError(
+                "Parameter `get_recommendations_params` is required when calling `get_recommendations`."
+            )
+
+        _data = {}
+        if get_recommendations_params is not None:
+            _data = get_recommendations_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/*/recommendations",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def get_recommendations(
+        self,
+        get_recommendations_params: GetRecommendationsParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetRecommendationsResponse:
+        """
+        Retrieves recommendations from selected AI models.
+
+        Required API Key ACLs:
+          - search
+
+        :param get_recommendations_params: (required)
+        :type get_recommendations_params: GetRecommendationsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetRecommendationsResponse' result object.
+        """
+        return (
+            self.get_recommendations_with_http_info(
+                get_recommendations_params, request_options
+            )
+        ).deserialize(GetRecommendationsResponse)
+
+    def search_recommend_rules_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        search_recommend_rules_params: Optional[SearchRecommendRulesParams] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for Recommend rules.  Use an empty query to list all rules for this recommendation scenario.
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param search_recommend_rules_params:
+        :type search_recommend_rules_params: SearchRecommendRulesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_recommend_rules`."
+            )
+
+        if model is None:
+            raise ValueError(
+                "Parameter `model` is required when calling `search_recommend_rules`."
+            )
+
+        _data = {}
+        if search_recommend_rules_params is not None:
+            _data = search_recommend_rules_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/{model}/recommend/rules/search".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{model}", quote(str(model), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def search_recommend_rules(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        search_recommend_rules_params: Optional[SearchRecommendRulesParams] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchRecommendRulesResponse:
+        """
+        Searches for Recommend rules.  Use an empty query to list all rules for this recommendation scenario.
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param search_recommend_rules_params:
+        :type search_recommend_rules_params: SearchRecommendRulesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchRecommendRulesResponse' result object.
+        """
+        return (
+            self.search_recommend_rules_with_http_info(
                 index_name, model, search_recommend_rules_params, request_options
             )
         ).deserialize(SearchRecommendRulesResponse)

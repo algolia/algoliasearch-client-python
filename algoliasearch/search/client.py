@@ -26,10 +26,15 @@ else:
 
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.exceptions import RequestException, ValidUntilNotFoundException
-from algoliasearch.http.helpers import RetryTimeout, create_iterable
+from algoliasearch.http.helpers import (
+    RetryTimeout,
+    create_iterable,
+    create_iterable_sync,
+)
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import QueryParametersSerializer, bodySerializer
 from algoliasearch.http.transporter import Transporter
+from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.search.config import SearchConfig
 from algoliasearch.search.models.action import Action
@@ -203,7 +208,7 @@ class SearchClient:
         """Closes the underlying `transporter` of the API client."""
         return await self._transporter.close()
 
-    def set_client_api_key(self, api_key: str) -> None:
+    async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self._transporter._config.set_client_api_key(api_key)
 
@@ -410,7 +415,7 @@ class SearchClient:
             aggregator=aggregator,
         )
 
-    def generate_secured_api_key(
+    async def generate_secured_api_key(
         self,
         parent_api_key: str,
         restrictions: Optional[SecuredApiKeyRestrictions] = SecuredApiKeyRestrictions(),
@@ -5100,4 +5105,4961 @@ class SearchClient:
         """
         return (
             await self.update_api_key_with_http_info(key, api_key, request_options)
+        ).deserialize(UpdateApiKeyResponse)
+
+
+class SearchClientSync:
+    """The Algolia 'SearchClientSync' class.
+
+    Args:
+    app_id (str): The Algolia application ID to retrieve information from.
+    api_key (str): The Algolia api key bound to the given `app_id`.
+
+
+    Returns:
+    The initialized API client.
+
+    Example:
+    _client = SearchClientSync("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_API_KEY")
+    _client_with_named_args = SearchClientSync(app_id="YOUR_ALGOLIA_APP_ID", api_key="YOUR_ALGOLIA_API_KEY")
+
+    See `SearchClientSync.create_with_config` for advanced configuration.
+    """
+
+    _transporter: TransporterSync
+    _config: SearchConfig
+    _request_options: RequestOptions
+
+    def __init__(
+        self,
+        app_id: Optional[str] = None,
+        api_key: Optional[str] = None,
+        transporter: Optional[TransporterSync] = None,
+        config: Optional[SearchConfig] = None,
+    ) -> None:
+        if transporter is not None and config is None:
+            config = transporter._config
+
+        if config is None:
+            config = SearchConfig(app_id, api_key)
+        self._config = config
+        self._request_options = RequestOptions(config)
+
+        if transporter is None:
+            transporter = TransporterSync(config)
+        self._transporter = transporter
+
+    def create_with_config(
+        config: SearchConfig, transporter: Optional[TransporterSync] = None
+    ) -> Self:
+        """Allows creating a client with a customized `SearchConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
+
+        Args:
+        config (SearchConfig): The config of the API client.
+        transporter (TransporterSync): The HTTP transporter, see `http/transporter.py` for implementation details.
+
+        Returns:
+        The initialized API client.
+
+        Example:
+        _client_with_custom_config = SearchClientSync.create_with_config(config=SearchConfig(...))
+        _client_with_custom_config_and_transporter = SearchClientSync.create_with_config(config=SearchConfig(...), transporter=TransporterSync(...))
+        """
+        if transporter is None:
+            transporter = TransporterSync(config)
+
+        return SearchClientSync(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            transporter=transporter,
+            config=config,
+        )
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        """Closes the underlying `transporter` of the API client."""
+        self.close()
+
+    def close(self) -> None:
+        return self._transporter.close()
+
+    def set_client_api_key(self, api_key: str) -> None:
+        """Sets a new API key to authenticate requests."""
+        self._transporter._config.set_client_api_key(api_key)
+
+    def wait_for_task(
+        self,
+        index_name: str,
+        task_id: int,
+        timeout: RetryTimeout = RetryTimeout(),
+        max_retries: int = 50,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetTaskResponse:
+        """
+        Helper: Wait for a task to be published (completed) for a given `indexName` and `taskID`.
+        """
+        self._retry_count = 0
+
+        def _func(_: GetTaskResponse) -> GetTaskResponse:
+            return self.get_task(index_name, task_id, request_options)
+
+        def _aggregator(_: GetTaskResponse) -> None:
+            self._retry_count += 1
+
+        return create_iterable_sync(
+            func=_func,
+            aggregator=_aggregator,
+            validate=lambda _resp: _resp.status == "published",
+            timeout=lambda: timeout(self._retry_count),
+            error_validate=lambda x: self._retry_count >= max_retries,
+            error_message=lambda: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+        )
+
+    def wait_for_app_task(
+        self,
+        task_id: int,
+        timeout: RetryTimeout = RetryTimeout(),
+        max_retries: int = 50,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetTaskResponse:
+        """
+        Helper: Wait for an application-level task to complete for a given `taskID`.
+        """
+        self._retry_count = 0
+
+        def _func(_: GetTaskResponse) -> GetTaskResponse:
+            return self.get_app_task(task_id, request_options)
+
+        def _aggregator(_: GetTaskResponse) -> None:
+            self._retry_count += 1
+
+        return create_iterable_sync(
+            func=_func,
+            aggregator=_aggregator,
+            validate=lambda _resp: _resp.status == "published",
+            timeout=lambda: timeout(self._retry_count),
+            error_validate=lambda x: self._retry_count >= max_retries,
+            error_message=lambda: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+        )
+
+    def wait_for_api_key(
+        self,
+        key: str,
+        operation: str,
+        api_key: Optional[ApiKey] = None,
+        max_retries: int = 50,
+        timeout: RetryTimeout = RetryTimeout(),
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetApiKeyResponse | None:
+        """
+        Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
+        """
+        self._retry_count = 0
+
+        if operation == "update" and api_key is None:
+            raise ValueError(
+                "`apiKey` is required when waiting for an `update` operation."
+            )
+
+        def _func(_prev: GetApiKeyResponse | None) -> GetApiKeyResponse | None:
+            try:
+                return self.get_api_key(key=key, request_options=request_options)
+            except RequestException as e:
+                if e.status_code == 404 and (
+                    operation == "delete" or operation == "add"
+                ):
+                    return None
+                raise e
+
+        def _aggregator(_: GetApiKeyResponse | None) -> None:
+            self._retry_count += 1
+
+        def _validate(_resp: GetApiKeyResponse | None) -> bool:
+            if operation == "update":
+                resp_dict = _resp.to_dict()
+                api_key_dict = (
+                    api_key.to_dict() if isinstance(api_key, ApiKey) else api_key
+                )
+                for field in api_key_dict:
+                    if isinstance(api_key_dict[field], list) and isinstance(
+                        resp_dict[field], list
+                    ):
+                        if len(api_key_dict[field]) != len(resp_dict[field]) or any(
+                            v != resp_dict[field][i]
+                            for i, v in enumerate(api_key_dict[field])
+                        ):
+                            return False
+                    elif api_key_dict[field] != resp_dict[field]:
+                        return False
+                return True
+            elif operation == "add":
+                return _resp is not None
+            return _resp is None
+
+        return create_iterable_sync(
+            func=_func,
+            validate=_validate,
+            aggregator=_aggregator,
+            timeout=lambda: timeout(self._retry_count),
+            error_validate=lambda _: self._retry_count >= max_retries,
+            error_message=lambda _: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+        )
+
+    def browse_objects(
+        self,
+        index_name: str,
+        aggregator: Optional[Callable[[BrowseResponse], None]],
+        browse_params: Optional[BrowseParamsObject] = BrowseParamsObject(),
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> BrowseResponse:
+        """
+        Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
+        """
+
+        def _func(_prev: BrowseResponse) -> BrowseResponse:
+            if _prev is not None and _prev.cursor is not None:
+                browse_params.cursor = _prev.cursor
+            return self.browse(
+                index_name=index_name,
+                browse_params=browse_params,
+                request_options=request_options,
+            )
+
+        return create_iterable_sync(
+            func=_func,
+            validate=lambda _resp: _resp.cursor is None,
+            aggregator=aggregator,
+        )
+
+    def browse_rules(
+        self,
+        index_name: str,
+        aggregator: Optional[Callable[[SearchRulesResponse], None]],
+        search_rules_params: Optional[SearchRulesParams] = SearchRulesParams(
+            hits_per_page=1000
+        ),
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchRulesResponse:
+        """
+        Helper: Iterate on the `search_rules` method of the client to allow aggregating rules of an index.
+        """
+        if search_rules_params is not None:
+            search_rules_params.hits_per_page = 1000
+
+        def _func(_prev: SearchRulesResponse) -> SearchRulesResponse:
+            if _prev is not None:
+                search_rules_params.page = _prev.page + 1
+            return self.search_rules(
+                index_name=index_name,
+                search_rules_params=search_rules_params,
+                request_options=request_options,
+            )
+
+        return create_iterable_sync(
+            func=_func,
+            validate=lambda _resp: _resp.nb_hits < search_rules_params.hits_per_page,
+            aggregator=aggregator,
+        )
+
+    def browse_synonyms(
+        self,
+        index_name: str,
+        aggregator: Callable[[SearchSynonymsResponse], None],
+        search_synonyms_params: Optional[SearchSynonymsParams] = SearchSynonymsParams(),
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchSynonymsResponse:
+        """
+        Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
+        """
+        if search_synonyms_params.page is None:
+            search_synonyms_params.page = 0
+        search_synonyms_params.hits_per_page = 1000
+
+        def _func(_prev: SearchRulesResponse) -> SearchRulesResponse:
+            resp = self.search_synonyms(
+                index_name=index_name,
+                search_synonyms_params=search_synonyms_params,
+                request_options=request_options,
+            )
+            search_synonyms_params.page += 1
+            return resp
+
+        return create_iterable_sync(
+            func=_func,
+            validate=lambda _resp: _resp.nb_hits < search_synonyms_params.hits_per_page,
+            aggregator=aggregator,
+        )
+
+    def generate_secured_api_key(
+        self,
+        parent_api_key: str,
+        restrictions: Optional[SecuredApiKeyRestrictions] = SecuredApiKeyRestrictions(),
+    ) -> str:
+        """
+        Helper: Generates a secured API key based on the given `parent_api_key` and given `restrictions`.
+        """
+        if not isinstance(restrictions, SecuredApiKeyRestrictions):
+            restrictions = SecuredApiKeyRestrictions.from_dict(restrictions)
+
+        restrictions = restrictions.to_dict()
+        if "searchParams" in restrictions:
+            restrictions = {**restrictions, **restrictions["searchParams"]}
+            del restrictions["searchParams"]
+
+        query_parameters = QueryParametersSerializer(
+            dict(sorted(restrictions.items()))
+        ).encoded()
+
+        secured_key = hmac.new(
+            parent_api_key.encode(encoding="utf-8"),
+            query_parameters.encode(encoding="utf-8"),
+            hashlib.sha256,
+        ).hexdigest()
+
+        base64encoded = base64.b64encode(
+            ("{}{}".format(secured_key, query_parameters)).encode(encoding="utf-8")
+        )
+
+        return str(base64encoded.decode("utf-8"))
+
+    def get_secured_api_key_remaining_validity(self, secured_api_key: str) -> int:
+        """
+        Helper: Retrieves the remaining validity of the previous generated `secured_api_key`, the `validUntil` parameter must have been provided.
+        """
+        validity = search(r"validUntil=(\d+)", str(base64.b64decode(secured_api_key)))
+
+        if validity is None:
+            raise ValidUntilNotFoundException("validUntil not found in api key.")
+
+        return int(validity.group(1)) - int(round(time()))
+
+    def create_temporary_name(self, index_name: str) -> str:
+        """
+        Helper: Creates a temporary index name from the given `index_name`.
+        """
+        return "{}_tmp_{}".format(index_name, randint(1000000, 9999999))
+
+    def save_objects(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+    ) -> List[BatchResponse]:
+        """
+        Helper: Saves the given array of objects in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
+        """
+        return self.chunked_batch(
+            index_name=index_name, objects=objects, action=Action.ADDOBJECT
+        )
+
+    def delete_objects(
+        self,
+        index_name: str,
+        object_ids: List[str],
+    ) -> List[BatchResponse]:
+        """
+        Helper: Deletes every records for the given objectIDs. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objectIDs in it.
+        """
+        return self.chunked_batch(
+            index_name=index_name,
+            objects=[{"objectID": id} for id in object_ids],
+            action=Action.DELETEOBJECT,
+        )
+
+    def partial_update_objects(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        create_if_not_exists: Optional[bool] = False,
+    ) -> List[BatchResponse]:
+        """
+        Helper: Replaces object content of all the given objects according to their respective `objectID` field. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
+        """
+        return self.chunked_batch(
+            index_name=index_name,
+            objects=objects,
+            action=Action.PARTIALUPDATEOBJECT
+            if create_if_not_exists
+            else Action.PARTIALUPDATEOBJECTNOCREATE,
+        )
+
+    def chunked_batch(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        action: Action = Action.ADDOBJECT,
+        wait_for_tasks: bool = False,
+        batch_size: int = 1000,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[BatchResponse]:
+        """
+        Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `batch` requests.
+        """
+        requests: List[BatchRequest] = []
+        responses: List[BatchResponse] = []
+        for i, obj in enumerate(objects):
+            requests.append(BatchRequest(action=action, body=obj))
+            if len(requests) == batch_size or i == len(objects) - 1:
+                responses.append(
+                    self.batch(
+                        index_name=index_name,
+                        batch_write_params=BatchWriteParams(requests=requests),
+                        request_options=request_options,
+                    )
+                )
+                requests = []
+        if wait_for_tasks:
+            for response in responses:
+                self.wait_for_task(index_name=index_name, task_id=response.task_id)
+        return responses
+
+    def replace_all_objects(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        batch_size: int = 1000,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[ApiResponse[str]]:
+        """
+        Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
+
+        See https://api-clients-automation.netlify.app/docs/add-new-api-client#5-helpers for implementation details.
+        """
+        tmp_index_name = self.create_temporary_name(index_name)
+
+        def _copy() -> UpdatedAtResponse:
+            return self.operation_index(
+                index_name=index_name,
+                operation_index_params=OperationIndexParams(
+                    operation="copy",
+                    destination=tmp_index_name,
+                    scope=[
+                        ScopeType("settings"),
+                        ScopeType("rules"),
+                        ScopeType("synonyms"),
+                    ],
+                ),
+                request_options=request_options,
+            )
+
+        copy_operation_response = _copy()
+
+        batch_responses = self.chunked_batch(
+            index_name=tmp_index_name,
+            objects=objects,
+            wait_for_tasks=True,
+            batch_size=batch_size,
+            request_options=request_options,
+        )
+
+        self.wait_for_task(
+            index_name=tmp_index_name, task_id=copy_operation_response.task_id
+        )
+
+        copy_operation_response = _copy()
+        self.wait_for_task(
+            index_name=tmp_index_name, task_id=copy_operation_response.task_id
+        )
+
+        move_operation_response = self.operation_index(
+            index_name=tmp_index_name,
+            operation_index_params=OperationIndexParams(
+                operation="move",
+                destination=index_name,
+            ),
+            request_options=request_options,
+        )
+        self.wait_for_task(
+            index_name=tmp_index_name, task_id=move_operation_response.task_id
+        )
+
+        return ReplaceAllObjectsResponse(
+            copy_operation_response=copy_operation_response,
+            batch_responses=batch_responses,
+            move_operation_response=move_operation_response,
+        )
+
+    def index_exists(self, index_name: str) -> bool:
+        """
+        Helper: Checks if the given `index_name` exists.
+        """
+        try:
+            self.get_settings(index_name)
+        except Exception as e:
+            if isinstance(e, RequestException) and e.status_code == 404:
+                return False
+            raise e
+
+        return True
+
+    def add_api_key_with_http_info(
+        self,
+        api_key: ApiKey,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Creates a new API key with specific permissions and restrictions.
+
+        Required API Key ACLs:
+          - admin
+
+        :param api_key: (required)
+        :type api_key: ApiKey
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if api_key is None:
+            raise ValueError(
+                "Parameter `api_key` is required when calling `add_api_key`."
+            )
+
+        _data = {}
+        if api_key is not None:
+            _data = api_key
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/keys",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def add_api_key(
+        self,
+        api_key: ApiKey,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> AddApiKeyResponse:
+        """
+        Creates a new API key with specific permissions and restrictions.
+
+        Required API Key ACLs:
+          - admin
+
+        :param api_key: (required)
+        :type api_key: ApiKey
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'AddApiKeyResponse' result object.
+        """
+        return (self.add_api_key_with_http_info(api_key, request_options)).deserialize(
+            AddApiKeyResponse
+        )
+
+    def add_or_update_object_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        body: Annotated[
+            Dict[str, Any],
+            Field(
+                description="The record, a schemaless object with attributes that are useful in the context of search and discovery."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        If a record with the specified object ID exists, the existing record is replaced. Otherwise, a new record is added to the index.  To update _some_ attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead. To add, update, or replace multiple records, use the [`batch` operation](#tag/Records/operation/batch).
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param body: The record, a schemaless object with attributes that are useful in the context of search and discovery. (required)
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `add_or_update_object`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `add_or_update_object`."
+            )
+
+        if body is None:
+            raise ValueError(
+                "Parameter `body` is required when calling `add_or_update_object`."
+            )
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/indexes/{indexName}/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def add_or_update_object(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        body: Annotated[
+            Dict[str, Any],
+            Field(
+                description="The record, a schemaless object with attributes that are useful in the context of search and discovery."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtWithObjectIdResponse:
+        """
+        If a record with the specified object ID exists, the existing record is replaced. Otherwise, a new record is added to the index.  To update _some_ attributes of an existing record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject) instead. To add, update, or replace multiple records, use the [`batch` operation](#tag/Records/operation/batch).
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param body: The record, a schemaless object with attributes that are useful in the context of search and discovery. (required)
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtWithObjectIdResponse' result object.
+        """
+        return (
+            self.add_or_update_object_with_http_info(
+                index_name, object_id, body, request_options
+            )
+        ).deserialize(UpdatedAtWithObjectIdResponse)
+
+    def append_source_with_http_info(
+        self,
+        source: Annotated[Source, Field(description="Source to add.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Adds a source to the list of allowed sources.
+
+        Required API Key ACLs:
+          - admin
+
+        :param source: Source to add. (required)
+        :type source: Source
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source is None:
+            raise ValueError(
+                "Parameter `source` is required when calling `append_source`."
+            )
+
+        _data = {}
+        if source is not None:
+            _data = source
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/security/sources/append",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def append_source(
+        self,
+        source: Annotated[Source, Field(description="Source to add.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> CreatedAtResponse:
+        """
+        Adds a source to the list of allowed sources.
+
+        Required API Key ACLs:
+          - admin
+
+        :param source: Source to add. (required)
+        :type source: Source
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'CreatedAtResponse' result object.
+        """
+        return (self.append_source_with_http_info(source, request_options)).deserialize(
+            CreatedAtResponse
+        )
+
+    def assign_user_id_with_http_info(
+        self,
+        x_algolia_user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
+        assign_user_id_params: AssignUserIdParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Assigns or moves a user ID to a cluster.  The time it takes to move a user is proportional to the amount of data linked to the user ID.
+
+        Required API Key ACLs:
+          - admin
+
+        :param x_algolia_user_id: Unique identifier of the user who makes the search request. (required)
+        :type x_algolia_user_id: str
+        :param assign_user_id_params: (required)
+        :type assign_user_id_params: AssignUserIdParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if x_algolia_user_id is None:
+            raise ValueError(
+                "Parameter `x_algolia_user_id` is required when calling `assign_user_id`."
+            )
+
+        if assign_user_id_params is None:
+            raise ValueError(
+                "Parameter `assign_user_id_params` is required when calling `assign_user_id`."
+            )
+
+        _headers: Dict[str, Optional[str]] = {}
+
+        if x_algolia_user_id is not None:
+            _headers["x-algolia-user-id"] = x_algolia_user_id
+
+        _data = {}
+        if assign_user_id_params is not None:
+            _data = assign_user_id_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/clusters/mapping",
+            request_options=self._request_options.merge(
+                headers=_headers,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def assign_user_id(
+        self,
+        x_algolia_user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
+        assign_user_id_params: AssignUserIdParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> CreatedAtResponse:
+        """
+        Assigns or moves a user ID to a cluster.  The time it takes to move a user is proportional to the amount of data linked to the user ID.
+
+        Required API Key ACLs:
+          - admin
+
+        :param x_algolia_user_id: Unique identifier of the user who makes the search request. (required)
+        :type x_algolia_user_id: str
+        :param assign_user_id_params: (required)
+        :type assign_user_id_params: AssignUserIdParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'CreatedAtResponse' result object.
+        """
+        return (
+            self.assign_user_id_with_http_info(
+                x_algolia_user_id, assign_user_id_params, request_options
+            )
+        ).deserialize(CreatedAtResponse)
+
+    def batch_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        batch_write_params: BatchWriteParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Adds, updates, or deletes records in one index with a single API request.  Batching index updates reduces latency and increases data integrity.  - Actions are applied in the order they're specified. - Actions are equivalent to the individual API requests of the same name.
+
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param batch_write_params: (required)
+        :type batch_write_params: BatchWriteParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError("Parameter `index_name` is required when calling `batch`.")
+
+        if batch_write_params is None:
+            raise ValueError(
+                "Parameter `batch_write_params` is required when calling `batch`."
+            )
+
+        _data = {}
+        if batch_write_params is not None:
+            _data = batch_write_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/batch".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def batch(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        batch_write_params: BatchWriteParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> BatchResponse:
+        """
+        Adds, updates, or deletes records in one index with a single API request.  Batching index updates reduces latency and increases data integrity.  - Actions are applied in the order they're specified. - Actions are equivalent to the individual API requests of the same name.
+
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param batch_write_params: (required)
+        :type batch_write_params: BatchWriteParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'BatchResponse' result object.
+        """
+        return (
+            self.batch_with_http_info(index_name, batch_write_params, request_options)
+        ).deserialize(BatchResponse)
+
+    def batch_assign_user_ids_with_http_info(
+        self,
+        x_algolia_user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
+        batch_assign_user_ids_params: BatchAssignUserIdsParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Assigns multiple user IDs to a cluster.  **You can't move users with this operation**.
+
+        Required API Key ACLs:
+          - admin
+
+        :param x_algolia_user_id: Unique identifier of the user who makes the search request. (required)
+        :type x_algolia_user_id: str
+        :param batch_assign_user_ids_params: (required)
+        :type batch_assign_user_ids_params: BatchAssignUserIdsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if x_algolia_user_id is None:
+            raise ValueError(
+                "Parameter `x_algolia_user_id` is required when calling `batch_assign_user_ids`."
+            )
+
+        if batch_assign_user_ids_params is None:
+            raise ValueError(
+                "Parameter `batch_assign_user_ids_params` is required when calling `batch_assign_user_ids`."
+            )
+
+        _headers: Dict[str, Optional[str]] = {}
+
+        if x_algolia_user_id is not None:
+            _headers["x-algolia-user-id"] = x_algolia_user_id
+
+        _data = {}
+        if batch_assign_user_ids_params is not None:
+            _data = batch_assign_user_ids_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/clusters/mapping/batch",
+            request_options=self._request_options.merge(
+                headers=_headers,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def batch_assign_user_ids(
+        self,
+        x_algolia_user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
+        batch_assign_user_ids_params: BatchAssignUserIdsParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> CreatedAtResponse:
+        """
+        Assigns multiple user IDs to a cluster.  **You can't move users with this operation**.
+
+        Required API Key ACLs:
+          - admin
+
+        :param x_algolia_user_id: Unique identifier of the user who makes the search request. (required)
+        :type x_algolia_user_id: str
+        :param batch_assign_user_ids_params: (required)
+        :type batch_assign_user_ids_params: BatchAssignUserIdsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'CreatedAtResponse' result object.
+        """
+        return (
+            self.batch_assign_user_ids_with_http_info(
+                x_algolia_user_id, batch_assign_user_ids_params, request_options
+            )
+        ).deserialize(CreatedAtResponse)
+
+    def batch_dictionary_entries_with_http_info(
+        self,
+        dictionary_name: Annotated[
+            DictionaryType, Field(description="Dictionary type in which to search.")
+        ],
+        batch_dictionary_entries_params: BatchDictionaryEntriesParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Adds or deletes multiple entries from your plurals, segmentation, or stop word dictionaries.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param dictionary_name: Dictionary type in which to search. (required)
+        :type dictionary_name: DictionaryType
+        :param batch_dictionary_entries_params: (required)
+        :type batch_dictionary_entries_params: BatchDictionaryEntriesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if dictionary_name is None:
+            raise ValueError(
+                "Parameter `dictionary_name` is required when calling `batch_dictionary_entries`."
+            )
+
+        if batch_dictionary_entries_params is None:
+            raise ValueError(
+                "Parameter `batch_dictionary_entries_params` is required when calling `batch_dictionary_entries`."
+            )
+
+        _data = {}
+        if batch_dictionary_entries_params is not None:
+            _data = batch_dictionary_entries_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/dictionaries/{dictionaryName}/batch".replace(
+                "{dictionaryName}", quote(str(dictionary_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def batch_dictionary_entries(
+        self,
+        dictionary_name: Annotated[
+            DictionaryType, Field(description="Dictionary type in which to search.")
+        ],
+        batch_dictionary_entries_params: BatchDictionaryEntriesParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Adds or deletes multiple entries from your plurals, segmentation, or stop word dictionaries.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param dictionary_name: Dictionary type in which to search. (required)
+        :type dictionary_name: DictionaryType
+        :param batch_dictionary_entries_params: (required)
+        :type batch_dictionary_entries_params: BatchDictionaryEntriesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.batch_dictionary_entries_with_http_info(
+                dictionary_name, batch_dictionary_entries_params, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    def browse_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        browse_params: Optional[BrowseParams] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves records from an index, up to 1,000 per request.  While searching retrieves _hits_ (records augmented with attributes for highlighting and ranking details), browsing _just_ returns matching records. This can be useful if you want to export your indices.  - The Analytics API doesn't collect data when using `browse`. - Records are ranked by attributes and custom ranking. - There's no ranking for: typo-tolerance, number of matched words, proximity, geo distance.  Browse requests automatically apply these settings:  - `advancedSyntax`: `false` - `attributesToHighlight`: `[]` - `attributesToSnippet`: `[]` - `distinct`: `false` - `enablePersonalization`: `false` - `enableRules`: `false` - `facets`: `[]` - `getRankingInfo`: `false` - `ignorePlurals`: `false` - `optionalFilters`: `[]` - `typoTolerance`: `true` or `false` (`min` and `strict` is evaluated to `true`)  If you send these parameters with your browse requests, they'll be ignored.
+
+        Required API Key ACLs:
+          - browse
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param browse_params:
+        :type browse_params: BrowseParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `browse`."
+            )
+
+        _data = {}
+        if browse_params is not None:
+            _data = browse_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/browse".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def browse(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        browse_params: Optional[BrowseParams] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> BrowseResponse:
+        """
+        Retrieves records from an index, up to 1,000 per request.  While searching retrieves _hits_ (records augmented with attributes for highlighting and ranking details), browsing _just_ returns matching records. This can be useful if you want to export your indices.  - The Analytics API doesn't collect data when using `browse`. - Records are ranked by attributes and custom ranking. - There's no ranking for: typo-tolerance, number of matched words, proximity, geo distance.  Browse requests automatically apply these settings:  - `advancedSyntax`: `false` - `attributesToHighlight`: `[]` - `attributesToSnippet`: `[]` - `distinct`: `false` - `enablePersonalization`: `false` - `enableRules`: `false` - `facets`: `[]` - `getRankingInfo`: `false` - `ignorePlurals`: `false` - `optionalFilters`: `[]` - `typoTolerance`: `true` or `false` (`min` and `strict` is evaluated to `true`)  If you send these parameters with your browse requests, they'll be ignored.
+
+        Required API Key ACLs:
+          - browse
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param browse_params:
+        :type browse_params: BrowseParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'BrowseResponse' result object.
+        """
+        return (
+            self.browse_with_http_info(index_name, browse_params, request_options)
+        ).deserialize(BrowseResponse)
+
+    def clear_objects_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes only the records from an index while keeping settings, synonyms, and rules.
+
+        Required API Key ACLs:
+          - deleteIndex
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_objects`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/clear".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def clear_objects(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Deletes only the records from an index while keeping settings, synonyms, and rules.
+
+        Required API Key ACLs:
+          - deleteIndex
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.clear_objects_with_http_info(index_name, request_options)
+        ).deserialize(UpdatedAtResponse)
+
+    def clear_rules_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes all rules from the index.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_rules`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/rules/clear".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def clear_rules(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Deletes all rules from the index.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.clear_rules_with_http_info(
+                index_name, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    def clear_synonyms_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes all synonyms from the index.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_synonyms`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/synonyms/clear".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def clear_synonyms(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Deletes all synonyms from the index.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.clear_synonyms_with_http_info(
+                index_name, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    def custom_delete_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_delete(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_delete_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_get_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_get(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_get_with_http_info(path, parameters, request_options)
+        ).deserialize(object)
+
+    def custom_post_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_post(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_post_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def custom_put_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters.append((_qpkey, _qpvalue))
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_put(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(
+                description='Path of the endpoint, anything after "/1" must be specified.'
+            ),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method allow you to send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.custom_put_with_http_info(path, parameters, body, request_options)
+        ).deserialize(object)
+
+    def delete_api_key_with_http_info(
+        self,
+        key: Annotated[StrictStr, Field(description="API key.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes the API key.
+
+        Required API Key ACLs:
+          - admin
+
+        :param key: API key. (required)
+        :type key: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if key is None:
+            raise ValueError(
+                "Parameter `key` is required when calling `delete_api_key`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_api_key(
+        self,
+        key: Annotated[StrictStr, Field(description="API key.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteApiKeyResponse:
+        """
+        Deletes the API key.
+
+        Required API Key ACLs:
+          - admin
+
+        :param key: API key. (required)
+        :type key: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteApiKeyResponse' result object.
+        """
+        return (self.delete_api_key_with_http_info(key, request_options)).deserialize(
+            DeleteApiKeyResponse
+        )
+
+    def delete_by_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        delete_by_params: DeleteByParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This operation doesn't accept empty queries or filters.  It's more efficient to get a list of object IDs with the [`browse` operation](#tag/Search/operation/browse), and then delete the records using the [`batch` operation](#tag/Records/operation/batch).
+
+        Required API Key ACLs:
+          - deleteIndex
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param delete_by_params: (required)
+        :type delete_by_params: DeleteByParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_by`."
+            )
+
+        if delete_by_params is None:
+            raise ValueError(
+                "Parameter `delete_by_params` is required when calling `delete_by`."
+            )
+
+        _data = {}
+        if delete_by_params is not None:
+            _data = delete_by_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/deleteByQuery".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_by(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        delete_by_params: DeleteByParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeletedAtResponse:
+        """
+        This operation doesn't accept empty queries or filters.  It's more efficient to get a list of object IDs with the [`browse` operation](#tag/Search/operation/browse), and then delete the records using the [`batch` operation](#tag/Records/operation/batch).
+
+        Required API Key ACLs:
+          - deleteIndex
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param delete_by_params: (required)
+        :type delete_by_params: DeleteByParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
+        """
+        return (
+            self.delete_by_with_http_info(index_name, delete_by_params, request_options)
+        ).deserialize(DeletedAtResponse)
+
+    def delete_index_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes an index and all its settings.  - Deleting an index doesn't delete its analytics data. - If you try to delete a non-existing index, the operation is ignored without warning. - If the index you want to delete has replica indices, the replicas become independent indices. - If the index you want to delete is a replica index, you must first unlink it from its primary index before you can delete it.   For more information, see [Delete replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/deleting-replicas/).
+
+        Required API Key ACLs:
+          - deleteIndex
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_index`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/indexes/{indexName}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_index(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeletedAtResponse:
+        """
+        Deletes an index and all its settings.  - Deleting an index doesn't delete its analytics data. - If you try to delete a non-existing index, the operation is ignored without warning. - If the index you want to delete has replica indices, the replicas become independent indices. - If the index you want to delete is a replica index, you must first unlink it from its primary index before you can delete it.   For more information, see [Delete replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/deleting-replicas/).
+
+        Required API Key ACLs:
+          - deleteIndex
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
+        """
+        return (
+            self.delete_index_with_http_info(index_name, request_options)
+        ).deserialize(DeletedAtResponse)
+
+    def delete_object_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a record by its object ID.  To delete more than one record, use the [`batch` operation](#tag/Records/operation/batch). To delete records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy).
+
+        Required API Key ACLs:
+          - deleteObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_object`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_object`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/indexes/{indexName}/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_object(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeletedAtResponse:
+        """
+        Deletes a record by its object ID.  To delete more than one record, use the [`batch` operation](#tag/Records/operation/batch). To delete records matching a query, use the [`deleteByQuery` operation](#tag/Records/operation/deleteBy).
+
+        Required API Key ACLs:
+          - deleteObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
+        """
+        return (
+            self.delete_object_with_http_info(index_name, object_id, request_options)
+        ).deserialize(DeletedAtResponse)
+
+    def delete_rule_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a rule by its ID. To find the object ID for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_rule`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/indexes/{indexName}/rules/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_rule(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Deletes a rule by its ID. To find the object ID for rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.delete_rule_with_http_info(
+                index_name, object_id, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    def delete_source_with_http_info(
+        self,
+        source: Annotated[
+            StrictStr, Field(description="IP address range of the source.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a source from the list of allowed sources.
+
+        Required API Key ACLs:
+          - admin
+
+        :param source: IP address range of the source. (required)
+        :type source: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source is None:
+            raise ValueError(
+                "Parameter `source` is required when calling `delete_source`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/security/sources/{source}".replace(
+                "{source}", quote(str(source), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_source(
+        self,
+        source: Annotated[
+            StrictStr, Field(description="IP address range of the source.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeleteSourceResponse:
+        """
+        Deletes a source from the list of allowed sources.
+
+        Required API Key ACLs:
+          - admin
+
+        :param source: IP address range of the source. (required)
+        :type source: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeleteSourceResponse' result object.
+        """
+        return (self.delete_source_with_http_info(source, request_options)).deserialize(
+            DeleteSourceResponse
+        )
+
+    def delete_synonym_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a synonym object.")
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a synonym by its ID. To find the object IDs of your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a synonym object. (required)
+        :type object_id: str
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_synonym`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_synonym`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_synonym(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a synonym object.")
+        ],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> DeletedAtResponse:
+        """
+        Deletes a synonym by its ID. To find the object IDs of your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a synonym object. (required)
+        :type object_id: str
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
+        """
+        return (
+            self.delete_synonym_with_http_info(
+                index_name, object_id, forward_to_replicas, request_options
+            )
+        ).deserialize(DeletedAtResponse)
+
+    def get_api_key_with_http_info(
+        self,
+        key: Annotated[StrictStr, Field(description="API key.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Gets the permissions and restrictions of an API key.  When authenticating with the admin API key, you can request information for any of your application's keys. When authenticating with other API keys, you can only retrieve information for that key.
+
+
+        :param key: API key. (required)
+        :type key: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if key is None:
+            raise ValueError("Parameter `key` is required when calling `get_api_key`.")
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_api_key(
+        self,
+        key: Annotated[StrictStr, Field(description="API key.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetApiKeyResponse:
+        """
+        Gets the permissions and restrictions of an API key.  When authenticating with the admin API key, you can request information for any of your application's keys. When authenticating with other API keys, you can only retrieve information for that key.
+
+
+        :param key: API key. (required)
+        :type key: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetApiKeyResponse' result object.
+        """
+        return (self.get_api_key_with_http_info(key, request_options)).deserialize(
+            GetApiKeyResponse
+        )
+
+    def get_app_task_with_http_info(
+        self,
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Checks the status of a given application task.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `get_app_task`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/task/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_app_task(
+        self,
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetTaskResponse:
+        """
+        Checks the status of a given application task.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetTaskResponse' result object.
+        """
+        return (self.get_app_task_with_http_info(task_id, request_options)).deserialize(
+            GetTaskResponse
+        )
+
+    def get_dictionary_languages_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Lists supported languages with their supported dictionary types and number of custom entries.
+
+        Required API Key ACLs:
+          - settings
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/dictionaries/*/languages",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_dictionary_languages(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> Dict[str, Languages]:
+        """
+        Lists supported languages with their supported dictionary types and number of custom entries.
+
+        Required API Key ACLs:
+          - settings
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Dict[str, Languages]' result object.
+        """
+        return (
+            self.get_dictionary_languages_with_http_info(request_options)
+        ).deserialize(Dict[str, Languages])
+
+    def get_dictionary_settings_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the languages for which standard dictionary entries are turned off.
+
+        Required API Key ACLs:
+          - settings
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/dictionaries/*/settings",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_dictionary_settings(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> GetDictionarySettingsResponse:
+        """
+        Retrieves the languages for which standard dictionary entries are turned off.
+
+        Required API Key ACLs:
+          - settings
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetDictionarySettingsResponse' result object.
+        """
+        return (
+            self.get_dictionary_settings_with_http_info(request_options)
+        ).deserialize(GetDictionarySettingsResponse)
+
+    def get_logs_with_http_info(
+        self,
+        offset: Annotated[
+            Optional[StrictInt],
+            Field(
+                description="First log entry to retrieve. The most recent entries are listed first."
+            ),
+        ] = None,
+        length: Annotated[
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(description="Maximum number of entries to retrieve."),
+        ] = None,
+        index_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Index for which to retrieve log entries. By default, log entries are retrieved for all indices. "
+            ),
+        ] = None,
+        type: Annotated[
+            Optional[LogType],
+            Field(
+                description="Type of log entries to retrieve. By default, all log entries are retrieved. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        The request must be authenticated by an API key with the [`logs` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).  - Logs are held for the last seven days. - Up to 1,000 API requests per server are logged. - This request counts towards your [operations quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-) but doesn't appear in the logs itself.
+
+        Required API Key ACLs:
+          - logs
+
+        :param offset: First log entry to retrieve. The most recent entries are listed first.
+        :type offset: int
+        :param length: Maximum number of entries to retrieve.
+        :type length: int
+        :param index_name: Index for which to retrieve log entries. By default, log entries are retrieved for all indices.
+        :type index_name: str
+        :param type: Type of log entries to retrieve. By default, all log entries are retrieved.
+        :type type: LogType
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if offset is not None:
+            _query_parameters.append(("offset", offset))
+        if length is not None:
+            _query_parameters.append(("length", length))
+        if index_name is not None:
+            _query_parameters.append(("indexName", index_name))
+        if type is not None:
+            _query_parameters.append(("type", type))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/logs",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_logs(
+        self,
+        offset: Annotated[
+            Optional[StrictInt],
+            Field(
+                description="First log entry to retrieve. The most recent entries are listed first."
+            ),
+        ] = None,
+        length: Annotated[
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(description="Maximum number of entries to retrieve."),
+        ] = None,
+        index_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Index for which to retrieve log entries. By default, log entries are retrieved for all indices. "
+            ),
+        ] = None,
+        type: Annotated[
+            Optional[LogType],
+            Field(
+                description="Type of log entries to retrieve. By default, all log entries are retrieved. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetLogsResponse:
+        """
+        The request must be authenticated by an API key with the [`logs` ACL](https://www.algolia.com/doc/guides/security/api-keys/#access-control-list-acl).  - Logs are held for the last seven days. - Up to 1,000 API requests per server are logged. - This request counts towards your [operations quota](https://support.algolia.com/hc/en-us/articles/4406981829777-How-does-Algolia-count-records-and-operations-) but doesn't appear in the logs itself.
+
+        Required API Key ACLs:
+          - logs
+
+        :param offset: First log entry to retrieve. The most recent entries are listed first.
+        :type offset: int
+        :param length: Maximum number of entries to retrieve.
+        :type length: int
+        :param index_name: Index for which to retrieve log entries. By default, log entries are retrieved for all indices.
+        :type index_name: str
+        :param type: Type of log entries to retrieve. By default, all log entries are retrieved.
+        :type type: LogType
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetLogsResponse' result object.
+        """
+        return (
+            self.get_logs_with_http_info(
+                offset, length, index_name, type, request_options
+            )
+        ).deserialize(GetLogsResponse)
+
+    def get_object_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        attributes_to_retrieve: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned.  `objectID` is always retrieved.  Attributes included in `unretrievableAttributes` won't be retrieved unless the request is authenticated with the admin API key. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves one record by its object ID.  To retrieve more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
+
+        Required API Key ACLs:
+          - search
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param attributes_to_retrieve: Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned.  `objectID` is always retrieved.  Attributes included in `unretrievableAttributes` won't be retrieved unless the request is authenticated with the admin API key.
+        :type attributes_to_retrieve: List[str]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_object`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_object`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if attributes_to_retrieve is not None:
+            _query_parameters.append(("attributesToRetrieve", attributes_to_retrieve))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/indexes/{indexName}/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_object(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        attributes_to_retrieve: Annotated[
+            Optional[List[StrictStr]],
+            Field(
+                description="Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned.  `objectID` is always retrieved.  Attributes included in `unretrievableAttributes` won't be retrieved unless the request is authenticated with the admin API key. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        Retrieves one record by its object ID.  To retrieve more than one record, use the [`objects` operation](#tag/Records/operation/getObjects).
+
+        Required API Key ACLs:
+          - search
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param attributes_to_retrieve: Attributes to include with the records in the response. This is useful to reduce the size of the API response. By default, all retrievable attributes are returned.  `objectID` is always retrieved.  Attributes included in `unretrievableAttributes` won't be retrieved unless the request is authenticated with the admin API key.
+        :type attributes_to_retrieve: List[str]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        return (
+            self.get_object_with_http_info(
+                index_name, object_id, attributes_to_retrieve, request_options
+            )
+        ).deserialize(object)
+
+    def get_objects_with_http_info(
+        self,
+        get_objects_params: Annotated[
+            GetObjectsParams, Field(description="Request object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves one or more records, potentially from different indices.  Records are returned in the same order as the requests.
+
+        Required API Key ACLs:
+          - search
+
+        :param get_objects_params: Request object. (required)
+        :type get_objects_params: GetObjectsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if get_objects_params is None:
+            raise ValueError(
+                "Parameter `get_objects_params` is required when calling `get_objects`."
+            )
+
+        _data = {}
+        if get_objects_params is not None:
+            _data = get_objects_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/*/objects",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def get_objects(
+        self,
+        get_objects_params: Annotated[
+            GetObjectsParams, Field(description="Request object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetObjectsResponse:
+        """
+        Retrieves one or more records, potentially from different indices.  Records are returned in the same order as the requests.
+
+        Required API Key ACLs:
+          - search
+
+        :param get_objects_params: Request object. (required)
+        :type get_objects_params: GetObjectsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetObjectsResponse' result object.
+        """
+        return (
+            self.get_objects_with_http_info(get_objects_params, request_options)
+        ).deserialize(GetObjectsResponse)
+
+    def get_rule_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_rule`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/indexes/{indexName}/rules/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_rule(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Rule:
+        """
+        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Rule' result object.
+        """
+        return (
+            self.get_rule_with_http_info(index_name, object_id, request_options)
+        ).deserialize(Rule)
+
+    def get_settings_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves an object with non-null index settings.
+
+        Required API Key ACLs:
+          - search
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_settings`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/indexes/{indexName}/settings".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_settings(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SettingsResponse:
+        """
+        Retrieves an object with non-null index settings.
+
+        Required API Key ACLs:
+          - search
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SettingsResponse' result object.
+        """
+        return (
+            self.get_settings_with_http_info(index_name, request_options)
+        ).deserialize(SettingsResponse)
+
+    def get_sources_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Retrieves all allowed IP addresses with access to your application.
+
+        Required API Key ACLs:
+          - admin
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/security/sources",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_sources(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> List[Source]:
+        """
+        Retrieves all allowed IP addresses with access to your application.
+
+        Required API Key ACLs:
+          - admin
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'List[Source]' result object.
+        """
+        return (self.get_sources_with_http_info(request_options)).deserialize(
+            List[Source]
+        )
+
+    def get_synonym_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a synonym object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a syonym by its ID. To find the object IDs for your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a synonym object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_synonym`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_synonym`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_synonym(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a synonym object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SynonymHit:
+        """
+        Retrieves a syonym by its ID. To find the object IDs for your synonyms, use the [`search` operation](#tag/Synonyms/operation/searchSynonyms).
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a synonym object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SynonymHit' result object.
+        """
+        return (
+            self.get_synonym_with_http_info(index_name, object_id, request_options)
+        ).deserialize(SynonymHit)
+
+    def get_task_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Checks the status of a given task.  Indexing tasks are asynchronous. When you add, update, or delete records or indices, a task is created on a queue and completed depending on the load on the server.  The indexing tasks' responses include a task ID that you can use to check the status.
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_task`."
+            )
+
+        if task_id is None:
+            raise ValueError("Parameter `task_id` is required when calling `get_task`.")
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/indexes/{indexName}/task/{taskID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_task(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetTaskResponse:
+        """
+        Checks the status of a given task.  Indexing tasks are asynchronous. When you add, update, or delete records or indices, a task is created on a queue and completed depending on the load on the server.  The indexing tasks' responses include a task ID that you can use to check the status.
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetTaskResponse' result object.
+        """
+        return (
+            self.get_task_with_http_info(index_name, task_id, request_options)
+        ).deserialize(GetTaskResponse)
+
+    def get_top_user_ids_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Get the IDs of the 10 users with the highest number of records per cluster.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
+
+        Required API Key ACLs:
+          - admin
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/clusters/mapping/top",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_top_user_ids(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> GetTopUserIdsResponse:
+        """
+        Get the IDs of the 10 users with the highest number of records per cluster.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
+
+        Required API Key ACLs:
+          - admin
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetTopUserIdsResponse' result object.
+        """
+        return (self.get_top_user_ids_with_http_info(request_options)).deserialize(
+            GetTopUserIdsResponse
+        )
+
+    def get_user_id_with_http_info(
+        self,
+        user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Returns the user ID data stored in the mapping.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
+
+        Required API Key ACLs:
+          - admin
+
+        :param user_id: Unique identifier of the user who makes the search request. (required)
+        :type user_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if user_id is None:
+            raise ValueError(
+                "Parameter `user_id` is required when calling `get_user_id`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/clusters/mapping/{userID}".replace(
+                "{userID}", quote(str(user_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_user_id(
+        self,
+        user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UserId:
+        """
+        Returns the user ID data stored in the mapping.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
+
+        Required API Key ACLs:
+          - admin
+
+        :param user_id: Unique identifier of the user who makes the search request. (required)
+        :type user_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UserId' result object.
+        """
+        return (self.get_user_id_with_http_info(user_id, request_options)).deserialize(
+            UserId
+        )
+
+    def has_pending_mappings_with_http_info(
+        self,
+        get_clusters: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to include the cluster's pending mapping state in the response."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        To determine when the time-consuming process of creating a large batch of users or migrating users from one cluster to another is complete, this operation retrieves the status of the process.
+
+        Required API Key ACLs:
+          - admin
+
+        :param get_clusters: Whether to include the cluster's pending mapping state in the response.
+        :type get_clusters: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if get_clusters is not None:
+            _query_parameters.append(("getClusters", get_clusters))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/clusters/mapping/pending",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def has_pending_mappings(
+        self,
+        get_clusters: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to include the cluster's pending mapping state in the response."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> HasPendingMappingsResponse:
+        """
+        To determine when the time-consuming process of creating a large batch of users or migrating users from one cluster to another is complete, this operation retrieves the status of the process.
+
+        Required API Key ACLs:
+          - admin
+
+        :param get_clusters: Whether to include the cluster's pending mapping state in the response.
+        :type get_clusters: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'HasPendingMappingsResponse' result object.
+        """
+        return (
+            self.has_pending_mappings_with_http_info(get_clusters, request_options)
+        ).deserialize(HasPendingMappingsResponse)
+
+    def list_api_keys_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Lists all API keys associated with your Algolia application, including their permissions and restrictions.
+
+        Required API Key ACLs:
+          - admin
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/keys",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_api_keys(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ListApiKeysResponse:
+        """
+        Lists all API keys associated with your Algolia application, including their permissions and restrictions.
+
+        Required API Key ACLs:
+          - admin
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListApiKeysResponse' result object.
+        """
+        return (self.list_api_keys_with_http_info(request_options)).deserialize(
+            ListApiKeysResponse
+        )
+
+    def list_clusters_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Lists the available clusters in a multi-cluster setup.
+
+        Required API Key ACLs:
+          - admin
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/clusters",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_clusters(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ListClustersResponse:
+        """
+        Lists the available clusters in a multi-cluster setup.
+
+        Required API Key ACLs:
+          - admin
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListClustersResponse' result object.
+        """
+        return (self.list_clusters_with_http_info(request_options)).deserialize(
+            ListClustersResponse
+        )
+
+    def list_indices_with_http_info(
+        self,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
+            ),
+        ] = None,
+        hits_per_page: Annotated[
+            Optional[StrictInt], Field(description="Number of hits per page.")
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Lists all indices in the current Algolia application.  The request follows any index restrictions of the API key you use to make the request.
+
+        Required API Key ACLs:
+          - listIndexes
+
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
+        :type page: int
+        :param hits_per_page: Number of hits per page.
+        :type hits_per_page: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if hits_per_page is not None:
+            _query_parameters.append(("hitsPerPage", hits_per_page))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/indexes",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_indices(
+        self,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
+            ),
+        ] = None,
+        hits_per_page: Annotated[
+            Optional[StrictInt], Field(description="Number of hits per page.")
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListIndicesResponse:
+        """
+        Lists all indices in the current Algolia application.  The request follows any index restrictions of the API key you use to make the request.
+
+        Required API Key ACLs:
+          - listIndexes
+
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
+        :type page: int
+        :param hits_per_page: Number of hits per page.
+        :type hits_per_page: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListIndicesResponse' result object.
+        """
+        return (
+            self.list_indices_with_http_info(page, hits_per_page, request_options)
+        ).deserialize(ListIndicesResponse)
+
+    def list_user_ids_with_http_info(
+        self,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
+            ),
+        ] = None,
+        hits_per_page: Annotated[
+            Optional[StrictInt], Field(description="Number of hits per page.")
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Lists the userIDs assigned to a multi-cluster application.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
+
+        Required API Key ACLs:
+          - admin
+
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
+        :type page: int
+        :param hits_per_page: Number of hits per page.
+        :type hits_per_page: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if page is not None:
+            _query_parameters.append(("page", page))
+        if hits_per_page is not None:
+            _query_parameters.append(("hitsPerPage", hits_per_page))
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/clusters/mapping",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_user_ids(
+        self,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
+            ),
+        ] = None,
+        hits_per_page: Annotated[
+            Optional[StrictInt], Field(description="Number of hits per page.")
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListUserIdsResponse:
+        """
+        Lists the userIDs assigned to a multi-cluster application.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
+
+        Required API Key ACLs:
+          - admin
+
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
+        :type page: int
+        :param hits_per_page: Number of hits per page.
+        :type hits_per_page: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListUserIdsResponse' result object.
+        """
+        return (
+            self.list_user_ids_with_http_info(page, hits_per_page, request_options)
+        ).deserialize(ListUserIdsResponse)
+
+    def multiple_batch_with_http_info(
+        self,
+        batch_params: BatchParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Adds, updates, or deletes records in multiple indices with a single API request.  - Actions are applied in the order they are specified. - Actions are equivalent to the individual API requests of the same name.
+
+
+        :param batch_params: (required)
+        :type batch_params: BatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if batch_params is None:
+            raise ValueError(
+                "Parameter `batch_params` is required when calling `multiple_batch`."
+            )
+
+        _data = {}
+        if batch_params is not None:
+            _data = batch_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/*/batch",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def multiple_batch(
+        self,
+        batch_params: BatchParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> MultipleBatchResponse:
+        """
+        Adds, updates, or deletes records in multiple indices with a single API request.  - Actions are applied in the order they are specified. - Actions are equivalent to the individual API requests of the same name.
+
+
+        :param batch_params: (required)
+        :type batch_params: BatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'MultipleBatchResponse' result object.
+        """
+        return (
+            self.multiple_batch_with_http_info(batch_params, request_options)
+        ).deserialize(MultipleBatchResponse)
+
+    def operation_index_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        operation_index_params: OperationIndexParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Copies or moves (renames) an index within the same Algolia application.  - Existing destination indices are overwritten, except for their analytics data. - If the destination index doesn't exist yet, it'll be created.  **Copy**  - Copying a source index that doesn't exist creates a new index with 0 records and default settings. - The API keys of the source index are merged with the existing keys in the destination index. - You can't copy the `enableReRanking`, `mode`, and `replicas` settings. - You can't copy to a destination index that already has replicas. - Be aware of the [size limits](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits). - Related guide: [Copy indices](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/how-to/copy-indices/)  **Move**  - Moving a source index that doesn't exist is ignored without returning an error. - When moving an index, the analytics data keep their original name and a new set of analytics data is started for the new name.   To access the original analytics in the dashboard, create an index with the original name. - If the destination index has replicas, moving will overwrite the existing index and copy the data to the replica indices. - Related guide: [Move indices](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/how-to/move-indices/).
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param operation_index_params: (required)
+        :type operation_index_params: OperationIndexParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `operation_index`."
+            )
+
+        if operation_index_params is None:
+            raise ValueError(
+                "Parameter `operation_index_params` is required when calling `operation_index`."
+            )
+
+        _data = {}
+        if operation_index_params is not None:
+            _data = operation_index_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/operation".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def operation_index(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        operation_index_params: OperationIndexParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Copies or moves (renames) an index within the same Algolia application.  - Existing destination indices are overwritten, except for their analytics data. - If the destination index doesn't exist yet, it'll be created.  **Copy**  - Copying a source index that doesn't exist creates a new index with 0 records and default settings. - The API keys of the source index are merged with the existing keys in the destination index. - You can't copy the `enableReRanking`, `mode`, and `replicas` settings. - You can't copy to a destination index that already has replicas. - Be aware of the [size limits](https://www.algolia.com/doc/guides/scaling/algolia-service-limits/#application-record-and-index-limits). - Related guide: [Copy indices](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/how-to/copy-indices/)  **Move**  - Moving a source index that doesn't exist is ignored without returning an error. - When moving an index, the analytics data keep their original name and a new set of analytics data is started for the new name.   To access the original analytics in the dashboard, create an index with the original name. - If the destination index has replicas, moving will overwrite the existing index and copy the data to the replica indices. - Related guide: [Move indices](https://www.algolia.com/doc/guides/sending-and-managing-data/manage-indices-and-apps/manage-indices/how-to/move-indices/).
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param operation_index_params: (required)
+        :type operation_index_params: OperationIndexParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.operation_index_with_http_info(
+                index_name, operation_index_params, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    def partial_update_object_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        attributes_to_update: Annotated[
+            Dict[str, Any], Field(description="Attributes with their values.")
+        ],
+        create_if_not_exists: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to create a new record if it doesn't exist."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Adds new attributes to a record, or update existing ones.  - If a record with the specified object ID doesn't exist,   a new record is added to the index **if** `createIfNotExists` is true. - If the index doesn't exist yet, this method creates a new index. - You can use any first-level attribute but not nested attributes.   If you specify a nested attribute, the engine treats it as a replacement for its first-level ancestor.  To update an attribute without pushing the entire record, you can use these built-in operations. These operations can be helpful if you don't have access to your initial data.  - Increment: increment a numeric attribute - Decrement: decrement a numeric attribute - Add: append a number or string element to an array attribute - Remove: remove all matching number or string elements from an array attribute made of numbers or strings - AddUnique: add a number or string element to an array attribute made of numbers or strings only if it's not already present - IncrementFrom: increment a numeric integer attribute only if the provided value matches the current value, and otherwise ignore the whole object update. For example, if you pass an IncrementFrom value of 2 for the version attribute, but the current value of the attribute is 1, the engine ignores the update. If the object doesn't exist, the engine only creates it if you pass an IncrementFrom value of 0. - IncrementSet: increment a numeric integer attribute only if the provided value is greater than the current value, and otherwise ignore the whole object update. For example, if you pass an IncrementSet value of 2 for the version attribute, and the current value of the attribute is 1, the engine updates the object. If the object doesn't exist yet, the engine only creates it if you pass an IncrementSet value that's greater than 0.  You can specify an operation by providing an object with the attribute to update as the key and its value being an object with the following properties:  - _operation: the operation to apply on the attribute - value: the right-hand side argument to the operation, for example, increment or decrement step, value to add or remove.
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param attributes_to_update: Attributes with their values. (required)
+        :type attributes_to_update: object
+        :param create_if_not_exists: Whether to create a new record if it doesn't exist.
+        :type create_if_not_exists: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `partial_update_object`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `partial_update_object`."
+            )
+
+        if attributes_to_update is None:
+            raise ValueError(
+                "Parameter `attributes_to_update` is required when calling `partial_update_object`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if create_if_not_exists is not None:
+            _query_parameters.append(("createIfNotExists", create_if_not_exists))
+
+        _data = {}
+        if attributes_to_update is not None:
+            _data = attributes_to_update
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/{objectID}/partial".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def partial_update_object(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
+        attributes_to_update: Annotated[
+            Dict[str, Any], Field(description="Attributes with their values.")
+        ],
+        create_if_not_exists: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to create a new record if it doesn't exist."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtWithObjectIdResponse:
+        """
+        Adds new attributes to a record, or update existing ones.  - If a record with the specified object ID doesn't exist,   a new record is added to the index **if** `createIfNotExists` is true. - If the index doesn't exist yet, this method creates a new index. - You can use any first-level attribute but not nested attributes.   If you specify a nested attribute, the engine treats it as a replacement for its first-level ancestor.  To update an attribute without pushing the entire record, you can use these built-in operations. These operations can be helpful if you don't have access to your initial data.  - Increment: increment a numeric attribute - Decrement: decrement a numeric attribute - Add: append a number or string element to an array attribute - Remove: remove all matching number or string elements from an array attribute made of numbers or strings - AddUnique: add a number or string element to an array attribute made of numbers or strings only if it's not already present - IncrementFrom: increment a numeric integer attribute only if the provided value matches the current value, and otherwise ignore the whole object update. For example, if you pass an IncrementFrom value of 2 for the version attribute, but the current value of the attribute is 1, the engine ignores the update. If the object doesn't exist, the engine only creates it if you pass an IncrementFrom value of 0. - IncrementSet: increment a numeric integer attribute only if the provided value is greater than the current value, and otherwise ignore the whole object update. For example, if you pass an IncrementSet value of 2 for the version attribute, and the current value of the attribute is 1, the engine updates the object. If the object doesn't exist yet, the engine only creates it if you pass an IncrementSet value that's greater than 0.  You can specify an operation by providing an object with the attribute to update as the key and its value being an object with the following properties:  - _operation: the operation to apply on the attribute - value: the right-hand side argument to the operation, for example, increment or decrement step, value to add or remove.
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique record identifier. (required)
+        :type object_id: str
+        :param attributes_to_update: Attributes with their values. (required)
+        :type attributes_to_update: object
+        :param create_if_not_exists: Whether to create a new record if it doesn't exist.
+        :type create_if_not_exists: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtWithObjectIdResponse' result object.
+        """
+        return (
+            self.partial_update_object_with_http_info(
+                index_name,
+                object_id,
+                attributes_to_update,
+                create_if_not_exists,
+                request_options,
+            )
+        ).deserialize(UpdatedAtWithObjectIdResponse)
+
+    def remove_user_id_with_http_info(
+        self,
+        user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deletes a user ID and its associated data from the clusters.
+
+        Required API Key ACLs:
+          - admin
+
+        :param user_id: Unique identifier of the user who makes the search request. (required)
+        :type user_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if user_id is None:
+            raise ValueError(
+                "Parameter `user_id` is required when calling `remove_user_id`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/clusters/mapping/{userID}".replace(
+                "{userID}", quote(str(user_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def remove_user_id(
+        self,
+        user_id: Annotated[
+            str,
+            Field(
+                strict=True,
+                description="Unique identifier of the user who makes the search request.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RemoveUserIdResponse:
+        """
+        Deletes a user ID and its associated data from the clusters.
+
+        Required API Key ACLs:
+          - admin
+
+        :param user_id: Unique identifier of the user who makes the search request. (required)
+        :type user_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RemoveUserIdResponse' result object.
+        """
+        return (
+            self.remove_user_id_with_http_info(user_id, request_options)
+        ).deserialize(RemoveUserIdResponse)
+
+    def replace_sources_with_http_info(
+        self,
+        source: Annotated[List[Source], Field(description="Allowed sources.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Replaces the list of allowed sources.
+
+        Required API Key ACLs:
+          - admin
+
+        :param source: Allowed sources. (required)
+        :type source: List[Source]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if source is None:
+            raise ValueError(
+                "Parameter `source` is required when calling `replace_sources`."
+            )
+
+        _data = {}
+        if source is not None:
+            _data = source
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/security/sources",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def replace_sources(
+        self,
+        source: Annotated[List[Source], Field(description="Allowed sources.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ReplaceSourceResponse:
+        """
+        Replaces the list of allowed sources.
+
+        Required API Key ACLs:
+          - admin
+
+        :param source: Allowed sources. (required)
+        :type source: List[Source]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ReplaceSourceResponse' result object.
+        """
+        return (
+            self.replace_sources_with_http_info(source, request_options)
+        ).deserialize(ReplaceSourceResponse)
+
+    def restore_api_key_with_http_info(
+        self,
+        key: Annotated[StrictStr, Field(description="API key.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Restores a deleted API key.  Restoring resets the `validity` attribute to `0`.  Algolia stores up to 1,000 API keys per application. If you create more, the oldest API keys are deleted and can't be restored.
+
+        Required API Key ACLs:
+          - admin
+
+        :param key: API key. (required)
+        :type key: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if key is None:
+            raise ValueError(
+                "Parameter `key` is required when calling `restore_api_key`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/keys/{key}/restore".replace("{key}", quote(str(key), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def restore_api_key(
+        self,
+        key: Annotated[StrictStr, Field(description="API key.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> AddApiKeyResponse:
+        """
+        Restores a deleted API key.  Restoring resets the `validity` attribute to `0`.  Algolia stores up to 1,000 API keys per application. If you create more, the oldest API keys are deleted and can't be restored.
+
+        Required API Key ACLs:
+          - admin
+
+        :param key: API key. (required)
+        :type key: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'AddApiKeyResponse' result object.
+        """
+        return (self.restore_api_key_with_http_info(key, request_options)).deserialize(
+            AddApiKeyResponse
+        )
+
+    def save_object_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        body: Annotated[
+            Dict[str, Any],
+            Field(
+                description="The record, a schemaless object with attributes that are useful in the context of search and discovery."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Adds a record to an index or replace it.  - If the record doesn't have an object ID, a new record with an auto-generated object ID is added to your index. - If a record with the specified object ID exists, the existing record is replaced. - If a record with the specified object ID doesn't exist, a new record is added to your index. - If you add a record to an index that doesn't exist yet, a new index is created.  To update _some_ attributes of a record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject). To add, update, or replace multiple records, use the [`batch` operation](#tag/Records/operation/batch).
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param body: The record, a schemaless object with attributes that are useful in the context of search and discovery. (required)
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_object`."
+            )
+
+        if body is None:
+            raise ValueError("Parameter `body` is required when calling `save_object`.")
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def save_object(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        body: Annotated[
+            Dict[str, Any],
+            Field(
+                description="The record, a schemaless object with attributes that are useful in the context of search and discovery."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SaveObjectResponse:
+        """
+        Adds a record to an index or replace it.  - If the record doesn't have an object ID, a new record with an auto-generated object ID is added to your index. - If a record with the specified object ID exists, the existing record is replaced. - If a record with the specified object ID doesn't exist, a new record is added to your index. - If you add a record to an index that doesn't exist yet, a new index is created.  To update _some_ attributes of a record, use the [`partial` operation](#tag/Records/operation/partialUpdateObject). To add, update, or replace multiple records, use the [`batch` operation](#tag/Records/operation/batch).
+
+        Required API Key ACLs:
+          - addObject
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param body: The record, a schemaless object with attributes that are useful in the context of search and discovery. (required)
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SaveObjectResponse' result object.
+        """
+        return (
+            self.save_object_with_http_info(index_name, body, request_options)
+        ).deserialize(SaveObjectResponse)
+
+    def save_rule_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        rule: Rule,
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        If a rule with the specified object ID doesn't exist, it's created. Otherwise, the existing rule is replaced.  To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param rule: (required)
+        :type rule: Rule
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `save_rule`."
+            )
+
+        if rule is None:
+            raise ValueError("Parameter `rule` is required when calling `save_rule`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+
+        _data = {}
+        if rule is not None:
+            _data = rule
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/indexes/{indexName}/rules/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def save_rule(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        rule: Rule,
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedRuleResponse:
+        """
+        If a rule with the specified object ID doesn't exist, it's created. Otherwise, the existing rule is replaced.  To create or update more than one rule, use the [`batch` operation](#tag/Rules/operation/saveRules).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param rule: (required)
+        :type rule: Rule
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedRuleResponse' result object.
+        """
+        return (
+            self.save_rule_with_http_info(
+                index_name, object_id, rule, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedRuleResponse)
+
+    def save_rules_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        rules: List[Rule],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        clear_existing_rules: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether existing rules should be deleted before adding this batch."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Create or update multiple rules.  If a rule with the specified object ID doesn't exist, Algolia creates a new one. Otherwise, existing rules are replaced.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param rules: (required)
+        :type rules: List[Rule]
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param clear_existing_rules: Whether existing rules should be deleted before adding this batch.
+        :type clear_existing_rules: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_rules`."
+            )
+
+        if rules is None:
+            raise ValueError("Parameter `rules` is required when calling `save_rules`.")
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+        if clear_existing_rules is not None:
+            _query_parameters.append(("clearExistingRules", clear_existing_rules))
+
+        _data = {}
+        if rules is not None:
+            _data = rules
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/rules/batch".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def save_rules(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        rules: List[Rule],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        clear_existing_rules: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether existing rules should be deleted before adding this batch."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Create or update multiple rules.  If a rule with the specified object ID doesn't exist, Algolia creates a new one. Otherwise, existing rules are replaced.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param rules: (required)
+        :type rules: List[Rule]
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param clear_existing_rules: Whether existing rules should be deleted before adding this batch.
+        :type clear_existing_rules: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.save_rules_with_http_info(
+                index_name,
+                rules,
+                forward_to_replicas,
+                clear_existing_rules,
+                request_options,
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    def save_synonym_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a synonym object.")
+        ],
+        synonym_hit: SynonymHit,
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        If a synonym with the specified object ID doesn't exist, Algolia adds a new one. Otherwise, the existing synonym is replaced. To add multiple synonyms in a single API request, use the [`batch` operation](#tag/Synonyms/operation/saveSynonyms).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a synonym object. (required)
+        :type object_id: str
+        :param synonym_hit: (required)
+        :type synonym_hit: SynonymHit
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_synonym`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `save_synonym`."
+            )
+
+        if synonym_hit is None:
+            raise ValueError(
+                "Parameter `synonym_hit` is required when calling `save_synonym`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+
+        _data = {}
+        if synonym_hit is not None:
+            _data = synonym_hit
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/indexes/{indexName}/synonyms/{objectID}".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def save_synonym(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a synonym object.")
+        ],
+        synonym_hit: SynonymHit,
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SaveSynonymResponse:
+        """
+        If a synonym with the specified object ID doesn't exist, Algolia adds a new one. Otherwise, the existing synonym is replaced. To add multiple synonyms in a single API request, use the [`batch` operation](#tag/Synonyms/operation/saveSynonyms).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param object_id: Unique identifier of a synonym object. (required)
+        :type object_id: str
+        :param synonym_hit: (required)
+        :type synonym_hit: SynonymHit
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SaveSynonymResponse' result object.
+        """
+        return (
+            self.save_synonym_with_http_info(
+                index_name, object_id, synonym_hit, forward_to_replicas, request_options
+            )
+        ).deserialize(SaveSynonymResponse)
+
+    def save_synonyms_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        synonym_hit: List[SynonymHit],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        replace_existing_synonyms: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to replace all synonyms in the index with the ones sent with this request."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        If a synonym with the `objectID` doesn't exist, Algolia adds a new one. Otherwise, existing synonyms are replaced.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param synonym_hit: (required)
+        :type synonym_hit: List[SynonymHit]
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param replace_existing_synonyms: Whether to replace all synonyms in the index with the ones sent with this request.
+        :type replace_existing_synonyms: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_synonyms`."
+            )
+
+        if synonym_hit is None:
+            raise ValueError(
+                "Parameter `synonym_hit` is required when calling `save_synonyms`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+        if replace_existing_synonyms is not None:
+            _query_parameters.append(
+                ("replaceExistingSynonyms", replace_existing_synonyms)
+            )
+
+        _data = {}
+        if synonym_hit is not None:
+            _data = synonym_hit
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/synonyms/batch".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def save_synonyms(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        synonym_hit: List[SynonymHit],
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        replace_existing_synonyms: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Whether to replace all synonyms in the index with the ones sent with this request."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        If a synonym with the `objectID` doesn't exist, Algolia adds a new one. Otherwise, existing synonyms are replaced.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param synonym_hit: (required)
+        :type synonym_hit: List[SynonymHit]
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param replace_existing_synonyms: Whether to replace all synonyms in the index with the ones sent with this request.
+        :type replace_existing_synonyms: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.save_synonyms_with_http_info(
+                index_name,
+                synonym_hit,
+                forward_to_replicas,
+                replace_existing_synonyms,
+                request_options,
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    def search_with_http_info(
+        self,
+        search_method_params: Annotated[
+            SearchMethodParams,
+            Field(
+                description="Muli-search request body. Results are returned in the same order as the requests."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Sends multiple search request to one or more indices.  This can be useful in these cases:  - Different indices for different purposes, such as, one index for products, another one for marketing content. - Multiple searches to the same index—for example, with different filters.
+
+        Required API Key ACLs:
+          - search
+
+        :param search_method_params: Muli-search request body. Results are returned in the same order as the requests. (required)
+        :type search_method_params: SearchMethodParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if search_method_params is None:
+            raise ValueError(
+                "Parameter `search_method_params` is required when calling `search`."
+            )
+
+        _data = {}
+        if search_method_params is not None:
+            _data = search_method_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/*/queries",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def search(
+        self,
+        search_method_params: Annotated[
+            SearchMethodParams,
+            Field(
+                description="Muli-search request body. Results are returned in the same order as the requests."
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchResponses:
+        """
+        Sends multiple search request to one or more indices.  This can be useful in these cases:  - Different indices for different purposes, such as, one index for products, another one for marketing content. - Multiple searches to the same index—for example, with different filters.
+
+        Required API Key ACLs:
+          - search
+
+        :param search_method_params: Muli-search request body. Results are returned in the same order as the requests. (required)
+        :type search_method_params: SearchMethodParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchResponses' result object.
+        """
+        return (
+            self.search_with_http_info(search_method_params, request_options)
+        ).deserialize(SearchResponses)
+
+    def search_dictionary_entries_with_http_info(
+        self,
+        dictionary_name: Annotated[
+            DictionaryType, Field(description="Dictionary type in which to search.")
+        ],
+        search_dictionary_entries_params: SearchDictionaryEntriesParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for standard and custom dictionary entries.
+
+        Required API Key ACLs:
+          - settings
+
+        :param dictionary_name: Dictionary type in which to search. (required)
+        :type dictionary_name: DictionaryType
+        :param search_dictionary_entries_params: (required)
+        :type search_dictionary_entries_params: SearchDictionaryEntriesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if dictionary_name is None:
+            raise ValueError(
+                "Parameter `dictionary_name` is required when calling `search_dictionary_entries`."
+            )
+
+        if search_dictionary_entries_params is None:
+            raise ValueError(
+                "Parameter `search_dictionary_entries_params` is required when calling `search_dictionary_entries`."
+            )
+
+        _data = {}
+        if search_dictionary_entries_params is not None:
+            _data = search_dictionary_entries_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/dictionaries/{dictionaryName}/search".replace(
+                "{dictionaryName}", quote(str(dictionary_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def search_dictionary_entries(
+        self,
+        dictionary_name: Annotated[
+            DictionaryType, Field(description="Dictionary type in which to search.")
+        ],
+        search_dictionary_entries_params: SearchDictionaryEntriesParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchDictionaryEntriesResponse:
+        """
+        Searches for standard and custom dictionary entries.
+
+        Required API Key ACLs:
+          - settings
+
+        :param dictionary_name: Dictionary type in which to search. (required)
+        :type dictionary_name: DictionaryType
+        :param search_dictionary_entries_params: (required)
+        :type search_dictionary_entries_params: SearchDictionaryEntriesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchDictionaryEntriesResponse' result object.
+        """
+        return (
+            self.search_dictionary_entries_with_http_info(
+                dictionary_name, search_dictionary_entries_params, request_options
+            )
+        ).deserialize(SearchDictionaryEntriesResponse)
+
+    def search_for_facet_values_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        facet_name: Annotated[
+            StrictStr,
+            Field(
+                description="Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier. "
+            ),
+        ],
+        search_for_facet_values_request: Optional[SearchForFacetValuesRequest] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for values of a specified facet attribute.  - By default, facet values are sorted by decreasing count.   You can adjust this with the `sortFacetValueBy` parameter. - Searching for facet values doesn't work if you have **more than 65 searchable facets and searchable attributes combined**.
+
+        Required API Key ACLs:
+          - search
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param facet_name: Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier.  (required)
+        :type facet_name: str
+        :param search_for_facet_values_request:
+        :type search_for_facet_values_request: SearchForFacetValuesRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_for_facet_values`."
+            )
+
+        if facet_name is None:
+            raise ValueError(
+                "Parameter `facet_name` is required when calling `search_for_facet_values`."
+            )
+
+        _data = {}
+        if search_for_facet_values_request is not None:
+            _data = search_for_facet_values_request
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/facets/{facetName}/query".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{facetName}", quote(str(facet_name), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def search_for_facet_values(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        facet_name: Annotated[
+            StrictStr,
+            Field(
+                description="Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier. "
+            ),
+        ],
+        search_for_facet_values_request: Optional[SearchForFacetValuesRequest] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchForFacetValuesResponse:
+        """
+        Searches for values of a specified facet attribute.  - By default, facet values are sorted by decreasing count.   You can adjust this with the `sortFacetValueBy` parameter. - Searching for facet values doesn't work if you have **more than 65 searchable facets and searchable attributes combined**.
+
+        Required API Key ACLs:
+          - search
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param facet_name: Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier.  (required)
+        :type facet_name: str
+        :param search_for_facet_values_request:
+        :type search_for_facet_values_request: SearchForFacetValuesRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchForFacetValuesResponse' result object.
+        """
+        return (
+            self.search_for_facet_values_with_http_info(
+                index_name, facet_name, search_for_facet_values_request, request_options
+            )
+        ).deserialize(SearchForFacetValuesResponse)
+
+    def search_rules_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        search_rules_params: Optional[SearchRulesParams] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for rules in your index.
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param search_rules_params:
+        :type search_rules_params: SearchRulesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_rules`."
+            )
+
+        _data = {}
+        if search_rules_params is not None:
+            _data = search_rules_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/rules/search".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def search_rules(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        search_rules_params: Optional[SearchRulesParams] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchRulesResponse:
+        """
+        Searches for rules in your index.
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param search_rules_params:
+        :type search_rules_params: SearchRulesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchRulesResponse' result object.
+        """
+        return (
+            self.search_rules_with_http_info(
+                index_name, search_rules_params, request_options
+            )
+        ).deserialize(SearchRulesResponse)
+
+    def search_single_index_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        search_params: Optional[SearchParams] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches a single index and return matching search results (_hits_).  This method lets you retrieve up to 1,000 hits. If you need more, use the [`browse` operation](#tag/Search/operation/browse) or increase the `paginatedLimitedTo` index setting.
+
+        Required API Key ACLs:
+          - search
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param search_params:
+        :type search_params: SearchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_single_index`."
+            )
+
+        _data = {}
+        if search_params is not None:
+            _data = search_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/query".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def search_single_index(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        search_params: Optional[SearchParams] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchResponse:
+        """
+        Searches a single index and return matching search results (_hits_).  This method lets you retrieve up to 1,000 hits. If you need more, use the [`browse` operation](#tag/Search/operation/browse) or increase the `paginatedLimitedTo` index setting.
+
+        Required API Key ACLs:
+          - search
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param search_params:
+        :type search_params: SearchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchResponse' result object.
+        """
+        return (
+            self.search_single_index_with_http_info(
+                index_name, search_params, request_options
+            )
+        ).deserialize(SearchResponse)
+
+    def search_synonyms_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        search_synonyms_params: Annotated[
+            Optional[SearchSynonymsParams],
+            Field(description="Body of the `searchSynonyms` operation."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for synonyms in your index.
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param search_synonyms_params: Body of the `searchSynonyms` operation.
+        :type search_synonyms_params: SearchSynonymsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_synonyms`."
+            )
+
+        _data = {}
+        if search_synonyms_params is not None:
+            _data = search_synonyms_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/synonyms/search".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def search_synonyms(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        search_synonyms_params: Annotated[
+            Optional[SearchSynonymsParams],
+            Field(description="Body of the `searchSynonyms` operation."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchSynonymsResponse:
+        """
+        Searches for synonyms in your index.
+
+        Required API Key ACLs:
+          - settings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param search_synonyms_params: Body of the `searchSynonyms` operation.
+        :type search_synonyms_params: SearchSynonymsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchSynonymsResponse' result object.
+        """
+        return (
+            self.search_synonyms_with_http_info(
+                index_name, search_synonyms_params, request_options
+            )
+        ).deserialize(SearchSynonymsResponse)
+
+    def search_user_ids_with_http_info(
+        self,
+        search_user_ids_params: SearchUserIdsParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.  To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
+
+        Required API Key ACLs:
+          - admin
+
+        :param search_user_ids_params: (required)
+        :type search_user_ids_params: SearchUserIdsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if search_user_ids_params is None:
+            raise ValueError(
+                "Parameter `search_user_ids_params` is required when calling `search_user_ids`."
+            )
+
+        _data = {}
+        if search_user_ids_params is not None:
+            _data = search_user_ids_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/clusters/mapping/search",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=True,
+        )
+
+    def search_user_ids(
+        self,
+        search_user_ids_params: SearchUserIdsParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchUserIdsResponse:
+        """
+        Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.  To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
+
+        Required API Key ACLs:
+          - admin
+
+        :param search_user_ids_params: (required)
+        :type search_user_ids_params: SearchUserIdsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchUserIdsResponse' result object.
+        """
+        return (
+            self.search_user_ids_with_http_info(search_user_ids_params, request_options)
+        ).deserialize(SearchUserIdsResponse)
+
+    def set_dictionary_settings_with_http_info(
+        self,
+        dictionary_settings_params: DictionarySettingsParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Turns standard stop word dictionary entries on or off for a given language.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param dictionary_settings_params: (required)
+        :type dictionary_settings_params: DictionarySettingsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if dictionary_settings_params is None:
+            raise ValueError(
+                "Parameter `dictionary_settings_params` is required when calling `set_dictionary_settings`."
+            )
+
+        _data = {}
+        if dictionary_settings_params is not None:
+            _data = dictionary_settings_params
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/dictionaries/*/settings",
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def set_dictionary_settings(
+        self,
+        dictionary_settings_params: DictionarySettingsParams,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Turns standard stop word dictionary entries on or off for a given language.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param dictionary_settings_params: (required)
+        :type dictionary_settings_params: DictionarySettingsParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.set_dictionary_settings_with_http_info(
+                dictionary_settings_params, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    def set_settings_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        index_settings: IndexSettings,
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Update the specified index settings.  Index settings that you don't specify are left unchanged. Specify `null` to reset a setting to its default value.  For best performance, update the index settings before you add new records to your index.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param index_settings: (required)
+        :type index_settings: IndexSettings
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `set_settings`."
+            )
+
+        if index_settings is None:
+            raise ValueError(
+                "Parameter `index_settings` is required when calling `set_settings`."
+            )
+
+        _query_parameters: List[Tuple[str, str]] = []
+
+        if forward_to_replicas is not None:
+            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+
+        _data = {}
+        if index_settings is not None:
+            _data = index_settings
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/indexes/{indexName}/settings".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def set_settings(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        index_settings: IndexSettings,
+        forward_to_replicas: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether changes are applied to replica indices."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdatedAtResponse:
+        """
+        Update the specified index settings.  Index settings that you don't specify are left unchanged. Specify `null` to reset a setting to its default value.  For best performance, update the index settings before you add new records to your index.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param index_settings: (required)
+        :type index_settings: IndexSettings
+        :param forward_to_replicas: Whether changes are applied to replica indices.
+        :type forward_to_replicas: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
+        """
+        return (
+            self.set_settings_with_http_info(
+                index_name, index_settings, forward_to_replicas, request_options
+            )
+        ).deserialize(UpdatedAtResponse)
+
+    def update_api_key_with_http_info(
+        self,
+        key: Annotated[StrictStr, Field(description="API key.")],
+        api_key: ApiKey,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Replaces the permissions of an existing API key.  Any unspecified attribute resets that attribute to its default value.
+
+        Required API Key ACLs:
+          - admin
+
+        :param key: API key. (required)
+        :type key: str
+        :param api_key: (required)
+        :type api_key: ApiKey
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if key is None:
+            raise ValueError(
+                "Parameter `key` is required when calling `update_api_key`."
+            )
+
+        if api_key is None:
+            raise ValueError(
+                "Parameter `api_key` is required when calling `update_api_key`."
+            )
+
+        _data = {}
+        if api_key is not None:
+            _data = api_key
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def update_api_key(
+        self,
+        key: Annotated[StrictStr, Field(description="API key.")],
+        api_key: ApiKey,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> UpdateApiKeyResponse:
+        """
+        Replaces the permissions of an existing API key.  Any unspecified attribute resets that attribute to its default value.
+
+        Required API Key ACLs:
+          - admin
+
+        :param key: API key. (required)
+        :type key: str
+        :param api_key: (required)
+        :type api_key: ApiKey
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'UpdateApiKeyResponse' result object.
+        """
+        return (
+            self.update_api_key_with_http_info(key, api_key, request_options)
         ).deserialize(UpdateApiKeyResponse)
