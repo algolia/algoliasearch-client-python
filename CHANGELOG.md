@@ -1,3 +1,7 @@
+## [4.4.0](https://github.com/algolia/algoliasearch-client-python/compare/4.3.0...4.4.0)
+
+- [b6e273f4f](https://github.com/algolia/api-clients-automation/commit/b6e273f4f) feat(python): add sync client ([#3609](https://github.com/algolia/api-clients-automation/pull/3609)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.3.0](https://github.com/algolia/algoliasearch-client-python/compare/4.2.4...4.3.0)
 
 - [2c65a8d11](https://github.com/algolia/api-clients-automation/commit/2c65a8d11) feat(clients): helper to switch API key in use ([#3616](https://github.com/algolia/api-clients-automation/pull/3616)) by [@Fluf22](https://github.com/Fluf22/)
