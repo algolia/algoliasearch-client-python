@@ -140,6 +140,11 @@ class BrowseResponse(BaseModel):
         description="Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics/).",
         alias="queryID",
     )
+    automatic_insights: Optional[StrictBool] = Field(
+        default=None,
+        description="Whether automatic events collection is enabled for the application.",
+        alias="_automaticInsights",
+    )
     page: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
         default=0, description="Page of search results to retrieve."
     )
@@ -277,6 +282,7 @@ class BrowseResponse(BaseModel):
                 "serverUsed": obj.get("serverUsed"),
                 "userData": obj.get("userData"),
                 "queryID": obj.get("queryID"),
+                "_automaticInsights": obj.get("_automaticInsights"),
                 "page": obj.get("page"),
                 "nbHits": obj.get("nbHits"),
                 "nbPages": obj.get("nbPages"),
