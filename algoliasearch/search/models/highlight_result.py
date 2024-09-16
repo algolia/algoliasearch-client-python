@@ -26,26 +26,17 @@ class HighlightResult(BaseModel):
     HighlightResult
     """
 
-    oneof_schema_1_validator: Optional[Dict[str, HighlightResult]] = Field(
+    oneof_schema_1_validator: Optional[HighlightResultOption] = None
+    oneof_schema_2_validator: Optional[Dict[str, HighlightResult]] = Field(
         default=None,
         description="Surround words that match the query with HTML tags for highlighting.",
     )
-    oneof_schema_2_validator: Optional[HighlightResultOption] = None
-    oneof_schema_3_validator: Optional[Dict[str, HighlightResultOption]] = Field(
-        default=None,
-        description="Surround words that match the query with HTML tags for highlighting.",
-    )
-    oneof_schema_4_validator: Optional[List[HighlightResultOption]] = Field(
+    oneof_schema_3_validator: Optional[List[HighlightResult]] = Field(
         default=None,
         description="Surround words that match the query with HTML tags for highlighting.",
     )
     actual_instance: Optional[
-        Union[
-            Dict[str, HighlightResultOption],
-            Dict[str, HighlightResult],
-            HighlightResultOption,
-            List[HighlightResultOption],
-        ]
+        Union[Dict[str, HighlightResult], HighlightResultOption, List[HighlightResult]]
     ] = None
 
     def __init__(self, *args, **kwargs) -> None:
@@ -66,12 +57,7 @@ class HighlightResult(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Optional[
-        Union[
-            Dict[str, HighlightResultOption],
-            Dict[str, HighlightResult],
-            HighlightResultOption,
-            List[HighlightResultOption],
-        ]
+        Union[Dict[str, HighlightResult], HighlightResultOption, List[HighlightResult]]
     ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
@@ -89,14 +75,14 @@ class HighlightResult(BaseModel):
         error_messages = []
 
         try:
-            instance.oneof_schema_1_validator = loads(json_str)
-            instance.actual_instance = instance.oneof_schema_1_validator
+            instance.actual_instance = HighlightResultOption.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.actual_instance = HighlightResultOption.from_json(json_str)
+            instance.oneof_schema_2_validator = loads(json_str)
+            instance.actual_instance = instance.oneof_schema_2_validator
 
             return instance
         except (ValidationError, ValueError) as e:
@@ -108,16 +94,9 @@ class HighlightResult(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        try:
-            instance.oneof_schema_4_validator = loads(json_str)
-            instance.actual_instance = instance.oneof_schema_4_validator
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into HighlightResult with oneOf schemas: Dict[str, HighlightResultOption], Dict[str, HighlightResult], HighlightResultOption, List[HighlightResultOption]. Details: "
+            "No match found when deserializing the JSON string into HighlightResult with oneOf schemas: Dict[str, HighlightResult], HighlightResultOption, List[HighlightResult]. Details: "
             + ", ".join(error_messages)
         )
 

@@ -26,26 +26,17 @@ class SnippetResult(BaseModel):
     SnippetResult
     """
 
-    oneof_schema_1_validator: Optional[Dict[str, SnippetResult]] = Field(
+    oneof_schema_1_validator: Optional[SnippetResultOption] = None
+    oneof_schema_2_validator: Optional[Dict[str, SnippetResult]] = Field(
         default=None,
         description="Snippets that show the context around a matching search query.",
     )
-    oneof_schema_2_validator: Optional[SnippetResultOption] = None
-    oneof_schema_3_validator: Optional[Dict[str, SnippetResultOption]] = Field(
-        default=None,
-        description="Snippets that show the context around a matching search query.",
-    )
-    oneof_schema_4_validator: Optional[List[SnippetResultOption]] = Field(
+    oneof_schema_3_validator: Optional[List[SnippetResult]] = Field(
         default=None,
         description="Snippets that show the context around a matching search query.",
     )
     actual_instance: Optional[
-        Union[
-            Dict[str, SnippetResultOption],
-            Dict[str, SnippetResult],
-            List[SnippetResultOption],
-            SnippetResultOption,
-        ]
+        Union[Dict[str, SnippetResult], List[SnippetResult], SnippetResultOption]
     ] = None
 
     def __init__(self, *args, **kwargs) -> None:
@@ -66,12 +57,7 @@ class SnippetResult(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Optional[
-        Union[
-            Dict[str, SnippetResultOption],
-            Dict[str, SnippetResult],
-            List[SnippetResultOption],
-            SnippetResultOption,
-        ]
+        Union[Dict[str, SnippetResult], List[SnippetResult], SnippetResultOption]
     ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
@@ -89,14 +75,14 @@ class SnippetResult(BaseModel):
         error_messages = []
 
         try:
-            instance.oneof_schema_1_validator = loads(json_str)
-            instance.actual_instance = instance.oneof_schema_1_validator
+            instance.actual_instance = SnippetResultOption.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.actual_instance = SnippetResultOption.from_json(json_str)
+            instance.oneof_schema_2_validator = loads(json_str)
+            instance.actual_instance = instance.oneof_schema_2_validator
 
             return instance
         except (ValidationError, ValueError) as e:
@@ -108,16 +94,9 @@ class SnippetResult(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        try:
-            instance.oneof_schema_4_validator = loads(json_str)
-            instance.actual_instance = instance.oneof_schema_4_validator
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into SnippetResult with oneOf schemas: Dict[str, SnippetResultOption], Dict[str, SnippetResult], List[SnippetResultOption], SnippetResultOption. Details: "
+            "No match found when deserializing the JSON string into SnippetResult with oneOf schemas: Dict[str, SnippetResult], List[SnippetResult], SnippetResultOption. Details: "
             + ", ".join(error_messages)
         )
 

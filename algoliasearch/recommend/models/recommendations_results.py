@@ -145,15 +145,17 @@ class RecommendationsResults(BaseModel):
         description="Whether automatic events collection is enabled for the application.",
         alias="_automaticInsights",
     )
-    page: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Page of search results to retrieve."
+    page: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
+        default=0, description="Page of search results to retrieve."
     )
-    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
-    nb_pages: StrictInt = Field(
-        description="Number of pages of results.", alias="nbPages"
+    nb_hits: Optional[StrictInt] = Field(
+        default=None, description="Number of results (hits).", alias="nbHits"
     )
-    hits_per_page: Annotated[int, Field(le=1000, strict=True, ge=1)] = Field(
-        description="Number of hits per page.", alias="hitsPerPage"
+    nb_pages: Optional[StrictInt] = Field(
+        default=None, description="Number of pages of results.", alias="nbPages"
+    )
+    hits_per_page: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
+        default=20, description="Number of hits per page.", alias="hitsPerPage"
     )
     hits: List[RecommendationsHit]
 
