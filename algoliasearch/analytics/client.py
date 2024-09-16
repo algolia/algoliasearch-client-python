@@ -125,9 +125,10 @@ class AnalyticsClient:
             transporter = Transporter(config)
         self._transporter = transporter
 
+    @classmethod
     def create_with_config(
-        config: AnalyticsConfig, transporter: Optional[Transporter] = None
-    ) -> Self:
+        cls, config: AnalyticsConfig, transporter: Optional[Transporter] = None
+    ) -> AnalyticsClient:
         """Allows creating a client with a customized `AnalyticsConfig` and `Transporter`. If `transporter` is not provided, the default one will be initialized from the given `config`.
 
         Args:
@@ -152,7 +153,7 @@ class AnalyticsClient:
             config=config,
         )
 
-    async def __aenter__(self) -> None:
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(self, exc_type, exc_value, traceback) -> None:
@@ -239,9 +240,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_delete_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = await self.custom_delete_with_http_info(
+            path, parameters, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_get_with_http_info(
         self,
@@ -313,9 +315,8 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_get_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = await self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_post_with_http_info(
         self,
@@ -404,11 +405,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_post_with_http_info(
-                path, parameters, body, request_options
-            )
-        ).deserialize(object)
+        resp = await self.custom_post_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_put_with_http_info(
         self,
@@ -497,11 +497,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_put_with_http_info(
-                path, parameters, body, request_options
-            )
-        ).deserialize(object)
+        resp = await self.custom_put_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def get_add_to_cart_rate_with_http_info(
         self,
@@ -610,11 +609,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetAddToCartRateResponse' result object.
         """
-        return (
-            await self.get_add_to_cart_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetAddToCartRateResponse)
+        resp = await self.get_add_to_cart_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetAddToCartRateResponse, resp.raw_data)
 
     async def get_average_click_position_with_http_info(
         self,
@@ -723,11 +721,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetAverageClickPositionResponse' result object.
         """
-        return (
-            await self.get_average_click_position_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetAverageClickPositionResponse)
+        resp = await self.get_average_click_position_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetAverageClickPositionResponse, resp.raw_data)
 
     async def get_click_positions_with_http_info(
         self,
@@ -836,11 +833,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetClickPositionsResponse' result object.
         """
-        return (
-            await self.get_click_positions_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetClickPositionsResponse)
+        resp = await self.get_click_positions_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetClickPositionsResponse, resp.raw_data)
 
     async def get_click_through_rate_with_http_info(
         self,
@@ -949,11 +945,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetClickThroughRateResponse' result object.
         """
-        return (
-            await self.get_click_through_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetClickThroughRateResponse)
+        resp = await self.get_click_through_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetClickThroughRateResponse, resp.raw_data)
 
     async def get_conversion_rate_with_http_info(
         self,
@@ -1062,11 +1057,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetConversionRateResponse' result object.
         """
-        return (
-            await self.get_conversion_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetConversionRateResponse)
+        resp = await self.get_conversion_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetConversionRateResponse, resp.raw_data)
 
     async def get_no_click_rate_with_http_info(
         self,
@@ -1175,11 +1169,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetNoClickRateResponse' result object.
         """
-        return (
-            await self.get_no_click_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetNoClickRateResponse)
+        resp = await self.get_no_click_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetNoClickRateResponse, resp.raw_data)
 
     async def get_no_results_rate_with_http_info(
         self,
@@ -1288,11 +1281,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetNoResultsRateResponse' result object.
         """
-        return (
-            await self.get_no_results_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetNoResultsRateResponse)
+        resp = await self.get_no_results_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetNoResultsRateResponse, resp.raw_data)
 
     async def get_purchase_rate_with_http_info(
         self,
@@ -1401,11 +1393,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetPurchaseRateResponse' result object.
         """
-        return (
-            await self.get_purchase_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetPurchaseRateResponse)
+        resp = await self.get_purchase_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetPurchaseRateResponse, resp.raw_data)
 
     async def get_revenue_with_http_info(
         self,
@@ -1514,11 +1505,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetRevenue' result object.
         """
-        return (
-            await self.get_revenue_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetRevenue)
+        resp = await self.get_revenue_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetRevenue, resp.raw_data)
 
     async def get_searches_count_with_http_info(
         self,
@@ -1627,11 +1617,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesCountResponse' result object.
         """
-        return (
-            await self.get_searches_count_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetSearchesCountResponse)
+        resp = await self.get_searches_count_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetSearchesCountResponse, resp.raw_data)
 
     async def get_searches_no_clicks_with_http_info(
         self,
@@ -1766,11 +1755,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesNoClicksResponse' result object.
         """
-        return (
-            await self.get_searches_no_clicks_with_http_info(
-                index, start_date, end_date, limit, offset, tags, request_options
-            )
-        ).deserialize(GetSearchesNoClicksResponse)
+        resp = await self.get_searches_no_clicks_with_http_info(
+            index, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetSearchesNoClicksResponse, resp.raw_data)
 
     async def get_searches_no_results_with_http_info(
         self,
@@ -1905,11 +1893,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesNoResultsResponse' result object.
         """
-        return (
-            await self.get_searches_no_results_with_http_info(
-                index, start_date, end_date, limit, offset, tags, request_options
-            )
-        ).deserialize(GetSearchesNoResultsResponse)
+        resp = await self.get_searches_no_results_with_http_info(
+            index, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetSearchesNoResultsResponse, resp.raw_data)
 
     async def get_status_with_http_info(
         self,
@@ -1962,9 +1949,8 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetStatusResponse' result object.
         """
-        return (
-            await self.get_status_with_http_info(index, request_options)
-        ).deserialize(GetStatusResponse)
+        resp = await self.get_status_with_http_info(index, request_options)
+        return resp.deserialize(GetStatusResponse, resp.raw_data)
 
     async def get_top_countries_with_http_info(
         self,
@@ -2099,11 +2085,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopCountriesResponse' result object.
         """
-        return (
-            await self.get_top_countries_with_http_info(
-                index, start_date, end_date, limit, offset, tags, request_options
-            )
-        ).deserialize(GetTopCountriesResponse)
+        resp = await self.get_top_countries_with_http_info(
+            index, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetTopCountriesResponse, resp.raw_data)
 
     async def get_top_filter_attributes_with_http_info(
         self,
@@ -2250,18 +2235,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFilterAttributesResponse' result object.
         """
-        return (
-            await self.get_top_filter_attributes_with_http_info(
-                index,
-                search,
-                start_date,
-                end_date,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopFilterAttributesResponse)
+        resp = await self.get_top_filter_attributes_with_http_info(
+            index, search, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetTopFilterAttributesResponse, resp.raw_data)
 
     async def get_top_filter_for_attribute_with_http_info(
         self,
@@ -2421,19 +2398,18 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFilterForAttributeResponse' result object.
         """
-        return (
-            await self.get_top_filter_for_attribute_with_http_info(
-                attribute,
-                index,
-                search,
-                start_date,
-                end_date,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopFilterForAttributeResponse)
+        resp = await self.get_top_filter_for_attribute_with_http_info(
+            attribute,
+            index,
+            search,
+            start_date,
+            end_date,
+            limit,
+            offset,
+            tags,
+            request_options,
+        )
+        return resp.deserialize(GetTopFilterForAttributeResponse, resp.raw_data)
 
     async def get_top_filters_no_results_with_http_info(
         self,
@@ -2580,18 +2556,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFiltersNoResultsResponse' result object.
         """
-        return (
-            await self.get_top_filters_no_results_with_http_info(
-                index,
-                search,
-                start_date,
-                end_date,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopFiltersNoResultsResponse)
+        resp = await self.get_top_filters_no_results_with_http_info(
+            index, search, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetTopFiltersNoResultsResponse, resp.raw_data)
 
     async def get_top_hits_with_http_info(
         self,
@@ -2774,20 +2742,19 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopHitsResponse' result object.
         """
-        return (
-            await self.get_top_hits_with_http_info(
-                index,
-                search,
-                click_analytics,
-                revenue_analytics,
-                start_date,
-                end_date,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopHitsResponse)
+        resp = await self.get_top_hits_with_http_info(
+            index,
+            search,
+            click_analytics,
+            revenue_analytics,
+            start_date,
+            end_date,
+            limit,
+            offset,
+            tags,
+            request_options,
+        )
+        return resp.deserialize(GetTopHitsResponse, resp.raw_data)
 
     async def get_top_searches_with_http_info(
         self,
@@ -2994,21 +2961,20 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopSearchesResponse' result object.
         """
-        return (
-            await self.get_top_searches_with_http_info(
-                index,
-                click_analytics,
-                revenue_analytics,
-                start_date,
-                end_date,
-                order_by,
-                direction,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopSearchesResponse)
+        resp = await self.get_top_searches_with_http_info(
+            index,
+            click_analytics,
+            revenue_analytics,
+            start_date,
+            end_date,
+            order_by,
+            direction,
+            limit,
+            offset,
+            tags,
+            request_options,
+        )
+        return resp.deserialize(GetTopSearchesResponse, resp.raw_data)
 
     async def get_users_count_with_http_info(
         self,
@@ -3117,11 +3083,10 @@ class AnalyticsClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetUsersCountResponse' result object.
         """
-        return (
-            await self.get_users_count_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetUsersCountResponse)
+        resp = await self.get_users_count_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetUsersCountResponse, resp.raw_data)
 
 
 class AnalyticsClientSync:
@@ -3166,9 +3131,10 @@ class AnalyticsClientSync:
             transporter = TransporterSync(config)
         self._transporter = transporter
 
+    @classmethod
     def create_with_config(
-        config: AnalyticsConfig, transporter: Optional[TransporterSync] = None
-    ) -> Self:
+        cls, config: AnalyticsConfig, transporter: Optional[TransporterSync] = None
+    ) -> AnalyticsClientSync:
         """Allows creating a client with a customized `AnalyticsConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
 
         Args:
@@ -3279,9 +3245,8 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_delete_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = self.custom_delete_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_get_with_http_info(
         self,
@@ -3353,9 +3318,8 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_get_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_post_with_http_info(
         self,
@@ -3444,9 +3408,8 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_post_with_http_info(path, parameters, body, request_options)
-        ).deserialize(object)
+        resp = self.custom_post_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_put_with_http_info(
         self,
@@ -3535,9 +3498,8 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_put_with_http_info(path, parameters, body, request_options)
-        ).deserialize(object)
+        resp = self.custom_put_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def get_add_to_cart_rate_with_http_info(
         self,
@@ -3646,11 +3608,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetAddToCartRateResponse' result object.
         """
-        return (
-            self.get_add_to_cart_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetAddToCartRateResponse)
+        resp = self.get_add_to_cart_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetAddToCartRateResponse, resp.raw_data)
 
     def get_average_click_position_with_http_info(
         self,
@@ -3759,11 +3720,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetAverageClickPositionResponse' result object.
         """
-        return (
-            self.get_average_click_position_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetAverageClickPositionResponse)
+        resp = self.get_average_click_position_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetAverageClickPositionResponse, resp.raw_data)
 
     def get_click_positions_with_http_info(
         self,
@@ -3872,11 +3832,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetClickPositionsResponse' result object.
         """
-        return (
-            self.get_click_positions_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetClickPositionsResponse)
+        resp = self.get_click_positions_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetClickPositionsResponse, resp.raw_data)
 
     def get_click_through_rate_with_http_info(
         self,
@@ -3985,11 +3944,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetClickThroughRateResponse' result object.
         """
-        return (
-            self.get_click_through_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetClickThroughRateResponse)
+        resp = self.get_click_through_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetClickThroughRateResponse, resp.raw_data)
 
     def get_conversion_rate_with_http_info(
         self,
@@ -4098,11 +4056,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetConversionRateResponse' result object.
         """
-        return (
-            self.get_conversion_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetConversionRateResponse)
+        resp = self.get_conversion_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetConversionRateResponse, resp.raw_data)
 
     def get_no_click_rate_with_http_info(
         self,
@@ -4211,11 +4168,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetNoClickRateResponse' result object.
         """
-        return (
-            self.get_no_click_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetNoClickRateResponse)
+        resp = self.get_no_click_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetNoClickRateResponse, resp.raw_data)
 
     def get_no_results_rate_with_http_info(
         self,
@@ -4324,11 +4280,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetNoResultsRateResponse' result object.
         """
-        return (
-            self.get_no_results_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetNoResultsRateResponse)
+        resp = self.get_no_results_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetNoResultsRateResponse, resp.raw_data)
 
     def get_purchase_rate_with_http_info(
         self,
@@ -4437,11 +4392,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetPurchaseRateResponse' result object.
         """
-        return (
-            self.get_purchase_rate_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetPurchaseRateResponse)
+        resp = self.get_purchase_rate_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetPurchaseRateResponse, resp.raw_data)
 
     def get_revenue_with_http_info(
         self,
@@ -4550,11 +4504,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetRevenue' result object.
         """
-        return (
-            self.get_revenue_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetRevenue)
+        resp = self.get_revenue_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetRevenue, resp.raw_data)
 
     def get_searches_count_with_http_info(
         self,
@@ -4663,11 +4616,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesCountResponse' result object.
         """
-        return (
-            self.get_searches_count_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetSearchesCountResponse)
+        resp = self.get_searches_count_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetSearchesCountResponse, resp.raw_data)
 
     def get_searches_no_clicks_with_http_info(
         self,
@@ -4802,11 +4754,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesNoClicksResponse' result object.
         """
-        return (
-            self.get_searches_no_clicks_with_http_info(
-                index, start_date, end_date, limit, offset, tags, request_options
-            )
-        ).deserialize(GetSearchesNoClicksResponse)
+        resp = self.get_searches_no_clicks_with_http_info(
+            index, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetSearchesNoClicksResponse, resp.raw_data)
 
     def get_searches_no_results_with_http_info(
         self,
@@ -4941,11 +4892,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetSearchesNoResultsResponse' result object.
         """
-        return (
-            self.get_searches_no_results_with_http_info(
-                index, start_date, end_date, limit, offset, tags, request_options
-            )
-        ).deserialize(GetSearchesNoResultsResponse)
+        resp = self.get_searches_no_results_with_http_info(
+            index, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetSearchesNoResultsResponse, resp.raw_data)
 
     def get_status_with_http_info(
         self,
@@ -4998,9 +4948,8 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetStatusResponse' result object.
         """
-        return (self.get_status_with_http_info(index, request_options)).deserialize(
-            GetStatusResponse
-        )
+        resp = self.get_status_with_http_info(index, request_options)
+        return resp.deserialize(GetStatusResponse, resp.raw_data)
 
     def get_top_countries_with_http_info(
         self,
@@ -5135,11 +5084,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopCountriesResponse' result object.
         """
-        return (
-            self.get_top_countries_with_http_info(
-                index, start_date, end_date, limit, offset, tags, request_options
-            )
-        ).deserialize(GetTopCountriesResponse)
+        resp = self.get_top_countries_with_http_info(
+            index, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetTopCountriesResponse, resp.raw_data)
 
     def get_top_filter_attributes_with_http_info(
         self,
@@ -5286,18 +5234,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFilterAttributesResponse' result object.
         """
-        return (
-            self.get_top_filter_attributes_with_http_info(
-                index,
-                search,
-                start_date,
-                end_date,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopFilterAttributesResponse)
+        resp = self.get_top_filter_attributes_with_http_info(
+            index, search, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetTopFilterAttributesResponse, resp.raw_data)
 
     def get_top_filter_for_attribute_with_http_info(
         self,
@@ -5457,19 +5397,18 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFilterForAttributeResponse' result object.
         """
-        return (
-            self.get_top_filter_for_attribute_with_http_info(
-                attribute,
-                index,
-                search,
-                start_date,
-                end_date,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopFilterForAttributeResponse)
+        resp = self.get_top_filter_for_attribute_with_http_info(
+            attribute,
+            index,
+            search,
+            start_date,
+            end_date,
+            limit,
+            offset,
+            tags,
+            request_options,
+        )
+        return resp.deserialize(GetTopFilterForAttributeResponse, resp.raw_data)
 
     def get_top_filters_no_results_with_http_info(
         self,
@@ -5616,18 +5555,10 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopFiltersNoResultsResponse' result object.
         """
-        return (
-            self.get_top_filters_no_results_with_http_info(
-                index,
-                search,
-                start_date,
-                end_date,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopFiltersNoResultsResponse)
+        resp = self.get_top_filters_no_results_with_http_info(
+            index, search, start_date, end_date, limit, offset, tags, request_options
+        )
+        return resp.deserialize(GetTopFiltersNoResultsResponse, resp.raw_data)
 
     def get_top_hits_with_http_info(
         self,
@@ -5810,20 +5741,19 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopHitsResponse' result object.
         """
-        return (
-            self.get_top_hits_with_http_info(
-                index,
-                search,
-                click_analytics,
-                revenue_analytics,
-                start_date,
-                end_date,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopHitsResponse)
+        resp = self.get_top_hits_with_http_info(
+            index,
+            search,
+            click_analytics,
+            revenue_analytics,
+            start_date,
+            end_date,
+            limit,
+            offset,
+            tags,
+            request_options,
+        )
+        return resp.deserialize(GetTopHitsResponse, resp.raw_data)
 
     def get_top_searches_with_http_info(
         self,
@@ -6030,21 +5960,20 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetTopSearchesResponse' result object.
         """
-        return (
-            self.get_top_searches_with_http_info(
-                index,
-                click_analytics,
-                revenue_analytics,
-                start_date,
-                end_date,
-                order_by,
-                direction,
-                limit,
-                offset,
-                tags,
-                request_options,
-            )
-        ).deserialize(GetTopSearchesResponse)
+        resp = self.get_top_searches_with_http_info(
+            index,
+            click_analytics,
+            revenue_analytics,
+            start_date,
+            end_date,
+            order_by,
+            direction,
+            limit,
+            offset,
+            tags,
+            request_options,
+        )
+        return resp.deserialize(GetTopSearchesResponse, resp.raw_data)
 
     def get_users_count_with_http_info(
         self,
@@ -6153,8 +6082,7 @@ class AnalyticsClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetUsersCountResponse' result object.
         """
-        return (
-            self.get_users_count_with_http_info(
-                index, start_date, end_date, tags, request_options
-            )
-        ).deserialize(GetUsersCountResponse)
+        resp = self.get_users_count_with_http_info(
+            index, start_date, end_date, tags, request_options
+        )
+        return resp.deserialize(GetUsersCountResponse, resp.raw_data)

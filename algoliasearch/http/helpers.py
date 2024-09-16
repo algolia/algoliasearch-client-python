@@ -2,37 +2,37 @@
 
 import asyncio
 import time
-from typing import Callable, TypeVar
+from typing import Awaitable, Callable, Optional, TypeVar
 
 T = TypeVar("T")
 
 
 class Timeout:
-    def __call__(self) -> int:
-        return 0
+    def __call__(self, retry_count: int = 0) -> int:
+        return retry_count
 
     def __init__(self) -> None:
         pass
 
 
 class RetryTimeout(Timeout):
-    def __call__(self, retry_count: int) -> int:
+    def __call__(self, retry_count: int = 0) -> int:
         return int(min(retry_count * 0.2, 5))
 
 
 async def create_iterable(
-    func: Callable[[T], T],
+    func: Callable[[Optional[T]], Awaitable[T]],
     validate: Callable[[T], bool],
     aggregator: Callable[[T], None],
     timeout: Timeout = Timeout(),
-    error_validate: Callable[[T], bool] = None,
-    error_message: Callable[[T], str] = None,
+    error_validate: Optional[Callable[[T], bool]] = None,
+    error_message: Optional[Callable[[T], str]] = None,
 ) -> T:
     """
     Helper: Iterates until the given `func` until `timeout` or `validate`.
     """
 
-    async def retry(prev: T = None) -> T:
+    async def retry(prev: Optional[T] = None) -> T:
         resp = await func(prev)
 
         if aggregator:
@@ -53,18 +53,18 @@ async def create_iterable(
 
 
 def create_iterable_sync(
-    func: Callable[[T], T],
+    func: Callable[[Optional[T]], T],
     validate: Callable[[T], bool],
     aggregator: Callable[[T], None],
     timeout: Timeout = Timeout(),
-    error_validate: Callable[[T], bool] = None,
-    error_message: Callable[[T], str] = None,
+    error_validate: Optional[Callable[[T], bool]] = None,
+    error_message: Optional[Callable[[T], str]] = None,
 ) -> T:
     """
     Helper: Iterates until the given `func` until `timeout` or `validate`.
     """
 
-    def retry(prev: T = None) -> T:
+    def retry(prev: Optional[T] = None) -> T:
         resp = func(prev)
 
         if aggregator:

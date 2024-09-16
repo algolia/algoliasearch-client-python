@@ -79,9 +79,10 @@ class AbtestingClient:
             transporter = Transporter(config)
         self._transporter = transporter
 
+    @classmethod
     def create_with_config(
-        config: AbtestingConfig, transporter: Optional[Transporter] = None
-    ) -> Self:
+        cls, config: AbtestingConfig, transporter: Optional[Transporter] = None
+    ) -> AbtestingClient:
         """Allows creating a client with a customized `AbtestingConfig` and `Transporter`. If `transporter` is not provided, the default one will be initialized from the given `config`.
 
         Args:
@@ -106,7 +107,7 @@ class AbtestingClient:
             config=config,
         )
 
-    async def __aenter__(self) -> None:
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(self, exc_type, exc_value, traceback) -> None:
@@ -173,11 +174,10 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
         """
-        return (
-            await self.add_ab_tests_with_http_info(
-                add_ab_tests_request, request_options
-            )
-        ).deserialize(ABTestResponse)
+        resp = await self.add_ab_tests_with_http_info(
+            add_ab_tests_request, request_options
+        )
+        return resp.deserialize(ABTestResponse, resp.raw_data)
 
     async def custom_delete_with_http_info(
         self,
@@ -251,9 +251,10 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_delete_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = await self.custom_delete_with_http_info(
+            path, parameters, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_get_with_http_info(
         self,
@@ -325,9 +326,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_get_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = await self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_post_with_http_info(
         self,
@@ -416,11 +416,10 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_post_with_http_info(
-                path, parameters, body, request_options
-            )
-        ).deserialize(object)
+        resp = await self.custom_post_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_put_with_http_info(
         self,
@@ -509,11 +508,10 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_put_with_http_info(
-                path, parameters, body, request_options
-            )
-        ).deserialize(object)
+        resp = await self.custom_put_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def delete_ab_test_with_http_info(
         self,
@@ -562,9 +560,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
         """
-        return (
-            await self.delete_ab_test_with_http_info(id, request_options)
-        ).deserialize(ABTestResponse)
+        resp = await self.delete_ab_test_with_http_info(id, request_options)
+        return resp.deserialize(ABTestResponse, resp.raw_data)
 
     async def get_ab_test_with_http_info(
         self,
@@ -611,9 +608,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTest' result object.
         """
-        return (await self.get_ab_test_with_http_info(id, request_options)).deserialize(
-            ABTest
-        )
+        resp = await self.get_ab_test_with_http_info(id, request_options)
+        return resp.deserialize(ABTest, resp.raw_data)
 
     async def list_ab_tests_with_http_info(
         self,
@@ -717,11 +713,10 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListABTestsResponse' result object.
         """
-        return (
-            await self.list_ab_tests_with_http_info(
-                offset, limit, index_prefix, index_suffix, request_options
-            )
-        ).deserialize(ListABTestsResponse)
+        resp = await self.list_ab_tests_with_http_info(
+            offset, limit, index_prefix, index_suffix, request_options
+        )
+        return resp.deserialize(ListABTestsResponse, resp.raw_data)
 
     async def schedule_ab_test_with_http_info(
         self,
@@ -775,11 +770,10 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ScheduleABTestResponse' result object.
         """
-        return (
-            await self.schedule_ab_test_with_http_info(
-                schedule_ab_tests_request, request_options
-            )
-        ).deserialize(ScheduleABTestResponse)
+        resp = await self.schedule_ab_test_with_http_info(
+            schedule_ab_tests_request, request_options
+        )
+        return resp.deserialize(ScheduleABTestResponse, resp.raw_data)
 
     async def stop_ab_test_with_http_info(
         self,
@@ -826,9 +820,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
         """
-        return (
-            await self.stop_ab_test_with_http_info(id, request_options)
-        ).deserialize(ABTestResponse)
+        resp = await self.stop_ab_test_with_http_info(id, request_options)
+        return resp.deserialize(ABTestResponse, resp.raw_data)
 
 
 class AbtestingClientSync:
@@ -873,9 +866,10 @@ class AbtestingClientSync:
             transporter = TransporterSync(config)
         self._transporter = transporter
 
+    @classmethod
     def create_with_config(
-        config: AbtestingConfig, transporter: Optional[TransporterSync] = None
-    ) -> Self:
+        cls, config: AbtestingConfig, transporter: Optional[TransporterSync] = None
+    ) -> AbtestingClientSync:
         """Allows creating a client with a customized `AbtestingConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
 
         Args:
@@ -966,9 +960,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
         """
-        return (
-            self.add_ab_tests_with_http_info(add_ab_tests_request, request_options)
-        ).deserialize(ABTestResponse)
+        resp = self.add_ab_tests_with_http_info(add_ab_tests_request, request_options)
+        return resp.deserialize(ABTestResponse, resp.raw_data)
 
     def custom_delete_with_http_info(
         self,
@@ -1042,9 +1035,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_delete_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = self.custom_delete_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_get_with_http_info(
         self,
@@ -1116,9 +1108,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_get_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_post_with_http_info(
         self,
@@ -1207,9 +1198,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_post_with_http_info(path, parameters, body, request_options)
-        ).deserialize(object)
+        resp = self.custom_post_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_put_with_http_info(
         self,
@@ -1298,9 +1288,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_put_with_http_info(path, parameters, body, request_options)
-        ).deserialize(object)
+        resp = self.custom_put_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def delete_ab_test_with_http_info(
         self,
@@ -1349,9 +1338,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
         """
-        return (self.delete_ab_test_with_http_info(id, request_options)).deserialize(
-            ABTestResponse
-        )
+        resp = self.delete_ab_test_with_http_info(id, request_options)
+        return resp.deserialize(ABTestResponse, resp.raw_data)
 
     def get_ab_test_with_http_info(
         self,
@@ -1398,9 +1386,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTest' result object.
         """
-        return (self.get_ab_test_with_http_info(id, request_options)).deserialize(
-            ABTest
-        )
+        resp = self.get_ab_test_with_http_info(id, request_options)
+        return resp.deserialize(ABTest, resp.raw_data)
 
     def list_ab_tests_with_http_info(
         self,
@@ -1504,11 +1491,10 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListABTestsResponse' result object.
         """
-        return (
-            self.list_ab_tests_with_http_info(
-                offset, limit, index_prefix, index_suffix, request_options
-            )
-        ).deserialize(ListABTestsResponse)
+        resp = self.list_ab_tests_with_http_info(
+            offset, limit, index_prefix, index_suffix, request_options
+        )
+        return resp.deserialize(ListABTestsResponse, resp.raw_data)
 
     def schedule_ab_test_with_http_info(
         self,
@@ -1562,11 +1548,10 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ScheduleABTestResponse' result object.
         """
-        return (
-            self.schedule_ab_test_with_http_info(
-                schedule_ab_tests_request, request_options
-            )
-        ).deserialize(ScheduleABTestResponse)
+        resp = self.schedule_ab_test_with_http_info(
+            schedule_ab_tests_request, request_options
+        )
+        return resp.deserialize(ScheduleABTestResponse, resp.raw_data)
 
     def stop_ab_test_with_http_info(
         self,
@@ -1613,6 +1598,5 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTestResponse' result object.
         """
-        return (self.stop_ab_test_with_http_info(id, request_options)).deserialize(
-            ABTestResponse
-        )
+        resp = self.stop_ab_test_with_http_info(id, request_options)
+        return resp.deserialize(ABTestResponse, resp.raw_data)

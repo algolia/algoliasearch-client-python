@@ -86,9 +86,10 @@ class RecommendClient:
             transporter = Transporter(config)
         self._transporter = transporter
 
+    @classmethod
     def create_with_config(
-        config: RecommendConfig, transporter: Optional[Transporter] = None
-    ) -> Self:
+        cls, config: RecommendConfig, transporter: Optional[Transporter] = None
+    ) -> RecommendClient:
         """Allows creating a client with a customized `RecommendConfig` and `Transporter`. If `transporter` is not provided, the default one will be initialized from the given `config`.
 
         Args:
@@ -112,7 +113,7 @@ class RecommendClient:
             config=config,
         )
 
-    async def __aenter__(self) -> None:
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(self, exc_type, exc_value, traceback) -> None:
@@ -199,9 +200,10 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_delete_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = await self.custom_delete_with_http_info(
+            path, parameters, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_get_with_http_info(
         self,
@@ -273,9 +275,8 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_get_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = await self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_post_with_http_info(
         self,
@@ -364,11 +365,10 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_post_with_http_info(
-                path, parameters, body, request_options
-            )
-        ).deserialize(object)
+        resp = await self.custom_post_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_put_with_http_info(
         self,
@@ -457,11 +457,10 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_put_with_http_info(
-                path, parameters, body, request_options
-            )
-        ).deserialize(object)
+        resp = await self.custom_put_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def delete_recommend_rule_with_http_info(
         self,
@@ -552,11 +551,10 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
         """
-        return (
-            await self.delete_recommend_rule_with_http_info(
-                index_name, model, object_id, request_options
-            )
-        ).deserialize(DeletedAtResponse)
+        resp = await self.delete_recommend_rule_with_http_info(
+            index_name, model, object_id, request_options
+        )
+        return resp.deserialize(DeletedAtResponse, resp.raw_data)
 
     async def get_recommend_rule_with_http_info(
         self,
@@ -647,11 +645,10 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RecommendRule' result object.
         """
-        return (
-            await self.get_recommend_rule_with_http_info(
-                index_name, model, object_id, request_options
-            )
-        ).deserialize(RecommendRule)
+        resp = await self.get_recommend_rule_with_http_info(
+            index_name, model, object_id, request_options
+        )
+        return resp.deserialize(RecommendRule, resp.raw_data)
 
     async def get_recommend_status_with_http_info(
         self,
@@ -742,11 +739,10 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetRecommendTaskResponse' result object.
         """
-        return (
-            await self.get_recommend_status_with_http_info(
-                index_name, model, task_id, request_options
-            )
-        ).deserialize(GetRecommendTaskResponse)
+        resp = await self.get_recommend_status_with_http_info(
+            index_name, model, task_id, request_options
+        )
+        return resp.deserialize(GetRecommendTaskResponse, resp.raw_data)
 
     async def get_recommendations_with_http_info(
         self,
@@ -800,11 +796,10 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetRecommendationsResponse' result object.
         """
-        return (
-            await self.get_recommendations_with_http_info(
-                get_recommendations_params, request_options
-            )
-        ).deserialize(GetRecommendationsResponse)
+        resp = await self.get_recommendations_with_http_info(
+            get_recommendations_params, request_options
+        )
+        return resp.deserialize(GetRecommendationsResponse, resp.raw_data)
 
     async def search_recommend_rules_with_http_info(
         self,
@@ -893,11 +888,10 @@ class RecommendClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchRecommendRulesResponse' result object.
         """
-        return (
-            await self.search_recommend_rules_with_http_info(
-                index_name, model, search_recommend_rules_params, request_options
-            )
-        ).deserialize(SearchRecommendRulesResponse)
+        resp = await self.search_recommend_rules_with_http_info(
+            index_name, model, search_recommend_rules_params, request_options
+        )
+        return resp.deserialize(SearchRecommendRulesResponse, resp.raw_data)
 
 
 class RecommendClientSync:
@@ -941,9 +935,10 @@ class RecommendClientSync:
             transporter = TransporterSync(config)
         self._transporter = transporter
 
+    @classmethod
     def create_with_config(
-        config: RecommendConfig, transporter: Optional[TransporterSync] = None
-    ) -> Self:
+        cls, config: RecommendConfig, transporter: Optional[TransporterSync] = None
+    ) -> RecommendClientSync:
         """Allows creating a client with a customized `RecommendConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
 
         Args:
@@ -1053,9 +1048,8 @@ class RecommendClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_delete_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = self.custom_delete_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_get_with_http_info(
         self,
@@ -1127,9 +1121,8 @@ class RecommendClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_get_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_post_with_http_info(
         self,
@@ -1218,9 +1211,8 @@ class RecommendClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_post_with_http_info(path, parameters, body, request_options)
-        ).deserialize(object)
+        resp = self.custom_post_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_put_with_http_info(
         self,
@@ -1309,9 +1301,8 @@ class RecommendClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_put_with_http_info(path, parameters, body, request_options)
-        ).deserialize(object)
+        resp = self.custom_put_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def delete_recommend_rule_with_http_info(
         self,
@@ -1402,11 +1393,10 @@ class RecommendClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
         """
-        return (
-            self.delete_recommend_rule_with_http_info(
-                index_name, model, object_id, request_options
-            )
-        ).deserialize(DeletedAtResponse)
+        resp = self.delete_recommend_rule_with_http_info(
+            index_name, model, object_id, request_options
+        )
+        return resp.deserialize(DeletedAtResponse, resp.raw_data)
 
     def get_recommend_rule_with_http_info(
         self,
@@ -1497,11 +1487,10 @@ class RecommendClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RecommendRule' result object.
         """
-        return (
-            self.get_recommend_rule_with_http_info(
-                index_name, model, object_id, request_options
-            )
-        ).deserialize(RecommendRule)
+        resp = self.get_recommend_rule_with_http_info(
+            index_name, model, object_id, request_options
+        )
+        return resp.deserialize(RecommendRule, resp.raw_data)
 
     def get_recommend_status_with_http_info(
         self,
@@ -1592,11 +1581,10 @@ class RecommendClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetRecommendTaskResponse' result object.
         """
-        return (
-            self.get_recommend_status_with_http_info(
-                index_name, model, task_id, request_options
-            )
-        ).deserialize(GetRecommendTaskResponse)
+        resp = self.get_recommend_status_with_http_info(
+            index_name, model, task_id, request_options
+        )
+        return resp.deserialize(GetRecommendTaskResponse, resp.raw_data)
 
     def get_recommendations_with_http_info(
         self,
@@ -1650,11 +1638,10 @@ class RecommendClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'GetRecommendationsResponse' result object.
         """
-        return (
-            self.get_recommendations_with_http_info(
-                get_recommendations_params, request_options
-            )
-        ).deserialize(GetRecommendationsResponse)
+        resp = self.get_recommendations_with_http_info(
+            get_recommendations_params, request_options
+        )
+        return resp.deserialize(GetRecommendationsResponse, resp.raw_data)
 
     def search_recommend_rules_with_http_info(
         self,
@@ -1743,8 +1730,7 @@ class RecommendClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchRecommendRulesResponse' result object.
         """
-        return (
-            self.search_recommend_rules_with_http_info(
-                index_name, model, search_recommend_rules_params, request_options
-            )
-        ).deserialize(SearchRecommendRulesResponse)
+        resp = self.search_recommend_rules_with_http_info(
+            index_name, model, search_recommend_rules_params, request_options
+        )
+        return resp.deserialize(SearchRecommendRulesResponse, resp.raw_data)

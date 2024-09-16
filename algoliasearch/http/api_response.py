@@ -10,13 +10,13 @@ from algoliasearch.http.verb import Verb
 
 T = TypeVar("T")
 
+PRIMITIVE_TYPES = (float, bool, bytes, str, int)
+
 
 class ApiResponse(Generic[T]):
     """
     API response object
     """
-
-    PRIMITIVE_TYPES = (float, bool, bytes, str, int)
 
     def __init__(
         self,
@@ -29,8 +29,8 @@ class ApiResponse(Generic[T]):
         is_timed_out_error: bool = False,
         path: str = "",
         query_parameters: Optional[Dict[str, Any]] = None,
-        raw_data: str = None,
-        status_code: int = None,
+        raw_data: Optional[str] = None,
+        status_code: Optional[int] = None,
         timeouts: Optional[Dict[str, int]] = None,
         url: str = "",
     ) -> None:
@@ -51,7 +51,8 @@ class ApiResponse(Generic[T]):
     def to_json(self) -> str:
         return str(self.__dict__)
 
-    def deserialize(self, klass: any = None, data: any = None) -> T:
+    @staticmethod
+    def deserialize(klass: Any = None, data: Any = None) -> Any:
         """Deserializes dict, list, str into an object.
 
         :param data: dict, list or str.
@@ -60,25 +61,27 @@ class ApiResponse(Generic[T]):
         :return: object.
         """
         if data is None:
-            data = self.raw_data
-        if data is None:
             return None
 
         if hasattr(klass, "__origin__") and klass.__origin__ is list:
             sub_kls = klass.__args__[0]
             arr = json.loads(data)
-            return [self.deserialize(sub_kls, sub_data) for sub_data in arr]
+            return [ApiResponse.deserialize(sub_kls, sub_data) for sub_data in arr]
 
         if isinstance(klass, str):
             if klass.startswith("List["):
-                sub_kls = match(r"List\[(.*)]", klass).group(1)
-                return [self.deserialize(sub_kls, sub_data) for sub_data in data]
+                sub_kls = match(r"List\[(.*)]", klass)
+                if sub_kls is not None:
+                    sub_kls = sub_kls.group(1)
+                return [ApiResponse.deserialize(sub_kls, sub_data) for sub_data in data]
 
             if klass.startswith("Dict["):
-                sub_kls = match(r"Dict\[([^,]*), (.*)]", klass).group(2)
-                return {k: self.deserialize(sub_kls, v) for k, v in data.items()}
+                sub_kls = match(r"Dict\[([^,]*), (.*)]", klass)
+                if sub_kls is not None:
+                    sub_kls = sub_kls.group(2)
+                return {k: ApiResponse.deserialize(sub_kls, v) for k, v in data.items()}
 
-        if klass in self.PRIMITIVE_TYPES:
+        if klass in PRIMITIVE_TYPES:
             try:
                 return klass(data)
             except UnicodeEncodeError:

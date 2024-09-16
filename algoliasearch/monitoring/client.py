@@ -78,9 +78,10 @@ class MonitoringClient:
             transporter = Transporter(config)
         self._transporter = transporter
 
+    @classmethod
     def create_with_config(
-        config: MonitoringConfig, transporter: Optional[Transporter] = None
-    ) -> Self:
+        cls, config: MonitoringConfig, transporter: Optional[Transporter] = None
+    ) -> MonitoringClient:
         """Allows creating a client with a customized `MonitoringConfig` and `Transporter`. If `transporter` is not provided, the default one will be initialized from the given `config`.
 
         Args:
@@ -104,7 +105,7 @@ class MonitoringClient:
             config=config,
         )
 
-    async def __aenter__(self) -> None:
+    async def __aenter__(self) -> Self:
         return self
 
     async def __aexit__(self, exc_type, exc_value, traceback) -> None:
@@ -191,9 +192,10 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_delete_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = await self.custom_delete_with_http_info(
+            path, parameters, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_get_with_http_info(
         self,
@@ -265,9 +267,8 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_get_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = await self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_post_with_http_info(
         self,
@@ -356,11 +357,10 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_post_with_http_info(
-                path, parameters, body, request_options
-            )
-        ).deserialize(object)
+        resp = await self.custom_post_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def custom_put_with_http_info(
         self,
@@ -449,11 +449,10 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            await self.custom_put_with_http_info(
-                path, parameters, body, request_options
-            )
-        ).deserialize(object)
+        resp = await self.custom_put_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
 
     async def get_cluster_incidents_with_http_info(
         self,
@@ -504,9 +503,10 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IncidentsResponse' result object.
         """
-        return (
-            await self.get_cluster_incidents_with_http_info(clusters, request_options)
-        ).deserialize(IncidentsResponse)
+        resp = await self.get_cluster_incidents_with_http_info(
+            clusters, request_options
+        )
+        return resp.deserialize(IncidentsResponse, resp.raw_data)
 
     async def get_cluster_status_with_http_info(
         self,
@@ -557,9 +557,8 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'StatusResponse' result object.
         """
-        return (
-            await self.get_cluster_status_with_http_info(clusters, request_options)
-        ).deserialize(StatusResponse)
+        resp = await self.get_cluster_status_with_http_info(clusters, request_options)
+        return resp.deserialize(StatusResponse, resp.raw_data)
 
     async def get_incidents_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -591,9 +590,8 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IncidentsResponse' result object.
         """
-        return (await self.get_incidents_with_http_info(request_options)).deserialize(
-            IncidentsResponse
-        )
+        resp = await self.get_incidents_with_http_info(request_options)
+        return resp.deserialize(IncidentsResponse, resp.raw_data)
 
     async def get_indexing_time_with_http_info(
         self,
@@ -644,9 +642,8 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IndexingTimeResponse' result object.
         """
-        return (
-            await self.get_indexing_time_with_http_info(clusters, request_options)
-        ).deserialize(IndexingTimeResponse)
+        resp = await self.get_indexing_time_with_http_info(clusters, request_options)
+        return resp.deserialize(IndexingTimeResponse, resp.raw_data)
 
     async def get_latency_with_http_info(
         self,
@@ -697,9 +694,8 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'LatencyResponse' result object.
         """
-        return (
-            await self.get_latency_with_http_info(clusters, request_options)
-        ).deserialize(LatencyResponse)
+        resp = await self.get_latency_with_http_info(clusters, request_options)
+        return resp.deserialize(LatencyResponse, resp.raw_data)
 
     async def get_metrics_with_http_info(
         self,
@@ -777,9 +773,8 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'InfrastructureResponse' result object.
         """
-        return (
-            await self.get_metrics_with_http_info(metric, period, request_options)
-        ).deserialize(InfrastructureResponse)
+        resp = await self.get_metrics_with_http_info(metric, period, request_options)
+        return resp.deserialize(InfrastructureResponse, resp.raw_data)
 
     async def get_reachability_with_http_info(
         self,
@@ -830,9 +825,8 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Dict[str, Dict[str, bool]]' result object.
         """
-        return (
-            await self.get_reachability_with_http_info(clusters, request_options)
-        ).deserialize(Dict[str, Dict[str, bool]])
+        resp = await self.get_reachability_with_http_info(clusters, request_options)
+        return resp.deserialize(Dict[str, Dict[str, bool]], resp.raw_data)
 
     async def get_servers_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -864,9 +858,8 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'InventoryResponse' result object.
         """
-        return (await self.get_servers_with_http_info(request_options)).deserialize(
-            InventoryResponse
-        )
+        resp = await self.get_servers_with_http_info(request_options)
+        return resp.deserialize(InventoryResponse, resp.raw_data)
 
     async def get_status_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -898,9 +891,8 @@ class MonitoringClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'StatusResponse' result object.
         """
-        return (await self.get_status_with_http_info(request_options)).deserialize(
-            StatusResponse
-        )
+        resp = await self.get_status_with_http_info(request_options)
+        return resp.deserialize(StatusResponse, resp.raw_data)
 
 
 class MonitoringClientSync:
@@ -944,9 +936,10 @@ class MonitoringClientSync:
             transporter = TransporterSync(config)
         self._transporter = transporter
 
+    @classmethod
     def create_with_config(
-        config: MonitoringConfig, transporter: Optional[TransporterSync] = None
-    ) -> Self:
+        cls, config: MonitoringConfig, transporter: Optional[TransporterSync] = None
+    ) -> MonitoringClientSync:
         """Allows creating a client with a customized `MonitoringConfig` and `TransporterSync`. If `transporter` is not provided, the default one will be initialized from the given `config`.
 
         Args:
@@ -1056,9 +1049,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_delete_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = self.custom_delete_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_get_with_http_info(
         self,
@@ -1130,9 +1122,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_get_with_http_info(path, parameters, request_options)
-        ).deserialize(object)
+        resp = self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_post_with_http_info(
         self,
@@ -1221,9 +1212,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_post_with_http_info(path, parameters, body, request_options)
-        ).deserialize(object)
+        resp = self.custom_post_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def custom_put_with_http_info(
         self,
@@ -1312,9 +1302,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'object' result object.
         """
-        return (
-            self.custom_put_with_http_info(path, parameters, body, request_options)
-        ).deserialize(object)
+        resp = self.custom_put_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
 
     def get_cluster_incidents_with_http_info(
         self,
@@ -1365,9 +1354,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IncidentsResponse' result object.
         """
-        return (
-            self.get_cluster_incidents_with_http_info(clusters, request_options)
-        ).deserialize(IncidentsResponse)
+        resp = self.get_cluster_incidents_with_http_info(clusters, request_options)
+        return resp.deserialize(IncidentsResponse, resp.raw_data)
 
     def get_cluster_status_with_http_info(
         self,
@@ -1418,9 +1406,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'StatusResponse' result object.
         """
-        return (
-            self.get_cluster_status_with_http_info(clusters, request_options)
-        ).deserialize(StatusResponse)
+        resp = self.get_cluster_status_with_http_info(clusters, request_options)
+        return resp.deserialize(StatusResponse, resp.raw_data)
 
     def get_incidents_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -1452,9 +1439,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IncidentsResponse' result object.
         """
-        return (self.get_incidents_with_http_info(request_options)).deserialize(
-            IncidentsResponse
-        )
+        resp = self.get_incidents_with_http_info(request_options)
+        return resp.deserialize(IncidentsResponse, resp.raw_data)
 
     def get_indexing_time_with_http_info(
         self,
@@ -1505,9 +1491,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IndexingTimeResponse' result object.
         """
-        return (
-            self.get_indexing_time_with_http_info(clusters, request_options)
-        ).deserialize(IndexingTimeResponse)
+        resp = self.get_indexing_time_with_http_info(clusters, request_options)
+        return resp.deserialize(IndexingTimeResponse, resp.raw_data)
 
     def get_latency_with_http_info(
         self,
@@ -1558,9 +1543,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'LatencyResponse' result object.
         """
-        return (self.get_latency_with_http_info(clusters, request_options)).deserialize(
-            LatencyResponse
-        )
+        resp = self.get_latency_with_http_info(clusters, request_options)
+        return resp.deserialize(LatencyResponse, resp.raw_data)
 
     def get_metrics_with_http_info(
         self,
@@ -1638,9 +1622,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'InfrastructureResponse' result object.
         """
-        return (
-            self.get_metrics_with_http_info(metric, period, request_options)
-        ).deserialize(InfrastructureResponse)
+        resp = self.get_metrics_with_http_info(metric, period, request_options)
+        return resp.deserialize(InfrastructureResponse, resp.raw_data)
 
     def get_reachability_with_http_info(
         self,
@@ -1691,9 +1674,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Dict[str, Dict[str, bool]]' result object.
         """
-        return (
-            self.get_reachability_with_http_info(clusters, request_options)
-        ).deserialize(Dict[str, Dict[str, bool]])
+        resp = self.get_reachability_with_http_info(clusters, request_options)
+        return resp.deserialize(Dict[str, Dict[str, bool]], resp.raw_data)
 
     def get_servers_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -1725,9 +1707,8 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'InventoryResponse' result object.
         """
-        return (self.get_servers_with_http_info(request_options)).deserialize(
-            InventoryResponse
-        )
+        resp = self.get_servers_with_http_info(request_options)
+        return resp.deserialize(InventoryResponse, resp.raw_data)
 
     def get_status_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -1759,6 +1740,5 @@ class MonitoringClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'StatusResponse' result object.
         """
-        return (self.get_status_with_http_info(request_options)).deserialize(
-            StatusResponse
-        )
+        resp = self.get_status_with_http_info(request_options)
+        return resp.deserialize(StatusResponse, resp.raw_data)

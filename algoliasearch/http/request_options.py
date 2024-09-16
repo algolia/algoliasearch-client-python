@@ -44,7 +44,7 @@ class RequestOptions:
     def to_json(self) -> str:
         return str(self.__dict__)
 
-    def from_dict(self, data: Optional[Dict[str, Dict[str, Any]]]) -> Self:
+    def from_dict(self, data: Dict[str, Dict[str, Any]]) -> Self:
         return RequestOptions(
             config=self._config,
             headers=data.get("headers", {}),
@@ -57,8 +57,8 @@ class RequestOptions:
         self,
         query_parameters: List[Tuple[str, str]] = [],
         headers: Dict[str, Optional[str]] = {},
-        timeouts: Dict[str, int] = {},
-        data: Optional[Union[dict, list]] = None,
+        _: Dict[str, int] = {},
+        data: Optional[str] = None,
         user_request_options: Optional[Union[Self, Dict[str, Any]]] = None,
     ) -> Self:
         """
@@ -85,9 +85,6 @@ class RequestOptions:
                 _user_request_options = user_request_options
 
             for key, value in _user_request_options.items():
-                if key == "data" and isinstance(value, dict):
-                    request_options.data = value
-                    continue
                 request_options[key].update(value)
 
         return self.from_dict(request_options)

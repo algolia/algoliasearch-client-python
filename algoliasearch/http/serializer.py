@@ -1,5 +1,5 @@
 from json import dumps
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from urllib.parse import urlencode
 
 PRIMITIVE_TYPES = (float, bool, bytes, str, int)
@@ -27,7 +27,7 @@ class QueryParametersSerializer:
             dict(sorted(self.query_parameters.items(), key=lambda val: val[0]))
         ).replace("+", "%20")
 
-    def __init__(self, query_parameters: Dict[str, Any]) -> None:
+    def __init__(self, query_parameters: Optional[Dict[str, Any]]) -> None:
         self.query_parameters = {}
         if query_parameters is None:
             return
@@ -39,7 +39,7 @@ class QueryParametersSerializer:
                 self.query_parameters[key] = self.parse(value)
 
 
-def bodySerializer(obj: Any) -> dict:
+def bodySerializer(obj: Any) -> Any:
     """Builds a JSON POST object.
 
     If obj is None, return None.
