@@ -56,6 +56,7 @@ class Languages(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.plurals:
             _dict["plurals"] = self.plurals.to_dict()

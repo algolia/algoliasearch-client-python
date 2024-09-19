@@ -58,6 +58,7 @@ class RedirectRuleIndexMetadata(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.data:
             _dict["data"] = self.data.to_dict()

@@ -197,6 +197,7 @@ class RecommendationsResults(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.exhaustive:
             _dict["exhaustive"] = self.exhaustive.to_dict()

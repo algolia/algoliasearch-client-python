@@ -241,6 +241,7 @@ class SearchResponse(BaseModel):
                 "additional_properties",
             },
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.exhaustive:
             _dict["exhaustive"] = self.exhaustive.to_dict()

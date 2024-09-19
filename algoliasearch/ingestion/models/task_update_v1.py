@@ -71,6 +71,7 @@ class TaskUpdateV1(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.trigger:
             _dict["trigger"] = self.trigger.to_dict()

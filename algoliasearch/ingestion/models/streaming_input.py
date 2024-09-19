@@ -54,6 +54,7 @@ class StreamingInput(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.mapping:
             _dict["mapping"] = self.mapping.to_dict()

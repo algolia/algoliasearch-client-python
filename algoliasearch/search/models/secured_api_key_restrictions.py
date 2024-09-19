@@ -80,6 +80,7 @@ class SecuredApiKeyRestrictions(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.search_params:
             _dict["searchParams"] = self.search_params.to_dict()

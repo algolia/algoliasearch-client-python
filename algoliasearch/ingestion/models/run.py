@@ -90,6 +90,7 @@ class Run(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.progress:
             _dict["progress"] = self.progress.to_dict()

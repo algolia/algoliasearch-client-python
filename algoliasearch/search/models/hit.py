@@ -81,6 +81,7 @@ class Hit(BaseModel):
                 "additional_properties",
             },
             exclude_none=True,
+            exclude_unset=True,
         )
         _field_dict = {}
         if self.highlight_result:

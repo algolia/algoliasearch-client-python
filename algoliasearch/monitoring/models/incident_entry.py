@@ -58,6 +58,7 @@ class IncidentEntry(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.v:
             _dict["v"] = self.v.to_dict()

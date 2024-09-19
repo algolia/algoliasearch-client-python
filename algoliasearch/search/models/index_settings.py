@@ -339,6 +339,7 @@ class IndexSettings(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.typo_tolerance:
             _dict["typoTolerance"] = self.typo_tolerance.to_dict()

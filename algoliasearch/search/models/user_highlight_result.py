@@ -55,6 +55,7 @@ class UserHighlightResult(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.user_id:
             _dict["userID"] = self.user_id.to_dict()

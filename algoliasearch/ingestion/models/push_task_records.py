@@ -58,6 +58,7 @@ class PushTaskRecords(BaseModel):
                 "additional_properties",
             },
             exclude_none=True,
+            exclude_unset=True,
         )
         # puts key-value pairs in additional_properties in the top level
         if self.additional_properties is not None:

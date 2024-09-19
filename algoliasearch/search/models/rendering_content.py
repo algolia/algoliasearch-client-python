@@ -56,6 +56,7 @@ class RenderingContent(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.facet_ordering:
             _dict["facetOrdering"] = self.facet_ordering.to_dict()

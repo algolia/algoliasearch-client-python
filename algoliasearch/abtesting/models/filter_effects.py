@@ -56,6 +56,7 @@ class FilterEffects(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.outliers:
             _dict["outliers"] = self.outliers.to_dict()

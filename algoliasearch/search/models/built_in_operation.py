@@ -56,6 +56,7 @@ class BuiltInOperation(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.value:
             _dict["value"] = self.value.to_dict()

@@ -59,6 +59,7 @@ class DailyRevenue(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         _field_dict = {}
         if self.currencies:

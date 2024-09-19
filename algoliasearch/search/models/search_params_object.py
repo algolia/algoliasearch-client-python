@@ -410,6 +410,7 @@ class SearchParamsObject(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.facet_filters:
             _dict["facetFilters"] = self.facet_filters.to_dict()

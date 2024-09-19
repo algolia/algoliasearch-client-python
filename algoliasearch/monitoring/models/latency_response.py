@@ -54,6 +54,7 @@ class LatencyResponse(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.metrics:
             _dict["metrics"] = self.metrics.to_dict()

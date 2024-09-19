@@ -78,6 +78,7 @@ class ObjectDataAfterSearch(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.price:
             _dict["price"] = self.price.to_dict()

@@ -54,6 +54,7 @@ class IncidentsResponse(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         _field_dict_of_array = {}
         if self.incidents:

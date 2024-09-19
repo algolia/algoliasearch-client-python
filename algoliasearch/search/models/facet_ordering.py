@@ -58,6 +58,7 @@ class FacetOrdering(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.facets:
             _dict["facets"] = self.facets.to_dict()

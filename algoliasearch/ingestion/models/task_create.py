@@ -80,6 +80,7 @@ class TaskCreate(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.input:
             _dict["input"] = self.input.to_dict()

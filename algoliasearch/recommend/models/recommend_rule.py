@@ -71,6 +71,7 @@ class RecommendRule(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.metadata:
             _dict["_metadata"] = self.metadata.to_dict()

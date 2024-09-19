@@ -56,6 +56,7 @@ class TopSearchesResponse(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         _items = []
         if self.searches:

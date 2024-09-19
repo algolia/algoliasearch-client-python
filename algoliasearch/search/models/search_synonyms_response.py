@@ -60,6 +60,7 @@ class SearchSynonymsResponse(BaseModel):
                 "additional_properties",
             },
             exclude_none=True,
+            exclude_unset=True,
         )
         _items = []
         if self.hits:

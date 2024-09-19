@@ -57,6 +57,7 @@ class TransformationTryResponse(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.error:
             _dict["error"] = self.error.to_dict()

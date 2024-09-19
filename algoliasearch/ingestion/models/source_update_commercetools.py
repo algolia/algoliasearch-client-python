@@ -68,6 +68,7 @@ class SourceUpdateCommercetools(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.custom_fields:
             _dict["customFields"] = self.custom_fields.to_dict()

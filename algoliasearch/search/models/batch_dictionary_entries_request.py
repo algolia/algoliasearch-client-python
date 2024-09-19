@@ -56,6 +56,7 @@ class BatchDictionaryEntriesRequest(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.body:
             _dict["body"] = self.body.to_dict()

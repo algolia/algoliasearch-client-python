@@ -54,6 +54,7 @@ class GetDictionarySettingsResponse(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.disable_standard_entries:
             _dict["disableStandardEntries"] = self.disable_standard_entries.to_dict()

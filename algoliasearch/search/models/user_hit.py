@@ -79,6 +79,7 @@ class UserHit(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.highlight_result:
             _dict["_highlightResult"] = self.highlight_result.to_dict()

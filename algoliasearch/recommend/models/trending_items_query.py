@@ -88,6 +88,7 @@ class TrendingItemsQuery(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.query_parameters:
             _dict["queryParameters"] = self.query_parameters.to_dict()

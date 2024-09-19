@@ -59,6 +59,7 @@ class ReplaceAllObjectsResponse(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.copy_operation_response:
             _dict["copyOperationResponse"] = self.copy_operation_response.to_dict()

@@ -52,6 +52,7 @@ class BatchAssignUserIdsParams(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         return _dict
 

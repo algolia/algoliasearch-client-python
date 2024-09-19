@@ -101,6 +101,7 @@ class RankingInfo(BaseModel):
             by_alias=True,
             exclude={},
             exclude_none=True,
+            exclude_unset=True,
         )
         if self.matched_geo_location:
             _dict["matchedGeoLocation"] = self.matched_geo_location.to_dict()
