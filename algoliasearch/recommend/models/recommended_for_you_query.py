@@ -19,10 +19,10 @@ else:
 
 
 from algoliasearch.recommend.models.fallback_params import FallbackParams
+from algoliasearch.recommend.models.recommend_search_params import RecommendSearchParams
 from algoliasearch.recommend.models.recommended_for_you_model import (
     RecommendedForYouModel,
 )
-from algoliasearch.recommend.models.search_params import SearchParams
 
 
 class RecommendedForYouQuery(BaseModel):
@@ -46,7 +46,7 @@ class RecommendedForYouQuery(BaseModel):
             alias="maxRecommendations",
         )
     )
-    query_parameters: Optional[SearchParams] = Field(
+    query_parameters: Optional[RecommendSearchParams] = Field(
         default=None, alias="queryParameters"
     )
     model: RecommendedForYouModel
@@ -102,7 +102,7 @@ class RecommendedForYouQuery(BaseModel):
                 "threshold": obj.get("threshold"),
                 "maxRecommendations": obj.get("maxRecommendations"),
                 "queryParameters": (
-                    SearchParams.from_dict(obj.get("queryParameters"))
+                    RecommendSearchParams.from_dict(obj.get("queryParameters"))
                     if obj.get("queryParameters") is not None
                     else None
                 ),

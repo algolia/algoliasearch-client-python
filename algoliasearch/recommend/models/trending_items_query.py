@@ -18,8 +18,8 @@ else:
     from typing_extensions import Annotated, Self
 
 
-from algoliasearch.recommend.models.search_params import SearchParams
-from algoliasearch.recommend.models.search_params_object import SearchParamsObject
+from algoliasearch.recommend.models.fallback_params import FallbackParams
+from algoliasearch.recommend.models.recommend_search_params import RecommendSearchParams
 from algoliasearch.recommend.models.trending_items_model import TrendingItemsModel
 
 
@@ -44,7 +44,7 @@ class TrendingItemsQuery(BaseModel):
             alias="maxRecommendations",
         )
     )
-    query_parameters: Optional[SearchParams] = Field(
+    query_parameters: Optional[RecommendSearchParams] = Field(
         default=None, alias="queryParameters"
     )
     facet_name: Optional[StrictStr] = Field(
@@ -58,7 +58,7 @@ class TrendingItemsQuery(BaseModel):
         alias="facetValue",
     )
     model: TrendingItemsModel
-    fallback_parameters: Optional[SearchParamsObject] = Field(
+    fallback_parameters: Optional[FallbackParams] = Field(
         default=None, alias="fallbackParameters"
     )
 
@@ -110,7 +110,7 @@ class TrendingItemsQuery(BaseModel):
                 "threshold": obj.get("threshold"),
                 "maxRecommendations": obj.get("maxRecommendations"),
                 "queryParameters": (
-                    SearchParams.from_dict(obj.get("queryParameters"))
+                    RecommendSearchParams.from_dict(obj.get("queryParameters"))
                     if obj.get("queryParameters") is not None
                     else None
                 ),
@@ -118,7 +118,7 @@ class TrendingItemsQuery(BaseModel):
                 "facetValue": obj.get("facetValue"),
                 "model": obj.get("model"),
                 "fallbackParameters": (
-                    SearchParamsObject.from_dict(obj.get("fallbackParameters"))
+                    FallbackParams.from_dict(obj.get("fallbackParameters"))
                     if obj.get("fallbackParameters") is not None
                     else None
                 ),

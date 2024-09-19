@@ -20,7 +20,7 @@ else:
 
 from algoliasearch.recommend.models.fallback_params import FallbackParams
 from algoliasearch.recommend.models.looking_similar_model import LookingSimilarModel
-from algoliasearch.recommend.models.search_params import SearchParams
+from algoliasearch.recommend.models.recommend_search_params import RecommendSearchParams
 
 
 class LookingSimilarQuery(BaseModel):
@@ -44,7 +44,7 @@ class LookingSimilarQuery(BaseModel):
             alias="maxRecommendations",
         )
     )
-    query_parameters: Optional[SearchParams] = Field(
+    query_parameters: Optional[RecommendSearchParams] = Field(
         default=None, alias="queryParameters"
     )
     model: LookingSimilarModel
@@ -103,7 +103,7 @@ class LookingSimilarQuery(BaseModel):
                 "threshold": obj.get("threshold"),
                 "maxRecommendations": obj.get("maxRecommendations"),
                 "queryParameters": (
-                    SearchParams.from_dict(obj.get("queryParameters"))
+                    RecommendSearchParams.from_dict(obj.get("queryParameters"))
                     if obj.get("queryParameters") is not None
                     else None
                 ),

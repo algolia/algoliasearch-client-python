@@ -18,7 +18,7 @@ else:
     from typing_extensions import Self
 
 
-class Facets(BaseModel):
+class IndexSettingsFacets(BaseModel):
     """
     Order of facet names.
     """
@@ -37,7 +37,7 @@ class Facets(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Facets from a JSON string"""
+        """Create an instance of IndexSettingsFacets from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -59,7 +59,7 @@ class Facets(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Dict) -> Self:
-        """Create an instance of Facets from a dict"""
+        """Create an instance of IndexSettingsFacets from a dict"""
         if obj is None:
             return None
 

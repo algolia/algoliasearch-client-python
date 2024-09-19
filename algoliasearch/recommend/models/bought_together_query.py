@@ -19,7 +19,7 @@ else:
 
 
 from algoliasearch.recommend.models.fbt_model import FbtModel
-from algoliasearch.recommend.models.search_params import SearchParams
+from algoliasearch.recommend.models.recommend_search_params import RecommendSearchParams
 
 
 class BoughtTogetherQuery(BaseModel):
@@ -43,7 +43,7 @@ class BoughtTogetherQuery(BaseModel):
             alias="maxRecommendations",
         )
     )
-    query_parameters: Optional[SearchParams] = Field(
+    query_parameters: Optional[RecommendSearchParams] = Field(
         default=None, alias="queryParameters"
     )
     model: FbtModel
@@ -97,7 +97,7 @@ class BoughtTogetherQuery(BaseModel):
                 "threshold": obj.get("threshold"),
                 "maxRecommendations": obj.get("maxRecommendations"),
                 "queryParameters": (
-                    SearchParams.from_dict(obj.get("queryParameters"))
+                    RecommendSearchParams.from_dict(obj.get("queryParameters"))
                     if obj.get("queryParameters") is not None
                     else None
                 ),

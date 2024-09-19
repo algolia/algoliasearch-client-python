@@ -19,7 +19,7 @@ else:
 
 
 from algoliasearch.recommend.models.fallback_params import FallbackParams
-from algoliasearch.recommend.models.search_params import SearchParams
+from algoliasearch.recommend.models.recommend_search_params import RecommendSearchParams
 from algoliasearch.recommend.models.trending_facets_model import TrendingFacetsModel
 
 
@@ -44,7 +44,7 @@ class TrendingFacetsQuery(BaseModel):
             alias="maxRecommendations",
         )
     )
-    query_parameters: Optional[SearchParams] = Field(
+    query_parameters: Optional[RecommendSearchParams] = Field(
         default=None, alias="queryParameters"
     )
     facet_name: Optional[Any] = Field(
@@ -104,7 +104,7 @@ class TrendingFacetsQuery(BaseModel):
                 "threshold": obj.get("threshold"),
                 "maxRecommendations": obj.get("maxRecommendations"),
                 "queryParameters": (
-                    SearchParams.from_dict(obj.get("queryParameters"))
+                    RecommendSearchParams.from_dict(obj.get("queryParameters"))
                     if obj.get("queryParameters") is not None
                     else None
                 ),
