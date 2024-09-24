@@ -1,3 +1,7 @@
+## [4.4.5](https://github.com/algolia/algoliasearch-client-python/compare/4.4.4...4.4.5)
+
+- [4666c0113](https://github.com/algolia/api-clients-automation/commit/4666c0113) fix(python): update deserialization templates and typing issues ([#3780](https://github.com/algolia/api-clients-automation/pull/3780)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.4.4](https://github.com/algolia/algoliasearch-client-python/compare/4.4.3...4.4.4)
 
 - [ba745beb9](https://github.com/algolia/api-clients-automation/commit/ba745beb9) fix(python): exclude unset API values on model dump ([#3777](https://github.com/algolia/api-clients-automation/pull/3777)) by [@shortcuts](https://github.com/shortcuts/)
