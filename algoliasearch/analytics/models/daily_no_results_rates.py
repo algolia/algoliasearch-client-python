@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Union
+from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 class DailyNoResultsRates(BaseModel):
@@ -23,52 +23,40 @@ class DailyNoResultsRates(BaseModel):
     DailyNoResultsRates
     """
 
-    var_date: StrictStr = Field(
-        description="Date in the format YYYY-MM-DD.", alias="date"
-    )
-    no_result_count: StrictInt = Field(
-        description="Number of searches without any results.", alias="noResultCount"
-    )
-    count: StrictInt = Field(description="Number of searches.")
-    rate: Union[
-        Annotated[float, Field(le=1, strict=True, ge=0)],
-        Annotated[int, Field(le=1, strict=True, ge=0)],
-    ] = Field(
-        description="No results rate, calculated as number of searches with zero results divided by the total number of searches."
-    )
+    var_date: str = Field(alias="date")
+    """ Date in the format YYYY-MM-DD. """
+    no_result_count: int = Field(alias="noResultCount")
+    """ Number of searches without any results. """
+    count: int = Field(alias="count")
+    """ Number of searches. """
+    rate: float = Field(alias="rate")
+    """ No results rate, calculated as number of searches with zero results divided by the total number of searches. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of DailyNoResultsRates from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of DailyNoResultsRates from a dict"""
         if obj is None:
             return None
@@ -76,12 +64,4 @@ class DailyNoResultsRates(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "date": obj.get("date"),
-                "noResultCount": obj.get("noResultCount"),
-                "count": obj.get("count"),
-                "rate": obj.get("rate"),
-            }
-        )
-        return _obj
+        return cls.model_validate(obj)

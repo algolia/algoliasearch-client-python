@@ -25,6 +25,7 @@ class Mode(str, Enum):
     allowed enum values
     """
     NEURALSEARCH = "neuralSearch"
+
     KEYWORDSEARCH = "keywordSearch"
 
     @classmethod

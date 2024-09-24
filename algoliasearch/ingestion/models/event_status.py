@@ -25,10 +25,15 @@ class EventStatus(str, Enum):
     allowed enum values
     """
     CREATED = "created"
+
     STARTED = "started"
+
     RETRIED = "retried"
+
     FAILED = "failed"
+
     SUCCEEDED = "succeeded"
+
     CRITICAL = "critical"
 
     @classmethod

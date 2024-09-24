@@ -25,9 +25,13 @@ class MappingTypeCSV(str, Enum):
     allowed enum values
     """
     STRING = "string"
+
     INTEGER = "integer"
+
     FLOAT = "float"
+
     BOOLEAN = "boolean"
+
     JSON = "json"
 
     @classmethod

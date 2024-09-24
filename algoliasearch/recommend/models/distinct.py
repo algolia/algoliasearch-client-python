@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from json import dumps, loads
 from sys import version_info
-from typing import Dict, Optional, Union
+from typing import Any, Dict, Optional, Set, Union
 
-from pydantic import BaseModel, Field, StrictBool, ValidationError, model_serializer
+from pydantic import BaseModel, Field, ValidationError, model_serializer
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 class Distinct(BaseModel):
@@ -23,17 +23,12 @@ class Distinct(BaseModel):
     Determines how many records of a group are included in the search results.  Records with the same value for the `attributeForDistinct` attribute are considered a group. The `distinct` setting controls how many members of the group are returned. This is useful for [deduplication and grouping](https://www.algolia.com/doc/guides/managing-results/refine-results/grouping/#introducing-algolias-distinct-feature).  The `distinct` setting is ignored if `attributeForDistinct` is not set.
     """
 
-    oneof_schema_1_validator: Optional[StrictBool] = Field(
-        default=None,
-        description="Whether deduplication is turned on. If true, only one member of a group is shown in the search results.",
-    )
-    oneof_schema_2_validator: Optional[
-        Annotated[int, Field(le=4, strict=True, ge=0)]
-    ] = Field(
-        default=0,
-        description="Number of members of a group of records to include in the search results.  - Don't use `distinct > 1` for records that might be [promoted by rules](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/promote-hits/).   The number of hits won't be correct and faceting won't work as expected. - With `distinct > 1`, the `hitsPerPage` parameter controls the number of returned groups.   For example, with `hitsPerPage: 10` and `distinct: 2`, up to 20 records are returned.   Likewise, the `nbHits` response attribute contains the number of returned groups. ",
-    )
+    oneof_schema_1_validator: Optional[bool] = Field(default=None)
+    """ Whether deduplication is turned on. If true, only one member of a group is shown in the search results. """
+    oneof_schema_2_validator: Optional[int] = Field(default=None)
+    """ Number of members of a group of records to include in the search results.  - Don't use `distinct > 1` for records that might be [promoted by rules](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/promote-hits/).   The number of hits won't be correct and faceting won't work as expected. - With `distinct > 1`, the `hitsPerPage` parameter controls the number of returned groups.   For example, with `hitsPerPage: 10` and `distinct: 2`, up to 20 records are returned.   Likewise, the `nbHits` response attribute contains the number of returned groups.  """
     actual_instance: Optional[Union[bool, int]] = None
+    one_of_schemas: Set[str] = {"bool", "int"}
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -57,7 +52,8 @@ class Distinct(BaseModel):
         return self.actual_instance if hasattr(self, "actual_instance") else self
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
+        """Create an instance of Distinct from a JSON string"""
         return cls.from_json(dumps(obj))
 
     @classmethod
@@ -91,17 +87,21 @@ class Distinct(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        if hasattr(self.actual_instance, "to_json"):
+        if hasattr(self.actual_instance, "to_json") and callable(
+            self.actual_instance.to_json
+        ):
             return self.actual_instance.to_json()
         else:
             return dumps(self.actual_instance)
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Optional[Union[Dict[str, Any], bool, int]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict"):
+        if hasattr(self.actual_instance, "to_dict") and callable(
+            self.actual_instance.to_dict
+        ):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance

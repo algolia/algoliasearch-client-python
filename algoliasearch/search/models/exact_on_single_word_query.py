@@ -25,7 +25,9 @@ class ExactOnSingleWordQuery(str, Enum):
     allowed enum values
     """
     ATTRIBUTE = "attribute"
+
     NONE = "none"
+
     WORD = "word"
 
     @classmethod

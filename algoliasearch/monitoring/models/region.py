@@ -25,19 +25,33 @@ class Region(str, Enum):
     allowed enum values
     """
     AU = "au"
+
     BR = "br"
+
     CA = "ca"
+
     DE = "de"
+
     EU = "eu"
+
     HK = "hk"
+
     IN = "in"
+
     JP = "jp"
+
     SG = "sg"
+
     UAE = "uae"
+
     UK = "uk"
+
     USC = "usc"
+
     USE = "use"
+
     USW = "usw"
+
     ZA = "za"
 
     @classmethod

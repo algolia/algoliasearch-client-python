@@ -25,11 +25,17 @@ class Operator(str, Enum):
     allowed enum values
     """
     COLON = ":"
+
     LESS_THAN = "<"
+
     LESS_THAN_EQUAL = "<="
+
     EQUAL = "="
+
     EXCLAMATION_EQUAL = "!="
+
     GREATER_THAN = ">"
+
     GREATER_THAN_EQUAL = ">="
 
     @classmethod

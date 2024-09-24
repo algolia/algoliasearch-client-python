@@ -25,7 +25,9 @@ class SortRemainingBy(str, Enum):
     allowed enum values
     """
     COUNT = "count"
+
     ALPHA = "alpha"
+
     HIDDEN = "hidden"
 
     @classmethod

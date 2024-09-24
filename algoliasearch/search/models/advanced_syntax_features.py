@@ -25,6 +25,7 @@ class AdvancedSyntaxFeatures(str, Enum):
     allowed enum values
     """
     EXACTPHRASE = "exactPhrase"
+
     EXCLUDEWORDS = "excludeWords"
 
     @classmethod

@@ -25,10 +25,15 @@ class Metric(str, Enum):
     allowed enum values
     """
     AVG_BUILD_TIME = "avg_build_time"
+
     SSD_USAGE = "ssd_usage"
+
     RAM_SEARCH_USAGE = "ram_search_usage"
+
     RAM_INDEXING_USAGE = "ram_indexing_usage"
+
     CPU_USAGE = "cpu_usage"
+
     STAR = "*"
 
     @classmethod

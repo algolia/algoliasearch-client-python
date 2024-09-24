@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.analytics.models.click_position import ClickPosition
@@ -26,91 +26,52 @@ class TopSearchWithAnalytics(BaseModel):
     TopSearchWithAnalytics
     """
 
-    search: StrictStr = Field(description="Search query.")
-    count: StrictInt = Field(description="Number of searches.")
-    click_through_rate: Optional[
-        Union[
-            Annotated[float, Field(le=1, strict=True, ge=0)],
-            Annotated[int, Field(le=1, strict=True, ge=0)],
-        ]
-    ] = Field(
-        description="Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. ",
-        alias="clickThroughRate",
-    )
-    average_click_position: Optional[
-        Union[
-            Annotated[float, Field(strict=True, ge=1)],
-            Annotated[int, Field(strict=True, ge=1)],
-        ]
-    ] = Field(
-        description="Average position of a clicked search result in the list of search results. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. ",
-        alias="averageClickPosition",
-    )
-    click_positions: Annotated[
-        List[ClickPosition], Field(min_length=12, max_length=12)
-    ] = Field(
-        description="List of positions in the search results and clicks associated with this search.",
-        alias="clickPositions",
-    )
-    conversion_rate: Optional[
-        Union[
-            Annotated[float, Field(le=1, strict=True, ge=0)],
-            Annotated[int, Field(le=1, strict=True, ge=0)],
-        ]
-    ] = Field(
-        description="Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. ",
-        alias="conversionRate",
-    )
-    tracked_search_count: StrictInt = Field(
-        description="Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true.",
-        alias="trackedSearchCount",
-    )
-    click_count: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Number of clicks associated with this search.", alias="clickCount"
-    )
-    conversion_count: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Number of conversions from this search.", alias="conversionCount"
-    )
-    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
+    search: str = Field(alias="search")
+    """ Search query. """
+    count: int = Field(alias="count")
+    """ Number of searches. """
+    click_through_rate: float = Field(alias="clickThroughRate")
+    """ Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    average_click_position: float = Field(alias="averageClickPosition")
+    """ Average position of a clicked search result in the list of search results. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    click_positions: List[ClickPosition] = Field(alias="clickPositions")
+    """ List of positions in the search results and clicks associated with this search. """
+    conversion_rate: float = Field(alias="conversionRate")
+    """ Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    tracked_search_count: int = Field(alias="trackedSearchCount")
+    """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
+    click_count: int = Field(alias="clickCount")
+    """ Number of clicks associated with this search. """
+    conversion_count: int = Field(alias="conversionCount")
+    """ Number of conversions from this search. """
+    nb_hits: int = Field(alias="nbHits")
+    """ Number of results (hits). """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of TopSearchWithAnalytics from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        _items = []
-        if self.click_positions:
-            for _item in self.click_positions:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["clickPositions"] = _items
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of TopSearchWithAnalytics from a dict"""
         if obj is None:
             return None
@@ -118,25 +79,10 @@ class TopSearchWithAnalytics(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "search": obj.get("search"),
-                "count": obj.get("count"),
-                "clickThroughRate": obj.get("clickThroughRate"),
-                "averageClickPosition": obj.get("averageClickPosition"),
-                "clickPositions": (
-                    [
-                        ClickPosition.from_dict(_item)
-                        for _item in obj.get("clickPositions")
-                    ]
-                    if obj.get("clickPositions") is not None
-                    else None
-                ),
-                "conversionRate": obj.get("conversionRate"),
-                "trackedSearchCount": obj.get("trackedSearchCount"),
-                "clickCount": obj.get("clickCount"),
-                "conversionCount": obj.get("conversionCount"),
-                "nbHits": obj.get("nbHits"),
-            }
+        obj["clickPositions"] = (
+            [ClickPosition.from_dict(_item) for _item in obj["clickPositions"]]
+            if obj.get("clickPositions") is not None
+            else None
         )
-        return _obj
+
+        return cls.model_validate(obj)

@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -23,51 +23,38 @@ class SourceGA4BigQueryExport(BaseModel):
     SourceGA4BigQueryExport
     """
 
-    project_id: StrictStr = Field(
-        description="GCP project ID that the BigQuery export writes to.",
-        alias="projectID",
-    )
-    dataset_id: StrictStr = Field(
-        description="BigQuery dataset ID that the BigQuery export writes to.",
-        alias="datasetID",
-    )
-    table_prefix: StrictStr = Field(
-        description="Prefix of the tables that the BigQuery Export writes to.",
-        alias="tablePrefix",
-    )
+    project_id: str = Field(alias="projectID")
+    """ GCP project ID that the BigQuery export writes to. """
+    dataset_id: str = Field(alias="datasetID")
+    """ BigQuery dataset ID that the BigQuery export writes to. """
+    table_prefix: str = Field(alias="tablePrefix")
+    """ Prefix of the tables that the BigQuery Export writes to. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of SourceGA4BigQueryExport from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of SourceGA4BigQueryExport from a dict"""
         if obj is None:
             return None
@@ -75,11 +62,4 @@ class SourceGA4BigQueryExport(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "projectID": obj.get("projectID"),
-                "datasetID": obj.get("datasetID"),
-                "tablePrefix": obj.get("tablePrefix"),
-            }
-        )
-        return _obj
+        return cls.model_validate(obj)

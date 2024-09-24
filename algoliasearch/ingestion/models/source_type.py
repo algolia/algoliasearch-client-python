@@ -25,14 +25,23 @@ class SourceType(str, Enum):
     allowed enum values
     """
     BIGCOMMERCE = "bigcommerce"
+
     BIGQUERY = "bigquery"
+
     COMMERCETOOLS = "commercetools"
+
     CSV = "csv"
+
     DOCKER = "docker"
+
     GA4BIGQUERYEXPORT = "ga4BigqueryExport"
+
     JSON = "json"
+
     SHOPIFY = "shopify"
+
     SFCC = "sfcc"
+
     PUSH = "push"
 
     @classmethod

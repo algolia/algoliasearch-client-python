@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from json import dumps
 from sys import version_info
-from typing import Dict, Optional, Union
+from typing import Any, Dict, Optional, Set, Union
 
-from pydantic import BaseModel, ValidationError, model_serializer
+from pydantic import BaseModel, Field, ValidationError, model_serializer
 
 if version_info >= (3, 11):
     from typing import Self
@@ -33,12 +33,18 @@ class AuthInput(BaseModel):
     AuthInput
     """
 
-    oneof_schema_1_validator: Optional[AuthGoogleServiceAccount] = None
-    oneof_schema_2_validator: Optional[AuthBasic] = None
-    oneof_schema_3_validator: Optional[AuthAPIKey] = None
-    oneof_schema_4_validator: Optional[AuthOAuth] = None
-    oneof_schema_5_validator: Optional[AuthAlgolia] = None
-    oneof_schema_6_validator: Optional[AuthAlgoliaInsights] = None
+    oneof_schema_1_validator: Optional[AuthGoogleServiceAccount] = Field(default=None)
+
+    oneof_schema_2_validator: Optional[AuthBasic] = Field(default=None)
+
+    oneof_schema_3_validator: Optional[AuthAPIKey] = Field(default=None)
+
+    oneof_schema_4_validator: Optional[AuthOAuth] = Field(default=None)
+
+    oneof_schema_5_validator: Optional[AuthAlgolia] = Field(default=None)
+
+    oneof_schema_6_validator: Optional[AuthAlgoliaInsights] = Field(default=None)
+
     actual_instance: Optional[
         Union[
             AuthAPIKey,
@@ -49,6 +55,14 @@ class AuthInput(BaseModel):
             AuthOAuth,
         ]
     ] = None
+    one_of_schemas: Set[str] = {
+        "AuthAPIKey",
+        "AuthAlgolia",
+        "AuthAlgoliaInsights",
+        "AuthBasic",
+        "AuthGoogleServiceAccount",
+        "AuthOAuth",
+    }
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -83,7 +97,8 @@ class AuthInput(BaseModel):
         return self.actual_instance if hasattr(self, "actual_instance") else self
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
+        """Create an instance of AuthInput from a JSON string"""
         return cls.from_json(dumps(obj))
 
     @classmethod
@@ -139,17 +154,33 @@ class AuthInput(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        if hasattr(self.actual_instance, "to_json"):
+        if hasattr(self.actual_instance, "to_json") and callable(
+            self.actual_instance.to_json
+        ):
             return self.actual_instance.to_json()
         else:
             return dumps(self.actual_instance)
 
-    def to_dict(self) -> Dict:
+    def to_dict(
+        self,
+    ) -> Optional[
+        Union[
+            Dict[str, Any],
+            AuthAPIKey,
+            AuthAlgolia,
+            AuthAlgoliaInsights,
+            AuthBasic,
+            AuthGoogleServiceAccount,
+            AuthOAuth,
+        ]
+    ]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict"):
+        if hasattr(self.actual_instance, "to_dict") and callable(
+            self.actual_instance.to_dict
+        ):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance

@@ -25,6 +25,7 @@ class MethodType(str, Enum):
     allowed enum values
     """
     GET = "GET"
+
     POST = "POST"
 
     @classmethod

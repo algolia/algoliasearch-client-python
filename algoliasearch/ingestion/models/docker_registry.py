@@ -25,6 +25,7 @@ class DockerRegistry(str, Enum):
     allowed enum values
     """
     DOCKERHUB = "dockerhub"
+
     GHCR = "ghcr"
 
     @classmethod

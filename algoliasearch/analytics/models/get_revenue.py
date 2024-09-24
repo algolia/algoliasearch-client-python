@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -27,55 +27,36 @@ class GetRevenue(BaseModel):
     GetRevenue
     """
 
-    currencies: Dict[str, CurrencyCode] = Field(
-        description="Revenue associated with this search, broken-down by currencies."
-    )
-    dates: List[DailyRevenue] = Field(description="Daily revenue.")
+    currencies: Dict[str, CurrencyCode] = Field(alias="currencies")
+    """ Revenue associated with this search, broken-down by currencies. """
+    dates: List[DailyRevenue] = Field(alias="dates")
+    """ Daily revenue. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of GetRevenue from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        _field_dict = {}
-        if self.currencies:
-            for _key in self.currencies:
-                if self.currencies[_key]:
-                    _field_dict[_key] = self.currencies[_key].to_dict()
-            _dict["currencies"] = _field_dict
-        _items = []
-        if self.dates:
-            for _item in self.dates:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["dates"] = _items
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of GetRevenue from a dict"""
         if obj is None:
             return None
@@ -83,21 +64,17 @@ class GetRevenue(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "currencies": (
-                    dict(
-                        (_k, CurrencyCode.from_dict(_v))
-                        for _k, _v in obj.get("currencies").items()
-                    )
-                    if obj.get("currencies") is not None
-                    else None
-                ),
-                "dates": (
-                    [DailyRevenue.from_dict(_item) for _item in obj.get("dates")]
-                    if obj.get("dates") is not None
-                    else None
-                ),
-            }
+        obj["currencies"] = (
+            dict(
+                (_k, CurrencyCode.from_dict(_v)) for _k, _v in obj["currencies"].items()
+            )
+            if obj.get("currencies") is not None
+            else None
         )
-        return _obj
+        obj["dates"] = (
+            [DailyRevenue.from_dict(_item) for _item in obj["dates"]]
+            if obj.get("dates") is not None
+            else None
+        )
+
+        return cls.model_validate(obj)

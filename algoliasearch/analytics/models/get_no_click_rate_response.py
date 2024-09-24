@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.analytics.models.daily_no_click_rates import DailyNoClickRates
@@ -26,59 +26,40 @@ class GetNoClickRateResponse(BaseModel):
     GetNoClickRateResponse
     """
 
-    rate: Union[
-        Annotated[float, Field(le=1, strict=True, ge=0)],
-        Annotated[int, Field(le=1, strict=True, ge=0)],
-    ] = Field(
-        description="No click rate, calculated as number of tracked searches without any click divided by the number of tracked searches."
-    )
-    count: StrictInt = Field(
-        description="Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true."
-    )
-    no_click_count: Annotated[int, Field(strict=True, ge=1)] = Field(
-        description="Number of times this search was returned as a result without any click.",
-        alias="noClickCount",
-    )
-    dates: List[DailyNoClickRates] = Field(description="Daily no click rates.")
+    rate: float = Field(alias="rate")
+    """ No click rate, calculated as number of tracked searches without any click divided by the number of tracked searches. """
+    count: int = Field(alias="count")
+    """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
+    no_click_count: int = Field(alias="noClickCount")
+    """ Number of times this search was returned as a result without any click. """
+    dates: List[DailyNoClickRates] = Field(alias="dates")
+    """ Daily no click rates. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of GetNoClickRateResponse from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        _items = []
-        if self.dates:
-            for _item in self.dates:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["dates"] = _items
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of GetNoClickRateResponse from a dict"""
         if obj is None:
             return None
@@ -86,16 +67,10 @@ class GetNoClickRateResponse(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "rate": obj.get("rate"),
-                "count": obj.get("count"),
-                "noClickCount": obj.get("noClickCount"),
-                "dates": (
-                    [DailyNoClickRates.from_dict(_item) for _item in obj.get("dates")]
-                    if obj.get("dates") is not None
-                    else None
-                ),
-            }
+        obj["dates"] = (
+            [DailyNoClickRates.from_dict(_item) for _item in obj["dates"]]
+            if obj.get("dates") is not None
+            else None
         )
-        return _obj
+
+        return cls.model_validate(obj)

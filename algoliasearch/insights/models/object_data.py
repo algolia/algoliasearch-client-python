@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -27,49 +27,36 @@ class ObjectData(BaseModel):
     ObjectData
     """
 
-    price: Optional[Price] = None
-    quantity: Optional[StrictInt] = Field(
-        default=None,
-        description="Quantity of a product that has been purchased or added to the cart. The total purchase value is the sum of `quantity` multiplied with the `price` for each purchased item. ",
-    )
-    discount: Optional[Discount] = None
+    price: Optional[Price] = Field(default=None, alias="price")
+    quantity: Optional[int] = Field(default=None, alias="quantity")
+    """ Quantity of a product that has been purchased or added to the cart. The total purchase value is the sum of `quantity` multiplied with the `price` for each purchased item.  """
+    discount: Optional[Discount] = Field(default=None, alias="discount")
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ObjectData from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        if self.price:
-            _dict["price"] = self.price.to_dict()
-        if self.discount:
-            _dict["discount"] = self.discount.to_dict()
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ObjectData from a dict"""
         if obj is None:
             return None
@@ -77,19 +64,13 @@ class ObjectData(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "price": (
-                    Price.from_dict(obj.get("price"))
-                    if obj.get("price") is not None
-                    else None
-                ),
-                "quantity": obj.get("quantity"),
-                "discount": (
-                    Discount.from_dict(obj.get("discount"))
-                    if obj.get("discount") is not None
-                    else None
-                ),
-            }
+        obj["price"] = (
+            Price.from_dict(obj["price"]) if obj.get("price") is not None else None
         )
-        return _obj
+        obj["discount"] = (
+            Discount.from_dict(obj["discount"])
+            if obj.get("discount") is not None
+            else None
+        )
+
+        return cls.model_validate(obj)

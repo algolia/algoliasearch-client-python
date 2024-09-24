@@ -25,8 +25,11 @@ class Effect(str, Enum):
     allowed enum values
     """
     ADDTOCARTRATE = "addToCartRate"
+
     CLICKTHROUGHRATE = "clickThroughRate"
+
     CONVERSIONRATE = "conversionRate"
+
     PURCHASERATE = "purchaseRate"
 
     @classmethod

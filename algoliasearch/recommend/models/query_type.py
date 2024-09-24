@@ -25,7 +25,9 @@ class QueryType(str, Enum):
     allowed enum values
     """
     PREFIXLAST = "prefixLast"
+
     PREFIXALL = "prefixAll"
+
     PREFIXNONE = "prefixNone"
 
     @classmethod

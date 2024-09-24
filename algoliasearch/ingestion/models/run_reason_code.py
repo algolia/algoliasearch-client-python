@@ -25,11 +25,17 @@ class RunReasonCode(str, Enum):
     allowed enum values
     """
     INTERNAL = "internal"
+
     CRITICAL = "critical"
+
     NO_EVENTS = "no_events"
+
     TOO_MANY_ERRORS = "too_many_errors"
+
     OK = "ok"
+
     DISCARDED = "discarded"
+
     BLOCKING = "blocking"
 
     @classmethod

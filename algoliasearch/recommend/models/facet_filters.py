@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from json import dumps, loads
 from sys import version_info
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Set, Union
 
-from pydantic import BaseModel, StrictStr, ValidationError, model_serializer
+from pydantic import BaseModel, Field, ValidationError, model_serializer
 
 if version_info >= (3, 11):
     from typing import Self
@@ -23,9 +23,12 @@ class FacetFilters(BaseModel):
     Filter the search by facet values, so that only records with the same facet values are retrieved.  **Prefer using the `filters` parameter, which supports all filter types and combinations with boolean operators.**  - `[filter1, filter2]` is interpreted as `filter1 AND filter2`. - `[[filter1, filter2], filter3]` is interpreted as `filter1 OR filter2 AND filter3`. - `facet:-value` is interpreted as `NOT facet:value`.  While it's best to avoid attributes that start with a `-`, you can still filter them by escaping with a backslash: `facet:\\-value`.
     """
 
-    oneof_schema_1_validator: Optional[List[FacetFilters]] = None
-    oneof_schema_2_validator: Optional[StrictStr] = None
+    oneof_schema_1_validator: Optional[List[FacetFilters]] = Field(default=None)
+
+    oneof_schema_2_validator: Optional[str] = Field(default=None)
+
     actual_instance: Optional[Union[List[FacetFilters], str]] = None
+    one_of_schemas: Set[str] = {"List[FacetFilters]", "str"}
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -49,7 +52,8 @@ class FacetFilters(BaseModel):
         return self.actual_instance if hasattr(self, "actual_instance") else self
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
+        """Create an instance of FacetFilters from a JSON string"""
         return cls.from_json(dumps(obj))
 
     @classmethod
@@ -83,17 +87,21 @@ class FacetFilters(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        if hasattr(self.actual_instance, "to_json"):
+        if hasattr(self.actual_instance, "to_json") and callable(
+            self.actual_instance.to_json
+        ):
             return self.actual_instance.to_json()
         else:
             return dumps(self.actual_instance)
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Optional[Union[Dict[str, Any], List[FacetFilters], str]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict"):
+        if hasattr(self.actual_instance, "to_dict") and callable(
+            self.actual_instance.to_dict
+        ):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance

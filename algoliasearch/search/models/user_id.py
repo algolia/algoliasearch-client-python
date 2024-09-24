@@ -9,14 +9,14 @@ from __future__ import annotations
 from json import loads
 from re import match
 from sys import version_info
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 class UserId(BaseModel):
@@ -24,19 +24,14 @@ class UserId(BaseModel):
     Unique user ID.
     """
 
-    user_id: Annotated[str, Field(strict=True)] = Field(
-        description="Unique identifier of the user who makes the search request.",
-        alias="userID",
-    )
-    cluster_name: StrictStr = Field(
-        description="Cluster to which the user is assigned.", alias="clusterName"
-    )
-    nb_records: StrictInt = Field(
-        description="Number of records belonging to the user.", alias="nbRecords"
-    )
-    data_size: StrictInt = Field(
-        description="Data size used by the user.", alias="dataSize"
-    )
+    user_id: str = Field(alias="userID")
+    """ Unique identifier of the user who makes the search request. """
+    cluster_name: str = Field(alias="clusterName")
+    """ Cluster to which the user is assigned. """
+    nb_records: int = Field(alias="nbRecords")
+    """ Number of records belonging to the user. """
+    data_size: int = Field(alias="dataSize")
+    """ Data size used by the user. """
 
     @field_validator("user_id")
     def user_id_validate_regular_expression(cls, value):
@@ -48,37 +43,30 @@ class UserId(BaseModel):
         return value
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of UserId from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of UserId from a dict"""
         if obj is None:
             return None
@@ -86,12 +74,4 @@ class UserId(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "userID": obj.get("userID"),
-                "clusterName": obj.get("clusterName"),
-                "nbRecords": obj.get("nbRecords"),
-                "dataSize": obj.get("dataSize"),
-            }
-        )
-        return _obj
+        return cls.model_validate(obj)

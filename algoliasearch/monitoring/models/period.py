@@ -25,9 +25,13 @@ class Period(str, Enum):
     allowed enum values
     """
     MINUTE = "minute"
+
     HOUR = "hour"
+
     DAY = "day"
+
     WEEK = "week"
+
     MONTH = "month"
 
     @classmethod

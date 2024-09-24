@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.search.models.user_hit import UserHit
@@ -26,57 +26,42 @@ class SearchUserIdsResponse(BaseModel):
     userIDs data.
     """
 
-    hits: List[UserHit] = Field(description="User objects that match the query.")
-    nb_hits: StrictInt = Field(description="Number of results (hits).", alias="nbHits")
-    page: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Page of search results to retrieve."
-    )
-    hits_per_page: Annotated[int, Field(le=1000, strict=True, ge=1)] = Field(
-        description="Maximum number of hits per page.", alias="hitsPerPage"
-    )
-    updated_at: StrictStr = Field(
-        description="Date and time when the object was updated, in RFC 3339 format.",
-        alias="updatedAt",
-    )
+    hits: List[UserHit] = Field(alias="hits")
+    """ User objects that match the query. """
+    nb_hits: int = Field(alias="nbHits")
+    """ Number of results (hits). """
+    page: int = Field(alias="page")
+    """ Page of search results to retrieve. """
+    hits_per_page: int = Field(alias="hitsPerPage")
+    """ Maximum number of hits per page. """
+    updated_at: str = Field(alias="updatedAt")
+    """ Date and time when the object was updated, in RFC 3339 format. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of SearchUserIdsResponse from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        _items = []
-        if self.hits:
-            for _item in self.hits:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["hits"] = _items
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of SearchUserIdsResponse from a dict"""
         if obj is None:
             return None
@@ -84,17 +69,10 @@ class SearchUserIdsResponse(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "hits": (
-                    [UserHit.from_dict(_item) for _item in obj.get("hits")]
-                    if obj.get("hits") is not None
-                    else None
-                ),
-                "nbHits": obj.get("nbHits"),
-                "page": obj.get("page"),
-                "hitsPerPage": obj.get("hitsPerPage"),
-                "updatedAt": obj.get("updatedAt"),
-            }
+        obj["hits"] = (
+            [UserHit.from_dict(_item) for _item in obj["hits"]]
+            if obj.get("hits") is not None
+            else None
         )
-        return _obj
+
+        return cls.model_validate(obj)

@@ -25,8 +25,11 @@ class Anchoring(str, Enum):
     allowed enum values
     """
     IS = "is"
+
     STARTSWITH = "startsWith"
+
     ENDSWITH = "endsWith"
+
     CONTAINS = "contains"
 
     @classmethod

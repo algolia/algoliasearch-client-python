@@ -25,6 +25,7 @@ class OperationType(str, Enum):
     allowed enum values
     """
     MOVE = "move"
+
     COPY = "copy"
 
     @classmethod

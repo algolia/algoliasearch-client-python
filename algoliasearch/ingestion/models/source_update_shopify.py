@@ -23,44 +23,36 @@ class SourceUpdateShopify(BaseModel):
     SourceUpdateShopify
     """
 
-    feature_flags: Optional[Dict[str, Any]] = Field(
-        default=None,
-        description="Feature flags for the Shopify source.",
-        alias="featureFlags",
+    feature_flags: Optional[Dict[str, object]] = Field(
+        default=None, alias="featureFlags"
     )
+    """ Feature flags for the Shopify source. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of SourceUpdateShopify from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of SourceUpdateShopify from a dict"""
         if obj is None:
             return None
@@ -68,5 +60,4 @@ class SourceUpdateShopify(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"featureFlags": obj.get("featureFlags")})
-        return _obj
+        return cls.model_validate(obj)

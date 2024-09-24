@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from json import dumps
 from sys import version_info
-from typing import Dict, Optional, Union
+from typing import Any, Dict, Optional, Set, Union
 
-from pydantic import BaseModel, ValidationError, model_serializer
+from pydantic import BaseModel, Field, ValidationError, model_serializer
 
 if version_info >= (3, 11):
     from typing import Self
@@ -36,13 +36,20 @@ class SourceUpdateInput(BaseModel):
     SourceUpdateInput
     """
 
-    oneof_schema_1_validator: Optional[SourceUpdateCommercetools] = None
-    oneof_schema_2_validator: Optional[SourceJSON] = None
-    oneof_schema_3_validator: Optional[SourceCSV] = None
-    oneof_schema_4_validator: Optional[SourceBigQuery] = None
-    oneof_schema_5_validator: Optional[SourceGA4BigQueryExport] = None
-    oneof_schema_6_validator: Optional[SourceUpdateDocker] = None
-    oneof_schema_7_validator: Optional[SourceUpdateShopify] = None
+    oneof_schema_1_validator: Optional[SourceUpdateCommercetools] = Field(default=None)
+
+    oneof_schema_2_validator: Optional[SourceJSON] = Field(default=None)
+
+    oneof_schema_3_validator: Optional[SourceCSV] = Field(default=None)
+
+    oneof_schema_4_validator: Optional[SourceBigQuery] = Field(default=None)
+
+    oneof_schema_5_validator: Optional[SourceGA4BigQueryExport] = Field(default=None)
+
+    oneof_schema_6_validator: Optional[SourceUpdateDocker] = Field(default=None)
+
+    oneof_schema_7_validator: Optional[SourceUpdateShopify] = Field(default=None)
+
     actual_instance: Optional[
         Union[
             SourceBigQuery,
@@ -54,6 +61,15 @@ class SourceUpdateInput(BaseModel):
             SourceUpdateShopify,
         ]
     ] = None
+    one_of_schemas: Set[str] = {
+        "SourceBigQuery",
+        "SourceCSV",
+        "SourceGA4BigQueryExport",
+        "SourceJSON",
+        "SourceUpdateCommercetools",
+        "SourceUpdateDocker",
+        "SourceUpdateShopify",
+    }
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -89,7 +105,8 @@ class SourceUpdateInput(BaseModel):
         return self.actual_instance if hasattr(self, "actual_instance") else self
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
+        """Create an instance of SourceUpdateInput from a JSON string"""
         return cls.from_json(dumps(obj))
 
     @classmethod
@@ -151,17 +168,34 @@ class SourceUpdateInput(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        if hasattr(self.actual_instance, "to_json"):
+        if hasattr(self.actual_instance, "to_json") and callable(
+            self.actual_instance.to_json
+        ):
             return self.actual_instance.to_json()
         else:
             return dumps(self.actual_instance)
 
-    def to_dict(self) -> Dict:
+    def to_dict(
+        self,
+    ) -> Optional[
+        Union[
+            Dict[str, Any],
+            SourceBigQuery,
+            SourceCSV,
+            SourceGA4BigQueryExport,
+            SourceJSON,
+            SourceUpdateCommercetools,
+            SourceUpdateDocker,
+            SourceUpdateShopify,
+        ]
+    ]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict"):
+        if hasattr(self.actual_instance, "to_dict") and callable(
+            self.actual_instance.to_dict
+        ):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance

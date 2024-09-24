@@ -25,11 +25,17 @@ class BuiltInOperationType(str, Enum):
     allowed enum values
     """
     INCREMENT = "Increment"
+
     DECREMENT = "Decrement"
+
     ADD = "Add"
+
     REMOVE = "Remove"
+
     ADDUNIQUE = "AddUnique"
+
     INCREMENTFROM = "IncrementFrom"
+
     INCREMENTSET = "IncrementSet"
 
     @classmethod

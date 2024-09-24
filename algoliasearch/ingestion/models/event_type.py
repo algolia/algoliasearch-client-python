@@ -25,8 +25,11 @@ class EventType(str, Enum):
     allowed enum values
     """
     FETCH = "fetch"
+
     RECORD = "record"
+
     LOG = "log"
+
     TRANSFORM = "transform"
 
     @classmethod

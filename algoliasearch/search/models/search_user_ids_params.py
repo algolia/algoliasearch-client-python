@@ -10,12 +10,12 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 class SearchUserIdsParams(BaseModel):
@@ -23,51 +23,40 @@ class SearchUserIdsParams(BaseModel):
     OK
     """
 
-    query: StrictStr = Field(
-        description="Query to search. The search is a prefix search with [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) enabled. An empty query will retrieve all users."
-    )
-    cluster_name: Optional[StrictStr] = Field(
-        default=None, description="Cluster name.", alias="clusterName"
-    )
-    page: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
-        default=0, description="Page of search results to retrieve."
-    )
-    hits_per_page: Optional[Annotated[int, Field(le=1000, strict=True, ge=1)]] = Field(
-        default=20, description="Number of hits per page.", alias="hitsPerPage"
-    )
+    query: str = Field(alias="query")
+    """ Query to search. The search is a prefix search with [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) enabled. An empty query will retrieve all users. """
+    cluster_name: Optional[str] = Field(default=None, alias="clusterName")
+    """ Cluster name. """
+    page: Optional[int] = Field(default=None, alias="page")
+    """ Page of search results to retrieve. """
+    hits_per_page: Optional[int] = Field(default=None, alias="hitsPerPage")
+    """ Number of hits per page. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of SearchUserIdsParams from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of SearchUserIdsParams from a dict"""
         if obj is None:
             return None
@@ -75,12 +64,4 @@ class SearchUserIdsParams(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "query": obj.get("query"),
-                "clusterName": obj.get("clusterName"),
-                "page": obj.get("page"),
-                "hitsPerPage": obj.get("hitsPerPage"),
-            }
-        )
-        return _obj
+        return cls.model_validate(obj)

@@ -25,9 +25,13 @@ class AuthenticationSortKeys(str, Enum):
     allowed enum values
     """
     NAME = "name"
+
     AUTH_TYPE = "auth_type"
+
     PLATFORM = "platform"
+
     UPDATEDAT = "updatedAt"
+
     CREATEDAT = "createdAt"
 
     @classmethod

@@ -25,7 +25,9 @@ class EventType(str, Enum):
     allowed enum values
     """
     CLICK = "click"
+
     CONVERSION = "conversion"
+
     VIEW = "view"
 
     @classmethod

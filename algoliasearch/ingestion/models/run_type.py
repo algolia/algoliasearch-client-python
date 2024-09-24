@@ -25,9 +25,13 @@ class RunType(str, Enum):
     allowed enum values
     """
     REINDEX = "reindex"
+
     UPDATE = "update"
+
     DISCOVER = "discover"
+
     VALIDATE = "validate"
+
     PUSH = "push"
 
     @classmethod

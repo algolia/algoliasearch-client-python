@@ -25,8 +25,11 @@ class LogType(str, Enum):
     allowed enum values
     """
     ALL = "all"
+
     QUERY = "query"
+
     BUILD = "build"
+
     ERROR = "error"
 
     @classmethod

@@ -10,12 +10,12 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.ingestion.models.event_status import EventStatus
@@ -27,59 +27,45 @@ class Event(BaseModel):
     An event describe a step of the task execution flow..
     """
 
-    event_id: StrictStr = Field(
-        description="Universally unique identifier (UUID) of an event.", alias="eventID"
-    )
-    run_id: StrictStr = Field(
-        description="Universally unique identifier (UUID) of a task run.", alias="runID"
-    )
-    parent_id: Optional[StrictStr] = Field(
-        default=None,
-        description="The parent event, the cause of this event.",
-        alias="parentID",
-    )
-    status: EventStatus
-    type: EventType
-    batch_size: Annotated[int, Field(multiple_of=1, strict=True, ge=0)] = Field(
-        description="The extracted record batch size.", alias="batchSize"
-    )
-    data: Optional[Dict[str, Any]] = None
-    published_at: StrictStr = Field(
-        description="Date of publish RFC 3339 format.", alias="publishedAt"
-    )
+    event_id: str = Field(alias="eventID")
+    """ Universally unique identifier (UUID) of an event. """
+    run_id: str = Field(alias="runID")
+    """ Universally unique identifier (UUID) of a task run. """
+    parent_id: Optional[str] = Field(default=None, alias="parentID")
+    """ The parent event, the cause of this event. """
+    status: EventStatus = Field(alias="status")
+    type: EventType = Field(alias="type")
+    batch_size: int = Field(alias="batchSize")
+    """ The extracted record batch size. """
+    data: Optional[Dict[str, object]] = Field(default=None, alias="data")
+    published_at: str = Field(alias="publishedAt")
+    """ Date of publish RFC 3339 format. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Event from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Event from a dict"""
         if obj is None:
             return None
@@ -87,16 +73,7 @@ class Event(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "eventID": obj.get("eventID"),
-                "runID": obj.get("runID"),
-                "parentID": obj.get("parentID"),
-                "status": obj.get("status"),
-                "type": obj.get("type"),
-                "batchSize": obj.get("batchSize"),
-                "data": obj.get("data"),
-                "publishedAt": obj.get("publishedAt"),
-            }
-        )
-        return _obj
+        obj["status"] = obj.get("status")
+        obj["type"] = obj.get("type")
+
+        return cls.model_validate(obj)

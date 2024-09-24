@@ -25,7 +25,9 @@ class AlternativesAsExact(str, Enum):
     allowed enum values
     """
     IGNOREPLURALS = "ignorePlurals"
+
     SINGLEWORDSYNONYM = "singleWordSynonym"
+
     MULTIWORDSSYNONYM = "multiWordsSynonym"
 
     @classmethod

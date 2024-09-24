@@ -25,8 +25,11 @@ class RemoveWordsIfNoResults(str, Enum):
     allowed enum values
     """
     NONE = "none"
+
     LASTWORDS = "lastWords"
+
     FIRSTWORDS = "firstWords"
+
     ALLOPTIONAL = "allOptional"
 
     @classmethod

@@ -25,19 +25,33 @@ class Acl(str, Enum):
     allowed enum values
     """
     ADDOBJECT = "addObject"
+
     ANALYTICS = "analytics"
+
     BROWSE = "browse"
+
     DELETEOBJECT = "deleteObject"
+
     DELETEINDEX = "deleteIndex"
+
     EDITSETTINGS = "editSettings"
+
     INFERENCE = "inference"
+
     LISTINDEXES = "listIndexes"
+
     LOGS = "logs"
+
     PERSONALIZATION = "personalization"
+
     RECOMMENDATION = "recommendation"
+
     SEARCH = "search"
+
     SEEUNRETRIEVABLEATTRIBUTES = "seeUnretrievableAttributes"
+
     SETTINGS = "settings"
+
     USAGE = "usage"
 
     @classmethod

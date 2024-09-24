@@ -25,6 +25,7 @@ class DockerStreamsSyncMode(str, Enum):
     allowed enum values
     """
     INCREMENTAL = "incremental"
+
     FULLTABLE = "fullTable"
 
     @classmethod

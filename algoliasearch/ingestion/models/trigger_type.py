@@ -25,8 +25,11 @@ class TriggerType(str, Enum):
     allowed enum values
     """
     ONDEMAND = "onDemand"
+
     SCHEDULE = "schedule"
+
     SUBSCRIPTION = "subscription"
+
     STREAMING = "streaming"
 
     @classmethod

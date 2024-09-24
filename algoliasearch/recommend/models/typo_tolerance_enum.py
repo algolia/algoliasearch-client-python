@@ -25,6 +25,7 @@ class TypoToleranceEnum(str, Enum):
     allowed enum values
     """
     MIN = "min"
+
     STRICT = "strict"
 
     @classmethod

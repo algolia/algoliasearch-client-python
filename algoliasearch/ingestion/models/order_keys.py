@@ -25,6 +25,7 @@ class OrderKeys(str, Enum):
     allowed enum values
     """
     ASC = "asc"
+
     DESC = "desc"
 
     @classmethod

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -23,48 +23,38 @@ class LogQuery(BaseModel):
     LogQuery
     """
 
-    index_name: Optional[StrictStr] = Field(
-        default=None, description="Index targeted by the query."
-    )
-    user_token: Optional[StrictStr] = Field(
-        default=None, description="A user identifier."
-    )
-    query_id: Optional[StrictStr] = Field(
-        default=None, description="Unique query identifier."
-    )
+    index_name: Optional[str] = Field(default=None, alias="index_name")
+    """ Index targeted by the query. """
+    user_token: Optional[str] = Field(default=None, alias="user_token")
+    """ A user identifier. """
+    query_id: Optional[str] = Field(default=None, alias="query_id")
+    """ Unique query identifier. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of LogQuery from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of LogQuery from a dict"""
         if obj is None:
             return None
@@ -72,11 +62,4 @@ class LogQuery(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "index_name": obj.get("index_name"),
-                "user_token": obj.get("user_token"),
-                "query_id": obj.get("query_id"),
-            }
-        )
-        return _obj
+        return cls.model_validate(obj)

@@ -25,6 +25,7 @@ class BooleanString(str, Enum):
     allowed enum values
     """
     TRUE = "true"
+
     FALSE = "false"
 
     @classmethod

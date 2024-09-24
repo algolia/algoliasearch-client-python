@@ -25,9 +25,13 @@ class TaskSortKeys(str, Enum):
     allowed enum values
     """
     ENABLED = "enabled"
+
     TRIGGERTYPE = "triggerType"
+
     ACTION = "action"
+
     UPDATEDAT = "updatedAt"
+
     CREATEDAT = "createdAt"
 
     @classmethod

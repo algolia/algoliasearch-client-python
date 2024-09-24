@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -23,50 +23,38 @@ class AutomaticFacetFilter(BaseModel):
     Filter or optional filter to be applied to the search.
     """
 
-    facet: StrictStr = Field(
-        description="Facet name to be applied as filter. The name must match placeholders in the `pattern` parameter. For example, with `pattern: {facet:genre}`, `automaticFacetFilters` must be `genre`. "
-    )
-    score: Optional[StrictInt] = Field(
-        default=1,
-        description="Filter scores to give different weights to individual filters.",
-    )
-    disjunctive: Optional[StrictBool] = Field(
-        default=False,
-        description="Whether the filter is disjunctive or conjunctive.  If true the filter has multiple matches, multiple occurences are combined with the logical `OR` operation. If false, multiple occurences are combined with the logical `AND` operation. ",
-    )
+    facet: str = Field(alias="facet")
+    """ Facet name to be applied as filter. The name must match placeholders in the `pattern` parameter. For example, with `pattern: {facet:genre}`, `automaticFacetFilters` must be `genre`.  """
+    score: Optional[int] = Field(default=None, alias="score")
+    """ Filter scores to give different weights to individual filters. """
+    disjunctive: Optional[bool] = Field(default=None, alias="disjunctive")
+    """ Whether the filter is disjunctive or conjunctive.  If true the filter has multiple matches, multiple occurences are combined with the logical `OR` operation. If false, multiple occurences are combined with the logical `AND` operation.  """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of AutomaticFacetFilter from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of AutomaticFacetFilter from a dict"""
         if obj is None:
             return None
@@ -74,11 +62,4 @@ class AutomaticFacetFilter(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "facet": obj.get("facet"),
-                "score": obj.get("score"),
-                "disjunctive": obj.get("disjunctive"),
-            }
-        )
-        return _obj
+        return cls.model_validate(obj)

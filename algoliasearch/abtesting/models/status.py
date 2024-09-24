@@ -25,8 +25,11 @@ class Status(str, Enum):
     allowed enum values
     """
     ACTIVE = "active"
+
     STOPPED = "stopped"
+
     EXPIRED = "expired"
+
     FAILED = "failed"
 
     @classmethod

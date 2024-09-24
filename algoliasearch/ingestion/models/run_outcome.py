@@ -25,7 +25,9 @@ class RunOutcome(str, Enum):
     allowed enum values
     """
     SUCCESS = "success"
+
     FAILURE = "failure"
+
     PROCESSING = "processing"
 
     @classmethod

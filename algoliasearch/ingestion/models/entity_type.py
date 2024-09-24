@@ -25,6 +25,7 @@ class EntityType(str, Enum):
     allowed enum values
     """
     PRODUCT = "product"
+
     COLLECTION = "collection"
 
     @classmethod

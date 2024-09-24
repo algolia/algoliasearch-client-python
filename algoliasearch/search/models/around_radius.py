@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from json import dumps, loads
 from sys import version_info
-from typing import Dict, Optional, Union
+from typing import Any, Dict, Optional, Set, Union
 
 from pydantic import BaseModel, Field, ValidationError, model_serializer
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.search.models.around_radius_all import AroundRadiusAll
@@ -26,14 +26,12 @@ class AroundRadius(BaseModel):
     Maximum radius for a search around a central location.  This parameter works in combination with the `aroundLatLng` and `aroundLatLngViaIP` parameters. By default, the search radius is determined automatically from the density of hits around the central location. The search radius is small if there are many hits close to the central coordinates.
     """
 
-    oneof_schema_1_validator: Optional[Annotated[int, Field(strict=True, ge=1)]] = (
-        Field(
-            default=None,
-            description="Maximum search radius around a central location in meters.",
-        )
-    )
-    oneof_schema_2_validator: Optional[AroundRadiusAll] = None
+    oneof_schema_1_validator: Optional[int] = Field(default=None)
+    """ Maximum search radius around a central location in meters. """
+    oneof_schema_2_validator: Optional[AroundRadiusAll] = Field(default=None)
+
     actual_instance: Optional[Union[AroundRadiusAll, int]] = None
+    one_of_schemas: Set[str] = {"AroundRadiusAll", "int"}
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -57,7 +55,8 @@ class AroundRadius(BaseModel):
         return self.actual_instance if hasattr(self, "actual_instance") else self
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
+        """Create an instance of AroundRadius from a JSON string"""
         return cls.from_json(dumps(obj))
 
     @classmethod
@@ -90,17 +89,21 @@ class AroundRadius(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        if hasattr(self.actual_instance, "to_json"):
+        if hasattr(self.actual_instance, "to_json") and callable(
+            self.actual_instance.to_json
+        ):
             return self.actual_instance.to_json()
         else:
             return dumps(self.actual_instance)
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> Optional[Union[Dict[str, Any], AroundRadiusAll, int]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict"):
+        if hasattr(self.actual_instance, "to_dict") and callable(
+            self.actual_instance.to_dict
+        ):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance

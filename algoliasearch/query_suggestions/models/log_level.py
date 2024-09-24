@@ -25,7 +25,9 @@ class LogLevel(str, Enum):
     allowed enum values
     """
     SKIP = "SKIP"
+
     INFO = "INFO"
+
     ERROR = "ERROR"
 
     @classmethod

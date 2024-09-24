@@ -25,8 +25,11 @@ class Status(str, Enum):
     allowed enum values
     """
     OPERATIONAL = "operational"
+
     DEGRADED_PERFORMANCE = "degraded_performance"
+
     PARTIAL_OUTAGE = "partial_outage"
+
     MAJOR_OUTAGE = "major_outage"
 
     @classmethod

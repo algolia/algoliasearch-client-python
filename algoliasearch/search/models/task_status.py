@@ -25,6 +25,7 @@ class TaskStatus(str, Enum):
     allowed enum values
     """
     PUBLISHED = "published"
+
     NOTPUBLISHED = "notPublished"
 
     @classmethod

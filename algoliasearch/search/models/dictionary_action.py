@@ -25,6 +25,7 @@ class DictionaryAction(str, Enum):
     allowed enum values
     """
     ADDENTRY = "addEntry"
+
     DELETEENTRY = "deleteEntry"
 
     @classmethod

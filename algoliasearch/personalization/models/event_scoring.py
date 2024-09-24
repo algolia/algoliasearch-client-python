@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -26,42 +26,37 @@ class EventScoring(BaseModel):
     EventScoring
     """
 
-    score: StrictInt = Field(description="Event score.")
-    event_name: StrictStr = Field(description="Event name.", alias="eventName")
+    score: int = Field(alias="score")
+    """ Event score. """
+    event_name: str = Field(alias="eventName")
+    """ Event name. """
     event_type: EventType = Field(alias="eventType")
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of EventScoring from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of EventScoring from a dict"""
         if obj is None:
             return None
@@ -69,11 +64,6 @@ class EventScoring(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "score": obj.get("score"),
-                "eventName": obj.get("eventName"),
-                "eventType": obj.get("eventType"),
-            }
-        )
-        return _obj
+        obj["eventType"] = obj.get("eventType")
+
+        return cls.model_validate(obj)

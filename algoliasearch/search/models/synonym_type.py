@@ -25,9 +25,13 @@ class SynonymType(str, Enum):
     allowed enum values
     """
     SYNONYM = "synonym"
+
     ONEWAYSYNONYM = "onewaysynonym"
+
     ALTCORRECTION1 = "altcorrection1"
+
     ALTCORRECTION2 = "altcorrection2"
+
     PLACEHOLDER = "placeholder"
 
     @classmethod

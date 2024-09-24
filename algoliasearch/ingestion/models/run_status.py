@@ -25,9 +25,13 @@ class RunStatus(str, Enum):
     allowed enum values
     """
     CREATED = "created"
+
     STARTED = "started"
+
     IDLED = "idled"
+
     FINISHED = "finished"
+
     SKIPPED = "skipped"
 
     @classmethod

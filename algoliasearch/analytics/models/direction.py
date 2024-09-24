@@ -25,6 +25,7 @@ class Direction(str, Enum):
     allowed enum values
     """
     ASC = "asc"
+
     DESC = "desc"
 
     @classmethod

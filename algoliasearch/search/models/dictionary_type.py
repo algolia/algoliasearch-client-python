@@ -25,7 +25,9 @@ class DictionaryType(str, Enum):
     allowed enum values
     """
     PLURALS = "plurals"
+
     STOPWORDS = "stopwords"
+
     COMPOUNDS = "compounds"
 
     @classmethod

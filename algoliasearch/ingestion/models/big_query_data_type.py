@@ -25,6 +25,7 @@ class BigQueryDataType(str, Enum):
     allowed enum values
     """
     GA4 = "ga4"
+
     GA360 = "ga360"
 
     @classmethod

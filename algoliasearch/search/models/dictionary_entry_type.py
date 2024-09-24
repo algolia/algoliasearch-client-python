@@ -25,6 +25,7 @@ class DictionaryEntryType(str, Enum):
     allowed enum values
     """
     CUSTOM = "custom"
+
     STANDARD = "standard"
 
     @classmethod

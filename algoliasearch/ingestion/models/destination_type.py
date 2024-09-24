@@ -25,6 +25,7 @@ class DestinationType(str, Enum):
     allowed enum values
     """
     SEARCH = "search"
+
     INSIGHTS = "insights"
 
     @classmethod

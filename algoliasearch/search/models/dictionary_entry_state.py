@@ -25,6 +25,7 @@ class DictionaryEntryState(str, Enum):
     allowed enum values
     """
     ENABLED = "enabled"
+
     DISABLED = "disabled"
 
     @classmethod

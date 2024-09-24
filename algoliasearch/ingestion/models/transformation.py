@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -23,64 +23,48 @@ class Transformation(BaseModel):
     Transformation
     """
 
-    transformation_id: StrictStr = Field(
-        description="Universally unique identifier (UUID) of a transformation.",
-        alias="transformationID",
+    transformation_id: str = Field(alias="transformationID")
+    """ Universally unique identifier (UUID) of a transformation. """
+    authentication_ids: Optional[List[str]] = Field(
+        default=None, alias="authenticationIDs"
     )
-    authentication_ids: Optional[List[StrictStr]] = Field(
-        default=None,
-        description="The authentications associated for the current transformation.",
-        alias="authenticationIDs",
-    )
-    code: StrictStr = Field(description="The source code of the transformation.")
-    name: StrictStr = Field(
-        description="The uniquely identified name of your transformation."
-    )
-    description: Optional[StrictStr] = Field(
-        default=None,
-        description="A descriptive name for your transformation of what it does.",
-    )
-    created_at: StrictStr = Field(
-        description="Date of creation in RFC 3339 format.", alias="createdAt"
-    )
-    updated_at: Optional[StrictStr] = Field(
-        default=None,
-        description="Date of last update in RFC 3339 format.",
-        alias="updatedAt",
-    )
+    """ The authentications associated for the current transformation. """
+    code: str = Field(alias="code")
+    """ The source code of the transformation. """
+    name: str = Field(alias="name")
+    """ The uniquely identified name of your transformation. """
+    description: Optional[str] = Field(default=None, alias="description")
+    """ A descriptive name for your transformation of what it does. """
+    created_at: str = Field(alias="createdAt")
+    """ Date of creation in RFC 3339 format. """
+    updated_at: Optional[str] = Field(default=None, alias="updatedAt")
+    """ Date of last update in RFC 3339 format. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Transformation from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Transformation from a dict"""
         if obj is None:
             return None
@@ -88,15 +72,4 @@ class Transformation(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "transformationID": obj.get("transformationID"),
-                "authenticationIDs": obj.get("authenticationIDs"),
-                "code": obj.get("code"),
-                "name": obj.get("name"),
-                "description": obj.get("description"),
-                "createdAt": obj.get("createdAt"),
-                "updatedAt": obj.get("updatedAt"),
-            }
-        )
-        return _obj
+        return cls.model_validate(obj)

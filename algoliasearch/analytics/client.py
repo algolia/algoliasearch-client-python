@@ -12,11 +12,12 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
+from typing_extensions import Annotated
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 from algoliasearch.analytics.config import AnalyticsConfig
 from algoliasearch.analytics.models.direction import Direction

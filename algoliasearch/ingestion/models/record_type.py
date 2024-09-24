@@ -25,6 +25,7 @@ class RecordType(str, Enum):
     allowed enum values
     """
     PRODUCT = "product"
+
     VARIANT = "variant"
 
     @classmethod

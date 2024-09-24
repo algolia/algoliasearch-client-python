@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, ClassVar, Dict, List, Optional, Union
+from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.recommend.models.highlight_result import HighlightResult
@@ -28,89 +28,47 @@ class RecommendHit(BaseModel):
     Recommend hit.
     """
 
-    object_id: StrictStr = Field(
-        description="Unique record identifier.", alias="objectID"
-    )
+    object_id: str = Field(alias="objectID")
+    """ Unique record identifier. """
     highlight_result: Optional[Dict[str, HighlightResult]] = Field(
-        default=None,
-        description="Surround words that match the query with HTML tags for highlighting.",
-        alias="_highlightResult",
+        default=None, alias="_highlightResult"
     )
+    """ Surround words that match the query with HTML tags for highlighting. """
     snippet_result: Optional[Dict[str, SnippetResult]] = Field(
-        default=None,
-        description="Snippets that show the context around a matching search query.",
-        alias="_snippetResult",
+        default=None, alias="_snippetResult"
     )
+    """ Snippets that show the context around a matching search query. """
     ranking_info: Optional[RankingInfo] = Field(default=None, alias="_rankingInfo")
-    distinct_seq_id: Optional[StrictInt] = Field(default=None, alias="_distinctSeqID")
-    score: Union[
-        Annotated[float, Field(le=100, strict=True, ge=0)],
-        Annotated[int, Field(le=100, strict=True, ge=0)],
-    ] = Field(description="Recommendation score.", alias="_score")
-    additional_properties: Dict[str, Any] = {}
-    __properties: ClassVar[List[str]] = [
-        "objectID",
-        "_highlightResult",
-        "_snippetResult",
-        "_rankingInfo",
-        "_distinctSeqID",
-        "_score",
-    ]
+    distinct_seq_id: Optional[int] = Field(default=None, alias="_distinctSeqID")
+    score: float = Field(alias="_score")
+    """ Recommendation score. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+        extra="allow",
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of RecommendHit from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        * Fields in `self.additional_properties` are added to the output dict.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={
-                "additional_properties",
-            },
             exclude_none=True,
             exclude_unset=True,
         )
-        _field_dict = {}
-        if self.highlight_result:
-            for _key in self.highlight_result:
-                if self.highlight_result[_key]:
-                    _field_dict[_key] = self.highlight_result[_key].to_dict()
-            _dict["_highlightResult"] = _field_dict
-        _field_dict = {}
-        if self.snippet_result:
-            for _key in self.snippet_result:
-                if self.snippet_result[_key]:
-                    _field_dict[_key] = self.snippet_result[_key].to_dict()
-            _dict["_snippetResult"] = _field_dict
-        if self.ranking_info:
-            _dict["_rankingInfo"] = self.ranking_info.to_dict()
-        # puts key-value pairs in additional_properties in the top level
-        if self.additional_properties is not None:
-            for _key, _value in self.additional_properties.items():
-                _dict[_key] = _value
-
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of RecommendHit from a dict"""
         if obj is None:
             return None
@@ -118,37 +76,26 @@ class RecommendHit(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "objectID": obj.get("objectID"),
-                "_highlightResult": (
-                    dict(
-                        (_k, HighlightResult.from_dict(_v))
-                        for _k, _v in obj.get("_highlightResult").items()
-                    )
-                    if obj.get("_highlightResult") is not None
-                    else None
-                ),
-                "_snippetResult": (
-                    dict(
-                        (_k, SnippetResult.from_dict(_v))
-                        for _k, _v in obj.get("_snippetResult").items()
-                    )
-                    if obj.get("_snippetResult") is not None
-                    else None
-                ),
-                "_rankingInfo": (
-                    RankingInfo.from_dict(obj.get("_rankingInfo"))
-                    if obj.get("_rankingInfo") is not None
-                    else None
-                ),
-                "_distinctSeqID": obj.get("_distinctSeqID"),
-                "_score": obj.get("_score"),
-            }
+        obj["_highlightResult"] = (
+            dict(
+                (_k, HighlightResult.from_dict(_v))
+                for _k, _v in obj["_highlightResult"].items()
+            )
+            if obj.get("_highlightResult") is not None
+            else None
         )
-        # store additional fields in additional_properties
-        for _key in obj.keys():
-            if _key not in cls.__properties:
-                _obj.additional_properties[_key] = obj.get(_key)
+        obj["_snippetResult"] = (
+            dict(
+                (_k, SnippetResult.from_dict(_v))
+                for _k, _v in obj["_snippetResult"].items()
+            )
+            if obj.get("_snippetResult") is not None
+            else None
+        )
+        obj["_rankingInfo"] = (
+            RankingInfo.from_dict(obj["_rankingInfo"])
+            if obj.get("_rankingInfo") is not None
+            else None
+        )
 
-        return _obj
+        return cls.model_validate(obj)

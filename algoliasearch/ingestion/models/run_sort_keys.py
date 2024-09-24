@@ -25,7 +25,9 @@ class RunSortKeys(str, Enum):
     allowed enum values
     """
     STATUS = "status"
+
     UPDATEDAT = "updatedAt"
+
     CREATEDAT = "createdAt"
 
     @classmethod

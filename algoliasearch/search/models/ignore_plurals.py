@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from json import dumps, loads
 from sys import version_info
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Set, Union
 
-from pydantic import BaseModel, Field, StrictBool, ValidationError, model_serializer
+from pydantic import BaseModel, Field, ValidationError, model_serializer
 
 if version_info >= (3, 11):
     from typing import Self
@@ -27,18 +27,16 @@ class IgnorePlurals(BaseModel):
     Treat singular, plurals, and other forms of declensions as equivalent. You should only use this feature for the languages used in your index.
     """
 
-    oneof_schema_1_validator: Optional[List[SupportedLanguage]] = Field(
-        default=None,
-        description="ISO code for languages for which this feature should be active. This overrides languages you set with `queryLanguages`. ",
-    )
-    oneof_schema_2_validator: Optional[BooleanString] = None
-    oneof_schema_3_validator: Optional[StrictBool] = Field(
-        default=False,
-        description="If true, `ignorePlurals` is active for all languages included in `queryLanguages`, or for all supported languages, if `queryLanguges` is empty. If false, singulars, plurals, and other declensions won't be considered equivalent. ",
-    )
+    oneof_schema_1_validator: Optional[List[SupportedLanguage]] = Field(default=None)
+    """ ISO code for languages for which this feature should be active. This overrides languages you set with `queryLanguages`.  """
+    oneof_schema_2_validator: Optional[BooleanString] = Field(default=None)
+
+    oneof_schema_3_validator: Optional[bool] = Field(default=None)
+    """ If true, `ignorePlurals` is active for all languages included in `queryLanguages`, or for all supported languages, if `queryLanguges` is empty. If false, singulars, plurals, and other declensions won't be considered equivalent.  """
     actual_instance: Optional[Union[BooleanString, List[SupportedLanguage], bool]] = (
         None
     )
+    one_of_schemas: Set[str] = {"BooleanString", "List[SupportedLanguage]", "bool"}
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -64,7 +62,8 @@ class IgnorePlurals(BaseModel):
         return self.actual_instance if hasattr(self, "actual_instance") else self
 
     @classmethod
-    def from_dict(cls, obj: dict) -> Self:
+    def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
+        """Create an instance of IgnorePlurals from a JSON string"""
         return cls.from_json(dumps(obj))
 
     @classmethod
@@ -104,17 +103,23 @@ class IgnorePlurals(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        if hasattr(self.actual_instance, "to_json"):
+        if hasattr(self.actual_instance, "to_json") and callable(
+            self.actual_instance.to_json
+        ):
             return self.actual_instance.to_json()
         else:
             return dumps(self.actual_instance)
 
-    def to_dict(self) -> Dict:
+    def to_dict(
+        self,
+    ) -> Optional[Union[Dict[str, Any], BooleanString, List[SupportedLanguage], bool]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict"):
+        if hasattr(self.actual_instance, "to_dict") and callable(
+            self.actual_instance.to_dict
+        ):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance

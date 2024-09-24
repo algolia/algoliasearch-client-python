@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -29,65 +29,42 @@ class SecuredApiKeyRestrictions(BaseModel):
     search_params: Optional[SearchParamsObject] = Field(
         default=None, alias="searchParams"
     )
-    filters: Optional[StrictStr] = Field(
-        default=None,
-        description="Filters that apply to every search made with the secured API key. Extra filters added at search time will be combined with `AND`. For example, if you set `group:admin` as fixed filter on your generated API key, and add `groups:visitors` to the search query, the complete set of filters will be `group:admin AND groups:visitors`. ",
-    )
-    valid_until: Optional[StrictInt] = Field(
-        default=None,
-        description="Timestamp when the secured API key expires, measured in seconds since the Unix epoch.",
-        alias="validUntil",
-    )
-    restrict_indices: Optional[List[StrictStr]] = Field(
-        default=None,
-        description='Index names or patterns that this API key can access. By default, an API key can access all indices in the same application.  You can use leading and trailing wildcard characters (`*`):  - `dev_*` matches all indices starting with "dev_". - `*_dev` matches all indices ending with "_dev". - `*_products_*` matches all indices containing "_products_". ',
-        alias="restrictIndices",
-    )
-    restrict_sources: Optional[StrictStr] = Field(
-        default=None,
-        description="IP network that are allowed to use this key.  You can only add a single source, but you can provide a range of IP addresses. Use this to protect against API key leaking and reuse. ",
-        alias="restrictSources",
-    )
-    user_token: Optional[StrictStr] = Field(
-        default=None,
-        description="Pseudonymous user identifier to restrict usage of this API key to specific users.  By default, rate limits are set based on IP addresses. This can be an issue if many users search from the same IP address. To avoid this, add a user token to each generated API key. ",
-        alias="userToken",
-    )
+    filters: Optional[str] = Field(default=None, alias="filters")
+    """ Filters that apply to every search made with the secured API key. Extra filters added at search time will be combined with `AND`. For example, if you set `group:admin` as fixed filter on your generated API key, and add `groups:visitors` to the search query, the complete set of filters will be `group:admin AND groups:visitors`.  """
+    valid_until: Optional[int] = Field(default=None, alias="validUntil")
+    """ Timestamp when the secured API key expires, measured in seconds since the Unix epoch. """
+    restrict_indices: Optional[List[str]] = Field(default=None, alias="restrictIndices")
+    """ Index names or patterns that this API key can access. By default, an API key can access all indices in the same application.  You can use leading and trailing wildcard characters (`*`):  - `dev_*` matches all indices starting with \"dev_\". - `*_dev` matches all indices ending with \"_dev\". - `*_products_*` matches all indices containing \"_products_\".  """
+    restrict_sources: Optional[str] = Field(default=None, alias="restrictSources")
+    """ IP network that are allowed to use this key.  You can only add a single source, but you can provide a range of IP addresses. Use this to protect against API key leaking and reuse.  """
+    user_token: Optional[str] = Field(default=None, alias="userToken")
+    """ Pseudonymous user identifier to restrict usage of this API key to specific users.  By default, rate limits are set based on IP addresses. This can be an issue if many users search from the same IP address. To avoid this, add a user token to each generated API key.  """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of SecuredApiKeyRestrictions from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        if self.search_params:
-            _dict["searchParams"] = self.search_params.to_dict()
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of SecuredApiKeyRestrictions from a dict"""
         if obj is None:
             return None
@@ -95,18 +72,10 @@ class SecuredApiKeyRestrictions(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "searchParams": (
-                    SearchParamsObject.from_dict(obj.get("searchParams"))
-                    if obj.get("searchParams") is not None
-                    else None
-                ),
-                "filters": obj.get("filters"),
-                "validUntil": obj.get("validUntil"),
-                "restrictIndices": obj.get("restrictIndices"),
-                "restrictSources": obj.get("restrictSources"),
-                "userToken": obj.get("userToken"),
-            }
+        obj["searchParams"] = (
+            SearchParamsObject.from_dict(obj["searchParams"])
+            if obj.get("searchParams") is not None
+            else None
         )
-        return _obj
+
+        return cls.model_validate(obj)

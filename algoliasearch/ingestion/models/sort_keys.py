@@ -25,8 +25,11 @@ class SortKeys(str, Enum):
     allowed enum values
     """
     NAME = "name"
+
     TYPE = "type"
+
     UPDATEDAT = "updatedAt"
+
     CREATEDAT = "createdAt"
 
     @classmethod

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -23,78 +23,56 @@ class FetchedIndex(BaseModel):
     FetchedIndex
     """
 
-    name: StrictStr = Field(description="Index name.")
-    created_at: StrictStr = Field(
-        description="Index creation date. An empty string means that the index has no records.",
-        alias="createdAt",
-    )
-    updated_at: StrictStr = Field(
-        description="Date and time when the object was updated, in RFC 3339 format.",
-        alias="updatedAt",
-    )
-    entries: StrictInt = Field(description="Number of records contained in the index.")
-    data_size: StrictInt = Field(
-        description="Number of bytes of the index in minified format.", alias="dataSize"
-    )
-    file_size: StrictInt = Field(
-        description="Number of bytes of the index binary file.", alias="fileSize"
-    )
-    last_build_time_s: StrictInt = Field(
-        description="Last build time.", alias="lastBuildTimeS"
-    )
-    number_of_pending_tasks: StrictInt = Field(
-        description="Number of pending indexing operations. This value is deprecated and should not be used.",
-        alias="numberOfPendingTasks",
-    )
-    pending_task: StrictBool = Field(
-        description="A boolean which says whether the index has pending tasks. This value is deprecated and should not be used.",
-        alias="pendingTask",
-    )
-    primary: Optional[StrictStr] = Field(
-        default=None,
-        description="Only present if the index is a replica. Contains the name of the related primary index.",
-    )
-    replicas: Optional[List[StrictStr]] = Field(
-        default=None,
-        description="Only present if the index is a primary index with replicas. Contains the names of all linked replicas.",
-    )
-    virtual: Optional[StrictBool] = Field(
-        default=None,
-        description="Only present if the index is a [virtual replica](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/sort-an-index-alphabetically/#virtual-replicas).",
-    )
+    name: str = Field(alias="name")
+    """ Index name. """
+    created_at: str = Field(alias="createdAt")
+    """ Index creation date. An empty string means that the index has no records. """
+    updated_at: str = Field(alias="updatedAt")
+    """ Date and time when the object was updated, in RFC 3339 format. """
+    entries: int = Field(alias="entries")
+    """ Number of records contained in the index. """
+    data_size: int = Field(alias="dataSize")
+    """ Number of bytes of the index in minified format. """
+    file_size: int = Field(alias="fileSize")
+    """ Number of bytes of the index binary file. """
+    last_build_time_s: int = Field(alias="lastBuildTimeS")
+    """ Last build time. """
+    number_of_pending_tasks: int = Field(alias="numberOfPendingTasks")
+    """ Number of pending indexing operations. This value is deprecated and should not be used. """
+    pending_task: bool = Field(alias="pendingTask")
+    """ A boolean which says whether the index has pending tasks. This value is deprecated and should not be used. """
+    primary: Optional[str] = Field(default=None, alias="primary")
+    """ Only present if the index is a replica. Contains the name of the related primary index. """
+    replicas: Optional[List[str]] = Field(default=None, alias="replicas")
+    """ Only present if the index is a primary index with replicas. Contains the names of all linked replicas. """
+    virtual: Optional[bool] = Field(default=None, alias="virtual")
+    """ Only present if the index is a [virtual replica](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/sort-an-index-alphabetically/#virtual-replicas). """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of FetchedIndex from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of FetchedIndex from a dict"""
         if obj is None:
             return None
@@ -102,20 +80,4 @@ class FetchedIndex(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "name": obj.get("name"),
-                "createdAt": obj.get("createdAt"),
-                "updatedAt": obj.get("updatedAt"),
-                "entries": obj.get("entries"),
-                "dataSize": obj.get("dataSize"),
-                "fileSize": obj.get("fileSize"),
-                "lastBuildTimeS": obj.get("lastBuildTimeS"),
-                "numberOfPendingTasks": obj.get("numberOfPendingTasks"),
-                "pendingTask": obj.get("pendingTask"),
-                "primary": obj.get("primary"),
-                "replicas": obj.get("replicas"),
-                "virtual": obj.get("virtual"),
-            }
-        )
-        return _obj
+        return cls.model_validate(obj)

@@ -25,7 +25,9 @@ class EventSortKeys(str, Enum):
     allowed enum values
     """
     STATUS = "status"
+
     TYPE = "type"
+
     PUBLISHEDAT = "publishedAt"
 
     @classmethod

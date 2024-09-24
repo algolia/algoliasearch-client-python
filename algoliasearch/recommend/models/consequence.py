@@ -13,9 +13,9 @@ from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.recommend.models.hide_consequence_object import HideConsequenceObject
@@ -30,63 +30,39 @@ class Consequence(BaseModel):
     Effect of the rule.
     """
 
-    hide: Optional[Annotated[List[HideConsequenceObject], Field(min_length=1)]] = Field(
-        default=None, description="Exclude items from recommendations."
+    hide: Optional[List[HideConsequenceObject]] = Field(default=None, alias="hide")
+    """ Exclude items from recommendations. """
+    promote: Optional[List[PromoteConsequenceObject]] = Field(
+        default=None, alias="promote"
     )
-    promote: Optional[
-        Annotated[List[PromoteConsequenceObject], Field(min_length=1)]
-    ] = Field(
-        default=None,
-        description="Place items at specific positions in the list of recommendations.",
-    )
-    params: Optional[ParamsConsequence] = None
+    """ Place items at specific positions in the list of recommendations. """
+    params: Optional[ParamsConsequence] = Field(default=None, alias="params")
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Consequence from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        _items = []
-        if self.hide:
-            for _item in self.hide:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["hide"] = _items
-        _items = []
-        if self.promote:
-            for _item in self.promote:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["promote"] = _items
-        if self.params:
-            _dict["params"] = self.params.to_dict()
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Consequence from a dict"""
         if obj is None:
             return None
@@ -94,29 +70,20 @@ class Consequence(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "hide": (
-                    [
-                        HideConsequenceObject.from_dict(_item)
-                        for _item in obj.get("hide")
-                    ]
-                    if obj.get("hide") is not None
-                    else None
-                ),
-                "promote": (
-                    [
-                        PromoteConsequenceObject.from_dict(_item)
-                        for _item in obj.get("promote")
-                    ]
-                    if obj.get("promote") is not None
-                    else None
-                ),
-                "params": (
-                    ParamsConsequence.from_dict(obj.get("params"))
-                    if obj.get("params") is not None
-                    else None
-                ),
-            }
+        obj["hide"] = (
+            [HideConsequenceObject.from_dict(_item) for _item in obj["hide"]]
+            if obj.get("hide") is not None
+            else None
         )
-        return _obj
+        obj["promote"] = (
+            [PromoteConsequenceObject.from_dict(_item) for _item in obj["promote"]]
+            if obj.get("promote") is not None
+            else None
+        )
+        obj["params"] = (
+            ParamsConsequence.from_dict(obj["params"])
+            if obj.get("params") is not None
+            else None
+        )
+
+        return cls.model_validate(obj)

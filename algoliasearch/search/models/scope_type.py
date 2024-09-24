@@ -25,7 +25,9 @@ class ScopeType(str, Enum):
     allowed enum values
     """
     SETTINGS = "settings"
+
     SYNONYMS = "synonyms"
+
     RULES = "rules"
 
     @classmethod

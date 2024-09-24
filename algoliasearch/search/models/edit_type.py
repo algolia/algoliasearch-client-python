@@ -25,6 +25,7 @@ class EditType(str, Enum):
     allowed enum values
     """
     REMOVE = "remove"
+
     REPLACE = "replace"
 
     @classmethod

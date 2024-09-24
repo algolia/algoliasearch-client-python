@@ -10,12 +10,12 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.ingestion.models.mapping_type_csv import MappingTypeCSV
@@ -27,56 +27,41 @@ class SourceCSV(BaseModel):
     SourceCSV
     """
 
-    url: StrictStr = Field(description="URL of the file.")
-    unique_id_column: Optional[StrictStr] = Field(
-        default=None,
-        description="Name of a column that contains a unique ID which will be used as `objectID` in Algolia.",
-        alias="uniqueIDColumn",
-    )
-    mapping: Optional[Dict[str, MappingTypeCSV]] = Field(
-        default=None,
-        description="Key-value pairs of column names and their expected types. ",
-    )
-    method: Optional[MethodType] = None
-    delimiter: Optional[
-        Annotated[str, Field(min_length=1, strict=True, max_length=1)]
-    ] = Field(
-        default=",",
-        description="The character used to split the value on each line, default to a comma (\\r, \\n, 0xFFFD, and space are forbidden).",
-    )
+    url: str = Field(alias="url")
+    """ URL of the file. """
+    unique_id_column: Optional[str] = Field(default=None, alias="uniqueIDColumn")
+    """ Name of a column that contains a unique ID which will be used as `objectID` in Algolia. """
+    mapping: Optional[Dict[str, MappingTypeCSV]] = Field(default=None, alias="mapping")
+    """ Key-value pairs of column names and their expected types.  """
+    method: Optional[MethodType] = Field(default=None, alias="method")
+    delimiter: Optional[str] = Field(default=None, alias="delimiter")
+    """ The character used to split the value on each line, default to a comma (\\r, \\n, 0xFFFD, and space are forbidden). """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of SourceCSV from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of SourceCSV from a dict"""
         if obj is None:
             return None
@@ -84,13 +69,7 @@ class SourceCSV(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "url": obj.get("url"),
-                "uniqueIDColumn": obj.get("uniqueIDColumn"),
-                "mapping": dict((_k, _v) for _k, _v in obj.get("mapping").items()),
-                "method": obj.get("method"),
-                "delimiter": obj.get("delimiter"),
-            }
-        )
-        return _obj
+        obj["mapping"] = dict((_k, _v) for _k, _v in obj.get("mapping").items())
+        obj["method"] = obj.get("method")
+
+        return cls.model_validate(obj)

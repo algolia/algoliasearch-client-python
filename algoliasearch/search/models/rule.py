@@ -10,12 +10,12 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.search.models.condition import Condition
@@ -28,73 +28,43 @@ class Rule(BaseModel):
     Rule object.
     """
 
-    object_id: StrictStr = Field(
-        description="Unique identifier of a rule object.", alias="objectID"
-    )
-    conditions: Optional[
-        Annotated[List[Condition], Field(min_length=0, max_length=25)]
-    ] = Field(
-        default=None,
-        description="Conditions that trigger a rule.  Some consequences require specific conditions or don't require any condition. For more information, see [Conditions](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#conditions). ",
-    )
-    consequence: Optional[Consequence] = None
-    description: Optional[StrictStr] = Field(
-        default=None,
-        description="Description of the rule's purpose to help you distinguish between different rules.",
-    )
-    enabled: Optional[StrictBool] = Field(
-        default=True, description="Whether the rule is active."
-    )
-    validity: Optional[List[TimeRange]] = Field(
-        default=None, description="Time periods when the rule is active."
-    )
+    object_id: str = Field(alias="objectID")
+    """ Unique identifier of a rule object. """
+    conditions: Optional[List[Condition]] = Field(default=None, alias="conditions")
+    """ Conditions that trigger a rule.  Some consequences require specific conditions or don't require any condition. For more information, see [Conditions](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#conditions).  """
+    consequence: Optional[Consequence] = Field(default=None, alias="consequence")
+    description: Optional[str] = Field(default=None, alias="description")
+    """ Description of the rule's purpose to help you distinguish between different rules. """
+    enabled: Optional[bool] = Field(default=None, alias="enabled")
+    """ Whether the rule is active. """
+    validity: Optional[List[TimeRange]] = Field(default=None, alias="validity")
+    """ Time periods when the rule is active. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Rule from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        _items = []
-        if self.conditions:
-            for _item in self.conditions:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["conditions"] = _items
-        if self.consequence:
-            _dict["consequence"] = self.consequence.to_dict()
-        _items = []
-        if self.validity:
-            for _item in self.validity:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["validity"] = _items
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Rule from a dict"""
         if obj is None:
             return None
@@ -102,26 +72,20 @@ class Rule(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "objectID": obj.get("objectID"),
-                "conditions": (
-                    [Condition.from_dict(_item) for _item in obj.get("conditions")]
-                    if obj.get("conditions") is not None
-                    else None
-                ),
-                "consequence": (
-                    Consequence.from_dict(obj.get("consequence"))
-                    if obj.get("consequence") is not None
-                    else None
-                ),
-                "description": obj.get("description"),
-                "enabled": obj.get("enabled"),
-                "validity": (
-                    [TimeRange.from_dict(_item) for _item in obj.get("validity")]
-                    if obj.get("validity") is not None
-                    else None
-                ),
-            }
+        obj["conditions"] = (
+            [Condition.from_dict(_item) for _item in obj["conditions"]]
+            if obj.get("conditions") is not None
+            else None
         )
-        return _obj
+        obj["consequence"] = (
+            Consequence.from_dict(obj["consequence"])
+            if obj.get("consequence") is not None
+            else None
+        )
+        obj["validity"] = (
+            [TimeRange.from_dict(_item) for _item in obj["validity"]]
+            if obj.get("validity") is not None
+            else None
+        )
+
+        return cls.model_validate(obj)

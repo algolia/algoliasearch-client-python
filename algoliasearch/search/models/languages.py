@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -26,48 +26,35 @@ class Languages(BaseModel):
     Dictionary language.
     """
 
-    plurals: Optional[DictionaryLanguage]
-    stopwords: Optional[DictionaryLanguage]
-    compounds: Optional[DictionaryLanguage]
+    plurals: DictionaryLanguage = Field(alias="plurals")
+    stopwords: DictionaryLanguage = Field(alias="stopwords")
+    compounds: DictionaryLanguage = Field(alias="compounds")
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Languages from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        if self.plurals:
-            _dict["plurals"] = self.plurals.to_dict()
-        if self.stopwords:
-            _dict["stopwords"] = self.stopwords.to_dict()
-        if self.compounds:
-            _dict["compounds"] = self.compounds.to_dict()
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Languages from a dict"""
         if obj is None:
             return None
@@ -75,23 +62,20 @@ class Languages(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "plurals": (
-                    DictionaryLanguage.from_dict(obj.get("plurals"))
-                    if obj.get("plurals") is not None
-                    else None
-                ),
-                "stopwords": (
-                    DictionaryLanguage.from_dict(obj.get("stopwords"))
-                    if obj.get("stopwords") is not None
-                    else None
-                ),
-                "compounds": (
-                    DictionaryLanguage.from_dict(obj.get("compounds"))
-                    if obj.get("compounds") is not None
-                    else None
-                ),
-            }
+        obj["plurals"] = (
+            DictionaryLanguage.from_dict(obj["plurals"])
+            if obj.get("plurals") is not None
+            else None
         )
-        return _obj
+        obj["stopwords"] = (
+            DictionaryLanguage.from_dict(obj["stopwords"])
+            if obj.get("stopwords") is not None
+            else None
+        )
+        obj["compounds"] = (
+            DictionaryLanguage.from_dict(obj["compounds"])
+            if obj.get("compounds") is not None
+            else None
+        )
+
+        return cls.model_validate(obj)

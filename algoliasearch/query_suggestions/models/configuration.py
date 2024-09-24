@@ -10,12 +10,12 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.query_suggestions.models.languages import Languages
@@ -27,63 +27,44 @@ class Configuration(BaseModel):
     Query Suggestions configuration.
     """
 
-    source_indices: Annotated[List[SourceIndex], Field(min_length=1)] = Field(
-        description="Algolia indices from which to get the popular searches for query suggestions.",
-        alias="sourceIndices",
+    source_indices: List[SourceIndex] = Field(alias="sourceIndices")
+    """ Algolia indices from which to get the popular searches for query suggestions. """
+    languages: Optional[Languages] = Field(default=None, alias="languages")
+    exclude: Optional[List[str]] = Field(default=None, alias="exclude")
+    enable_personalization: Optional[bool] = Field(
+        default=None, alias="enablePersonalization"
     )
-    languages: Optional[Languages] = None
-    exclude: Optional[List[StrictStr]] = None
-    enable_personalization: Optional[StrictBool] = Field(
-        default=False,
-        description="Whether to turn on personalized query suggestions.",
-        alias="enablePersonalization",
+    """ Whether to turn on personalized query suggestions. """
+    allow_special_characters: Optional[bool] = Field(
+        default=None, alias="allowSpecialCharacters"
     )
-    allow_special_characters: Optional[StrictBool] = Field(
-        default=False,
-        description="Whether to include suggestions with special characters.",
-        alias="allowSpecialCharacters",
-    )
+    """ Whether to include suggestions with special characters. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Configuration from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        _items = []
-        if self.source_indices:
-            for _item in self.source_indices:
-                if _item:
-                    _items.append(_item.to_dict())
-            _dict["sourceIndices"] = _items
-        if self.languages:
-            _dict["languages"] = self.languages.to_dict()
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Configuration from a dict"""
         if obj is None:
             return None
@@ -91,21 +72,15 @@ class Configuration(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "sourceIndices": (
-                    [SourceIndex.from_dict(_item) for _item in obj.get("sourceIndices")]
-                    if obj.get("sourceIndices") is not None
-                    else None
-                ),
-                "languages": (
-                    Languages.from_dict(obj.get("languages"))
-                    if obj.get("languages") is not None
-                    else None
-                ),
-                "exclude": obj.get("exclude"),
-                "enablePersonalization": obj.get("enablePersonalization"),
-                "allowSpecialCharacters": obj.get("allowSpecialCharacters"),
-            }
+        obj["sourceIndices"] = (
+            [SourceIndex.from_dict(_item) for _item in obj["sourceIndices"]]
+            if obj.get("sourceIndices") is not None
+            else None
         )
-        return _obj
+        obj["languages"] = (
+            Languages.from_dict(obj["languages"])
+            if obj.get("languages") is not None
+            else None
+        )
+
+        return cls.model_validate(obj)

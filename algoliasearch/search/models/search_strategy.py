@@ -25,6 +25,7 @@ class SearchStrategy(str, Enum):
     allowed enum values
     """
     NONE = "none"
+
     STOPIFENOUGHMATCHES = "stopIfEnoughMatches"
 
     @classmethod

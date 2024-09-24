@@ -25,11 +25,17 @@ class Action(str, Enum):
     allowed enum values
     """
     ADDOBJECT = "addObject"
+
     UPDATEOBJECT = "updateObject"
+
     PARTIALUPDATEOBJECT = "partialUpdateObject"
+
     PARTIALUPDATEOBJECTNOCREATE = "partialUpdateObjectNoCreate"
+
     DELETEOBJECT = "deleteObject"
+
     DELETE = "delete"
+
     CLEAR = "clear"
 
     @classmethod

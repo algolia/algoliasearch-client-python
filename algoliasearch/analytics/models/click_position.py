@@ -10,12 +10,12 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 class ClickPosition(BaseModel):
@@ -23,50 +23,36 @@ class ClickPosition(BaseModel):
     Click position.
     """
 
-    position: Optional[
-        Annotated[List[StrictInt], Field(min_length=2, max_length=2)]
-    ] = Field(
-        default=None,
-        description="Range of positions in the search results, using the pattern `[start,end]`.  For positions 11 and up, click events are summed over the specified range. `-1` indicates the end of the list of search results. ",
-    )
-    click_count: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
-        default=0,
-        description="Number of times this search has been clicked at that position.",
-        alias="clickCount",
-    )
+    position: Optional[List[int]] = Field(default=None, alias="position")
+    """ Range of positions in the search results, using the pattern `[start,end]`.  For positions 11 and up, click events are summed over the specified range. `-1` indicates the end of the list of search results.  """
+    click_count: Optional[int] = Field(default=None, alias="clickCount")
+    """ Number of times this search has been clicked at that position. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ClickPosition from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ClickPosition from a dict"""
         if obj is None:
             return None
@@ -74,7 +60,4 @@ class ClickPosition(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {"position": obj.get("position"), "clickCount": obj.get("clickCount")}
-        )
-        return _obj
+        return cls.model_validate(obj)

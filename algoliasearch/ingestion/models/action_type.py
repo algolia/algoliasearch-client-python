@@ -25,8 +25,11 @@ class ActionType(str, Enum):
     allowed enum values
     """
     REPLACE = "replace"
+
     SAVE = "save"
+
     PARTIAL = "partial"
+
     APPEND = "append"
 
     @classmethod

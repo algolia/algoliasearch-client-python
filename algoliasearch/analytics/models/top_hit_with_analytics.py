@@ -8,14 +8,14 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 class TopHitWithAnalytics(BaseModel):
@@ -23,71 +23,46 @@ class TopHitWithAnalytics(BaseModel):
     TopHitWithAnalytics
     """
 
-    hit: StrictStr = Field(
-        description="Object ID of a record that's returned as a search result."
-    )
-    count: StrictInt = Field(description="Number of occurrences.")
-    click_through_rate: Optional[
-        Union[
-            Annotated[float, Field(le=1, strict=True, ge=0)],
-            Annotated[int, Field(le=1, strict=True, ge=0)],
-        ]
-    ] = Field(
-        description="Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. ",
-        alias="clickThroughRate",
-    )
-    conversion_rate: Optional[
-        Union[
-            Annotated[float, Field(le=1, strict=True, ge=0)],
-            Annotated[int, Field(le=1, strict=True, ge=0)],
-        ]
-    ] = Field(
-        description="Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true. ",
-        alias="conversionRate",
-    )
-    tracked_hit_count: StrictInt = Field(
-        description="Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true.",
-        alias="trackedHitCount",
-    )
-    click_count: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Number of clicks associated with this search.", alias="clickCount"
-    )
-    conversion_count: Annotated[int, Field(strict=True, ge=0)] = Field(
-        description="Number of conversions from this search.", alias="conversionCount"
-    )
+    hit: str = Field(alias="hit")
+    """ Object ID of a record that's returned as a search result. """
+    count: int = Field(alias="count")
+    """ Number of occurrences. """
+    click_through_rate: float = Field(alias="clickThroughRate")
+    """ Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    conversion_rate: float = Field(alias="conversionRate")
+    """ Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    tracked_hit_count: int = Field(alias="trackedHitCount")
+    """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
+    click_count: int = Field(alias="clickCount")
+    """ Number of clicks associated with this search. """
+    conversion_count: int = Field(alias="conversionCount")
+    """ Number of conversions from this search. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of TopHitWithAnalytics from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of TopHitWithAnalytics from a dict"""
         if obj is None:
             return None
@@ -95,15 +70,4 @@ class TopHitWithAnalytics(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "hit": obj.get("hit"),
-                "count": obj.get("count"),
-                "clickThroughRate": obj.get("clickThroughRate"),
-                "conversionRate": obj.get("conversionRate"),
-                "trackedHitCount": obj.get("trackedHitCount"),
-                "clickCount": obj.get("clickCount"),
-                "conversionCount": obj.get("conversionCount"),
-            }
-        )
-        return _obj
+        return cls.model_validate(obj)

@@ -25,10 +25,15 @@ class AuthenticationType(str, Enum):
     allowed enum values
     """
     GOOGLESERVICEACCOUNT = "googleServiceAccount"
+
     BASIC = "basic"
+
     APIKEY = "apiKey"
+
     OAUTH = "oauth"
+
     ALGOLIA = "algolia"
+
     ALGOLIAINSIGHTS = "algoliaInsights"
 
     @classmethod

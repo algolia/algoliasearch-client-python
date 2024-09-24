@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
     from typing import Self
@@ -26,48 +26,39 @@ class DestinationIndexName(BaseModel):
     DestinationIndexName
     """
 
-    index_name: StrictStr = Field(
-        description="Algolia index name (case-sensitive).", alias="indexName"
-    )
+    index_name: str = Field(alias="indexName")
+    """ Algolia index name (case-sensitive). """
     record_type: Optional[RecordType] = Field(default=None, alias="recordType")
-    attributes_to_exclude: Optional[List[StrictStr]] = Field(
-        default=None,
-        description="Attributes from your source to exclude from Algolia records.  Not all your data attributes will be useful for searching. Keeping your Algolia records small increases indexing and search performance.  - Exclude nested attributes with `.` notation. For example, `foo.bar` indexes the `foo` attribute and all its children **except** the `bar` attribute. - Exclude attributes from arrays with `[i]`, where `i` is the index of the array element.   For example, `foo.[0].bar` only excludes the `bar` attribute from the first element of the `foo` array, but indexes the complete `foo` attribute for all other elements.   Use `*` as wildcard: `foo.[*].bar` excludes `bar` from all elements of the `foo` array. ",
-        alias="attributesToExclude",
+    attributes_to_exclude: Optional[List[str]] = Field(
+        default=None, alias="attributesToExclude"
     )
+    """ Attributes from your source to exclude from Algolia records.  Not all your data attributes will be useful for searching. Keeping your Algolia records small increases indexing and search performance.  - Exclude nested attributes with `.` notation. For example, `foo.bar` indexes the `foo` attribute and all its children **except** the `bar` attribute. - Exclude attributes from arrays with `[i]`, where `i` is the index of the array element.   For example, `foo.[0].bar` only excludes the `bar` attribute from the first element of the `foo` array, but indexes the complete `foo` attribute for all other elements.   Use `*` as wildcard: `foo.[*].bar` excludes `bar` from all elements of the `foo` array.  """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of DestinationIndexName from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of DestinationIndexName from a dict"""
         if obj is None:
             return None
@@ -75,11 +66,6 @@ class DestinationIndexName(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "indexName": obj.get("indexName"),
-                "recordType": obj.get("recordType"),
-                "attributesToExclude": obj.get("attributesToExclude"),
-            }
-        )
-        return _obj
+        obj["recordType"] = obj.get("recordType")
+
+        return cls.model_validate(obj)

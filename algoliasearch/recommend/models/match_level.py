@@ -25,7 +25,9 @@ class MatchLevel(str, Enum):
     allowed enum values
     """
     NONE = "none"
+
     PARTIAL = "partial"
+
     FULL = "full"
 
     @classmethod

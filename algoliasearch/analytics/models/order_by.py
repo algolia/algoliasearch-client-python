@@ -25,8 +25,11 @@ class OrderBy(str, Enum):
     allowed enum values
     """
     SEARCHCOUNT = "searchCount"
+
     CLICKTHROUGHRATE = "clickThroughRate"
+
     CONVERSIONRATE = "conversionRate"
+
     AVERAGECLICKPOSITION = "averageClickPosition"
 
     @classmethod

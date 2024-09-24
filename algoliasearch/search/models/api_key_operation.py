@@ -25,7 +25,9 @@ class ApiKeyOperation(str, Enum):
     allowed enum values
     """
     ADD = "add"
+
     DELETE = "delete"
+
     UPDATE = "update"
 
     @classmethod

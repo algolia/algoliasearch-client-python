@@ -10,12 +10,12 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from pydantic import BaseModel, ConfigDict, Field
 
 if version_info >= (3, 11):
-    from typing import Annotated, Self
+    from typing import Self
 else:
-    from typing_extensions import Annotated, Self
+    from typing_extensions import Self
 
 
 from algoliasearch.ingestion.models.run_outcome import RunOutcome
@@ -30,74 +30,52 @@ class Run(BaseModel):
     Run
     """
 
-    run_id: StrictStr = Field(
-        description="Universally unique identifier (UUID) of a task run.", alias="runID"
-    )
-    app_id: StrictStr = Field(alias="appID")
-    task_id: StrictStr = Field(
-        description="Universally unique identifier (UUID) of a task.", alias="taskID"
-    )
-    status: RunStatus
-    progress: Optional[RunProgress] = None
-    outcome: Optional[RunOutcome] = None
-    failure_threshold: Optional[Annotated[int, Field(le=100, strict=True, ge=0)]] = (
-        Field(
-            default=None,
-            description="Maximum accepted percentage of failures for a task run to finish successfully.",
-            alias="failureThreshold",
-        )
-    )
-    reason: Optional[StrictStr] = Field(
-        default=None, description="More information about the task run's outcome."
-    )
+    run_id: str = Field(alias="runID")
+    """ Universally unique identifier (UUID) of a task run. """
+    app_id: str = Field(alias="appID")
+    task_id: str = Field(alias="taskID")
+    """ Universally unique identifier (UUID) of a task. """
+    status: RunStatus = Field(alias="status")
+    progress: Optional[RunProgress] = Field(default=None, alias="progress")
+    outcome: Optional[RunOutcome] = Field(default=None, alias="outcome")
+    failure_threshold: Optional[int] = Field(default=None, alias="failureThreshold")
+    """ Maximum accepted percentage of failures for a task run to finish successfully. """
+    reason: Optional[str] = Field(default=None, alias="reason")
+    """ More information about the task run's outcome. """
     reason_code: Optional[RunReasonCode] = Field(default=None, alias="reasonCode")
-    type: RunType
-    created_at: StrictStr = Field(
-        description="Date of creation in RFC 3339 format.", alias="createdAt"
-    )
-    started_at: Optional[StrictStr] = Field(
-        default=None, description="Date of start in RFC 3339 format.", alias="startedAt"
-    )
-    finished_at: Optional[StrictStr] = Field(
-        default=None,
-        description="Date of finish in RFC 3339 format.",
-        alias="finishedAt",
-    )
+    type: RunType = Field(alias="type")
+    created_at: str = Field(alias="createdAt")
+    """ Date of creation in RFC 3339 format. """
+    started_at: Optional[str] = Field(default=None, alias="startedAt")
+    """ Date of start in RFC 3339 format. """
+    finished_at: Optional[str] = Field(default=None, alias="finishedAt")
+    """ Date of finish in RFC 3339 format. """
 
     model_config = ConfigDict(
-        use_enum_values=True, populate_by_name=True, validate_assignment=True
+        use_enum_values=True,
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
     )
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of Run from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
-        """Return the dictionary representation of the model using alias.
-
-        This has the following differences from calling pydantic's
-        `self.model_dump(by_alias=True)`:
-
-        * `None` is only added to the output dict for nullable fields that
-          were set at model initialization. Other fields with value `None`
-          are ignored.
-        """
-        _dict = self.model_dump(
+        """Return the dictionary representation of the model using alias."""
+        return self.model_dump(
             by_alias=True,
-            exclude={},
             exclude_none=True,
             exclude_unset=True,
         )
-        if self.progress:
-            _dict["progress"] = self.progress.to_dict()
-        return _dict
 
     @classmethod
-    def from_dict(cls, obj: Dict) -> Self:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of Run from a dict"""
         if obj is None:
             return None
@@ -105,25 +83,14 @@ class Run(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "runID": obj.get("runID"),
-                "appID": obj.get("appID"),
-                "taskID": obj.get("taskID"),
-                "status": obj.get("status"),
-                "progress": (
-                    RunProgress.from_dict(obj.get("progress"))
-                    if obj.get("progress") is not None
-                    else None
-                ),
-                "outcome": obj.get("outcome"),
-                "failureThreshold": obj.get("failureThreshold"),
-                "reason": obj.get("reason"),
-                "reasonCode": obj.get("reasonCode"),
-                "type": obj.get("type"),
-                "createdAt": obj.get("createdAt"),
-                "startedAt": obj.get("startedAt"),
-                "finishedAt": obj.get("finishedAt"),
-            }
+        obj["status"] = obj.get("status")
+        obj["progress"] = (
+            RunProgress.from_dict(obj["progress"])
+            if obj.get("progress") is not None
+            else None
         )
-        return _obj
+        obj["outcome"] = obj.get("outcome")
+        obj["reasonCode"] = obj.get("reasonCode")
+        obj["type"] = obj.get("type")
+
+        return cls.model_validate(obj)

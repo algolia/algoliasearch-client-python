@@ -25,7 +25,9 @@ class Platform(str, Enum):
     allowed enum values
     """
     BIGCOMMERCE = "bigcommerce"
+
     COMMERCETOOLS = "commercetools"
+
     SHOPIFY = "shopify"
 
     @classmethod
