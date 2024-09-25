@@ -18,7 +18,7 @@ else:
 
 class AuthenticationSortKeys(str, Enum):
     """
-    Property by which to sort the list of authentication resources.
+    Property by which to sort the list of authentications.
     """
 
     """
@@ -26,7 +26,7 @@ class AuthenticationSortKeys(str, Enum):
     """
     NAME = "name"
 
-    AUTH_TYPE = "auth_type"
+    TYPE = "type"
 
     PLATFORM = "platform"
 

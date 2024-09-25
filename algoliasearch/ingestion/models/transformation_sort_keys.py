@@ -16,9 +16,9 @@ else:
     from typing_extensions import Self
 
 
-class SortKeys(str, Enum):
+class TransformationSortKeys(str, Enum):
     """
-    Property by which to sort the list.
+    Property by which to sort the list of transformations.
     """
 
     """
@@ -26,13 +26,11 @@ class SortKeys(str, Enum):
     """
     NAME = "name"
 
-    TYPE = "type"
-
     UPDATEDAT = "updatedAt"
 
     CREATEDAT = "createdAt"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of SortKeys from a JSON string"""
+        """Create an instance of TransformationSortKeys from a JSON string"""
         return cls(loads(json_str))
