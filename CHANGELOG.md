@@ -1,3 +1,7 @@
+## [4.4.6](https://github.com/algolia/algoliasearch-client-python/compare/4.4.5...4.4.6)
+
+- [022131871](https://github.com/algolia/api-clients-automation/commit/022131871) fix(specs): correct query params for ingestion [skip-bc] ([#3830](https://github.com/algolia/api-clients-automation/pull/3830)) by [@millotp](https://github.com/millotp/)
+
 ## [4.4.5](https://github.com/algolia/algoliasearch-client-python/compare/4.4.4...4.4.5)
 
 - [4666c0113](https://github.com/algolia/api-clients-automation/commit/4666c0113) fix(python): update deserialization templates and typing issues ([#3780](https://github.com/algolia/api-clients-automation/pull/3780)) by [@shortcuts](https://github.com/shortcuts/)
