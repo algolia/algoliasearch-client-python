@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -21,6 +21,7 @@ else:
 from algoliasearch.recommend.models.condition import Condition
 from algoliasearch.recommend.models.consequence import Consequence
 from algoliasearch.recommend.models.rule_metadata import RuleMetadata
+from algoliasearch.recommend.models.time_range import TimeRange
 
 
 class RecommendRule(BaseModel):
@@ -37,6 +38,8 @@ class RecommendRule(BaseModel):
     """ Description of the rule's purpose. This can be helpful for display in the Algolia dashboard. """
     enabled: Optional[bool] = Field(default=None, alias="enabled")
     """ Indicates whether to enable the rule. If it isn't enabled, it isn't applied at query time. """
+    validity: Optional[List[TimeRange]] = Field(default=None, alias="validity")
+    """ Time periods when the rule is active. """
 
     model_config = ConfigDict(
         use_enum_values=True,
@@ -83,6 +86,11 @@ class RecommendRule(BaseModel):
         obj["consequence"] = (
             Consequence.from_dict(obj["consequence"])
             if obj.get("consequence") is not None
+            else None
+        )
+        obj["validity"] = (
+            [TimeRange.from_dict(_item) for _item in obj["validity"]]
+            if obj.get("validity") is not None
             else None
         )
 

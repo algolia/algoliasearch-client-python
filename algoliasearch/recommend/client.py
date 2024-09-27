@@ -38,6 +38,9 @@ from algoliasearch.recommend.models.get_recommendations_response import (
 )
 from algoliasearch.recommend.models.recommend_models import RecommendModels
 from algoliasearch.recommend.models.recommend_rule import RecommendRule
+from algoliasearch.recommend.models.recommend_updated_at_response import (
+    RecommendUpdatedAtResponse,
+)
 from algoliasearch.recommend.models.search_recommend_rules_params import (
     SearchRecommendRulesParams,
 )
@@ -128,6 +131,98 @@ class RecommendClient:
     async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self._transporter._config.set_client_api_key(api_key)
+
+    async def batch_recommend_rules_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        recommend_rule: Optional[List[RecommendRule]] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Create or update a batch of Recommend Rules  Each Recommend Rule is created or updated, depending on whether a Recommend Rule with the same `objectID` already exists. You may also specify `true` for `clearExistingRules`, in which case the batch will atomically replace all the existing Recommend Rules.  Recommend Rules are similar to Search Rules, except that the conditions and consequences apply to a [source item](/doc/guides/algolia-recommend/overview/#recommend-models) instead of a query. The main differences are the following: - Conditions `pattern` and `anchoring` are unavailable. - Condition `filters` triggers if the source item matches the specified filters. - Condition `filters` accepts numeric filters. - Consequence `params` only covers filtering parameters. - Consequence `automaticFacetFilters` doesn't require a facet value placeholder (it tries to match the data source item's attributes instead).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param recommend_rule:
+        :type recommend_rule: List[RecommendRule]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `batch_recommend_rules`."
+            )
+
+        if model is None:
+            raise ValueError(
+                "Parameter `model` is required when calling `batch_recommend_rules`."
+            )
+
+        _data = {}
+        if recommend_rule is not None:
+            _data = recommend_rule
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/{model}/recommend/rules/batch".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{model}", quote(str(model), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def batch_recommend_rules(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        recommend_rule: Optional[List[RecommendRule]] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RecommendUpdatedAtResponse:
+        """
+        Create or update a batch of Recommend Rules  Each Recommend Rule is created or updated, depending on whether a Recommend Rule with the same `objectID` already exists. You may also specify `true` for `clearExistingRules`, in which case the batch will atomically replace all the existing Recommend Rules.  Recommend Rules are similar to Search Rules, except that the conditions and consequences apply to a [source item](/doc/guides/algolia-recommend/overview/#recommend-models) instead of a query. The main differences are the following: - Conditions `pattern` and `anchoring` are unavailable. - Condition `filters` triggers if the source item matches the specified filters. - Condition `filters` accepts numeric filters. - Consequence `params` only covers filtering parameters. - Consequence `automaticFacetFilters` doesn't require a facet value placeholder (it tries to match the data source item's attributes instead).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param recommend_rule:
+        :type recommend_rule: List[RecommendRule]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RecommendUpdatedAtResponse' result object.
+        """
+        resp = await self.batch_recommend_rules_with_http_info(
+            index_name, model, recommend_rule, request_options
+        )
+        return resp.deserialize(RecommendUpdatedAtResponse, resp.raw_data)
 
     async def custom_delete_with_http_info(
         self,
@@ -976,6 +1071,98 @@ class RecommendClientSync:
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self._transporter._config.set_client_api_key(api_key)
+
+    def batch_recommend_rules_with_http_info(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        recommend_rule: Optional[List[RecommendRule]] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Create or update a batch of Recommend Rules  Each Recommend Rule is created or updated, depending on whether a Recommend Rule with the same `objectID` already exists. You may also specify `true` for `clearExistingRules`, in which case the batch will atomically replace all the existing Recommend Rules.  Recommend Rules are similar to Search Rules, except that the conditions and consequences apply to a [source item](/doc/guides/algolia-recommend/overview/#recommend-models) instead of a query. The main differences are the following: - Conditions `pattern` and `anchoring` are unavailable. - Condition `filters` triggers if the source item matches the specified filters. - Condition `filters` accepts numeric filters. - Consequence `params` only covers filtering parameters. - Consequence `automaticFacetFilters` doesn't require a facet value placeholder (it tries to match the data source item's attributes instead).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param recommend_rule:
+        :type recommend_rule: List[RecommendRule]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `batch_recommend_rules`."
+            )
+
+        if model is None:
+            raise ValueError(
+                "Parameter `model` is required when calling `batch_recommend_rules`."
+            )
+
+        _data = {}
+        if recommend_rule is not None:
+            _data = recommend_rule
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/indexes/{indexName}/{model}/recommend/rules/batch".replace(
+                "{indexName}", quote(str(index_name), safe="")
+            ).replace("{model}", quote(str(model), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(bodySerializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def batch_recommend_rules(
+        self,
+        index_name: Annotated[
+            StrictStr,
+            Field(description="Name of the index on which to perform the operation."),
+        ],
+        model: Annotated[
+            RecommendModels,
+            Field(
+                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+            ),
+        ],
+        recommend_rule: Optional[List[RecommendRule]] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RecommendUpdatedAtResponse:
+        """
+        Create or update a batch of Recommend Rules  Each Recommend Rule is created or updated, depending on whether a Recommend Rule with the same `objectID` already exists. You may also specify `true` for `clearExistingRules`, in which case the batch will atomically replace all the existing Recommend Rules.  Recommend Rules are similar to Search Rules, except that the conditions and consequences apply to a [source item](/doc/guides/algolia-recommend/overview/#recommend-models) instead of a query. The main differences are the following: - Conditions `pattern` and `anchoring` are unavailable. - Condition `filters` triggers if the source item matches the specified filters. - Condition `filters` accepts numeric filters. - Consequence `params` only covers filtering parameters. - Consequence `automaticFacetFilters` doesn't require a facet value placeholder (it tries to match the data source item's attributes instead).
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param index_name: Name of the index on which to perform the operation. (required)
+        :type index_name: str
+        :param model: [Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models).  (required)
+        :type model: RecommendModels
+        :param recommend_rule:
+        :type recommend_rule: List[RecommendRule]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RecommendUpdatedAtResponse' result object.
+        """
+        resp = self.batch_recommend_rules_with_http_info(
+            index_name, model, recommend_rule, request_options
+        )
+        return resp.deserialize(RecommendUpdatedAtResponse, resp.raw_data)
 
     def custom_delete_with_http_info(
         self,
