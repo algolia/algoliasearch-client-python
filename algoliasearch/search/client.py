@@ -420,7 +420,9 @@ class SearchClient:
     async def generate_secured_api_key(
         self,
         parent_api_key: str,
-        restrictions: Optional[SecuredApiKeyRestrictions] = SecuredApiKeyRestrictions(),
+        restrictions: Optional[
+            Union[dict, SecuredApiKeyRestrictions]
+        ] = SecuredApiKeyRestrictions(),
     ) -> str:
         """
         Helper: Generates a secured API key based on the given `parent_api_key` and given `restrictions`.
@@ -470,18 +472,23 @@ class SearchClient:
         self,
         index_name: str,
         objects: List[Dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Saves the given array of objects in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
         """
         return await self.chunked_batch(
-            index_name=index_name, objects=objects, action=Action.ADDOBJECT
+            index_name=index_name,
+            objects=objects,
+            action=Action.ADDOBJECT,
+            request_options=request_options,
         )
 
     async def delete_objects(
         self,
         index_name: str,
         object_ids: List[str],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Deletes every records for the given objectIDs. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objectIDs in it.
@@ -490,6 +497,7 @@ class SearchClient:
             index_name=index_name,
             objects=[{"objectID": id} for id in object_ids],
             action=Action.DELETEOBJECT,
+            request_options=request_options,
         )
 
     async def partial_update_objects(
@@ -497,6 +505,7 @@ class SearchClient:
         index_name: str,
         objects: List[Dict[str, Any]],
         create_if_not_exists: Optional[bool] = False,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Replaces object content of all the given objects according to their respective `objectID` field. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
@@ -507,6 +516,7 @@ class SearchClient:
             action=Action.PARTIALUPDATEOBJECT
             if create_if_not_exists
             else Action.PARTIALUPDATEOBJECTNOCREATE,
+            request_options=request_options,
         )
 
     async def chunked_batch(
@@ -5346,7 +5356,9 @@ class SearchClientSync:
     def generate_secured_api_key(
         self,
         parent_api_key: str,
-        restrictions: Optional[SecuredApiKeyRestrictions] = SecuredApiKeyRestrictions(),
+        restrictions: Optional[
+            Union[dict, SecuredApiKeyRestrictions]
+        ] = SecuredApiKeyRestrictions(),
     ) -> str:
         """
         Helper: Generates a secured API key based on the given `parent_api_key` and given `restrictions`.
@@ -5396,18 +5408,23 @@ class SearchClientSync:
         self,
         index_name: str,
         objects: List[Dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Saves the given array of objects in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
         """
         return self.chunked_batch(
-            index_name=index_name, objects=objects, action=Action.ADDOBJECT
+            index_name=index_name,
+            objects=objects,
+            action=Action.ADDOBJECT,
+            request_options=request_options,
         )
 
     def delete_objects(
         self,
         index_name: str,
         object_ids: List[str],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Deletes every records for the given objectIDs. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objectIDs in it.
@@ -5416,6 +5433,7 @@ class SearchClientSync:
             index_name=index_name,
             objects=[{"objectID": id} for id in object_ids],
             action=Action.DELETEOBJECT,
+            request_options=request_options,
         )
 
     def partial_update_objects(
@@ -5423,6 +5441,7 @@ class SearchClientSync:
         index_name: str,
         objects: List[Dict[str, Any]],
         create_if_not_exists: Optional[bool] = False,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Replaces object content of all the given objects according to their respective `objectID` field. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
@@ -5433,6 +5452,7 @@ class SearchClientSync:
             action=Action.PARTIALUPDATEOBJECT
             if create_if_not_exists
             else Action.PARTIALUPDATEOBJECTNOCREATE,
+            request_options=request_options,
         )
 
     def chunked_batch(
