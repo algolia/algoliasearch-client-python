@@ -11,7 +11,7 @@ from sys import version_info
 from typing import Any, Dict, List, Optional, Tuple, Union
 from urllib.parse import quote
 
-from pydantic import Field, StrictBool, StrictInt, StrictStr
+from pydantic import Field, StrictBool, StrictStr
 from typing_extensions import Annotated
 
 if version_info >= (3, 11):
@@ -1639,11 +1639,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1665,9 +1670,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1721,11 +1726,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1747,9 +1757,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1777,11 +1787,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1803,9 +1818,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1859,11 +1874,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1885,9 +1905,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -1969,11 +1989,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -1995,9 +2020,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2051,11 +2076,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2077,9 +2107,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2110,11 +2140,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2138,9 +2173,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2199,11 +2234,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2227,9 +2267,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2261,11 +2301,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2291,9 +2336,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2360,11 +2405,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2390,9 +2440,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2431,11 +2481,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2459,9 +2514,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2520,11 +2575,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2548,9 +2608,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2593,11 +2653,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2625,9 +2690,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2702,11 +2767,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2734,9 +2804,9 @@ class AnalyticsClient:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2797,11 +2867,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2831,9 +2906,9 @@ class AnalyticsClient:
         :type order_by: OrderBy
         :param direction: Sorting direction of the results: ascending or descending.
         :type direction: Direction
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -2919,11 +2994,16 @@ class AnalyticsClient:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -2953,9 +3033,9 @@ class AnalyticsClient:
         :type order_by: OrderBy
         :param direction: Sorting direction of the results: ascending or descending.
         :type direction: Direction
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -4638,11 +4718,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -4664,9 +4749,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -4720,11 +4805,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -4746,9 +4836,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -4776,11 +4866,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -4802,9 +4897,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -4858,11 +4953,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -4884,9 +4984,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -4968,11 +5068,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -4994,9 +5099,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5050,11 +5155,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5076,9 +5186,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5109,11 +5219,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5137,9 +5252,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5198,11 +5313,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5226,9 +5346,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5260,11 +5380,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5290,9 +5415,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5359,11 +5484,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5389,9 +5519,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5430,11 +5560,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5458,9 +5593,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5519,11 +5654,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5547,9 +5687,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5592,11 +5732,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5624,9 +5769,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5701,11 +5846,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5733,9 +5883,9 @@ class AnalyticsClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5796,11 +5946,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5830,9 +5985,9 @@ class AnalyticsClientSync:
         :type order_by: OrderBy
         :param direction: Sorting direction of the results: ascending or descending.
         :type direction: Direction
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
@@ -5918,11 +6073,16 @@ class AnalyticsClientSync:
             ),
         ] = None,
         limit: Annotated[
-            Optional[StrictInt], Field(description="Number of items to return.")
+            Optional[Annotated[int, Field(le=1000, strict=True)]],
+            Field(
+                description="Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         offset: Annotated[
-            Optional[Annotated[int, Field(strict=True, ge=0)]],
-            Field(description="Position of the first item to return."),
+            Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]],
+            Field(
+                description="Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved. "
+            ),
         ] = None,
         tags: Annotated[
             Optional[StrictStr],
@@ -5952,9 +6112,9 @@ class AnalyticsClientSync:
         :type order_by: OrderBy
         :param direction: Sorting direction of the results: ascending or descending.
         :type direction: Direction
-        :param limit: Number of items to return.
+        :param limit: Number of items to return.  Combined with the `offset` parameter, only the first 1000 items can be retrieved.
         :type limit: int
-        :param offset: Position of the first item to return.
+        :param offset: Position of the first item to return.  Combined with the `limit` parameter, only the first 1000 items can be retrieved.
         :type offset: int
         :param tags: Tags by which to segment the analytics.  You can combine multiple tags with `OR` and `AND`. Tags must be URL-encoded. For more information, see [Segment your analytics data](https://www.algolia.com/doc/guides/search-analytics/guides/segments/).
         :type tags: str
