@@ -23,8 +23,8 @@ class RetryTimeout(Timeout):
 async def create_iterable(
     func: Callable[[Optional[T]], Awaitable[T]],
     validate: Callable[[T], bool],
-    aggregator: Callable[[T], None],
-    timeout: Timeout = Timeout(),
+    aggregator: Optional[Callable[[T], None]],
+    timeout: Callable[[], int] = Timeout(),
     error_validate: Optional[Callable[[T], bool]] = None,
     error_message: Optional[Callable[[T], str]] = None,
 ) -> T:
@@ -55,8 +55,8 @@ async def create_iterable(
 def create_iterable_sync(
     func: Callable[[Optional[T]], T],
     validate: Callable[[T], bool],
-    aggregator: Callable[[T], None],
-    timeout: Timeout = Timeout(),
+    aggregator: Optional[Callable[[T], None]],
+    timeout: Callable[[], int] = Timeout(),
     error_validate: Optional[Callable[[T], bool]] = None,
     error_message: Optional[Callable[[T], str]] = None,
 ) -> T:

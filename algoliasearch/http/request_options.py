@@ -1,6 +1,6 @@
 from copy import deepcopy
 from sys import version_info
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Union
 from urllib.parse import quote
 
 from algoliasearch.http.base_config import BaseConfig
@@ -13,20 +13,20 @@ else:
 
 
 class RequestOptions:
-    _config: BaseConfig
-    headers: Dict[str, str]
-    query_parameters: Dict[str, Any]
-    timeouts: Dict[str, int]
-    data: Dict[str, Any]
-
     def __init__(
         self,
         config: BaseConfig,
-        headers: Dict[str, str] = {},
-        query_parameters: Dict[str, Any] = {},
-        timeouts: Dict[str, int] = {},
-        data: Dict[str, Any] = {},
+        headers: Optional[Dict[str, str]] = None,
+        query_parameters: Optional[Dict[str, Any]] = None,
+        timeouts: Optional[Dict[str, int]] = None,
+        data: Optional[Dict[str, Any]] = None,
     ) -> None:
+        if headers is None:
+            headers = {}
+        if query_parameters is None:
+            query_parameters = {}
+        if timeouts is None:
+            timeouts = {}
         self._config = config
         self.headers = headers
         self.query_parameters = {
@@ -51,13 +51,12 @@ class RequestOptions:
             query_parameters=data.get("query_parameters", {}),
             timeouts=data.get("timeouts", {}),
             data=data.get("data", {}),
-        )
+        )  # pyright: ignore
 
     def merge(
         self,
-        query_parameters: List[Tuple[str, str]] = [],
-        headers: Dict[str, Optional[str]] = {},
-        _: Dict[str, int] = {},
+        query_parameters: Optional[Dict[str, Any]] = None,
+        headers: Optional[Dict[str, str]] = None,
         data: Optional[str] = None,
         user_request_options: Optional[Union[Self, Dict[str, Any]]] = None,
     ) -> Self:
@@ -65,11 +64,15 @@ class RequestOptions:
         Merges the default config values with the user given request options if it exists.
         """
 
-        headers.update(self._config.headers)
+        if query_parameters is None:
+            query_parameters = {}
+        if headers is None:
+            headers = {}
+        headers.update(self._config.headers or {})
 
         request_options = {
             "headers": headers,
-            "query_parameters": {k: v for k, v in query_parameters},
+            "query_parameters": query_parameters,
             "timeouts": {
                 "read": self._config.read_timeout,
                 "write": self._config.write_timeout,

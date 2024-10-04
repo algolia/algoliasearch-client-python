@@ -21,7 +21,7 @@ class ApiResponse(Generic[T]):
     def __init__(
         self,
         verb: Verb,
-        data: T = None,
+        data: Optional[T] = None,
         error_message: str = "",
         headers: Optional[Dict[str, str]] = None,
         host: str = "",
@@ -94,6 +94,6 @@ class ApiResponse(Generic[T]):
             return data
 
         if isinstance(data, str):
-            return klass.from_json(data)
+            return klass.from_json(data)  # pyright: ignore
 
-        return klass.from_dict(data)
+        return klass.from_dict(data)  # pyright: ignore

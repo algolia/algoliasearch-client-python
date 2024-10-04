@@ -18,8 +18,9 @@ class Host:
         self.port = port
         self.priority = cast(int, priority)
         self.accept = (CallType.WRITE | CallType.READ) if accept is None else accept
-
-        self.reset()
+        self.last_use = 0.0
+        self.retry_count = 0
+        self.up = True
 
     def reset(self) -> None:
         self.last_use = 0.0

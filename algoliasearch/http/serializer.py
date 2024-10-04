@@ -10,7 +10,16 @@ class QueryParametersSerializer:
     Parses the given 'query_parameters' values of each keys into their string value.
     """
 
-    query_parameters: Dict[str, Any] = {}
+    def __init__(self, query_parameters: Optional[Dict[str, Any]]) -> None:
+        self.query_parameters: Dict[str, Any] = {}
+        if query_parameters is None:
+            return
+        for key, value in query_parameters.items():
+            if isinstance(value, dict):
+                for dkey, dvalue in value.items():
+                    self.query_parameters[dkey] = self.parse(dvalue)
+            else:
+                self.query_parameters[key] = self.parse(value)
 
     def parse(self, value) -> Any:
         if isinstance(value, list):
@@ -27,19 +36,8 @@ class QueryParametersSerializer:
             dict(sorted(self.query_parameters.items(), key=lambda val: val[0]))
         ).replace("+", "%20")
 
-    def __init__(self, query_parameters: Optional[Dict[str, Any]]) -> None:
-        self.query_parameters = {}
-        if query_parameters is None:
-            return
-        for key, value in query_parameters.items():
-            if isinstance(value, dict):
-                for dkey, dvalue in value.items():
-                    self.query_parameters[dkey] = self.parse(dvalue)
-            else:
-                self.query_parameters[key] = self.parse(value)
 
-
-def bodySerializer(obj: Any) -> Any:
+def body_serializer(obj: Any) -> Any:
     """Builds a JSON POST object.
 
     If obj is None, return None.
@@ -57,9 +55,9 @@ def bodySerializer(obj: Any) -> Any:
     elif isinstance(obj, PRIMITIVE_TYPES):
         return obj
     elif isinstance(obj, list):
-        return [bodySerializer(sub_obj) for sub_obj in obj]
+        return [body_serializer(sub_obj) for sub_obj in obj]
     elif isinstance(obj, tuple):
-        return tuple(bodySerializer(sub_obj) for sub_obj in obj)
+        return tuple(body_serializer(sub_obj) for sub_obj in obj)
     elif isinstance(obj, dict):
         obj_dict = obj
     else:
@@ -67,4 +65,4 @@ def bodySerializer(obj: Any) -> Any:
         if obj_dict is None:
             return None
 
-    return {key: bodySerializer(val) for key, val in obj_dict.items()}
+    return {key: body_serializer(val) for key, val in obj_dict.items()}

@@ -4,9 +4,9 @@ from sys import version_info
 from requests import Request, Session, Timeout
 
 if version_info >= (3, 11):
-    from typing import Self
+    from typing import List, Optional, Self
 else:
-    from typing_extensions import Self
+    from typing_extensions import List, Self
 
 from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
@@ -18,19 +18,19 @@ from algoliasearch.http.exceptions import (
     AlgoliaUnreachableHostException,
     RequestException,
 )
+from algoliasearch.http.hosts import Host
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.retry import RetryOutcome, RetryStrategy
 from algoliasearch.http.verb import Verb
 
 
 class TransporterSync(BaseTransporter):
-    _session: Session
-
     def __init__(self, config: BaseConfig) -> None:
-        self._session = None
+        super().__init__(config)
+        self._session: Optional[Session] = None
         self._config = config
         self._retry_strategy = RetryStrategy()
-        self._hosts = []
+        self._hosts: List[Host] = []
 
     def __enter__(self) -> Self:
         return self
@@ -64,7 +64,7 @@ class TransporterSync(BaseTransporter):
 
         for host in self._retry_strategy.valid_hosts(self._hosts):
             url = self.build_url(host, path)
-            proxy = self.get_proxy(url)
+            proxies = self.get_proxies(url)
 
             req = Request(
                 method=verb,
@@ -77,7 +77,7 @@ class TransporterSync(BaseTransporter):
                 resp = self._session.send(
                     req,
                     timeout=self._timeout / 1000,
-                    proxies=proxy,
+                    proxies=proxies,
                 )
 
                 response = ApiResponse(
@@ -86,7 +86,7 @@ class TransporterSync(BaseTransporter):
                     url=url,
                     host=host.url,
                     status_code=resp.status_code,
-                    headers=resp.headers,  # type: ignore -- insensitive dict is still a dict
+                    headers=resp.headers,  # type: ignore # insensitive dict is still a dict
                     data=resp.text,
                     raw_data=resp.text,
                     error_message=str(resp.reason),
@@ -117,6 +117,7 @@ class TransporterSync(BaseTransporter):
 
 class EchoTransporterSync(TransporterSync):
     def __init__(self, config: BaseConfig) -> None:
+        super().__init__(config)
         self._config = config
         self._retry_strategy = RetryStrategy()
 

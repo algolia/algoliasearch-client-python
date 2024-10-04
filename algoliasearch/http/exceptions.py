@@ -127,7 +127,12 @@ class ApiKeyError(AlgoliaException, KeyError):
 
 
 class ApiException(AlgoliaException):
-    def __init__(self, status_code=None, error_message=None, raw_data=None) -> None:
+    def __init__(
+        self,
+        status_code: int = -1,
+        error_message: str = "Unknown error",
+        raw_data: bytes = b"",
+    ) -> None:
         self.status_code = status_code
         self.error_message = error_message
         self.body = raw_data.decode("utf-8")

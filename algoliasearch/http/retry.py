@@ -14,7 +14,7 @@ class RetryOutcome:
 class RetryStrategy:
     def valid_hosts(self, hosts: List[Host]) -> List[Host]:
         for host in hosts:
-            if not host.up and self._now() - host.last_use > Host.TTL:
+            if not host.up and time.time() - host.last_use > Host.TTL:
                 host.up = True
 
         return [host for host in hosts if host.up]

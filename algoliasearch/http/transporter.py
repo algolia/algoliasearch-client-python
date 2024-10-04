@@ -1,5 +1,6 @@
 from asyncio import TimeoutError
 from json import loads
+from typing import List, Optional
 
 from aiohttp import ClientSession, TCPConnector
 from async_timeout import timeout
@@ -11,19 +12,19 @@ from algoliasearch.http.exceptions import (
     AlgoliaUnreachableHostException,
     RequestException,
 )
+from algoliasearch.http.hosts import Host
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.retry import RetryOutcome, RetryStrategy
 from algoliasearch.http.verb import Verb
 
 
 class Transporter(BaseTransporter):
-    _session: ClientSession
-
     def __init__(self, config: BaseConfig) -> None:
-        self._session = None
+        super().__init__(config)
+        self._session: Optional[ClientSession] = None
         self._config = config
         self._retry_strategy = RetryStrategy()
-        self._hosts = []
+        self._hosts: List[Host] = []
 
     async def close(self) -> None:
         if self._session is not None:
@@ -71,7 +72,7 @@ class Transporter(BaseTransporter):
                         url=url,
                         host=host.url,
                         status_code=resp.status,
-                        headers=resp.headers,
+                        headers=resp.headers,  # pyright: ignore # insensitive dict is still a dict
                         data=_raw_data,
                         raw_data=_raw_data,
                         error_message=str(resp.reason),
@@ -103,6 +104,7 @@ class Transporter(BaseTransporter):
 
 class EchoTransporter(Transporter):
     def __init__(self, config: BaseConfig) -> None:
+        super().__init__(config)
         self._config = config
         self._retry_strategy = RetryStrategy()
 
