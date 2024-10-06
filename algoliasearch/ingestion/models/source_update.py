@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,16 +20,26 @@ else:
 
 from algoliasearch.ingestion.models.source_update_input import SourceUpdateInput
 
+_ALIASES = {
+    "name": "name",
+    "input": "input",
+    "authentication_id": "authenticationID",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SourceUpdate(BaseModel):
     """
     SourceUpdate
     """
 
-    name: Optional[str] = Field(default=None, alias="name")
+    name: Optional[str] = None
     """ Descriptive name of the source. """
-    input: Optional[SourceUpdateInput] = Field(default=None, alias="input")
-    authentication_id: Optional[str] = Field(default=None, alias="authenticationID")
+    input: Optional[SourceUpdateInput] = None
+    authentication_id: Optional[str] = None
     """ Universally unique identifier (UUID) of an authentication resource. """
 
     model_config = ConfigDict(
@@ -37,6 +47,7 @@ class SourceUpdate(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

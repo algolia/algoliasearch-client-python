@@ -7,10 +7,18 @@ from algoliasearch.http.user_agent import UserAgent
 
 
 class InsightsConfig(BaseConfig):
-    def __init__(self, app_id: str, api_key: str, region: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        app_id: Optional[str],
+        api_key: Optional[str],
+        region: Optional[str] = None,
+    ) -> None:
         super().__init__(app_id, api_key)
 
         user_agent = UserAgent().add("Insights")
+
+        assert app_id, "`app_id` is missing."
+        assert api_key, "`api_key` is missing."
 
         self.headers = {
             "x-algolia-application-id": app_id,
@@ -42,7 +50,9 @@ class InsightsConfig(BaseConfig):
                 Host(
                     "insights.algolia.io"
                     if region is None
-                    else "insights.{region}.algolia.io".replace("{region}", region)
+                    else "insights.{region}.algolia.io".replace(
+                        "{region}", region or ""
+                    )
                 )
             ]
         )

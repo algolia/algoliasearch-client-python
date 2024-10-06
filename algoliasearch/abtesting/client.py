@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import dumps
 from sys import version_info
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Union
 from urllib.parse import quote
 
 from pydantic import Field, StrictInt, StrictStr
@@ -31,8 +31,9 @@ from algoliasearch.abtesting.models.schedule_ab_tests_request import (
     ScheduleABTestsRequest,
 )
 from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.http.serializer import bodySerializer
+from algoliasearch.http.serializer import body_serializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
@@ -57,7 +58,7 @@ class AbtestingClient:
     """
 
     _transporter: Transporter
-    _config: AbtestingConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
@@ -69,7 +70,9 @@ class AbtestingClient:
         config: Optional[AbtestingConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = AbtestingConfig(
+                transporter.config.app_id, transporter.config.api_key, region
+            )
 
         if config is None:
             config = AbtestingConfig(app_id, api_key, region)
@@ -121,11 +124,11 @@ class AbtestingClient:
 
     async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     async def add_ab_tests_with_http_info(
         self,
-        add_ab_tests_request: AddABTestsRequest,
+        add_ab_tests_request: Union[AddABTestsRequest, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -153,7 +156,7 @@ class AbtestingClient:
             verb=Verb.POST,
             path="/2/abtests",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -161,7 +164,7 @@ class AbtestingClient:
 
     async def add_ab_tests(
         self,
-        add_ab_tests_request: AddABTestsRequest,
+        add_ab_tests_request: Union[AddABTestsRequest, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
@@ -211,11 +214,11 @@ class AbtestingClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.DELETE,
@@ -286,11 +289,11 @@ class AbtestingClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -365,11 +368,11 @@ class AbtestingClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -380,7 +383,7 @@ class AbtestingClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -457,11 +460,11 @@ class AbtestingClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -472,7 +475,7 @@ class AbtestingClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -653,16 +656,16 @@ class AbtestingClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if offset is not None:
-            _query_parameters.append(("offset", offset))
+            _query_parameters["offset"] = offset
         if limit is not None:
-            _query_parameters.append(("limit", limit))
+            _query_parameters["limit"] = limit
         if index_prefix is not None:
-            _query_parameters.append(("indexPrefix", index_prefix))
+            _query_parameters["indexPrefix"] = index_prefix
         if index_suffix is not None:
-            _query_parameters.append(("indexSuffix", index_suffix))
+            _query_parameters["indexSuffix"] = index_suffix
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -721,7 +724,7 @@ class AbtestingClient:
 
     async def schedule_ab_test_with_http_info(
         self,
-        schedule_ab_tests_request: ScheduleABTestsRequest,
+        schedule_ab_tests_request: Union[ScheduleABTestsRequest, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -749,7 +752,7 @@ class AbtestingClient:
             verb=Verb.POST,
             path="/2/abtests/schedule",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -757,7 +760,7 @@ class AbtestingClient:
 
     async def schedule_ab_test(
         self,
-        schedule_ab_tests_request: ScheduleABTestsRequest,
+        schedule_ab_tests_request: Union[ScheduleABTestsRequest, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ScheduleABTestResponse:
         """
@@ -844,7 +847,7 @@ class AbtestingClientSync:
     """
 
     _transporter: TransporterSync
-    _config: AbtestingConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
@@ -856,7 +859,9 @@ class AbtestingClientSync:
         config: Optional[AbtestingConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = AbtestingConfig(
+                transporter.config.app_id, transporter.config.api_key, region
+            )
 
         if config is None:
             config = AbtestingConfig(app_id, api_key, region)
@@ -907,11 +912,11 @@ class AbtestingClientSync:
 
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     def add_ab_tests_with_http_info(
         self,
-        add_ab_tests_request: AddABTestsRequest,
+        add_ab_tests_request: Union[AddABTestsRequest, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -939,7 +944,7 @@ class AbtestingClientSync:
             verb=Verb.POST,
             path="/2/abtests",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -947,7 +952,7 @@ class AbtestingClientSync:
 
     def add_ab_tests(
         self,
-        add_ab_tests_request: AddABTestsRequest,
+        add_ab_tests_request: Union[AddABTestsRequest, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
@@ -995,11 +1000,11 @@ class AbtestingClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.DELETE,
@@ -1068,11 +1073,11 @@ class AbtestingClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -1147,11 +1152,11 @@ class AbtestingClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -1162,7 +1167,7 @@ class AbtestingClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1237,11 +1242,11 @@ class AbtestingClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -1252,7 +1257,7 @@ class AbtestingClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1431,16 +1436,16 @@ class AbtestingClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if offset is not None:
-            _query_parameters.append(("offset", offset))
+            _query_parameters["offset"] = offset
         if limit is not None:
-            _query_parameters.append(("limit", limit))
+            _query_parameters["limit"] = limit
         if index_prefix is not None:
-            _query_parameters.append(("indexPrefix", index_prefix))
+            _query_parameters["indexPrefix"] = index_prefix
         if index_suffix is not None:
-            _query_parameters.append(("indexSuffix", index_suffix))
+            _query_parameters["indexSuffix"] = index_suffix
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -1499,7 +1504,7 @@ class AbtestingClientSync:
 
     def schedule_ab_test_with_http_info(
         self,
-        schedule_ab_tests_request: ScheduleABTestsRequest,
+        schedule_ab_tests_request: Union[ScheduleABTestsRequest, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1527,7 +1532,7 @@ class AbtestingClientSync:
             verb=Verb.POST,
             path="/2/abtests/schedule",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1535,7 +1540,7 @@ class AbtestingClientSync:
 
     def schedule_ab_test(
         self,
-        schedule_ab_tests_request: ScheduleABTestsRequest,
+        schedule_ab_tests_request: Union[ScheduleABTestsRequest, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ScheduleABTestResponse:
         """

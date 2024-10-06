@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "facet": "facet",
+    "score": "score",
+    "disjunctive": "disjunctive",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class AutomaticFacetFilter(BaseModel):
     """
     Filter or optional filter to be applied to the search.
     """
 
-    facet: str = Field(alias="facet")
+    facet: str
     """ Facet name to be applied as filter. The name must match placeholders in the `pattern` parameter. For example, with `pattern: {facet:genre}`, `automaticFacetFilters` must be `genre`.  """
-    score: Optional[int] = Field(default=None, alias="score")
+    score: Optional[int] = None
     """ Filter scores to give different weights to individual filters. """
-    disjunctive: Optional[bool] = Field(default=None, alias="disjunctive")
+    disjunctive: Optional[bool] = None
     """ Whether the filter is disjunctive or conjunctive.  If true the filter has multiple matches, multiple occurences are combined with the logical `OR` operation. If false, multiple occurences are combined with the logical `AND` operation.  """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class AutomaticFacetFilter(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

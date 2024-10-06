@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,24 +20,35 @@ else:
 
 from algoliasearch.search.models.search_params_object import SearchParamsObject
 
+_ALIASES = {
+    "search_params": "searchParams",
+    "filters": "filters",
+    "valid_until": "validUntil",
+    "restrict_indices": "restrictIndices",
+    "restrict_sources": "restrictSources",
+    "user_token": "userToken",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SecuredApiKeyRestrictions(BaseModel):
     """
     SecuredApiKeyRestrictions
     """
 
-    search_params: Optional[SearchParamsObject] = Field(
-        default=None, alias="searchParams"
-    )
-    filters: Optional[str] = Field(default=None, alias="filters")
+    search_params: Optional[SearchParamsObject] = None
+    filters: Optional[str] = None
     """ Filters that apply to every search made with the secured API key. Extra filters added at search time will be combined with `AND`. For example, if you set `group:admin` as fixed filter on your generated API key, and add `groups:visitors` to the search query, the complete set of filters will be `group:admin AND groups:visitors`.  """
-    valid_until: Optional[int] = Field(default=None, alias="validUntil")
+    valid_until: Optional[int] = None
     """ Timestamp when the secured API key expires, measured in seconds since the Unix epoch. """
-    restrict_indices: Optional[List[str]] = Field(default=None, alias="restrictIndices")
+    restrict_indices: Optional[List[str]] = None
     """ Index names or patterns that this API key can access. By default, an API key can access all indices in the same application.  You can use leading and trailing wildcard characters (`*`):  - `dev_*` matches all indices starting with \"dev_\". - `*_dev` matches all indices ending with \"_dev\". - `*_products_*` matches all indices containing \"_products_\".  """
-    restrict_sources: Optional[str] = Field(default=None, alias="restrictSources")
+    restrict_sources: Optional[str] = None
     """ IP network that are allowed to use this key.  You can only add a single source, but you can provide a range of IP addresses. Use this to protect against API key leaking and reuse.  """
-    user_token: Optional[str] = Field(default=None, alias="userToken")
+    user_token: Optional[str] = None
     """ Pseudonymous user identifier to restrict usage of this API key to specific users.  By default, rate limits are set based on IP addresses. This can be an issue if many users search from the same IP address. To avoid this, add a user token to each generated API key.  """
 
     model_config = ConfigDict(
@@ -45,6 +56,7 @@ class SecuredApiKeyRestrictions(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

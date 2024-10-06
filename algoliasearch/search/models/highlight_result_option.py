@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,18 +20,29 @@ else:
 
 from algoliasearch.search.models.match_level import MatchLevel
 
+_ALIASES = {
+    "value": "value",
+    "match_level": "matchLevel",
+    "matched_words": "matchedWords",
+    "fully_highlighted": "fullyHighlighted",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class HighlightResultOption(BaseModel):
     """
     Surround words that match the query with HTML tags for highlighting.
     """
 
-    value: str = Field(alias="value")
+    value: str
     """ Highlighted attribute value, including HTML tags. """
-    match_level: MatchLevel = Field(alias="matchLevel")
-    matched_words: List[str] = Field(alias="matchedWords")
+    match_level: MatchLevel
+    matched_words: List[str]
     """ List of matched words from the search query. """
-    fully_highlighted: Optional[bool] = Field(default=None, alias="fullyHighlighted")
+    fully_highlighted: Optional[bool] = None
     """ Whether the entire attribute value is highlighted. """
 
     model_config = ConfigDict(
@@ -39,6 +50,7 @@ class HighlightResultOption(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

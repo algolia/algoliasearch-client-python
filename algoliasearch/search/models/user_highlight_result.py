@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,20 +20,30 @@ else:
 
 from algoliasearch.search.models.highlight_result import HighlightResult
 
+_ALIASES = {
+    "user_id": "userID",
+    "cluster_name": "clusterName",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class UserHighlightResult(BaseModel):
     """
     UserHighlightResult
     """
 
-    user_id: HighlightResult = Field(alias="userID")
-    cluster_name: HighlightResult = Field(alias="clusterName")
+    user_id: HighlightResult
+    cluster_name: HighlightResult
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

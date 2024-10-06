@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,23 +22,35 @@ from algoliasearch.ingestion.models.auth_input_partial import AuthInputPartial
 from algoliasearch.ingestion.models.authentication_type import AuthenticationType
 from algoliasearch.ingestion.models.platform import Platform
 
+_ALIASES = {
+    "type": "type",
+    "name": "name",
+    "platform": "platform",
+    "input": "input",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class AuthenticationUpdate(BaseModel):
     """
     Request body for updating an authentication resource.
     """
 
-    type: Optional[AuthenticationType] = Field(default=None, alias="type")
-    name: Optional[str] = Field(default=None, alias="name")
+    type: Optional[AuthenticationType] = None
+    name: Optional[str] = None
     """ Descriptive name for the resource. """
-    platform: Optional[Platform] = Field(default=None, alias="platform")
-    input: Optional[AuthInputPartial] = Field(default=None, alias="input")
+    platform: Optional[Platform] = None
+    input: Optional[AuthInputPartial] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

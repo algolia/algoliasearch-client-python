@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,24 +21,39 @@ else:
 from algoliasearch.ingestion.models.event_status import EventStatus
 from algoliasearch.ingestion.models.event_type import EventType
 
+_ALIASES = {
+    "event_id": "eventID",
+    "run_id": "runID",
+    "parent_id": "parentID",
+    "status": "status",
+    "type": "type",
+    "batch_size": "batchSize",
+    "data": "data",
+    "published_at": "publishedAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Event(BaseModel):
     """
     An event describe a step of the task execution flow..
     """
 
-    event_id: str = Field(alias="eventID")
+    event_id: str
     """ Universally unique identifier (UUID) of an event. """
-    run_id: str = Field(alias="runID")
+    run_id: str
     """ Universally unique identifier (UUID) of a task run. """
-    parent_id: Optional[str] = Field(default=None, alias="parentID")
+    parent_id: Optional[str] = None
     """ The parent event, the cause of this event. """
-    status: EventStatus = Field(alias="status")
-    type: EventType = Field(alias="type")
-    batch_size: int = Field(alias="batchSize")
+    status: EventStatus
+    type: EventType
+    batch_size: int
     """ The extracted record batch size. """
-    data: Optional[Dict[str, object]] = Field(default=None, alias="data")
-    published_at: str = Field(alias="publishedAt")
+    data: Optional[Dict[str, object]] = None
+    published_at: str
     """ Date of publish RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -46,6 +61,7 @@ class Event(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

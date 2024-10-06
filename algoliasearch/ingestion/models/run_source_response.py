@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "task_with_run_id": "taskWithRunID",
+    "created_at": "createdAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class RunSourceResponse(BaseModel):
     """
     RunSourceResponse
     """
 
-    task_with_run_id: Dict[str, str] = Field(alias="taskWithRunID")
+    task_with_run_id: Dict[str, str]
     """ Map of taskID sent for reindex with the corresponding runID. """
-    created_at: str = Field(alias="createdAt")
+    created_at: str
     """ Date of creation in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class RunSourceResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

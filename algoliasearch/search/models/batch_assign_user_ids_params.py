@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "cluster": "cluster",
+    "users": "users",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class BatchAssignUserIdsParams(BaseModel):
     """
     Assign userID parameters.
     """
 
-    cluster: str = Field(alias="cluster")
+    cluster: str
     """ Cluster name. """
-    users: List[str] = Field(alias="users")
+    users: List[str]
     """ User IDs to assign. """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class BatchAssignUserIdsParams(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,22 +21,36 @@ else:
 from algoliasearch.ingestion.models.source_input import SourceInput
 from algoliasearch.ingestion.models.source_type import SourceType
 
+_ALIASES = {
+    "source_id": "sourceID",
+    "type": "type",
+    "name": "name",
+    "input": "input",
+    "authentication_id": "authenticationID",
+    "created_at": "createdAt",
+    "updated_at": "updatedAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Source(BaseModel):
     """
     Source
     """
 
-    source_id: str = Field(alias="sourceID")
+    source_id: str
     """ Universally uniqud identifier (UUID) of a source. """
-    type: SourceType = Field(alias="type")
-    name: str = Field(alias="name")
-    input: Optional[SourceInput] = Field(default=None, alias="input")
-    authentication_id: Optional[str] = Field(default=None, alias="authenticationID")
+    type: SourceType
+    name: str
+    input: Optional[SourceInput] = None
+    authentication_id: Optional[str] = None
     """ Universally unique identifier (UUID) of an authentication resource. """
-    created_at: str = Field(alias="createdAt")
+    created_at: str
     """ Date of creation in RFC 3339 format. """
-    updated_at: Optional[str] = Field(default=None, alias="updatedAt")
+    updated_at: Optional[str] = None
     """ Date of last update in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -44,6 +58,7 @@ class Source(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

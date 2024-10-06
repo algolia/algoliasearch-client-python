@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,15 +21,24 @@ else:
 from algoliasearch.analytics.models.currency_code import CurrencyCode
 from algoliasearch.analytics.models.daily_revenue import DailyRevenue
 
+_ALIASES = {
+    "currencies": "currencies",
+    "dates": "dates",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class GetRevenue(BaseModel):
     """
     GetRevenue
     """
 
-    currencies: Dict[str, CurrencyCode] = Field(alias="currencies")
+    currencies: Dict[str, CurrencyCode]
     """ Revenue associated with this search, broken-down by currencies. """
-    dates: List[DailyRevenue] = Field(alias="dates")
+    dates: List[DailyRevenue]
     """ Daily revenue. """
 
     model_config = ConfigDict(
@@ -37,6 +46,7 @@ class GetRevenue(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

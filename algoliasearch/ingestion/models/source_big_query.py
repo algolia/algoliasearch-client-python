@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,24 +20,38 @@ else:
 
 from algoliasearch.ingestion.models.big_query_data_type import BigQueryDataType
 
+_ALIASES = {
+    "project_id": "projectID",
+    "dataset_id": "datasetID",
+    "data_type": "dataType",
+    "table": "table",
+    "table_prefix": "tablePrefix",
+    "custom_sql_request": "customSQLRequest",
+    "unique_id_column": "uniqueIDColumn",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SourceBigQuery(BaseModel):
     """
     SourceBigQuery
     """
 
-    project_id: str = Field(alias="projectID")
+    project_id: str
     """ Project ID of the BigQuery source. """
-    dataset_id: str = Field(alias="datasetID")
+    dataset_id: str
     """ Dataset ID of the BigQuery source. """
-    data_type: Optional[BigQueryDataType] = Field(default=None, alias="dataType")
-    table: Optional[str] = Field(default=None, alias="table")
+    data_type: Optional[BigQueryDataType] = None
+    table: Optional[str] = None
     """ Table name for the BigQuery export. """
-    table_prefix: Optional[str] = Field(default=None, alias="tablePrefix")
+    table_prefix: Optional[str] = None
     """ Table prefix for a Google Analytics 4 data export to BigQuery. """
-    custom_sql_request: Optional[str] = Field(default=None, alias="customSQLRequest")
+    custom_sql_request: Optional[str] = None
     """ Custom SQL request to extract data from the BigQuery table. """
-    unique_id_column: Optional[str] = Field(default=None, alias="uniqueIDColumn")
+    unique_id_column: Optional[str] = None
     """ Name of a column that contains a unique ID which will be used as `objectID` in Algolia. """
 
     model_config = ConfigDict(
@@ -45,6 +59,7 @@ class SourceBigQuery(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

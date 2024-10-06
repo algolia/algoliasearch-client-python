@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "index_name": "index_name",
+    "user_token": "user_token",
+    "query_id": "query_id",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class LogQuery(BaseModel):
     """
     LogQuery
     """
 
-    index_name: Optional[str] = Field(default=None, alias="index_name")
+    index_name: Optional[str] = None
     """ Index targeted by the query. """
-    user_token: Optional[str] = Field(default=None, alias="user_token")
+    user_token: Optional[str] = None
     """ A user identifier. """
-    query_id: Optional[str] = Field(default=None, alias="query_id")
+    query_id: Optional[str] = None
     """ Unique query identifier. """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class LogQuery(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

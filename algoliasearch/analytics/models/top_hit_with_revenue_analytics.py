@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,35 +20,54 @@ else:
 
 from algoliasearch.analytics.models.currency_code import CurrencyCode
 
+_ALIASES = {
+    "hit": "hit",
+    "count": "count",
+    "click_through_rate": "clickThroughRate",
+    "conversion_rate": "conversionRate",
+    "tracked_hit_count": "trackedHitCount",
+    "click_count": "clickCount",
+    "conversion_count": "conversionCount",
+    "add_to_cart_rate": "addToCartRate",
+    "add_to_cart_count": "addToCartCount",
+    "purchase_rate": "purchaseRate",
+    "purchase_count": "purchaseCount",
+    "currencies": "currencies",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class TopHitWithRevenueAnalytics(BaseModel):
     """
     TopHitWithRevenueAnalytics
     """
 
-    hit: str = Field(alias="hit")
+    hit: str
     """ Object ID of a record that's returned as a search result. """
-    count: int = Field(alias="count")
+    count: int
     """ Number of occurrences. """
-    click_through_rate: float = Field(alias="clickThroughRate")
+    click_through_rate: float
     """ Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    conversion_rate: float = Field(alias="conversionRate")
+    conversion_rate: float
     """ Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    tracked_hit_count: int = Field(alias="trackedHitCount")
+    tracked_hit_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
-    click_count: int = Field(alias="clickCount")
+    click_count: int
     """ Number of clicks associated with this search. """
-    conversion_count: int = Field(alias="conversionCount")
+    conversion_count: int
     """ Number of conversions from this search. """
-    add_to_cart_rate: float = Field(alias="addToCartRate")
+    add_to_cart_rate: float
     """ Add-to-cart rate, calculated as number of tracked searches with at least one add-to-cart event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    add_to_cart_count: int = Field(alias="addToCartCount")
+    add_to_cart_count: int
     """ Number of add-to-cart events from this search. """
-    purchase_rate: float = Field(alias="purchaseRate")
+    purchase_rate: float
     """ Purchase rate, calculated as number of tracked searches with at least one purchase event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    purchase_count: int = Field(alias="purchaseCount")
+    purchase_count: int
     """ Number of purchase events from this search. """
-    currencies: Dict[str, CurrencyCode] = Field(alias="currencies")
+    currencies: Dict[str, CurrencyCode]
     """ Revenue associated with this search, broken-down by currencies. """
 
     model_config = ConfigDict(
@@ -56,6 +75,7 @@ class TopHitWithRevenueAnalytics(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

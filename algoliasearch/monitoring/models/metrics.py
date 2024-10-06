@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,31 +20,33 @@ else:
 
 from algoliasearch.monitoring.models.probes_metric import ProbesMetric
 
+_ALIASES = {
+    "cpu_usage": "cpu_usage",
+    "ram_indexing_usage": "ram_indexing_usage",
+    "ram_search_usage": "ram_search_usage",
+    "ssd_usage": "ssd_usage",
+    "avg_build_time": "avg_build_time",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Metrics(BaseModel):
     """
     Metrics
     """
 
-    cpu_usage: Optional[Dict[str, List[ProbesMetric]]] = Field(
-        default=None, alias="cpu_usage"
-    )
+    cpu_usage: Optional[Dict[str, List[ProbesMetric]]] = None
     """ CPU idleness in %. """
-    ram_indexing_usage: Optional[Dict[str, List[ProbesMetric]]] = Field(
-        default=None, alias="ram_indexing_usage"
-    )
+    ram_indexing_usage: Optional[Dict[str, List[ProbesMetric]]] = None
     """ RAM used for indexing in MB. """
-    ram_search_usage: Optional[Dict[str, List[ProbesMetric]]] = Field(
-        default=None, alias="ram_search_usage"
-    )
+    ram_search_usage: Optional[Dict[str, List[ProbesMetric]]] = None
     """ RAM used for search in MB. """
-    ssd_usage: Optional[Dict[str, List[ProbesMetric]]] = Field(
-        default=None, alias="ssd_usage"
-    )
+    ssd_usage: Optional[Dict[str, List[ProbesMetric]]] = None
     """ Solid-state disk (SSD) usage expressed as % of RAM.  0% means no SSD usage. A value of 50% indicates 32&nbsp;GB SSD usage for a machine with 64&nbsp;RAM.  """
-    avg_build_time: Optional[Dict[str, List[ProbesMetric]]] = Field(
-        default=None, alias="avg_build_time"
-    )
+    avg_build_time: Optional[Dict[str, List[ProbesMetric]]] = None
     """ Average build time of the indices in seconds. """
 
     model_config = ConfigDict(
@@ -52,6 +54,7 @@ class Metrics(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

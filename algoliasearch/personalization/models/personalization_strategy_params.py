@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,17 +21,27 @@ else:
 from algoliasearch.personalization.models.event_scoring import EventScoring
 from algoliasearch.personalization.models.facet_scoring import FacetScoring
 
+_ALIASES = {
+    "event_scoring": "eventScoring",
+    "facet_scoring": "facetScoring",
+    "personalization_impact": "personalizationImpact",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class PersonalizationStrategyParams(BaseModel):
     """
     PersonalizationStrategyParams
     """
 
-    event_scoring: List[EventScoring] = Field(alias="eventScoring")
+    event_scoring: List[EventScoring]
     """ Scores associated with each event.  The higher the scores, the higher the impact of those events on the personalization of search results.  """
-    facet_scoring: List[FacetScoring] = Field(alias="facetScoring")
+    facet_scoring: List[FacetScoring]
     """ Scores associated with each facet.  The higher the scores, the higher the impact of those events on the personalization of search results.  """
-    personalization_impact: int = Field(alias="personalizationImpact")
+    personalization_impact: int
     """ Impact of personalization on the search results.  If set to 0, personalization has no impact on the search results.  """
 
     model_config = ConfigDict(
@@ -39,6 +49,7 @@ class PersonalizationStrategyParams(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

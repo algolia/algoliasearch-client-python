@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "id": "id",
+    "currencies": "currencies",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class BigCommerceChannel(BaseModel):
     """
     BigCommerceChannel
     """
 
-    id: int = Field(alias="id")
+    id: int
     """ ID of the BigCommerce channel. """
-    currencies: Optional[List[str]] = Field(default=None, alias="currencies")
+    currencies: Optional[List[str]] = None
     """ Currencies for the given channel. """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class BigCommerceChannel(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

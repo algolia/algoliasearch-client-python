@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,19 +20,28 @@ else:
 
 from algoliasearch.ingestion.models.streaming_trigger_type import StreamingTriggerType
 
+_ALIASES = {
+    "type": "type",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class StreamingTrigger(BaseModel):
     """
     Trigger input for continuously running tasks.
     """
 
-    type: StreamingTriggerType = Field(alias="type")
+    type: StreamingTriggerType
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

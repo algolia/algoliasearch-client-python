@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,16 +21,26 @@ else:
 from algoliasearch.search.models.operation_type import OperationType
 from algoliasearch.search.models.scope_type import ScopeType
 
+_ALIASES = {
+    "operation": "operation",
+    "destination": "destination",
+    "scope": "scope",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class OperationIndexParams(BaseModel):
     """
     OperationIndexParams
     """
 
-    operation: OperationType = Field(alias="operation")
-    destination: str = Field(alias="destination")
+    operation: OperationType
+    destination: str
     """ Index name (case-sensitive). """
-    scope: Optional[List[ScopeType]] = Field(default=None, alias="scope")
+    scope: Optional[List[ScopeType]] = None
     """ **Only for copying.**  If you specify a scope, only the selected scopes are copied. Records and the other scopes are left unchanged. If you omit the `scope` parameter, everything is copied: records, settings, synonyms, and rules.  """
 
     model_config = ConfigDict(
@@ -38,6 +48,7 @@ class OperationIndexParams(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

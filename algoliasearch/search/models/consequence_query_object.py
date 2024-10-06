@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,15 +20,24 @@ else:
 
 from algoliasearch.search.models.edit import Edit
 
+_ALIASES = {
+    "remove": "remove",
+    "edits": "edits",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ConsequenceQueryObject(BaseModel):
     """
     ConsequenceQueryObject
     """
 
-    remove: Optional[List[str]] = Field(default=None, alias="remove")
+    remove: Optional[List[str]] = None
     """ Words to remove from the search query. """
-    edits: Optional[List[Edit]] = Field(default=None, alias="edits")
+    edits: Optional[List[Edit]] = None
     """ Changes to make to the search query. """
 
     model_config = ConfigDict(
@@ -36,6 +45,7 @@ class ConsequenceQueryObject(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

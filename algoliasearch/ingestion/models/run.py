@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -24,31 +24,51 @@ from algoliasearch.ingestion.models.run_reason_code import RunReasonCode
 from algoliasearch.ingestion.models.run_status import RunStatus
 from algoliasearch.ingestion.models.run_type import RunType
 
+_ALIASES = {
+    "run_id": "runID",
+    "app_id": "appID",
+    "task_id": "taskID",
+    "status": "status",
+    "progress": "progress",
+    "outcome": "outcome",
+    "failure_threshold": "failureThreshold",
+    "reason": "reason",
+    "reason_code": "reasonCode",
+    "type": "type",
+    "created_at": "createdAt",
+    "started_at": "startedAt",
+    "finished_at": "finishedAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Run(BaseModel):
     """
     Run
     """
 
-    run_id: str = Field(alias="runID")
+    run_id: str
     """ Universally unique identifier (UUID) of a task run. """
-    app_id: str = Field(alias="appID")
-    task_id: str = Field(alias="taskID")
+    app_id: str
+    task_id: str
     """ Universally unique identifier (UUID) of a task. """
-    status: RunStatus = Field(alias="status")
-    progress: Optional[RunProgress] = Field(default=None, alias="progress")
-    outcome: Optional[RunOutcome] = Field(default=None, alias="outcome")
-    failure_threshold: Optional[int] = Field(default=None, alias="failureThreshold")
+    status: RunStatus
+    progress: Optional[RunProgress] = None
+    outcome: Optional[RunOutcome] = None
+    failure_threshold: Optional[int] = None
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
-    reason: Optional[str] = Field(default=None, alias="reason")
+    reason: Optional[str] = None
     """ More information about the task run's outcome. """
-    reason_code: Optional[RunReasonCode] = Field(default=None, alias="reasonCode")
-    type: RunType = Field(alias="type")
-    created_at: str = Field(alias="createdAt")
+    reason_code: Optional[RunReasonCode] = None
+    type: RunType
+    created_at: str
     """ Date of creation in RFC 3339 format. """
-    started_at: Optional[str] = Field(default=None, alias="startedAt")
+    started_at: Optional[str] = None
     """ Date of start in RFC 3339 format. """
-    finished_at: Optional[str] = Field(default=None, alias="finishedAt")
+    finished_at: Optional[str] = None
     """ Date of finish in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -56,6 +76,7 @@ class Run(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

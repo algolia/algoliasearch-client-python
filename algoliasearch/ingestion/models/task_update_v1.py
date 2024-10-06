@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,19 +21,31 @@ else:
 from algoliasearch.ingestion.models.task_input import TaskInput
 from algoliasearch.ingestion.models.trigger_update_input import TriggerUpdateInput
 
+_ALIASES = {
+    "destination_id": "destinationID",
+    "trigger": "trigger",
+    "input": "input",
+    "enabled": "enabled",
+    "failure_threshold": "failureThreshold",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class TaskUpdateV1(BaseModel):
     """
     API request body for updating a task using the V1 shape, please use methods and types that don't contain the V1 suffix.
     """
 
-    destination_id: Optional[str] = Field(default=None, alias="destinationID")
+    destination_id: Optional[str] = None
     """ Universally unique identifier (UUID) of a destination resource. """
-    trigger: Optional[TriggerUpdateInput] = Field(default=None, alias="trigger")
-    input: Optional[TaskInput] = Field(default=None, alias="input")
-    enabled: Optional[bool] = Field(default=None, alias="enabled")
+    trigger: Optional[TriggerUpdateInput] = None
+    input: Optional[TaskInput] = None
+    enabled: Optional[bool] = None
     """ Whether the task is enabled. """
-    failure_threshold: Optional[int] = Field(default=None, alias="failureThreshold")
+    failure_threshold: Optional[int] = None
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
 
     model_config = ConfigDict(
@@ -41,6 +53,7 @@ class TaskUpdateV1(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

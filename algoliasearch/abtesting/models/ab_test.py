@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,47 +22,58 @@ from algoliasearch.abtesting.models.ab_test_configuration import ABTestConfigura
 from algoliasearch.abtesting.models.status import Status
 from algoliasearch.abtesting.models.variant import Variant
 
+_ALIASES = {
+    "ab_test_id": "abTestID",
+    "click_significance": "clickSignificance",
+    "conversion_significance": "conversionSignificance",
+    "add_to_cart_significance": "addToCartSignificance",
+    "purchase_significance": "purchaseSignificance",
+    "revenue_significance": "revenueSignificance",
+    "updated_at": "updatedAt",
+    "created_at": "createdAt",
+    "end_at": "endAt",
+    "name": "name",
+    "status": "status",
+    "variants": "variants",
+    "configuration": "configuration",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ABTest(BaseModel):
     """
     ABTest
     """
 
-    ab_test_id: int = Field(alias="abTestID")
+    ab_test_id: int
     """ Unique A/B test identifier. """
-    click_significance: Optional[float] = Field(default=None, alias="clickSignificance")
-    conversion_significance: Optional[float] = Field(
-        default=None, alias="conversionSignificance"
-    )
-    add_to_cart_significance: Optional[float] = Field(
-        default=None, alias="addToCartSignificance"
-    )
-    purchase_significance: Optional[float] = Field(
-        default=None, alias="purchaseSignificance"
-    )
-    revenue_significance: Optional[Dict[str, float]] = Field(
-        default=None, alias="revenueSignificance"
-    )
-    updated_at: str = Field(alias="updatedAt")
+    click_significance: Optional[float] = None
+    conversion_significance: Optional[float] = None
+    add_to_cart_significance: Optional[float] = None
+    purchase_significance: Optional[float] = None
+    revenue_significance: Optional[Dict[str, float]] = None
+    updated_at: str
     """ Date and time when the A/B test was last updated, in RFC 3339 format. """
-    created_at: str = Field(alias="createdAt")
+    created_at: str
     """ Date and time when the A/B test was created, in RFC 3339 format. """
-    end_at: str = Field(alias="endAt")
+    end_at: str
     """ End date and time of the A/B test, in RFC 3339 format. """
-    name: str = Field(alias="name")
+    name: str
     """ A/B test name. """
-    status: Status = Field(alias="status")
-    variants: List[Variant] = Field(alias="variants")
+    status: Status
+    variants: List[Variant]
     """ A/B test variants.  The first variant is your _control_ index, typically your production index. The second variant is an index with changed settings that you want to test against the control.  """
-    configuration: Optional[ABTestConfiguration] = Field(
-        default=None, alias="configuration"
-    )
+    configuration: Optional[ABTestConfiguration] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

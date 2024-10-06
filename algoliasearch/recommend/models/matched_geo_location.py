@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "lat": "lat",
+    "lng": "lng",
+    "distance": "distance",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class MatchedGeoLocation(BaseModel):
     """
     MatchedGeoLocation
     """
 
-    lat: Optional[float] = Field(default=None, alias="lat")
+    lat: Optional[float] = None
     """ Latitude of the matched location. """
-    lng: Optional[float] = Field(default=None, alias="lng")
+    lng: Optional[float] = None
     """ Longitude of the matched location. """
-    distance: Optional[int] = Field(default=None, alias="distance")
+    distance: Optional[int] = None
     """ Distance between the matched location and the search location (in meters). """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class MatchedGeoLocation(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

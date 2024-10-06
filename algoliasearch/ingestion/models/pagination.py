@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,18 +18,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "nb_pages": "nbPages",
+    "page": "page",
+    "nb_items": "nbItems",
+    "items_per_page": "itemsPerPage",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class Pagination(BaseModel):
     """
     Paginated API response.
     """
 
-    nb_pages: int = Field(alias="nbPages")
+    nb_pages: int
     """ Number of pages in the API response. """
-    page: int = Field(alias="page")
+    page: int
     """ Page of the API response to retrieve. """
-    nb_items: int = Field(alias="nbItems")
+    nb_items: int
     """ Number of items in the API response. """
-    items_per_page: int = Field(alias="itemsPerPage")
+    items_per_page: int
     """ Number of items per page. """
 
     model_config = ConfigDict(
@@ -37,6 +49,7 @@ class Pagination(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

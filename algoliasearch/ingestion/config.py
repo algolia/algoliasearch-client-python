@@ -1,4 +1,5 @@
 from os import environ
+from typing import Optional
 
 from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.hosts import Host, HostsCollection
@@ -6,10 +7,15 @@ from algoliasearch.http.user_agent import UserAgent
 
 
 class IngestionConfig(BaseConfig):
-    def __init__(self, app_id: str, api_key: str, region: str = None) -> None:
+    def __init__(
+        self, app_id: Optional[str], api_key: Optional[str], region: str = ""
+    ) -> None:
         super().__init__(app_id, api_key)
 
         user_agent = UserAgent().add("Ingestion")
+
+        assert app_id, "`app_id` is missing."
+        assert api_key, "`api_key` is missing."
 
         self.headers = {
             "x-algolia-application-id": app_id,
@@ -37,5 +43,5 @@ class IngestionConfig(BaseConfig):
             )
 
         self.hosts = HostsCollection(
-            [Host("data.{region}.algolia.com".replace("{region}", region))]
+            [Host("data.{region}.algolia.com".replace("{region}", region or ""))]
         )

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,18 +18,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "rate": "rate",
+    "tracked_search_count": "trackedSearchCount",
+    "add_to_cart_count": "addToCartCount",
+    "var_date": "date",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class DailyAddToCartRates(BaseModel):
     """
     DailyAddToCartRates
     """
 
-    rate: float = Field(alias="rate")
+    rate: float
     """ Add-to-cart rate, calculated as number of tracked searches with at least one add-to-cart event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    tracked_search_count: int = Field(alias="trackedSearchCount")
+    tracked_search_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
-    add_to_cart_count: int = Field(alias="addToCartCount")
+    add_to_cart_count: int
     """ Number of add-to-cart events from this search. """
-    var_date: str = Field(alias="date")
+    var_date: str
     """ Date in the format YYYY-MM-DD. """
 
     model_config = ConfigDict(
@@ -37,6 +49,7 @@ class DailyAddToCartRates(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

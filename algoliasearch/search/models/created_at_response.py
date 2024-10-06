@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,12 +18,21 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "created_at": "createdAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class CreatedAtResponse(BaseModel):
     """
     Response and creation timestamp.
     """
 
-    created_at: str = Field(alias="createdAt")
+    created_at: str
     """ Date and time when the object was created, in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -31,6 +40,7 @@ class CreatedAtResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

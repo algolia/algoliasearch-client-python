@@ -27,7 +27,7 @@ class Distinct(BaseModel):
     """ Whether deduplication is turned on. If true, only one member of a group is shown in the search results. """
     oneof_schema_2_validator: Optional[int] = Field(default=None)
     """ Number of members of a group of records to include in the search results.  - Don't use `distinct > 1` for records that might be [promoted by rules](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/promote-hits/).   The number of hits won't be correct and faceting won't work as expected. - With `distinct > 1`, the `hitsPerPage` parameter controls the number of returned groups.   For example, with `hitsPerPage: 10` and `distinct: 2`, up to 20 records are returned.   Likewise, the `nbHits` response attribute contains the number of returned groups.  """
-    actual_instance: Optional[Union[bool, int]] = None
+    actual_instance: Union[bool, int, None] = None
     one_of_schemas: Set[str] = {"bool", "int"}
 
     def __init__(self, *args, **kwargs) -> None:
@@ -40,12 +40,12 @@ class Distinct(BaseModel):
                 raise ValueError(
                     "If a position argument is used, keyword arguments cannot be used."
                 )
-            super().__init__(actual_instance=args[0])
+            super().__init__(actual_instance=args[0])  # pyright: ignore
         else:
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[bool, int]]:
+    def unwrap_actual_instance(self) -> Union[bool, int, Self, None]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -88,9 +88,9 @@ class Distinct(BaseModel):
             return "null"
 
         if hasattr(self.actual_instance, "to_json") and callable(
-            self.actual_instance.to_json
+            self.actual_instance.to_json  # pyright: ignore
         ):
-            return self.actual_instance.to_json()
+            return self.actual_instance.to_json()  # pyright: ignore
         else:
             return dumps(self.actual_instance)
 
@@ -100,8 +100,8 @@ class Distinct(BaseModel):
             return None
 
         if hasattr(self.actual_instance, "to_dict") and callable(
-            self.actual_instance.to_dict
+            self.actual_instance.to_dict  # pyright: ignore
         ):
-            return self.actual_instance.to_dict()
+            return self.actual_instance.to_dict()  # pyright: ignore
         else:
-            return self.actual_instance
+            return self.actual_instance  # pyright: ignore

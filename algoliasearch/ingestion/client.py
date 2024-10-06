@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import dumps
 from sys import version_info
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Union
 from urllib.parse import quote
 from warnings import warn
 
@@ -21,8 +21,9 @@ else:
     from typing_extensions import Self
 
 from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.http.serializer import bodySerializer
+from algoliasearch.http.serializer import body_serializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
@@ -140,19 +141,21 @@ class IngestionClient:
     """
 
     _transporter: Transporter
-    _config: IngestionConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
         self,
         app_id: Optional[str] = None,
         api_key: Optional[str] = None,
-        region: str = None,
+        region: str = "",
         transporter: Optional[Transporter] = None,
         config: Optional[IngestionConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = IngestionConfig(
+                transporter.config.app_id, transporter.config.api_key, region
+            )
 
         if config is None:
             config = IngestionConfig(app_id, api_key, region)
@@ -204,11 +207,11 @@ class IngestionClient:
 
     async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     async def create_authentication_with_http_info(
         self,
-        authentication_create: AuthenticationCreate,
+        authentication_create: Union[AuthenticationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -238,7 +241,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/authentications",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -246,7 +249,7 @@ class IngestionClient:
 
     async def create_authentication(
         self,
-        authentication_create: AuthenticationCreate,
+        authentication_create: Union[AuthenticationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AuthenticationCreateResponse:
         """
@@ -269,7 +272,7 @@ class IngestionClient:
 
     async def create_destination_with_http_info(
         self,
-        destination_create: DestinationCreate,
+        destination_create: Union[DestinationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -299,7 +302,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/destinations",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -307,7 +310,7 @@ class IngestionClient:
 
     async def create_destination(
         self,
-        destination_create: DestinationCreate,
+        destination_create: Union[DestinationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DestinationCreateResponse:
         """
@@ -330,7 +333,7 @@ class IngestionClient:
 
     async def create_source_with_http_info(
         self,
-        source_create: SourceCreate,
+        source_create: Union[SourceCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -360,7 +363,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/sources",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -368,7 +371,7 @@ class IngestionClient:
 
     async def create_source(
         self,
-        source_create: SourceCreate,
+        source_create: Union[SourceCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceCreateResponse:
         """
@@ -389,8 +392,11 @@ class IngestionClient:
 
     async def create_task_with_http_info(
         self,
-        task_create: Annotated[
-            TaskCreate, Field(description="Request body for creating a task.")
+        task_create: Union[
+            Annotated[
+                TaskCreate, Field(description="Request body for creating a task.")
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -417,7 +423,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/2/tasks",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -425,8 +431,11 @@ class IngestionClient:
 
     async def create_task(
         self,
-        task_create: Annotated[
-            TaskCreate, Field(description="Request body for creating a task.")
+        task_create: Union[
+            Annotated[
+                TaskCreate, Field(description="Request body for creating a task.")
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskCreateResponse:
@@ -444,8 +453,11 @@ class IngestionClient:
 
     async def create_task_v1_with_http_info(
         self,
-        task_create: Annotated[
-            TaskCreateV1, Field(description="Request body for creating a task.")
+        task_create: Union[
+            Annotated[
+                TaskCreateV1, Field(description="Request body for creating a task.")
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -472,7 +484,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/tasks",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -480,8 +492,11 @@ class IngestionClient:
 
     async def create_task_v1(
         self,
-        task_create: Annotated[
-            TaskCreateV1, Field(description="Request body for creating a task.")
+        task_create: Union[
+            Annotated[
+                TaskCreateV1, Field(description="Request body for creating a task.")
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskCreateResponse:
@@ -499,9 +514,12 @@ class IngestionClient:
 
     async def create_transformation_with_http_info(
         self,
-        transformation_create: Annotated[
-            TransformationCreate,
-            Field(description="Request body for creating a transformation."),
+        transformation_create: Union[
+            Annotated[
+                TransformationCreate,
+                Field(description="Request body for creating a transformation."),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -528,7 +546,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/transformations",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -536,9 +554,12 @@ class IngestionClient:
 
     async def create_transformation(
         self,
-        transformation_create: Annotated[
-            TransformationCreate,
-            Field(description="Request body for creating a transformation."),
+        transformation_create: Union[
+            Annotated[
+                TransformationCreate,
+                Field(description="Request body for creating a transformation."),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationCreateResponse:
@@ -587,11 +608,11 @@ class IngestionClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.DELETE,
@@ -662,11 +683,11 @@ class IngestionClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -741,11 +762,11 @@ class IngestionClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -756,7 +777,7 @@ class IngestionClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -833,11 +854,11 @@ class IngestionClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -848,7 +869,7 @@ class IngestionClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1979,19 +2000,32 @@ class IngestionClient:
             Optional[List[AuthenticationType]],
             Field(description="Type of authentication resource to retrieve."),
         ] = None,
-        platform: Annotated[
-            Optional[List[PlatformWithNone]],
-            Field(
-                description="Ecommerce platform for which to retrieve authentications."
-            ),
+        platform: Union[
+            Annotated[
+                Optional[List[PlatformWithNone]],
+                Field(
+                    description="Ecommerce platform for which to retrieve authentications."
+                ),
+            ],
+            list[dict[str, Any]],
         ] = None,
-        sort: Annotated[
-            Optional[AuthenticationSortKeys],
-            Field(description="Property by which to sort the list of authentications."),
+        sort: Union[
+            Annotated[
+                Optional[AuthenticationSortKeys],
+                Field(
+                    description="Property by which to sort the list of authentications."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -2019,20 +2053,20 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if platform is not None:
-            _query_parameters.append(("platform", platform))
+            _query_parameters["platform"] = platform
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -2058,19 +2092,32 @@ class IngestionClient:
             Optional[List[AuthenticationType]],
             Field(description="Type of authentication resource to retrieve."),
         ] = None,
-        platform: Annotated[
-            Optional[List[PlatformWithNone]],
-            Field(
-                description="Ecommerce platform for which to retrieve authentications."
-            ),
+        platform: Union[
+            Annotated[
+                Optional[List[PlatformWithNone]],
+                Field(
+                    description="Ecommerce platform for which to retrieve authentications."
+                ),
+            ],
+            list[dict[str, Any]],
         ] = None,
-        sort: Annotated[
-            Optional[AuthenticationSortKeys],
-            Field(description="Property by which to sort the list of authentications."),
+        sort: Union[
+            Annotated[
+                Optional[AuthenticationSortKeys],
+                Field(
+                    description="Property by which to sort the list of authentications."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListAuthenticationsResponse:
@@ -2123,13 +2170,21 @@ class IngestionClient:
             Optional[StrictStr],
             Field(description="Get the list of destinations used by a transformation."),
         ] = None,
-        sort: Annotated[
-            Optional[DestinationSortKeys],
-            Field(description="Property by which to sort the destinations."),
+        sort: Union[
+            Annotated[
+                Optional[DestinationSortKeys],
+                Field(description="Property by which to sort the destinations."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -2159,22 +2214,22 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if authentication_id is not None:
-            _query_parameters.append(("authenticationID", authentication_id))
+            _query_parameters["authenticationID"] = authentication_id
         if transformation_id is not None:
-            _query_parameters.append(("transformationID", transformation_id))
+            _query_parameters["transformationID"] = transformation_id
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -2207,13 +2262,21 @@ class IngestionClient:
             Optional[StrictStr],
             Field(description="Get the list of destinations used by a transformation."),
         ] = None,
-        sort: Annotated[
-            Optional[DestinationSortKeys],
-            Field(description="Property by which to sort the destinations."),
+        sort: Union[
+            Annotated[
+                Optional[DestinationSortKeys],
+                Field(description="Property by which to sort the destinations."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListDestinationsResponse:
@@ -2275,13 +2338,23 @@ class IngestionClient:
             Optional[List[EventType]],
             Field(description="Event type for filtering the list of task runs."),
         ] = None,
-        sort: Annotated[
-            Optional[EventSortKeys],
-            Field(description="Property by which to sort the list of task run events."),
+        sort: Union[
+            Annotated[
+                Optional[EventSortKeys],
+                Field(
+                    description="Property by which to sort the list of task run events."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
@@ -2332,24 +2405,24 @@ class IngestionClient:
                 "Parameter `run_id` is required when calling `list_events`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if status is not None:
-            _query_parameters.append(("status", status))
+            _query_parameters["status"] = status
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
         if start_date is not None:
-            _query_parameters.append(("startDate", start_date))
+            _query_parameters["startDate"] = start_date
         if end_date is not None:
-            _query_parameters.append(("endDate", end_date))
+            _query_parameters["endDate"] = end_date
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -2384,13 +2457,23 @@ class IngestionClient:
             Optional[List[EventType]],
             Field(description="Event type for filtering the list of task runs."),
         ] = None,
-        sort: Annotated[
-            Optional[EventSortKeys],
-            Field(description="Property by which to sort the list of task run events."),
+        sort: Union[
+            Annotated[
+                Optional[EventSortKeys],
+                Field(
+                    description="Property by which to sort the list of task run events."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
@@ -2471,13 +2554,21 @@ class IngestionClient:
             Optional[StrictStr],
             Field(description="Task ID for filtering the list of task runs."),
         ] = None,
-        sort: Annotated[
-            Optional[RunSortKeys],
-            Field(description="Property by which to sort the list of task runs."),
+        sort: Union[
+            Annotated[
+                Optional[RunSortKeys],
+                Field(description="Property by which to sort the list of task runs."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
@@ -2523,26 +2614,26 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if status is not None:
-            _query_parameters.append(("status", status))
+            _query_parameters["status"] = status
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if task_id is not None:
-            _query_parameters.append(("taskID", task_id))
+            _query_parameters["taskID"] = task_id
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
         if start_date is not None:
-            _query_parameters.append(("startDate", start_date))
+            _query_parameters["startDate"] = start_date
         if end_date is not None:
-            _query_parameters.append(("endDate", end_date))
+            _query_parameters["endDate"] = end_date
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -2576,13 +2667,21 @@ class IngestionClient:
             Optional[StrictStr],
             Field(description="Task ID for filtering the list of task runs."),
         ] = None,
-        sort: Annotated[
-            Optional[RunSortKeys],
-            Field(description="Property by which to sort the list of task runs."),
+        sort: Union[
+            Annotated[
+                Optional[RunSortKeys],
+                Field(description="Property by which to sort the list of task runs."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
@@ -2661,13 +2760,21 @@ class IngestionClient:
                 description="Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication. "
             ),
         ] = None,
-        sort: Annotated[
-            Optional[SourceSortKeys],
-            Field(description="Property by which to sort the list of sources."),
+        sort: Union[
+            Annotated[
+                Optional[SourceSortKeys],
+                Field(description="Property by which to sort the list of sources."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -2695,20 +2802,20 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if authentication_id is not None:
-            _query_parameters.append(("authenticationID", authentication_id))
+            _query_parameters["authenticationID"] = authentication_id
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -2740,13 +2847,21 @@ class IngestionClient:
                 description="Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication. "
             ),
         ] = None,
-        sort: Annotated[
-            Optional[SourceSortKeys],
-            Field(description="Property by which to sort the list of sources."),
+        sort: Union[
+            Annotated[
+                Optional[SourceSortKeys],
+                Field(description="Property by which to sort the list of sources."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListSourcesResponse:
@@ -2810,13 +2925,21 @@ class IngestionClient:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
-        sort: Annotated[
-            Optional[TaskSortKeys],
-            Field(description="Property by which to sort the list of tasks."),
+        sort: Union[
+            Annotated[
+                Optional[TaskSortKeys],
+                Field(description="Property by which to sort the list of tasks."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -2850,26 +2973,26 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if action is not None:
-            _query_parameters.append(("action", action))
+            _query_parameters["action"] = action
         if enabled is not None:
-            _query_parameters.append(("enabled", enabled))
+            _query_parameters["enabled"] = enabled
         if source_id is not None:
-            _query_parameters.append(("sourceID", source_id))
+            _query_parameters["sourceID"] = source_id
         if destination_id is not None:
-            _query_parameters.append(("destinationID", destination_id))
+            _query_parameters["destinationID"] = destination_id
         if trigger_type is not None:
-            _query_parameters.append(("triggerType", trigger_type))
+            _query_parameters["triggerType"] = trigger_type
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -2913,13 +3036,21 @@ class IngestionClient:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
-        sort: Annotated[
-            Optional[TaskSortKeys],
-            Field(description="Property by which to sort the list of tasks."),
+        sort: Union[
+            Annotated[
+                Optional[TaskSortKeys],
+                Field(description="Property by which to sort the list of tasks."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTasksResponse:
@@ -2998,13 +3129,21 @@ class IngestionClient:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
-        sort: Annotated[
-            Optional[TaskSortKeys],
-            Field(description="Property by which to sort the list of tasks."),
+        sort: Union[
+            Annotated[
+                Optional[TaskSortKeys],
+                Field(description="Property by which to sort the list of tasks."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -3038,26 +3177,26 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if action is not None:
-            _query_parameters.append(("action", action))
+            _query_parameters["action"] = action
         if enabled is not None:
-            _query_parameters.append(("enabled", enabled))
+            _query_parameters["enabled"] = enabled
         if source_id is not None:
-            _query_parameters.append(("sourceID", source_id))
+            _query_parameters["sourceID"] = source_id
         if destination_id is not None:
-            _query_parameters.append(("destinationID", destination_id))
+            _query_parameters["destinationID"] = destination_id
         if trigger_type is not None:
-            _query_parameters.append(("triggerType", trigger_type))
+            _query_parameters["triggerType"] = trigger_type
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -3101,13 +3240,21 @@ class IngestionClient:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
-        sort: Annotated[
-            Optional[TaskSortKeys],
-            Field(description="Property by which to sort the list of tasks."),
+        sort: Union[
+            Annotated[
+                Optional[TaskSortKeys],
+                Field(description="Property by which to sort the list of tasks."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTasksResponseV1:
@@ -3164,13 +3311,23 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        sort: Annotated[
-            Optional[TransformationSortKeys],
-            Field(description="Property by which to sort the list of transformations."),
+        sort: Union[
+            Annotated[
+                Optional[TransformationSortKeys],
+                Field(
+                    description="Property by which to sort the list of transformations."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -3194,16 +3351,16 @@ class IngestionClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -3225,13 +3382,23 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        sort: Annotated[
-            Optional[TransformationSortKeys],
-            Field(description="Property by which to sort the list of transformations."),
+        sort: Union[
+            Annotated[
+                Optional[TransformationSortKeys],
+                Field(
+                    description="Property by which to sort the list of transformations."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTransformationsResponse:
@@ -3264,11 +3431,14 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        push_task_payload: Annotated[
-            PushTaskPayload,
-            Field(
-                description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
-            ),
+        push_task_payload: Union[
+            Annotated[
+                PushTaskPayload,
+                Field(
+                    description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
+                ),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -3308,7 +3478,7 @@ class IngestionClient:
                 "{taskID}", quote(str(task_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3319,11 +3489,14 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        push_task_payload: Annotated[
-            PushTaskPayload,
-            Field(
-                description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
-            ),
+        push_task_payload: Union[
+            Annotated[
+                PushTaskPayload,
+                Field(
+                    description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
+                ),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
@@ -3352,7 +3525,7 @@ class IngestionClient:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        run_source_payload: Optional[RunSourcePayload] = None,
+        run_source_payload: Union[Optional[RunSourcePayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3386,7 +3559,7 @@ class IngestionClient:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3397,7 +3570,7 @@ class IngestionClient:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        run_source_payload: Optional[RunSourcePayload] = None,
+        run_source_payload: Union[Optional[RunSourcePayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunSourceResponse:
         """
@@ -3540,7 +3713,7 @@ class IngestionClient:
 
     async def search_authentications_with_http_info(
         self,
-        authentication_search: AuthenticationSearch,
+        authentication_search: Union[AuthenticationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3570,7 +3743,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/authentications/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3578,7 +3751,7 @@ class IngestionClient:
 
     async def search_authentications(
         self,
-        authentication_search: AuthenticationSearch,
+        authentication_search: Union[AuthenticationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Authentication]:
         """
@@ -3601,7 +3774,7 @@ class IngestionClient:
 
     async def search_destinations_with_http_info(
         self,
-        destination_search: DestinationSearch,
+        destination_search: Union[DestinationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3631,7 +3804,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/destinations/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3639,7 +3812,7 @@ class IngestionClient:
 
     async def search_destinations(
         self,
-        destination_search: DestinationSearch,
+        destination_search: Union[DestinationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Destination]:
         """
@@ -3662,7 +3835,7 @@ class IngestionClient:
 
     async def search_sources_with_http_info(
         self,
-        source_search: SourceSearch,
+        source_search: Union[SourceSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3692,7 +3865,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/sources/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3700,7 +3873,7 @@ class IngestionClient:
 
     async def search_sources(
         self,
-        source_search: SourceSearch,
+        source_search: Union[SourceSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Source]:
         """
@@ -3721,7 +3894,7 @@ class IngestionClient:
 
     async def search_tasks_with_http_info(
         self,
-        task_search: TaskSearch,
+        task_search: Union[TaskSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3751,7 +3924,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/2/tasks/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3759,7 +3932,7 @@ class IngestionClient:
 
     async def search_tasks(
         self,
-        task_search: TaskSearch,
+        task_search: Union[TaskSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Task]:
         """
@@ -3780,7 +3953,7 @@ class IngestionClient:
 
     async def search_tasks_v1_with_http_info(
         self,
-        task_search: TaskSearch,
+        task_search: Union[TaskSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3810,7 +3983,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/tasks/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3818,7 +3991,7 @@ class IngestionClient:
 
     async def search_tasks_v1(
         self,
-        task_search: TaskSearch,
+        task_search: Union[TaskSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[TaskV1]:
         """
@@ -3839,7 +4012,7 @@ class IngestionClient:
 
     async def search_transformations_with_http_info(
         self,
-        transformation_search: TransformationSearch,
+        transformation_search: Union[TransformationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3869,7 +4042,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/transformations/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3877,7 +4050,7 @@ class IngestionClient:
 
     async def search_transformations(
         self,
-        transformation_search: TransformationSearch,
+        transformation_search: Union[TransformationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Transformation]:
         """
@@ -3962,7 +4135,7 @@ class IngestionClient:
 
     async def try_transformation_with_http_info(
         self,
-        transformation_try: TransformationTry,
+        transformation_try: Union[TransformationTry, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3992,7 +4165,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/transformations/try",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4000,7 +4173,7 @@ class IngestionClient:
 
     async def try_transformation(
         self,
-        transformation_try: TransformationTry,
+        transformation_try: Union[TransformationTry, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationTryResponse:
         """
@@ -4026,7 +4199,7 @@ class IngestionClient:
         transformation_id: Annotated[
             StrictStr, Field(description="Unique identifier of a transformation.")
         ],
-        transformation_try: TransformationTry,
+        transformation_try: Union[TransformationTry, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4065,7 +4238,7 @@ class IngestionClient:
                 "{transformationID}", quote(str(transformation_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4076,7 +4249,7 @@ class IngestionClient:
         transformation_id: Annotated[
             StrictStr, Field(description="Unique identifier of a transformation.")
         ],
-        transformation_try: TransformationTry,
+        transformation_try: Union[TransformationTry, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationTryResponse:
         """
@@ -4105,7 +4278,7 @@ class IngestionClient:
             StrictStr,
             Field(description="Unique identifier of an authentication resource."),
         ],
-        authentication_update: AuthenticationUpdate,
+        authentication_update: Union[AuthenticationUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4144,7 +4317,7 @@ class IngestionClient:
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4156,7 +4329,7 @@ class IngestionClient:
             StrictStr,
             Field(description="Unique identifier of an authentication resource."),
         ],
-        authentication_update: AuthenticationUpdate,
+        authentication_update: Union[AuthenticationUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AuthenticationUpdateResponse:
         """
@@ -4184,7 +4357,7 @@ class IngestionClient:
         destination_id: Annotated[
             StrictStr, Field(description="Unique identifier of a destination.")
         ],
-        destination_update: DestinationUpdate,
+        destination_update: Union[DestinationUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4223,7 +4396,7 @@ class IngestionClient:
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4234,7 +4407,7 @@ class IngestionClient:
         destination_id: Annotated[
             StrictStr, Field(description="Unique identifier of a destination.")
         ],
-        destination_update: DestinationUpdate,
+        destination_update: Union[DestinationUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DestinationUpdateResponse:
         """
@@ -4262,7 +4435,7 @@ class IngestionClient:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        source_update: SourceUpdate,
+        source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4301,7 +4474,7 @@ class IngestionClient:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4312,7 +4485,7 @@ class IngestionClient:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        source_update: SourceUpdate,
+        source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceUpdateResponse:
         """
@@ -4340,7 +4513,7 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        task_update: TaskUpdate,
+        task_update: Union[TaskUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4373,7 +4546,7 @@ class IngestionClient:
             verb=Verb.PATCH,
             path="/2/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4384,7 +4557,7 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        task_update: TaskUpdate,
+        task_update: Union[TaskUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
@@ -4408,7 +4581,7 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        task_update: TaskUpdateV1,
+        task_update: Union[TaskUpdateV1, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4441,7 +4614,7 @@ class IngestionClient:
             verb=Verb.PATCH,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4452,7 +4625,7 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        task_update: TaskUpdateV1,
+        task_update: Union[TaskUpdateV1, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
@@ -4476,7 +4649,7 @@ class IngestionClient:
         transformation_id: Annotated[
             StrictStr, Field(description="Unique identifier of a transformation.")
         ],
-        transformation_create: TransformationCreate,
+        transformation_create: Union[TransformationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4511,7 +4684,7 @@ class IngestionClient:
                 "{transformationID}", quote(str(transformation_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4522,7 +4695,7 @@ class IngestionClient:
         transformation_id: Annotated[
             StrictStr, Field(description="Unique identifier of a transformation.")
         ],
-        transformation_create: TransformationCreate,
+        transformation_create: Union[TransformationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationUpdateResponse:
         """
@@ -4543,7 +4716,7 @@ class IngestionClient:
 
     async def validate_source_with_http_info(
         self,
-        source_create: Optional[SourceCreate] = None,
+        source_create: Union[Optional[SourceCreate], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4568,7 +4741,7 @@ class IngestionClient:
             verb=Verb.POST,
             path="/1/sources/validate",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4576,7 +4749,7 @@ class IngestionClient:
 
     async def validate_source(
         self,
-        source_create: Optional[SourceCreate] = None,
+        source_create: Union[Optional[SourceCreate], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceWatchResponse:
         """
@@ -4600,7 +4773,7 @@ class IngestionClient:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        source_update: SourceUpdate,
+        source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4639,7 +4812,7 @@ class IngestionClient:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4650,7 +4823,7 @@ class IngestionClient:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        source_update: SourceUpdate,
+        source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceWatchResponse:
         """
@@ -4693,19 +4866,21 @@ class IngestionClientSync:
     """
 
     _transporter: TransporterSync
-    _config: IngestionConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
         self,
         app_id: Optional[str] = None,
         api_key: Optional[str] = None,
-        region: str = None,
+        region: str = "",
         transporter: Optional[TransporterSync] = None,
         config: Optional[IngestionConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = IngestionConfig(
+                transporter.config.app_id, transporter.config.api_key, region
+            )
 
         if config is None:
             config = IngestionConfig(app_id, api_key, region)
@@ -4756,11 +4931,11 @@ class IngestionClientSync:
 
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     def create_authentication_with_http_info(
         self,
-        authentication_create: AuthenticationCreate,
+        authentication_create: Union[AuthenticationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4790,7 +4965,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/authentications",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4798,7 +4973,7 @@ class IngestionClientSync:
 
     def create_authentication(
         self,
-        authentication_create: AuthenticationCreate,
+        authentication_create: Union[AuthenticationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AuthenticationCreateResponse:
         """
@@ -4821,7 +4996,7 @@ class IngestionClientSync:
 
     def create_destination_with_http_info(
         self,
-        destination_create: DestinationCreate,
+        destination_create: Union[DestinationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4851,7 +5026,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/destinations",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4859,7 +5034,7 @@ class IngestionClientSync:
 
     def create_destination(
         self,
-        destination_create: DestinationCreate,
+        destination_create: Union[DestinationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DestinationCreateResponse:
         """
@@ -4882,7 +5057,7 @@ class IngestionClientSync:
 
     def create_source_with_http_info(
         self,
-        source_create: SourceCreate,
+        source_create: Union[SourceCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4912,7 +5087,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/sources",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4920,7 +5095,7 @@ class IngestionClientSync:
 
     def create_source(
         self,
-        source_create: SourceCreate,
+        source_create: Union[SourceCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceCreateResponse:
         """
@@ -4941,8 +5116,11 @@ class IngestionClientSync:
 
     def create_task_with_http_info(
         self,
-        task_create: Annotated[
-            TaskCreate, Field(description="Request body for creating a task.")
+        task_create: Union[
+            Annotated[
+                TaskCreate, Field(description="Request body for creating a task.")
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -4969,7 +5147,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/2/tasks",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4977,8 +5155,11 @@ class IngestionClientSync:
 
     def create_task(
         self,
-        task_create: Annotated[
-            TaskCreate, Field(description="Request body for creating a task.")
+        task_create: Union[
+            Annotated[
+                TaskCreate, Field(description="Request body for creating a task.")
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskCreateResponse:
@@ -4996,8 +5177,11 @@ class IngestionClientSync:
 
     def create_task_v1_with_http_info(
         self,
-        task_create: Annotated[
-            TaskCreateV1, Field(description="Request body for creating a task.")
+        task_create: Union[
+            Annotated[
+                TaskCreateV1, Field(description="Request body for creating a task.")
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -5024,7 +5208,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/tasks",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5032,8 +5216,11 @@ class IngestionClientSync:
 
     def create_task_v1(
         self,
-        task_create: Annotated[
-            TaskCreateV1, Field(description="Request body for creating a task.")
+        task_create: Union[
+            Annotated[
+                TaskCreateV1, Field(description="Request body for creating a task.")
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskCreateResponse:
@@ -5051,9 +5238,12 @@ class IngestionClientSync:
 
     def create_transformation_with_http_info(
         self,
-        transformation_create: Annotated[
-            TransformationCreate,
-            Field(description="Request body for creating a transformation."),
+        transformation_create: Union[
+            Annotated[
+                TransformationCreate,
+                Field(description="Request body for creating a transformation."),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -5080,7 +5270,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/transformations",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5088,9 +5278,12 @@ class IngestionClientSync:
 
     def create_transformation(
         self,
-        transformation_create: Annotated[
-            TransformationCreate,
-            Field(description="Request body for creating a transformation."),
+        transformation_create: Union[
+            Annotated[
+                TransformationCreate,
+                Field(description="Request body for creating a transformation."),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationCreateResponse:
@@ -5139,11 +5332,11 @@ class IngestionClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.DELETE,
@@ -5212,11 +5405,11 @@ class IngestionClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -5291,11 +5484,11 @@ class IngestionClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -5306,7 +5499,7 @@ class IngestionClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5381,11 +5574,11 @@ class IngestionClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -5396,7 +5589,7 @@ class IngestionClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -6521,19 +6714,32 @@ class IngestionClientSync:
             Optional[List[AuthenticationType]],
             Field(description="Type of authentication resource to retrieve."),
         ] = None,
-        platform: Annotated[
-            Optional[List[PlatformWithNone]],
-            Field(
-                description="Ecommerce platform for which to retrieve authentications."
-            ),
+        platform: Union[
+            Annotated[
+                Optional[List[PlatformWithNone]],
+                Field(
+                    description="Ecommerce platform for which to retrieve authentications."
+                ),
+            ],
+            list[dict[str, Any]],
         ] = None,
-        sort: Annotated[
-            Optional[AuthenticationSortKeys],
-            Field(description="Property by which to sort the list of authentications."),
+        sort: Union[
+            Annotated[
+                Optional[AuthenticationSortKeys],
+                Field(
+                    description="Property by which to sort the list of authentications."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -6561,20 +6767,20 @@ class IngestionClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if platform is not None:
-            _query_parameters.append(("platform", platform))
+            _query_parameters["platform"] = platform
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -6600,19 +6806,32 @@ class IngestionClientSync:
             Optional[List[AuthenticationType]],
             Field(description="Type of authentication resource to retrieve."),
         ] = None,
-        platform: Annotated[
-            Optional[List[PlatformWithNone]],
-            Field(
-                description="Ecommerce platform for which to retrieve authentications."
-            ),
+        platform: Union[
+            Annotated[
+                Optional[List[PlatformWithNone]],
+                Field(
+                    description="Ecommerce platform for which to retrieve authentications."
+                ),
+            ],
+            list[dict[str, Any]],
         ] = None,
-        sort: Annotated[
-            Optional[AuthenticationSortKeys],
-            Field(description="Property by which to sort the list of authentications."),
+        sort: Union[
+            Annotated[
+                Optional[AuthenticationSortKeys],
+                Field(
+                    description="Property by which to sort the list of authentications."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListAuthenticationsResponse:
@@ -6665,13 +6884,21 @@ class IngestionClientSync:
             Optional[StrictStr],
             Field(description="Get the list of destinations used by a transformation."),
         ] = None,
-        sort: Annotated[
-            Optional[DestinationSortKeys],
-            Field(description="Property by which to sort the destinations."),
+        sort: Union[
+            Annotated[
+                Optional[DestinationSortKeys],
+                Field(description="Property by which to sort the destinations."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -6701,22 +6928,22 @@ class IngestionClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if authentication_id is not None:
-            _query_parameters.append(("authenticationID", authentication_id))
+            _query_parameters["authenticationID"] = authentication_id
         if transformation_id is not None:
-            _query_parameters.append(("transformationID", transformation_id))
+            _query_parameters["transformationID"] = transformation_id
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -6749,13 +6976,21 @@ class IngestionClientSync:
             Optional[StrictStr],
             Field(description="Get the list of destinations used by a transformation."),
         ] = None,
-        sort: Annotated[
-            Optional[DestinationSortKeys],
-            Field(description="Property by which to sort the destinations."),
+        sort: Union[
+            Annotated[
+                Optional[DestinationSortKeys],
+                Field(description="Property by which to sort the destinations."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListDestinationsResponse:
@@ -6817,13 +7052,23 @@ class IngestionClientSync:
             Optional[List[EventType]],
             Field(description="Event type for filtering the list of task runs."),
         ] = None,
-        sort: Annotated[
-            Optional[EventSortKeys],
-            Field(description="Property by which to sort the list of task run events."),
+        sort: Union[
+            Annotated[
+                Optional[EventSortKeys],
+                Field(
+                    description="Property by which to sort the list of task run events."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
@@ -6874,24 +7119,24 @@ class IngestionClientSync:
                 "Parameter `run_id` is required when calling `list_events`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if status is not None:
-            _query_parameters.append(("status", status))
+            _query_parameters["status"] = status
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
         if start_date is not None:
-            _query_parameters.append(("startDate", start_date))
+            _query_parameters["startDate"] = start_date
         if end_date is not None:
-            _query_parameters.append(("endDate", end_date))
+            _query_parameters["endDate"] = end_date
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -6926,13 +7171,23 @@ class IngestionClientSync:
             Optional[List[EventType]],
             Field(description="Event type for filtering the list of task runs."),
         ] = None,
-        sort: Annotated[
-            Optional[EventSortKeys],
-            Field(description="Property by which to sort the list of task run events."),
+        sort: Union[
+            Annotated[
+                Optional[EventSortKeys],
+                Field(
+                    description="Property by which to sort the list of task run events."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
@@ -7013,13 +7268,21 @@ class IngestionClientSync:
             Optional[StrictStr],
             Field(description="Task ID for filtering the list of task runs."),
         ] = None,
-        sort: Annotated[
-            Optional[RunSortKeys],
-            Field(description="Property by which to sort the list of task runs."),
+        sort: Union[
+            Annotated[
+                Optional[RunSortKeys],
+                Field(description="Property by which to sort the list of task runs."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
@@ -7065,26 +7328,26 @@ class IngestionClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if status is not None:
-            _query_parameters.append(("status", status))
+            _query_parameters["status"] = status
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if task_id is not None:
-            _query_parameters.append(("taskID", task_id))
+            _query_parameters["taskID"] = task_id
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
         if start_date is not None:
-            _query_parameters.append(("startDate", start_date))
+            _query_parameters["startDate"] = start_date
         if end_date is not None:
-            _query_parameters.append(("endDate", end_date))
+            _query_parameters["endDate"] = end_date
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -7118,13 +7381,21 @@ class IngestionClientSync:
             Optional[StrictStr],
             Field(description="Task ID for filtering the list of task runs."),
         ] = None,
-        sort: Annotated[
-            Optional[RunSortKeys],
-            Field(description="Property by which to sort the list of task runs."),
+        sort: Union[
+            Annotated[
+                Optional[RunSortKeys],
+                Field(description="Property by which to sort the list of task runs."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         start_date: Annotated[
             Optional[StrictStr],
@@ -7203,13 +7474,21 @@ class IngestionClientSync:
                 description="Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication. "
             ),
         ] = None,
-        sort: Annotated[
-            Optional[SourceSortKeys],
-            Field(description="Property by which to sort the list of sources."),
+        sort: Union[
+            Annotated[
+                Optional[SourceSortKeys],
+                Field(description="Property by which to sort the list of sources."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -7237,20 +7516,20 @@ class IngestionClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
         if authentication_id is not None:
-            _query_parameters.append(("authenticationID", authentication_id))
+            _query_parameters["authenticationID"] = authentication_id
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -7282,13 +7561,21 @@ class IngestionClientSync:
                 description="Authentication IDs of the sources to retrieve. 'none' returns sources that doesn't have an authentication. "
             ),
         ] = None,
-        sort: Annotated[
-            Optional[SourceSortKeys],
-            Field(description="Property by which to sort the list of sources."),
+        sort: Union[
+            Annotated[
+                Optional[SourceSortKeys],
+                Field(description="Property by which to sort the list of sources."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListSourcesResponse:
@@ -7352,13 +7639,21 @@ class IngestionClientSync:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
-        sort: Annotated[
-            Optional[TaskSortKeys],
-            Field(description="Property by which to sort the list of tasks."),
+        sort: Union[
+            Annotated[
+                Optional[TaskSortKeys],
+                Field(description="Property by which to sort the list of tasks."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -7392,26 +7687,26 @@ class IngestionClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if action is not None:
-            _query_parameters.append(("action", action))
+            _query_parameters["action"] = action
         if enabled is not None:
-            _query_parameters.append(("enabled", enabled))
+            _query_parameters["enabled"] = enabled
         if source_id is not None:
-            _query_parameters.append(("sourceID", source_id))
+            _query_parameters["sourceID"] = source_id
         if destination_id is not None:
-            _query_parameters.append(("destinationID", destination_id))
+            _query_parameters["destinationID"] = destination_id
         if trigger_type is not None:
-            _query_parameters.append(("triggerType", trigger_type))
+            _query_parameters["triggerType"] = trigger_type
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -7455,13 +7750,21 @@ class IngestionClientSync:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
-        sort: Annotated[
-            Optional[TaskSortKeys],
-            Field(description="Property by which to sort the list of tasks."),
+        sort: Union[
+            Annotated[
+                Optional[TaskSortKeys],
+                Field(description="Property by which to sort the list of tasks."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTasksResponse:
@@ -7540,13 +7843,21 @@ class IngestionClientSync:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
-        sort: Annotated[
-            Optional[TaskSortKeys],
-            Field(description="Property by which to sort the list of tasks."),
+        sort: Union[
+            Annotated[
+                Optional[TaskSortKeys],
+                Field(description="Property by which to sort the list of tasks."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -7580,26 +7891,26 @@ class IngestionClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if action is not None:
-            _query_parameters.append(("action", action))
+            _query_parameters["action"] = action
         if enabled is not None:
-            _query_parameters.append(("enabled", enabled))
+            _query_parameters["enabled"] = enabled
         if source_id is not None:
-            _query_parameters.append(("sourceID", source_id))
+            _query_parameters["sourceID"] = source_id
         if destination_id is not None:
-            _query_parameters.append(("destinationID", destination_id))
+            _query_parameters["destinationID"] = destination_id
         if trigger_type is not None:
-            _query_parameters.append(("triggerType", trigger_type))
+            _query_parameters["triggerType"] = trigger_type
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -7643,13 +7954,21 @@ class IngestionClientSync:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
-        sort: Annotated[
-            Optional[TaskSortKeys],
-            Field(description="Property by which to sort the list of tasks."),
+        sort: Union[
+            Annotated[
+                Optional[TaskSortKeys],
+                Field(description="Property by which to sort the list of tasks."),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTasksResponseV1:
@@ -7706,13 +8025,23 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        sort: Annotated[
-            Optional[TransformationSortKeys],
-            Field(description="Property by which to sort the list of transformations."),
+        sort: Union[
+            Annotated[
+                Optional[TransformationSortKeys],
+                Field(
+                    description="Property by which to sort the list of transformations."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -7736,16 +8065,16 @@ class IngestionClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if items_per_page is not None:
-            _query_parameters.append(("itemsPerPage", items_per_page))
+            _query_parameters["itemsPerPage"] = items_per_page
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if sort is not None:
-            _query_parameters.append(("sort", sort))
+            _query_parameters["sort"] = sort
         if order is not None:
-            _query_parameters.append(("order", order))
+            _query_parameters["order"] = order
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -7767,13 +8096,23 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        sort: Annotated[
-            Optional[TransformationSortKeys],
-            Field(description="Property by which to sort the list of transformations."),
+        sort: Union[
+            Annotated[
+                Optional[TransformationSortKeys],
+                Field(
+                    description="Property by which to sort the list of transformations."
+                ),
+            ],
+            str,
         ] = None,
-        order: Annotated[
-            Optional[OrderKeys],
-            Field(description="Sort order of the response, ascending or descending."),
+        order: Union[
+            Annotated[
+                Optional[OrderKeys],
+                Field(
+                    description="Sort order of the response, ascending or descending."
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTransformationsResponse:
@@ -7806,11 +8145,14 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        push_task_payload: Annotated[
-            PushTaskPayload,
-            Field(
-                description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
-            ),
+        push_task_payload: Union[
+            Annotated[
+                PushTaskPayload,
+                Field(
+                    description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
+                ),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -7850,7 +8192,7 @@ class IngestionClientSync:
                 "{taskID}", quote(str(task_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -7861,11 +8203,14 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        push_task_payload: Annotated[
-            PushTaskPayload,
-            Field(
-                description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
-            ),
+        push_task_payload: Union[
+            Annotated[
+                PushTaskPayload,
+                Field(
+                    description="Request body of a Search API `batch` request that will be pushed in the Connectors pipeline."
+                ),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
@@ -7894,7 +8239,7 @@ class IngestionClientSync:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        run_source_payload: Optional[RunSourcePayload] = None,
+        run_source_payload: Union[Optional[RunSourcePayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -7928,7 +8273,7 @@ class IngestionClientSync:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -7939,7 +8284,7 @@ class IngestionClientSync:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        run_source_payload: Optional[RunSourcePayload] = None,
+        run_source_payload: Union[Optional[RunSourcePayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunSourceResponse:
         """
@@ -8082,7 +8427,7 @@ class IngestionClientSync:
 
     def search_authentications_with_http_info(
         self,
-        authentication_search: AuthenticationSearch,
+        authentication_search: Union[AuthenticationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8112,7 +8457,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/authentications/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8120,7 +8465,7 @@ class IngestionClientSync:
 
     def search_authentications(
         self,
-        authentication_search: AuthenticationSearch,
+        authentication_search: Union[AuthenticationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Authentication]:
         """
@@ -8143,7 +8488,7 @@ class IngestionClientSync:
 
     def search_destinations_with_http_info(
         self,
-        destination_search: DestinationSearch,
+        destination_search: Union[DestinationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8173,7 +8518,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/destinations/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8181,7 +8526,7 @@ class IngestionClientSync:
 
     def search_destinations(
         self,
-        destination_search: DestinationSearch,
+        destination_search: Union[DestinationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Destination]:
         """
@@ -8204,7 +8549,7 @@ class IngestionClientSync:
 
     def search_sources_with_http_info(
         self,
-        source_search: SourceSearch,
+        source_search: Union[SourceSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8234,7 +8579,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/sources/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8242,7 +8587,7 @@ class IngestionClientSync:
 
     def search_sources(
         self,
-        source_search: SourceSearch,
+        source_search: Union[SourceSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Source]:
         """
@@ -8263,7 +8608,7 @@ class IngestionClientSync:
 
     def search_tasks_with_http_info(
         self,
-        task_search: TaskSearch,
+        task_search: Union[TaskSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8293,7 +8638,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/2/tasks/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8301,7 +8646,7 @@ class IngestionClientSync:
 
     def search_tasks(
         self,
-        task_search: TaskSearch,
+        task_search: Union[TaskSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Task]:
         """
@@ -8322,7 +8667,7 @@ class IngestionClientSync:
 
     def search_tasks_v1_with_http_info(
         self,
-        task_search: TaskSearch,
+        task_search: Union[TaskSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8352,7 +8697,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/tasks/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8360,7 +8705,7 @@ class IngestionClientSync:
 
     def search_tasks_v1(
         self,
-        task_search: TaskSearch,
+        task_search: Union[TaskSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[TaskV1]:
         """
@@ -8381,7 +8726,7 @@ class IngestionClientSync:
 
     def search_transformations_with_http_info(
         self,
-        transformation_search: TransformationSearch,
+        transformation_search: Union[TransformationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8411,7 +8756,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/transformations/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8419,7 +8764,7 @@ class IngestionClientSync:
 
     def search_transformations(
         self,
-        transformation_search: TransformationSearch,
+        transformation_search: Union[TransformationSearch, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[Transformation]:
         """
@@ -8504,7 +8849,7 @@ class IngestionClientSync:
 
     def try_transformation_with_http_info(
         self,
-        transformation_try: TransformationTry,
+        transformation_try: Union[TransformationTry, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8534,7 +8879,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/transformations/try",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8542,7 +8887,7 @@ class IngestionClientSync:
 
     def try_transformation(
         self,
-        transformation_try: TransformationTry,
+        transformation_try: Union[TransformationTry, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationTryResponse:
         """
@@ -8568,7 +8913,7 @@ class IngestionClientSync:
         transformation_id: Annotated[
             StrictStr, Field(description="Unique identifier of a transformation.")
         ],
-        transformation_try: TransformationTry,
+        transformation_try: Union[TransformationTry, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8607,7 +8952,7 @@ class IngestionClientSync:
                 "{transformationID}", quote(str(transformation_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8618,7 +8963,7 @@ class IngestionClientSync:
         transformation_id: Annotated[
             StrictStr, Field(description="Unique identifier of a transformation.")
         ],
-        transformation_try: TransformationTry,
+        transformation_try: Union[TransformationTry, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationTryResponse:
         """
@@ -8647,7 +8992,7 @@ class IngestionClientSync:
             StrictStr,
             Field(description="Unique identifier of an authentication resource."),
         ],
-        authentication_update: AuthenticationUpdate,
+        authentication_update: Union[AuthenticationUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8686,7 +9031,7 @@ class IngestionClientSync:
                 "{authenticationID}", quote(str(authentication_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8698,7 +9043,7 @@ class IngestionClientSync:
             StrictStr,
             Field(description="Unique identifier of an authentication resource."),
         ],
-        authentication_update: AuthenticationUpdate,
+        authentication_update: Union[AuthenticationUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AuthenticationUpdateResponse:
         """
@@ -8726,7 +9071,7 @@ class IngestionClientSync:
         destination_id: Annotated[
             StrictStr, Field(description="Unique identifier of a destination.")
         ],
-        destination_update: DestinationUpdate,
+        destination_update: Union[DestinationUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8765,7 +9110,7 @@ class IngestionClientSync:
                 "{destinationID}", quote(str(destination_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8776,7 +9121,7 @@ class IngestionClientSync:
         destination_id: Annotated[
             StrictStr, Field(description="Unique identifier of a destination.")
         ],
-        destination_update: DestinationUpdate,
+        destination_update: Union[DestinationUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DestinationUpdateResponse:
         """
@@ -8804,7 +9149,7 @@ class IngestionClientSync:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        source_update: SourceUpdate,
+        source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8843,7 +9188,7 @@ class IngestionClientSync:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8854,7 +9199,7 @@ class IngestionClientSync:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        source_update: SourceUpdate,
+        source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceUpdateResponse:
         """
@@ -8882,7 +9227,7 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        task_update: TaskUpdate,
+        task_update: Union[TaskUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8915,7 +9260,7 @@ class IngestionClientSync:
             verb=Verb.PATCH,
             path="/2/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8926,7 +9271,7 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        task_update: TaskUpdate,
+        task_update: Union[TaskUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
@@ -8948,7 +9293,7 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        task_update: TaskUpdateV1,
+        task_update: Union[TaskUpdateV1, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8981,7 +9326,7 @@ class IngestionClientSync:
             verb=Verb.PATCH,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8992,7 +9337,7 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
-        task_update: TaskUpdateV1,
+        task_update: Union[TaskUpdateV1, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
@@ -9014,7 +9359,7 @@ class IngestionClientSync:
         transformation_id: Annotated[
             StrictStr, Field(description="Unique identifier of a transformation.")
         ],
-        transformation_create: TransformationCreate,
+        transformation_create: Union[TransformationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9049,7 +9394,7 @@ class IngestionClientSync:
                 "{transformationID}", quote(str(transformation_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9060,7 +9405,7 @@ class IngestionClientSync:
         transformation_id: Annotated[
             StrictStr, Field(description="Unique identifier of a transformation.")
         ],
-        transformation_create: TransformationCreate,
+        transformation_create: Union[TransformationCreate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TransformationUpdateResponse:
         """
@@ -9081,7 +9426,7 @@ class IngestionClientSync:
 
     def validate_source_with_http_info(
         self,
-        source_create: Optional[SourceCreate] = None,
+        source_create: Union[Optional[SourceCreate], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9106,7 +9451,7 @@ class IngestionClientSync:
             verb=Verb.POST,
             path="/1/sources/validate",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9114,7 +9459,7 @@ class IngestionClientSync:
 
     def validate_source(
         self,
-        source_create: Optional[SourceCreate] = None,
+        source_create: Union[Optional[SourceCreate], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceWatchResponse:
         """
@@ -9138,7 +9483,7 @@ class IngestionClientSync:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        source_update: SourceUpdate,
+        source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9177,7 +9522,7 @@ class IngestionClientSync:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9188,7 +9533,7 @@ class IngestionClientSync:
         source_id: Annotated[
             StrictStr, Field(description="Unique identifier of a source.")
         ],
-        source_update: SourceUpdate,
+        source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SourceWatchResponse:
         """

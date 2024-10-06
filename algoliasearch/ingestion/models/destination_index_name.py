@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,18 +20,26 @@ else:
 
 from algoliasearch.ingestion.models.record_type import RecordType
 
+_ALIASES = {
+    "index_name": "indexName",
+    "record_type": "recordType",
+    "attributes_to_exclude": "attributesToExclude",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class DestinationIndexName(BaseModel):
     """
     DestinationIndexName
     """
 
-    index_name: str = Field(alias="indexName")
+    index_name: str
     """ Algolia index name (case-sensitive). """
-    record_type: Optional[RecordType] = Field(default=None, alias="recordType")
-    attributes_to_exclude: Optional[List[str]] = Field(
-        default=None, alias="attributesToExclude"
-    )
+    record_type: Optional[RecordType] = None
+    attributes_to_exclude: Optional[List[str]] = None
     """ Attributes from your source to exclude from Algolia records.  Not all your data attributes will be useful for searching. Keeping your Algolia records small increases indexing and search performance.  - Exclude nested attributes with `.` notation. For example, `foo.bar` indexes the `foo` attribute and all its children **except** the `bar` attribute. - Exclude attributes from arrays with `[i]`, where `i` is the index of the array element.   For example, `foo.[0].bar` only excludes the `bar` attribute from the first element of the `foo` array, but indexes the complete `foo` attribute for all other elements.   Use `*` as wildcard: `foo.[*].bar` excludes `bar` from all elements of the `foo` array.  """
 
     model_config = ConfigDict(
@@ -39,6 +47,7 @@ class DestinationIndexName(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

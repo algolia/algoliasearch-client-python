@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "start_date": "startDate",
+    "end_date": "endDate",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class Window(BaseModel):
     """
     Time window by which to filter the observability data.
     """
 
-    start_date: str = Field(alias="startDate")
+    start_date: str
     """ Date in RFC 3339 format representing the oldest data in the time window. """
-    end_date: str = Field(alias="endDate")
+    end_date: str
     """ Date in RFC 3339 format representing the newest data in the time window. """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class Window(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

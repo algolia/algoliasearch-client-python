@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,18 +18,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "var_date": "date",
+    "no_result_count": "noResultCount",
+    "count": "count",
+    "rate": "rate",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class DailyNoResultsRates(BaseModel):
     """
     DailyNoResultsRates
     """
 
-    var_date: str = Field(alias="date")
+    var_date: str
     """ Date in the format YYYY-MM-DD. """
-    no_result_count: int = Field(alias="noResultCount")
+    no_result_count: int
     """ Number of searches without any results. """
-    count: int = Field(alias="count")
+    count: int
     """ Number of searches. """
-    rate: float = Field(alias="rate")
+    rate: float
     """ No results rate, calculated as number of searches with zero results divided by the total number of searches. """
 
     model_config = ConfigDict(
@@ -37,6 +49,7 @@ class DailyNoResultsRates(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

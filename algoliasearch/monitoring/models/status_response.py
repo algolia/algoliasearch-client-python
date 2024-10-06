@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,19 +20,28 @@ else:
 
 from algoliasearch.monitoring.models.status import Status
 
+_ALIASES = {
+    "status": "status",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class StatusResponse(BaseModel):
     """
     StatusResponse
     """
 
-    status: Optional[Dict[str, Status]] = Field(default=None, alias="status")
+    status: Optional[Dict[str, Status]] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:
@@ -60,6 +69,8 @@ class StatusResponse(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["status"] = dict((_k, _v) for _k, _v in obj.get("status").items())
+        status = obj.get("status")
+        if status is not None:
+            obj["status"] = dict((_k, _v) for _k, _v in status.items())
 
         return cls.model_validate(obj)

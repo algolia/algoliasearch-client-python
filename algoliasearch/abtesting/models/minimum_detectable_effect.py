@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,21 +20,31 @@ else:
 
 from algoliasearch.abtesting.models.effect import Effect
 
+_ALIASES = {
+    "size": "size",
+    "effect": "effect",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class MinimumDetectableEffect(BaseModel):
     """
     Configuration for the smallest difference between test variants you want to detect.
     """
 
-    size: Optional[float] = Field(default=None, alias="size")
+    size: Optional[float] = None
     """ Smallest difference in an observable metric between variants. For example, to detect a 10% difference between variants, set this value to 0.1.  """
-    effect: Optional[Effect] = Field(default=None, alias="effect")
+    effect: Optional[Effect] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

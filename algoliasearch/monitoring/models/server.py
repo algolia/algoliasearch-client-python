@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,29 +22,44 @@ from algoliasearch.monitoring.models.region import Region
 from algoliasearch.monitoring.models.server_status import ServerStatus
 from algoliasearch.monitoring.models.type import Type
 
+_ALIASES = {
+    "name": "name",
+    "region": "region",
+    "is_slave": "is_slave",
+    "is_replica": "is_replica",
+    "cluster": "cluster",
+    "status": "status",
+    "type": "type",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Server(BaseModel):
     """
     Server
     """
 
-    name: Optional[str] = Field(default=None, alias="name")
+    name: Optional[str] = None
     """ Server name. """
-    region: Optional[Region] = Field(default=None, alias="region")
-    is_slave: Optional[bool] = Field(default=None, alias="is_slave")
+    region: Optional[Region] = None
+    is_slave: Optional[bool] = None
     """ Included to support legacy applications. Use `is_replica` instead.  """
-    is_replica: Optional[bool] = Field(default=None, alias="is_replica")
+    is_replica: Optional[bool] = None
     """ Whether this server is a replica of another server. """
-    cluster: Optional[str] = Field(default=None, alias="cluster")
+    cluster: Optional[str] = None
     """ Name of the cluster to which this server belongs. """
-    status: Optional[ServerStatus] = Field(default=None, alias="status")
-    type: Optional[Type] = Field(default=None, alias="type")
+    status: Optional[ServerStatus] = None
+    type: Optional[Type] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

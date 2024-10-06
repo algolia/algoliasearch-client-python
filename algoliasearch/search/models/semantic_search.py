@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,12 +18,21 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "event_sources": "eventSources",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class SemanticSearch(BaseModel):
     """
     Settings for the semantic search part of NeuralSearch. Only used when `mode` is `neuralSearch`.
     """
 
-    event_sources: Optional[List[str]] = Field(default=None, alias="eventSources")
+    event_sources: Optional[List[str]] = None
     """ Indices from which to collect click and conversion events.  If null, the current index and all its replicas are used.  """
 
     model_config = ConfigDict(
@@ -31,6 +40,7 @@ class SemanticSearch(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

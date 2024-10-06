@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,12 +18,21 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "top_users": "topUsers",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class ListClustersResponse(BaseModel):
     """
     Clusters.
     """
 
-    top_users: List[str] = Field(alias="topUsers")
+    top_users: List[str]
     """ Key-value pairs with cluster names as keys and lists of users with the highest number of records per cluster as values. """
 
     model_config = ConfigDict(
@@ -31,6 +40,7 @@ class ListClustersResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

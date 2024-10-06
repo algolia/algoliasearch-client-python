@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,14 +20,23 @@ else:
 
 from algoliasearch.search.models.action import Action
 
+_ALIASES = {
+    "action": "action",
+    "body": "body",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class BatchRequest(BaseModel):
     """
     BatchRequest
     """
 
-    action: Action = Field(alias="action")
-    body: object = Field(alias="body")
+    action: Action
+    body: object
     """ Operation arguments (varies with specified `action`). """
 
     model_config = ConfigDict(
@@ -35,6 +44,7 @@ class BatchRequest(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

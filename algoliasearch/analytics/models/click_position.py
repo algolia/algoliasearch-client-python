@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "position": "position",
+    "click_count": "clickCount",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class ClickPosition(BaseModel):
     """
     Click position.
     """
 
-    position: Optional[List[int]] = Field(default=None, alias="position")
+    position: Optional[List[int]] = None
     """ Range of positions in the search results, using the pattern `[start,end]`.  For positions 11 and up, click events are summed over the specified range. `-1` indicates the end of the list of search results.  """
-    click_count: Optional[int] = Field(default=None, alias="clickCount")
+    click_count: Optional[int] = None
     """ Number of times this search has been clicked at that position. """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class ClickPosition(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

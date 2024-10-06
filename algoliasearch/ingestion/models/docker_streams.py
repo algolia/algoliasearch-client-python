@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,23 +22,34 @@ from algoliasearch.ingestion.models.docker_streams_sync_mode import (
     DockerStreamsSyncMode,
 )
 
+_ALIASES = {
+    "name": "name",
+    "properties": "properties",
+    "sync_mode": "syncMode",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class DockerStreams(BaseModel):
     """
     DockerStreams
     """
 
-    name: str = Field(alias="name")
+    name: str
     """ The name of the stream to fetch the data from (e.g. table name). """
-    properties: Optional[List[str]] = Field(default=None, alias="properties")
+    properties: Optional[List[str]] = None
     """ The properties of the stream to select (e.g. column). """
-    sync_mode: DockerStreamsSyncMode = Field(alias="syncMode")
+    sync_mode: DockerStreamsSyncMode
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

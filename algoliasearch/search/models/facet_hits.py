@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "value": "value",
+    "highlighted": "highlighted",
+    "count": "count",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class FacetHits(BaseModel):
     """
     FacetHits
     """
 
-    value: str = Field(alias="value")
+    value: str
     """ Facet value. """
-    highlighted: str = Field(alias="highlighted")
+    highlighted: str
     """ Highlighted attribute value, including HTML tags. """
-    count: int = Field(alias="count")
+    count: int
     """ Number of records with this facet value. [The count may be approximated](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-). """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class FacetHits(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

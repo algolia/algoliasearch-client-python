@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "project_id": "projectID",
+    "dataset_id": "datasetID",
+    "table_prefix": "tablePrefix",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class SourceGA4BigQueryExport(BaseModel):
     """
     SourceGA4BigQueryExport
     """
 
-    project_id: str = Field(alias="projectID")
+    project_id: str
     """ GCP project ID that the BigQuery export writes to. """
-    dataset_id: str = Field(alias="datasetID")
+    dataset_id: str
     """ BigQuery dataset ID that the BigQuery export writes to. """
-    table_prefix: str = Field(alias="tablePrefix")
+    table_prefix: str
     """ Prefix of the tables that the BigQuery Export writes to. """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class SourceGA4BigQueryExport(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

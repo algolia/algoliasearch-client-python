@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "user_token": "userToken",
+    "last_event_at": "lastEventAt",
+    "scores": "scores",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class GetUserTokenResponse(BaseModel):
     """
     GetUserTokenResponse
     """
 
-    user_token: str = Field(alias="userToken")
+    user_token: str
     """ Unique pseudonymous or anonymous user identifier.  This helps with analytics and click and conversion events. For more information, see [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/).  """
-    last_event_at: str = Field(alias="lastEventAt")
+    last_event_at: str
     """ Date and time of the last event from this user, in RFC 3339 format. """
-    scores: object = Field(alias="scores")
+    scores: object
     """ Scores for different facet values.  Scores represent the user affinity for a user profile towards specific facet values, given the personalization strategy and past events.  """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class GetUserTokenResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

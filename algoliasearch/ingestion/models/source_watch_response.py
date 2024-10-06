@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,19 +20,30 @@ else:
 
 from algoliasearch.ingestion.models.event import Event
 
+_ALIASES = {
+    "run_id": "runID",
+    "data": "data",
+    "events": "events",
+    "message": "message",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SourceWatchResponse(BaseModel):
     """
     SourceWatchResponse
     """
 
-    run_id: Optional[str] = Field(default=None, alias="runID")
+    run_id: Optional[str] = None
     """ Universally unique identifier (UUID) of a task run. """
-    data: Optional[List[object]] = Field(default=None, alias="data")
+    data: Optional[List[object]] = None
     """ depending on the source type, the validation returns sampling data of your source (JSON, CSV, BigQuery). """
-    events: Optional[List[Event]] = Field(default=None, alias="events")
+    events: Optional[List[Event]] = None
     """ in case of error, observability events will be added to the response, if any. """
-    message: str = Field(alias="message")
+    message: str
     """ a message describing the outcome of a validate run. """
 
     model_config = ConfigDict(
@@ -40,6 +51,7 @@ class SourceWatchResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

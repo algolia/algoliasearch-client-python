@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "plurals": "plurals",
+    "stopwords": "stopwords",
+    "compounds": "compounds",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class StandardEntries(BaseModel):
     """
     Key-value pairs of [supported language ISO codes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages/) and boolean values.
     """
 
-    plurals: Optional[Dict[str, bool]] = Field(default=None, alias="plurals")
+    plurals: Optional[Dict[str, bool]] = None
     """ Key-value pair of a language ISO code and a boolean value. """
-    stopwords: Optional[Dict[str, bool]] = Field(default=None, alias="stopwords")
+    stopwords: Optional[Dict[str, bool]] = None
     """ Key-value pair of a language ISO code and a boolean value. """
-    compounds: Optional[Dict[str, bool]] = Field(default=None, alias="compounds")
+    compounds: Optional[Dict[str, bool]] = None
     """ Key-value pair of a language ISO code and a boolean value. """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class StandardEntries(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

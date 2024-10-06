@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,21 +22,28 @@ from algoliasearch.recommend.models.redirect_rule_index_metadata import (
     RedirectRuleIndexMetadata,
 )
 
+_ALIASES = {
+    "index": "index",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Redirect(BaseModel):
     """
     [Redirect results to a URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/), this this parameter is for internal use only.
     """
 
-    index: Optional[List[RedirectRuleIndexMetadata]] = Field(
-        default=None, alias="index"
-    )
+    index: Optional[List[RedirectRuleIndexMetadata]] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

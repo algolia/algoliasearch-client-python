@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,33 +21,47 @@ else:
 from algoliasearch.ingestion.models.destination_input import DestinationInput
 from algoliasearch.ingestion.models.destination_type import DestinationType
 
+_ALIASES = {
+    "destination_id": "destinationID",
+    "type": "type",
+    "name": "name",
+    "input": "input",
+    "created_at": "createdAt",
+    "updated_at": "updatedAt",
+    "authentication_id": "authenticationID",
+    "transformation_ids": "transformationIDs",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Destination(BaseModel):
     """
     Destinations are Algolia resources like indices or event streams.
     """
 
-    destination_id: str = Field(alias="destinationID")
+    destination_id: str
     """ Universally unique identifier (UUID) of a destination resource. """
-    type: DestinationType = Field(alias="type")
-    name: str = Field(alias="name")
+    type: DestinationType
+    name: str
     """ Descriptive name for the resource. """
-    input: DestinationInput = Field(alias="input")
-    created_at: str = Field(alias="createdAt")
+    input: DestinationInput
+    created_at: str
     """ Date of creation in RFC 3339 format. """
-    updated_at: Optional[str] = Field(default=None, alias="updatedAt")
+    updated_at: Optional[str] = None
     """ Date of last update in RFC 3339 format. """
-    authentication_id: Optional[str] = Field(default=None, alias="authenticationID")
+    authentication_id: Optional[str] = None
     """ Universally unique identifier (UUID) of an authentication resource. """
-    transformation_ids: Optional[List[str]] = Field(
-        default=None, alias="transformationIDs"
-    )
+    transformation_ids: Optional[List[str]] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

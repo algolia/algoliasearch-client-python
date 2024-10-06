@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,18 +18,28 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "message": "message",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class ErrorBase(BaseModel):
     """
     Error.
     """
 
-    message: Optional[str] = Field(default=None, alias="message")
+    message: Optional[str] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
         extra="allow",
     )
 

@@ -14,7 +14,7 @@ from random import randint
 from re import search
 from sys import version_info
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 from urllib.parse import quote
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
@@ -26,6 +26,7 @@ else:
     from typing_extensions import Self
 
 from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.exceptions import RequestException, ValidUntilNotFoundException
 from algoliasearch.http.helpers import (
     RetryTimeout,
@@ -33,7 +34,7 @@ from algoliasearch.http.helpers import (
     create_iterable_sync,
 )
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.http.serializer import QueryParametersSerializer, bodySerializer
+from algoliasearch.http.serializer import QueryParametersSerializer, body_serializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
@@ -85,6 +86,7 @@ from algoliasearch.search.models.list_user_ids_response import ListUserIdsRespon
 from algoliasearch.search.models.log_type import LogType
 from algoliasearch.search.models.multiple_batch_response import MultipleBatchResponse
 from algoliasearch.search.models.operation_index_params import OperationIndexParams
+from algoliasearch.search.models.operation_type import OperationType
 from algoliasearch.search.models.remove_user_id_response import RemoveUserIdResponse
 from algoliasearch.search.models.replace_all_objects_response import (
     ReplaceAllObjectsResponse,
@@ -150,7 +152,7 @@ class SearchClient:
     """
 
     _transporter: Transporter
-    _config: SearchConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
@@ -161,7 +163,7 @@ class SearchClient:
         config: Optional[SearchConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = SearchConfig(transporter.config.app_id, transporter.config.api_key)
 
         if config is None:
             config = SearchConfig(app_id, api_key)
@@ -212,7 +214,7 @@ class SearchClient:
 
     async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     async def wait_for_task(
         self,
@@ -225,21 +227,22 @@ class SearchClient:
         """
         Helper: Wait for a task to be published (completed) for a given `indexName` and `taskID`.
         """
-        self._retry_count = 0
+        _retry_count = 0
 
-        async def _func(_: GetTaskResponse) -> GetTaskResponse:
+        async def _func(_: Optional[GetTaskResponse]) -> GetTaskResponse:
             return await self.get_task(index_name, task_id, request_options)
 
         def _aggregator(_: GetTaskResponse) -> None:
-            self._retry_count += 1
+            nonlocal _retry_count
+            _retry_count += 1
 
         return await create_iterable(
             func=_func,
             aggregator=_aggregator,
             validate=lambda _resp: _resp.status == "published",
-            timeout=lambda: timeout(self._retry_count),
-            error_validate=lambda _: self._retry_count >= max_retries,
-            error_message=lambda: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+            timeout=lambda: timeout(_retry_count),
+            error_validate=lambda _: _retry_count >= max_retries,
+            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
         )
 
     async def wait_for_app_task(
@@ -252,28 +255,29 @@ class SearchClient:
         """
         Helper: Wait for an application-level task to complete for a given `taskID`.
         """
-        self._retry_count = 0
+        _retry_count = 0
 
-        async def _func(_: GetTaskResponse) -> GetTaskResponse:
+        async def _func(_: Optional[GetTaskResponse]) -> GetTaskResponse:
             return await self.get_app_task(task_id, request_options)
 
         def _aggregator(_: GetTaskResponse) -> None:
-            self._retry_count += 1
+            nonlocal _retry_count
+            _retry_count += 1
 
         return await create_iterable(
             func=_func,
             aggregator=_aggregator,
             validate=lambda _resp: _resp.status == "published",
-            timeout=lambda: timeout(self._retry_count),
-            error_validate=lambda _: self._retry_count >= max_retries,
-            error_message=lambda: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+            timeout=lambda: timeout(_retry_count),
+            error_validate=lambda _: _retry_count >= max_retries,
+            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
         )
 
     async def wait_for_api_key(
         self,
         key: str,
         operation: str,
-        api_key: Optional[ApiKey] = None,
+        api_key: Optional[Union[ApiKey, dict[str, Any]]] = None,
         max_retries: int = 50,
         timeout: RetryTimeout = RetryTimeout(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -281,32 +285,37 @@ class SearchClient:
         """
         Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
         """
-        self._retry_count = 0
+        _retry_count = 0
 
         if operation == "update" and api_key is None:
             raise ValueError(
                 "`apiKey` is required when waiting for an `update` operation."
             )
 
-        async def _func(_prev: GetApiKeyResponse | None) -> GetApiKeyResponse | None:
+        async def _func(_prev: Optional[GetApiKeyResponse]) -> GetApiKeyResponse:
             try:
                 return await self.get_api_key(key=key, request_options=request_options)
             except RequestException as e:
                 if e.status_code == 404 and (
                     operation == "delete" or operation == "add"
                 ):
-                    return None
+                    return None  # pyright: ignore
                 raise e
 
         def _aggregator(_: GetApiKeyResponse | None) -> None:
-            self._retry_count += 1
+            nonlocal _retry_count
+            _retry_count += 1
 
         def _validate(_resp: GetApiKeyResponse | None) -> bool:
             if operation == "update":
+                if _resp is None:
+                    return False
                 resp_dict = _resp.to_dict()
                 api_key_dict = (
                     api_key.to_dict() if isinstance(api_key, ApiKey) else api_key
                 )
+                if api_key_dict is None:
+                    return False
                 for field in api_key_dict:
                     if isinstance(api_key_dict[field], list) and isinstance(
                         resp_dict[field], list
@@ -327,28 +336,28 @@ class SearchClient:
             func=_func,
             validate=_validate,
             aggregator=_aggregator,
-            timeout=lambda: timeout(self._retry_count),
-            error_validate=lambda _: self._retry_count >= max_retries,
-            error_message=lambda _: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+            timeout=lambda: timeout(_retry_count),
+            error_validate=lambda _: _retry_count >= max_retries,
+            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
         )
 
     async def browse_objects(
         self,
         index_name: str,
         aggregator: Optional[Callable[[BrowseResponse], None]],
-        browse_params: Optional[BrowseParamsObject] = BrowseParamsObject(),
+        browse_params: BrowseParamsObject = BrowseParamsObject(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
 
-        async def _func(_prev: BrowseResponse) -> BrowseResponse:
+        async def _func(_prev: Optional[BrowseResponse]) -> BrowseResponse:
             if _prev is not None and _prev.cursor is not None:
                 browse_params.cursor = _prev.cursor
             return await self.browse(
                 index_name=index_name,
-                browse_params=browse_params,
+                browse_params=BrowseParams(browse_params),
                 request_options=request_options,
             )
 
@@ -362,18 +371,17 @@ class SearchClient:
         self,
         index_name: str,
         aggregator: Optional[Callable[[SearchRulesResponse], None]],
-        search_rules_params: Optional[SearchRulesParams] = SearchRulesParams(
-            hits_per_page=1000
-        ),
+        search_rules_params: SearchRulesParams = SearchRulesParams(hits_per_page=1000),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRulesResponse:
         """
         Helper: Iterate on the `search_rules` method of the client to allow aggregating rules of an index.
         """
-        if search_rules_params is not None:
+        if search_rules_params.hits_per_page is None:
             search_rules_params.hits_per_page = 1000
+        hits_per_page = search_rules_params.hits_per_page
 
-        async def _func(_prev: SearchRulesResponse) -> SearchRulesResponse:
+        async def _func(_prev: Optional[SearchRulesResponse]) -> SearchRulesResponse:
             if _prev is not None:
                 search_rules_params.page = _prev.page + 1
             return await self.search_rules(
@@ -384,7 +392,7 @@ class SearchClient:
 
         return await create_iterable(
             func=_func,
-            validate=lambda _resp: _resp.nb_hits < search_rules_params.hits_per_page,
+            validate=lambda _resp: _resp.nb_hits < hits_per_page,
             aggregator=aggregator,
         )
 
@@ -392,28 +400,34 @@ class SearchClient:
         self,
         index_name: str,
         aggregator: Callable[[SearchSynonymsResponse], None],
-        search_synonyms_params: Optional[SearchSynonymsParams] = SearchSynonymsParams(),
+        search_synonyms_params: SearchSynonymsParams = SearchSynonymsParams(
+            hits_per_page=1000
+        ),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchSynonymsResponse:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
-        if search_synonyms_params.page is None:
-            search_synonyms_params.page = 0
-        search_synonyms_params.hits_per_page = 1000
+        hits_per_page = 1000
+        page = search_synonyms_params.page or 0
+        search_synonyms_params.hits_per_page = hits_per_page
 
-        async def _func(_prev: SearchRulesResponse) -> SearchRulesResponse:
+        async def _func(
+            _prev: Optional[SearchSynonymsResponse],
+        ) -> SearchSynonymsResponse:
+            nonlocal page
             resp = await self.search_synonyms(
                 index_name=index_name,
                 search_synonyms_params=search_synonyms_params,
                 request_options=request_options,
             )
-            search_synonyms_params.page += 1
+            page += 1
+            search_synonyms_params.page = page
             return resp
 
         return await create_iterable(
             func=_func,
-            validate=lambda _resp: _resp.nb_hits < search_synonyms_params.hits_per_page,
+            validate=lambda _resp: _resp.nb_hits < hits_per_page,
             aggregator=aggregator,
         )
 
@@ -427,16 +441,21 @@ class SearchClient:
         """
         Helper: Generates a secured API key based on the given `parent_api_key` and given `restrictions`.
         """
-        if not isinstance(restrictions, SecuredApiKeyRestrictions):
-            restrictions = SecuredApiKeyRestrictions.from_dict(restrictions)
+        restrictions_dict = {}
+        if isinstance(restrictions, SecuredApiKeyRestrictions):
+            restrictions_dict = restrictions.to_dict()
+        elif isinstance(restrictions, dict):
+            restrictions_dict = restrictions
 
-        restrictions = restrictions.to_dict()
-        if "searchParams" in restrictions:
-            restrictions = {**restrictions, **restrictions["searchParams"]}
-            del restrictions["searchParams"]
+        if "searchParams" in restrictions_dict:
+            restrictions_dict = {
+                **restrictions_dict,
+                **restrictions_dict["searchParams"],
+            }
+            del restrictions_dict["searchParams"]
 
         query_parameters = QueryParametersSerializer(
-            dict(sorted(restrictions.items()))
+            dict(sorted(restrictions_dict.items()))
         ).encoded()
 
         secured_key = hmac.new(
@@ -504,7 +523,7 @@ class SearchClient:
         self,
         index_name: str,
         objects: List[Dict[str, Any]],
-        create_if_not_exists: Optional[bool] = False,
+        create_if_not_exists: bool = False,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
@@ -557,7 +576,7 @@ class SearchClient:
         objects: List[Dict[str, Any]],
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> List[ApiResponse[str]]:
+    ) -> ReplaceAllObjectsResponse:
         """
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
 
@@ -569,7 +588,7 @@ class SearchClient:
             return await self.operation_index(
                 index_name=index_name,
                 operation_index_params=OperationIndexParams(
-                    operation="copy",
+                    operation=OperationType.COPY,
                     destination=tmp_index_name,
                     scope=[
                         ScopeType("settings"),
@@ -602,7 +621,7 @@ class SearchClient:
         move_operation_response = await self.operation_index(
             index_name=tmp_index_name,
             operation_index_params=OperationIndexParams(
-                operation="move",
+                operation=OperationType.MOVE,
                 destination=index_name,
             ),
             request_options=request_options,
@@ -632,7 +651,7 @@ class SearchClient:
 
     async def add_api_key_with_http_info(
         self,
-        api_key: ApiKey,
+        api_key: Union[ApiKey, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -660,7 +679,7 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/keys",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -668,7 +687,7 @@ class SearchClient:
 
     async def add_api_key(
         self,
-        api_key: ApiKey,
+        api_key: Union[ApiKey, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AddApiKeyResponse:
         """
@@ -741,7 +760,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -784,7 +803,9 @@ class SearchClient:
 
     async def append_source_with_http_info(
         self,
-        source: Annotated[Source, Field(description="Source to add.")],
+        source: Union[
+            Annotated[Source, Field(description="Source to add.")], dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -812,7 +833,7 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/security/sources/append",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -820,7 +841,9 @@ class SearchClient:
 
     async def append_source(
         self,
-        source: Annotated[Source, Field(description="Source to add.")],
+        source: Union[
+            Annotated[Source, Field(description="Source to add.")], dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
@@ -846,7 +869,7 @@ class SearchClient:
                 description="Unique identifier of the user who makes the search request.",
             ),
         ],
-        assign_user_id_params: AssignUserIdParams,
+        assign_user_id_params: Union[AssignUserIdParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -873,7 +896,7 @@ class SearchClient:
                 "Parameter `assign_user_id_params` is required when calling `assign_user_id`."
             )
 
-        _headers: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, str] = {}
 
         if x_algolia_user_id is not None:
             _headers["x-algolia-user-id"] = x_algolia_user_id
@@ -887,7 +910,7 @@ class SearchClient:
             path="/1/clusters/mapping",
             request_options=self._request_options.merge(
                 headers=_headers,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -902,7 +925,7 @@ class SearchClient:
                 description="Unique identifier of the user who makes the search request.",
             ),
         ],
-        assign_user_id_params: AssignUserIdParams,
+        assign_user_id_params: Union[AssignUserIdParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
@@ -929,7 +952,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        batch_write_params: BatchWriteParams,
+        batch_write_params: Union[BatchWriteParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -962,7 +985,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -974,7 +997,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        batch_write_params: BatchWriteParams,
+        batch_write_params: Union[BatchWriteParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BatchResponse:
         """
@@ -1002,7 +1025,7 @@ class SearchClient:
                 description="Unique identifier of the user who makes the search request.",
             ),
         ],
-        batch_assign_user_ids_params: BatchAssignUserIdsParams,
+        batch_assign_user_ids_params: Union[BatchAssignUserIdsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1029,7 +1052,7 @@ class SearchClient:
                 "Parameter `batch_assign_user_ids_params` is required when calling `batch_assign_user_ids`."
             )
 
-        _headers: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, str] = {}
 
         if x_algolia_user_id is not None:
             _headers["x-algolia-user-id"] = x_algolia_user_id
@@ -1043,7 +1066,7 @@ class SearchClient:
             path="/1/clusters/mapping/batch",
             request_options=self._request_options.merge(
                 headers=_headers,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1058,7 +1081,7 @@ class SearchClient:
                 description="Unique identifier of the user who makes the search request.",
             ),
         ],
-        batch_assign_user_ids_params: BatchAssignUserIdsParams,
+        batch_assign_user_ids_params: Union[BatchAssignUserIdsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
@@ -1081,10 +1104,15 @@ class SearchClient:
 
     async def batch_dictionary_entries_with_http_info(
         self,
-        dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary type in which to search.")
+        dictionary_name: Union[
+            Annotated[
+                DictionaryType, Field(description="Dictionary type in which to search.")
+            ],
+            str,
         ],
-        batch_dictionary_entries_params: BatchDictionaryEntriesParams,
+        batch_dictionary_entries_params: Union[
+            BatchDictionaryEntriesParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1121,7 +1149,7 @@ class SearchClient:
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1129,10 +1157,15 @@ class SearchClient:
 
     async def batch_dictionary_entries(
         self,
-        dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary type in which to search.")
+        dictionary_name: Union[
+            Annotated[
+                DictionaryType, Field(description="Dictionary type in which to search.")
+            ],
+            str,
         ],
-        batch_dictionary_entries_params: BatchDictionaryEntriesParams,
+        batch_dictionary_entries_params: Union[
+            BatchDictionaryEntriesParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
@@ -1159,7 +1192,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        browse_params: Optional[BrowseParams] = None,
+        browse_params: Union[Optional[BrowseParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1191,7 +1224,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1203,7 +1236,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        browse_params: Optional[BrowseParams] = None,
+        browse_params: Union[Optional[BrowseParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
         """
@@ -1313,10 +1346,10 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `clear_rules`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         return await self._transporter.request(
             verb=Verb.POST,
@@ -1391,10 +1424,10 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `clear_synonyms`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         return await self._transporter.request(
             verb=Verb.POST,
@@ -1469,11 +1502,11 @@ class SearchClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.DELETE,
@@ -1544,11 +1577,11 @@ class SearchClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -1623,11 +1656,11 @@ class SearchClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -1638,7 +1671,7 @@ class SearchClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1715,11 +1748,11 @@ class SearchClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -1730,7 +1763,7 @@ class SearchClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1828,7 +1861,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        delete_by_params: DeleteByParams,
+        delete_by_params: Union[DeleteByParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1865,7 +1898,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1877,7 +1910,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        delete_by_params: DeleteByParams,
+        delete_by_params: Union[DeleteByParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeletedAtResponse:
         """
@@ -2068,10 +2101,10 @@ class SearchClient:
                 "Parameter `object_id` is required when calling `delete_rule`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         return await self._transporter.request(
             verb=Verb.DELETE,
@@ -2217,10 +2250,10 @@ class SearchClient:
                 "Parameter `object_id` is required when calling `delete_synonym`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         return await self._transporter.request(
             verb=Verb.DELETE,
@@ -2455,11 +2488,14 @@ class SearchClient:
                 description="Index for which to retrieve log entries. By default, log entries are retrieved for all indices. "
             ),
         ] = None,
-        type: Annotated[
-            Optional[LogType],
-            Field(
-                description="Type of log entries to retrieve. By default, all log entries are retrieved. "
-            ),
+        type: Union[
+            Annotated[
+                Optional[LogType],
+                Field(
+                    description="Type of log entries to retrieve. By default, all log entries are retrieved. "
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -2481,16 +2517,16 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if offset is not None:
-            _query_parameters.append(("offset", offset))
+            _query_parameters["offset"] = offset
         if length is not None:
-            _query_parameters.append(("length", length))
+            _query_parameters["length"] = length
         if index_name is not None:
-            _query_parameters.append(("indexName", index_name))
+            _query_parameters["indexName"] = index_name
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -2520,11 +2556,14 @@ class SearchClient:
                 description="Index for which to retrieve log entries. By default, log entries are retrieved for all indices. "
             ),
         ] = None,
-        type: Annotated[
-            Optional[LogType],
-            Field(
-                description="Type of log entries to retrieve. By default, all log entries are retrieved. "
-            ),
+        type: Union[
+            Annotated[
+                Optional[LogType],
+                Field(
+                    description="Type of log entries to retrieve. By default, all log entries are retrieved. "
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetLogsResponse:
@@ -2591,10 +2630,10 @@ class SearchClient:
                 "Parameter `object_id` is required when calling `get_object`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if attributes_to_retrieve is not None:
-            _query_parameters.append(("attributesToRetrieve", attributes_to_retrieve))
+            _query_parameters["attributesToRetrieve"] = attributes_to_retrieve
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -2645,8 +2684,9 @@ class SearchClient:
 
     async def get_objects_with_http_info(
         self,
-        get_objects_params: Annotated[
-            GetObjectsParams, Field(description="Request object.")
+        get_objects_params: Union[
+            Annotated[GetObjectsParams, Field(description="Request object.")],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -2675,7 +2715,7 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/indexes/*/objects",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -2683,8 +2723,9 @@ class SearchClient:
 
     async def get_objects(
         self,
-        get_objects_params: Annotated[
-            GetObjectsParams, Field(description="Request object.")
+        get_objects_params: Union[
+            Annotated[GetObjectsParams, Field(description="Request object.")],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetObjectsResponse:
@@ -3139,10 +3180,10 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if get_clusters is not None:
-            _query_parameters.append(("getClusters", get_clusters))
+            _query_parameters["getClusters"] = get_clusters
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -3281,12 +3322,12 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if hits_per_page is not None:
-            _query_parameters.append(("hitsPerPage", hits_per_page))
+            _query_parameters["hitsPerPage"] = hits_per_page
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -3356,12 +3397,12 @@ class SearchClient:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if hits_per_page is not None:
-            _query_parameters.append(("hitsPerPage", hits_per_page))
+            _query_parameters["hitsPerPage"] = hits_per_page
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -3406,7 +3447,7 @@ class SearchClient:
 
     async def multiple_batch_with_http_info(
         self,
-        batch_params: BatchParams,
+        batch_params: Union[BatchParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3432,7 +3473,7 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/indexes/*/batch",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3440,7 +3481,7 @@ class SearchClient:
 
     async def multiple_batch(
         self,
-        batch_params: BatchParams,
+        batch_params: Union[BatchParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> MultipleBatchResponse:
         """
@@ -3461,7 +3502,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        operation_index_params: OperationIndexParams,
+        operation_index_params: Union[OperationIndexParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3498,7 +3539,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3510,7 +3551,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        operation_index_params: OperationIndexParams,
+        operation_index_params: Union[OperationIndexParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
@@ -3580,10 +3621,10 @@ class SearchClient:
                 "Parameter `attributes_to_update` is required when calling `partial_update_object`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if create_if_not_exists is not None:
-            _query_parameters.append(("createIfNotExists", create_if_not_exists))
+            _query_parameters["createIfNotExists"] = create_if_not_exists
 
         _data = {}
         if attributes_to_update is not None:
@@ -3596,7 +3637,7 @@ class SearchClient:
             ).replace("{objectID}", quote(str(object_id), safe="")),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3710,7 +3751,10 @@ class SearchClient:
 
     async def replace_sources_with_http_info(
         self,
-        source: Annotated[List[Source], Field(description="Allowed sources.")],
+        source: Union[
+            Annotated[List[Source], Field(description="Allowed sources.")],
+            list[dict[str, Any]],
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3738,7 +3782,7 @@ class SearchClient:
             verb=Verb.PUT,
             path="/1/security/sources",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3746,7 +3790,10 @@ class SearchClient:
 
     async def replace_sources(
         self,
-        source: Annotated[List[Source], Field(description="Allowed sources.")],
+        source: Union[
+            Annotated[List[Source], Field(description="Allowed sources.")],
+            list[dict[str, Any]],
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ReplaceSourceResponse:
         """
@@ -3859,7 +3906,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3904,7 +3951,7 @@ class SearchClient:
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
         ],
-        rule: Rule,
+        rule: Union[Rule, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -3942,10 +3989,10 @@ class SearchClient:
         if rule is None:
             raise ValueError("Parameter `rule` is required when calling `save_rule`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         _data = {}
         if rule is not None:
@@ -3958,7 +4005,7 @@ class SearchClient:
             ).replace("{objectID}", quote(str(object_id), safe="")),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3973,7 +4020,7 @@ class SearchClient:
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
         ],
-        rule: Rule,
+        rule: Union[Rule, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -4008,7 +4055,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        rules: List[Rule],
+        rules: Union[List[Rule], list[dict[str, Any]]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -4047,12 +4094,12 @@ class SearchClient:
         if rules is None:
             raise ValueError("Parameter `rules` is required when calling `save_rules`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
         if clear_existing_rules is not None:
-            _query_parameters.append(("clearExistingRules", clear_existing_rules))
+            _query_parameters["clearExistingRules"] = clear_existing_rules
 
         _data = {}
         if rules is not None:
@@ -4065,7 +4112,7 @@ class SearchClient:
             ),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4077,7 +4124,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        rules: List[Rule],
+        rules: Union[List[Rule], list[dict[str, Any]]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -4125,7 +4172,7 @@ class SearchClient:
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
         ],
-        synonym_hit: SynonymHit,
+        synonym_hit: Union[SynonymHit, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -4165,10 +4212,10 @@ class SearchClient:
                 "Parameter `synonym_hit` is required when calling `save_synonym`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         _data = {}
         if synonym_hit is not None:
@@ -4181,7 +4228,7 @@ class SearchClient:
             ).replace("{objectID}", quote(str(object_id), safe="")),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4196,7 +4243,7 @@ class SearchClient:
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
         ],
-        synonym_hit: SynonymHit,
+        synonym_hit: Union[SynonymHit, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -4231,7 +4278,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        synonym_hit: List[SynonymHit],
+        synonym_hit: Union[List[SynonymHit], list[dict[str, Any]]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -4272,14 +4319,12 @@ class SearchClient:
                 "Parameter `synonym_hit` is required when calling `save_synonyms`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
         if replace_existing_synonyms is not None:
-            _query_parameters.append(
-                ("replaceExistingSynonyms", replace_existing_synonyms)
-            )
+            _query_parameters["replaceExistingSynonyms"] = replace_existing_synonyms
 
         _data = {}
         if synonym_hit is not None:
@@ -4292,7 +4337,7 @@ class SearchClient:
             ),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4304,7 +4349,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        synonym_hit: List[SynonymHit],
+        synonym_hit: Union[List[SynonymHit], list[dict[str, Any]]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -4345,11 +4390,14 @@ class SearchClient:
 
     async def search_with_http_info(
         self,
-        search_method_params: Annotated[
-            SearchMethodParams,
-            Field(
-                description="Muli-search request body. Results are returned in the same order as the requests."
-            ),
+        search_method_params: Union[
+            Annotated[
+                SearchMethodParams,
+                Field(
+                    description="Muli-search request body. Results are returned in the same order as the requests."
+                ),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -4378,7 +4426,7 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/indexes/*/queries",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4386,11 +4434,14 @@ class SearchClient:
 
     async def search(
         self,
-        search_method_params: Annotated[
-            SearchMethodParams,
-            Field(
-                description="Muli-search request body. Results are returned in the same order as the requests."
-            ),
+        search_method_params: Union[
+            Annotated[
+                SearchMethodParams,
+                Field(
+                    description="Muli-search request body. Results are returned in the same order as the requests."
+                ),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchResponses:
@@ -4410,10 +4461,15 @@ class SearchClient:
 
     async def search_dictionary_entries_with_http_info(
         self,
-        dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary type in which to search.")
+        dictionary_name: Union[
+            Annotated[
+                DictionaryType, Field(description="Dictionary type in which to search.")
+            ],
+            str,
         ],
-        search_dictionary_entries_params: SearchDictionaryEntriesParams,
+        search_dictionary_entries_params: Union[
+            SearchDictionaryEntriesParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4450,7 +4506,7 @@ class SearchClient:
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4458,10 +4514,15 @@ class SearchClient:
 
     async def search_dictionary_entries(
         self,
-        dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary type in which to search.")
+        dictionary_name: Union[
+            Annotated[
+                DictionaryType, Field(description="Dictionary type in which to search.")
+            ],
+            str,
         ],
-        search_dictionary_entries_params: SearchDictionaryEntriesParams,
+        search_dictionary_entries_params: Union[
+            SearchDictionaryEntriesParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchDictionaryEntriesResponse:
         """
@@ -4494,7 +4555,9 @@ class SearchClient:
                 description="Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier. "
             ),
         ],
-        search_for_facet_values_request: Optional[SearchForFacetValuesRequest] = None,
+        search_for_facet_values_request: Union[
+            Optional[SearchForFacetValuesRequest], dict[str, Any]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4533,7 +4596,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{facetName}", quote(str(facet_name), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4551,7 +4614,9 @@ class SearchClient:
                 description="Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier. "
             ),
         ],
-        search_for_facet_values_request: Optional[SearchForFacetValuesRequest] = None,
+        search_for_facet_values_request: Union[
+            Optional[SearchForFacetValuesRequest], dict[str, Any]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchForFacetValuesResponse:
         """
@@ -4580,7 +4645,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_rules_params: Optional[SearchRulesParams] = None,
+        search_rules_params: Union[Optional[SearchRulesParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4612,7 +4677,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4624,7 +4689,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_rules_params: Optional[SearchRulesParams] = None,
+        search_rules_params: Union[Optional[SearchRulesParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRulesResponse:
         """
@@ -4651,7 +4716,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_params: Optional[SearchParams] = None,
+        search_params: Union[Optional[SearchParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4683,7 +4748,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4695,7 +4760,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_params: Optional[SearchParams] = None,
+        search_params: Union[Optional[SearchParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchResponse:
         """
@@ -4722,9 +4787,12 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_synonyms_params: Annotated[
-            Optional[SearchSynonymsParams],
-            Field(description="Body of the `searchSynonyms` operation."),
+        search_synonyms_params: Union[
+            Annotated[
+                Optional[SearchSynonymsParams],
+                Field(description="Body of the `searchSynonyms` operation."),
+            ],
+            dict[str, Any],
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -4757,7 +4825,7 @@ class SearchClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4769,9 +4837,12 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_synonyms_params: Annotated[
-            Optional[SearchSynonymsParams],
-            Field(description="Body of the `searchSynonyms` operation."),
+        search_synonyms_params: Union[
+            Annotated[
+                Optional[SearchSynonymsParams],
+                Field(description="Body of the `searchSynonyms` operation."),
+            ],
+            dict[str, Any],
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchSynonymsResponse:
@@ -4795,7 +4866,7 @@ class SearchClient:
 
     async def search_user_ids_with_http_info(
         self,
-        search_user_ids_params: SearchUserIdsParams,
+        search_user_ids_params: Union[SearchUserIdsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4823,7 +4894,7 @@ class SearchClient:
             verb=Verb.POST,
             path="/1/clusters/mapping/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -4831,7 +4902,7 @@ class SearchClient:
 
     async def search_user_ids(
         self,
-        search_user_ids_params: SearchUserIdsParams,
+        search_user_ids_params: Union[SearchUserIdsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchUserIdsResponse:
         """
@@ -4852,7 +4923,7 @@ class SearchClient:
 
     async def set_dictionary_settings_with_http_info(
         self,
-        dictionary_settings_params: DictionarySettingsParams,
+        dictionary_settings_params: Union[DictionarySettingsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4880,7 +4951,7 @@ class SearchClient:
             verb=Verb.PUT,
             path="/1/dictionaries/*/settings",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4888,7 +4959,7 @@ class SearchClient:
 
     async def set_dictionary_settings(
         self,
-        dictionary_settings_params: DictionarySettingsParams,
+        dictionary_settings_params: Union[DictionarySettingsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
@@ -4913,7 +4984,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        index_settings: IndexSettings,
+        index_settings: Union[IndexSettings, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -4946,10 +5017,10 @@ class SearchClient:
                 "Parameter `index_settings` is required when calling `set_settings`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         _data = {}
         if index_settings is not None:
@@ -4962,7 +5033,7 @@ class SearchClient:
             ),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4974,7 +5045,7 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        index_settings: IndexSettings,
+        index_settings: Union[IndexSettings, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -5004,7 +5075,7 @@ class SearchClient:
     async def update_api_key_with_http_info(
         self,
         key: Annotated[StrictStr, Field(description="API key.")],
-        api_key: ApiKey,
+        api_key: Union[ApiKey, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -5039,7 +5110,7 @@ class SearchClient:
             verb=Verb.PUT,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5048,7 +5119,7 @@ class SearchClient:
     async def update_api_key(
         self,
         key: Annotated[StrictStr, Field(description="API key.")],
-        api_key: ApiKey,
+        api_key: Union[ApiKey, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdateApiKeyResponse:
         """
@@ -5087,7 +5158,7 @@ class SearchClientSync:
     """
 
     _transporter: TransporterSync
-    _config: SearchConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
@@ -5098,7 +5169,7 @@ class SearchClientSync:
         config: Optional[SearchConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = SearchConfig(transporter.config.app_id, transporter.config.api_key)
 
         if config is None:
             config = SearchConfig(app_id, api_key)
@@ -5148,7 +5219,7 @@ class SearchClientSync:
 
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     def wait_for_task(
         self,
@@ -5161,21 +5232,22 @@ class SearchClientSync:
         """
         Helper: Wait for a task to be published (completed) for a given `indexName` and `taskID`.
         """
-        self._retry_count = 0
+        _retry_count = 0
 
-        def _func(_: GetTaskResponse) -> GetTaskResponse:
+        def _func(_: Optional[GetTaskResponse]) -> GetTaskResponse:
             return self.get_task(index_name, task_id, request_options)
 
         def _aggregator(_: GetTaskResponse) -> None:
-            self._retry_count += 1
+            nonlocal _retry_count
+            _retry_count += 1
 
         return create_iterable_sync(
             func=_func,
             aggregator=_aggregator,
             validate=lambda _resp: _resp.status == "published",
-            timeout=lambda: timeout(self._retry_count),
-            error_validate=lambda _: self._retry_count >= max_retries,
-            error_message=lambda: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+            timeout=lambda: timeout(_retry_count),
+            error_validate=lambda _: _retry_count >= max_retries,
+            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
         )
 
     def wait_for_app_task(
@@ -5188,28 +5260,29 @@ class SearchClientSync:
         """
         Helper: Wait for an application-level task to complete for a given `taskID`.
         """
-        self._retry_count = 0
+        _retry_count = 0
 
-        def _func(_: GetTaskResponse) -> GetTaskResponse:
+        def _func(_: Optional[GetTaskResponse]) -> GetTaskResponse:
             return self.get_app_task(task_id, request_options)
 
         def _aggregator(_: GetTaskResponse) -> None:
-            self._retry_count += 1
+            nonlocal _retry_count
+            _retry_count += 1
 
         return create_iterable_sync(
             func=_func,
             aggregator=_aggregator,
             validate=lambda _resp: _resp.status == "published",
-            timeout=lambda: timeout(self._retry_count),
-            error_validate=lambda _: self._retry_count >= max_retries,
-            error_message=lambda: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+            timeout=lambda: timeout(_retry_count),
+            error_validate=lambda _: _retry_count >= max_retries,
+            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
         )
 
     def wait_for_api_key(
         self,
         key: str,
         operation: str,
-        api_key: Optional[ApiKey] = None,
+        api_key: Optional[Union[ApiKey, dict[str, Any]]] = None,
         max_retries: int = 50,
         timeout: RetryTimeout = RetryTimeout(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -5217,32 +5290,37 @@ class SearchClientSync:
         """
         Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
         """
-        self._retry_count = 0
+        _retry_count = 0
 
         if operation == "update" and api_key is None:
             raise ValueError(
                 "`apiKey` is required when waiting for an `update` operation."
             )
 
-        def _func(_prev: GetApiKeyResponse | None) -> GetApiKeyResponse | None:
+        def _func(_prev: Optional[GetApiKeyResponse]) -> GetApiKeyResponse:
             try:
                 return self.get_api_key(key=key, request_options=request_options)
             except RequestException as e:
                 if e.status_code == 404 and (
                     operation == "delete" or operation == "add"
                 ):
-                    return None
+                    return None  # pyright: ignore
                 raise e
 
         def _aggregator(_: GetApiKeyResponse | None) -> None:
-            self._retry_count += 1
+            nonlocal _retry_count
+            _retry_count += 1
 
         def _validate(_resp: GetApiKeyResponse | None) -> bool:
             if operation == "update":
+                if _resp is None:
+                    return False
                 resp_dict = _resp.to_dict()
                 api_key_dict = (
                     api_key.to_dict() if isinstance(api_key, ApiKey) else api_key
                 )
+                if api_key_dict is None:
+                    return False
                 for field in api_key_dict:
                     if isinstance(api_key_dict[field], list) and isinstance(
                         resp_dict[field], list
@@ -5263,28 +5341,28 @@ class SearchClientSync:
             func=_func,
             validate=_validate,
             aggregator=_aggregator,
-            timeout=lambda: timeout(self._retry_count),
-            error_validate=lambda _: self._retry_count >= max_retries,
-            error_message=lambda _: f"The maximum number of retries exceeded. (${self._retry_count}/${max_retries})",
+            timeout=lambda: timeout(_retry_count),
+            error_validate=lambda _: _retry_count >= max_retries,
+            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
         )
 
     def browse_objects(
         self,
         index_name: str,
         aggregator: Optional[Callable[[BrowseResponse], None]],
-        browse_params: Optional[BrowseParamsObject] = BrowseParamsObject(),
+        browse_params: BrowseParamsObject = BrowseParamsObject(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
 
-        def _func(_prev: BrowseResponse) -> BrowseResponse:
+        def _func(_prev: Optional[BrowseResponse]) -> BrowseResponse:
             if _prev is not None and _prev.cursor is not None:
                 browse_params.cursor = _prev.cursor
             return self.browse(
                 index_name=index_name,
-                browse_params=browse_params,
+                browse_params=BrowseParams(browse_params),
                 request_options=request_options,
             )
 
@@ -5298,18 +5376,17 @@ class SearchClientSync:
         self,
         index_name: str,
         aggregator: Optional[Callable[[SearchRulesResponse], None]],
-        search_rules_params: Optional[SearchRulesParams] = SearchRulesParams(
-            hits_per_page=1000
-        ),
+        search_rules_params: SearchRulesParams = SearchRulesParams(hits_per_page=1000),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRulesResponse:
         """
         Helper: Iterate on the `search_rules` method of the client to allow aggregating rules of an index.
         """
-        if search_rules_params is not None:
+        if search_rules_params.hits_per_page is None:
             search_rules_params.hits_per_page = 1000
+        hits_per_page = search_rules_params.hits_per_page
 
-        def _func(_prev: SearchRulesResponse) -> SearchRulesResponse:
+        def _func(_prev: Optional[SearchRulesResponse]) -> SearchRulesResponse:
             if _prev is not None:
                 search_rules_params.page = _prev.page + 1
             return self.search_rules(
@@ -5320,7 +5397,7 @@ class SearchClientSync:
 
         return create_iterable_sync(
             func=_func,
-            validate=lambda _resp: _resp.nb_hits < search_rules_params.hits_per_page,
+            validate=lambda _resp: _resp.nb_hits < hits_per_page,
             aggregator=aggregator,
         )
 
@@ -5328,28 +5405,32 @@ class SearchClientSync:
         self,
         index_name: str,
         aggregator: Callable[[SearchSynonymsResponse], None],
-        search_synonyms_params: Optional[SearchSynonymsParams] = SearchSynonymsParams(),
+        search_synonyms_params: SearchSynonymsParams = SearchSynonymsParams(
+            hits_per_page=1000
+        ),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchSynonymsResponse:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
-        if search_synonyms_params.page is None:
-            search_synonyms_params.page = 0
-        search_synonyms_params.hits_per_page = 1000
+        hits_per_page = 1000
+        page = search_synonyms_params.page or 0
+        search_synonyms_params.hits_per_page = hits_per_page
 
-        def _func(_prev: SearchRulesResponse) -> SearchRulesResponse:
+        def _func(_prev: Optional[SearchSynonymsResponse]) -> SearchSynonymsResponse:
+            nonlocal page
             resp = self.search_synonyms(
                 index_name=index_name,
                 search_synonyms_params=search_synonyms_params,
                 request_options=request_options,
             )
-            search_synonyms_params.page += 1
+            page += 1
+            search_synonyms_params.page = page
             return resp
 
         return create_iterable_sync(
             func=_func,
-            validate=lambda _resp: _resp.nb_hits < search_synonyms_params.hits_per_page,
+            validate=lambda _resp: _resp.nb_hits < hits_per_page,
             aggregator=aggregator,
         )
 
@@ -5363,16 +5444,21 @@ class SearchClientSync:
         """
         Helper: Generates a secured API key based on the given `parent_api_key` and given `restrictions`.
         """
-        if not isinstance(restrictions, SecuredApiKeyRestrictions):
-            restrictions = SecuredApiKeyRestrictions.from_dict(restrictions)
+        restrictions_dict = {}
+        if isinstance(restrictions, SecuredApiKeyRestrictions):
+            restrictions_dict = restrictions.to_dict()
+        elif isinstance(restrictions, dict):
+            restrictions_dict = restrictions
 
-        restrictions = restrictions.to_dict()
-        if "searchParams" in restrictions:
-            restrictions = {**restrictions, **restrictions["searchParams"]}
-            del restrictions["searchParams"]
+        if "searchParams" in restrictions_dict:
+            restrictions_dict = {
+                **restrictions_dict,
+                **restrictions_dict["searchParams"],
+            }
+            del restrictions_dict["searchParams"]
 
         query_parameters = QueryParametersSerializer(
-            dict(sorted(restrictions.items()))
+            dict(sorted(restrictions_dict.items()))
         ).encoded()
 
         secured_key = hmac.new(
@@ -5440,7 +5526,7 @@ class SearchClientSync:
         self,
         index_name: str,
         objects: List[Dict[str, Any]],
-        create_if_not_exists: Optional[bool] = False,
+        create_if_not_exists: bool = False,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
@@ -5491,7 +5577,7 @@ class SearchClientSync:
         objects: List[Dict[str, Any]],
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> List[ApiResponse[str]]:
+    ) -> ReplaceAllObjectsResponse:
         """
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
 
@@ -5503,7 +5589,7 @@ class SearchClientSync:
             return self.operation_index(
                 index_name=index_name,
                 operation_index_params=OperationIndexParams(
-                    operation="copy",
+                    operation=OperationType.COPY,
                     destination=tmp_index_name,
                     scope=[
                         ScopeType("settings"),
@@ -5536,7 +5622,7 @@ class SearchClientSync:
         move_operation_response = self.operation_index(
             index_name=tmp_index_name,
             operation_index_params=OperationIndexParams(
-                operation="move",
+                operation=OperationType.MOVE,
                 destination=index_name,
             ),
             request_options=request_options,
@@ -5566,7 +5652,7 @@ class SearchClientSync:
 
     def add_api_key_with_http_info(
         self,
-        api_key: ApiKey,
+        api_key: Union[ApiKey, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -5594,7 +5680,7 @@ class SearchClientSync:
             verb=Verb.POST,
             path="/1/keys",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5602,7 +5688,7 @@ class SearchClientSync:
 
     def add_api_key(
         self,
-        api_key: ApiKey,
+        api_key: Union[ApiKey, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AddApiKeyResponse:
         """
@@ -5675,7 +5761,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{objectID}", quote(str(object_id), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5718,7 +5804,9 @@ class SearchClientSync:
 
     def append_source_with_http_info(
         self,
-        source: Annotated[Source, Field(description="Source to add.")],
+        source: Union[
+            Annotated[Source, Field(description="Source to add.")], dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -5746,7 +5834,7 @@ class SearchClientSync:
             verb=Verb.POST,
             path="/1/security/sources/append",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5754,7 +5842,9 @@ class SearchClientSync:
 
     def append_source(
         self,
-        source: Annotated[Source, Field(description="Source to add.")],
+        source: Union[
+            Annotated[Source, Field(description="Source to add.")], dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
@@ -5780,7 +5870,7 @@ class SearchClientSync:
                 description="Unique identifier of the user who makes the search request.",
             ),
         ],
-        assign_user_id_params: AssignUserIdParams,
+        assign_user_id_params: Union[AssignUserIdParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -5807,7 +5897,7 @@ class SearchClientSync:
                 "Parameter `assign_user_id_params` is required when calling `assign_user_id`."
             )
 
-        _headers: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, str] = {}
 
         if x_algolia_user_id is not None:
             _headers["x-algolia-user-id"] = x_algolia_user_id
@@ -5821,7 +5911,7 @@ class SearchClientSync:
             path="/1/clusters/mapping",
             request_options=self._request_options.merge(
                 headers=_headers,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5836,7 +5926,7 @@ class SearchClientSync:
                 description="Unique identifier of the user who makes the search request.",
             ),
         ],
-        assign_user_id_params: AssignUserIdParams,
+        assign_user_id_params: Union[AssignUserIdParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
@@ -5863,7 +5953,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        batch_write_params: BatchWriteParams,
+        batch_write_params: Union[BatchWriteParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -5896,7 +5986,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5908,7 +5998,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        batch_write_params: BatchWriteParams,
+        batch_write_params: Union[BatchWriteParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BatchResponse:
         """
@@ -5936,7 +6026,7 @@ class SearchClientSync:
                 description="Unique identifier of the user who makes the search request.",
             ),
         ],
-        batch_assign_user_ids_params: BatchAssignUserIdsParams,
+        batch_assign_user_ids_params: Union[BatchAssignUserIdsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -5963,7 +6053,7 @@ class SearchClientSync:
                 "Parameter `batch_assign_user_ids_params` is required when calling `batch_assign_user_ids`."
             )
 
-        _headers: Dict[str, Optional[str]] = {}
+        _headers: Dict[str, str] = {}
 
         if x_algolia_user_id is not None:
             _headers["x-algolia-user-id"] = x_algolia_user_id
@@ -5977,7 +6067,7 @@ class SearchClientSync:
             path="/1/clusters/mapping/batch",
             request_options=self._request_options.merge(
                 headers=_headers,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -5992,7 +6082,7 @@ class SearchClientSync:
                 description="Unique identifier of the user who makes the search request.",
             ),
         ],
-        batch_assign_user_ids_params: BatchAssignUserIdsParams,
+        batch_assign_user_ids_params: Union[BatchAssignUserIdsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
@@ -6015,10 +6105,15 @@ class SearchClientSync:
 
     def batch_dictionary_entries_with_http_info(
         self,
-        dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary type in which to search.")
+        dictionary_name: Union[
+            Annotated[
+                DictionaryType, Field(description="Dictionary type in which to search.")
+            ],
+            str,
         ],
-        batch_dictionary_entries_params: BatchDictionaryEntriesParams,
+        batch_dictionary_entries_params: Union[
+            BatchDictionaryEntriesParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -6055,7 +6150,7 @@ class SearchClientSync:
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -6063,10 +6158,15 @@ class SearchClientSync:
 
     def batch_dictionary_entries(
         self,
-        dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary type in which to search.")
+        dictionary_name: Union[
+            Annotated[
+                DictionaryType, Field(description="Dictionary type in which to search.")
+            ],
+            str,
         ],
-        batch_dictionary_entries_params: BatchDictionaryEntriesParams,
+        batch_dictionary_entries_params: Union[
+            BatchDictionaryEntriesParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
@@ -6093,7 +6193,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        browse_params: Optional[BrowseParams] = None,
+        browse_params: Union[Optional[BrowseParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -6125,7 +6225,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -6137,7 +6237,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        browse_params: Optional[BrowseParams] = None,
+        browse_params: Union[Optional[BrowseParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
         """
@@ -6245,10 +6345,10 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `clear_rules`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         return self._transporter.request(
             verb=Verb.POST,
@@ -6323,10 +6423,10 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `clear_synonyms`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         return self._transporter.request(
             verb=Verb.POST,
@@ -6401,11 +6501,11 @@ class SearchClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.DELETE,
@@ -6474,11 +6574,11 @@ class SearchClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -6553,11 +6653,11 @@ class SearchClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -6568,7 +6668,7 @@ class SearchClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -6643,11 +6743,11 @@ class SearchClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -6658,7 +6758,7 @@ class SearchClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -6754,7 +6854,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        delete_by_params: DeleteByParams,
+        delete_by_params: Union[DeleteByParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -6791,7 +6891,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -6803,7 +6903,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        delete_by_params: DeleteByParams,
+        delete_by_params: Union[DeleteByParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeletedAtResponse:
         """
@@ -6992,10 +7092,10 @@ class SearchClientSync:
                 "Parameter `object_id` is required when calling `delete_rule`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         return self._transporter.request(
             verb=Verb.DELETE,
@@ -7141,10 +7241,10 @@ class SearchClientSync:
                 "Parameter `object_id` is required when calling `delete_synonym`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         return self._transporter.request(
             verb=Verb.DELETE,
@@ -7379,11 +7479,14 @@ class SearchClientSync:
                 description="Index for which to retrieve log entries. By default, log entries are retrieved for all indices. "
             ),
         ] = None,
-        type: Annotated[
-            Optional[LogType],
-            Field(
-                description="Type of log entries to retrieve. By default, all log entries are retrieved. "
-            ),
+        type: Union[
+            Annotated[
+                Optional[LogType],
+                Field(
+                    description="Type of log entries to retrieve. By default, all log entries are retrieved. "
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -7405,16 +7508,16 @@ class SearchClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if offset is not None:
-            _query_parameters.append(("offset", offset))
+            _query_parameters["offset"] = offset
         if length is not None:
-            _query_parameters.append(("length", length))
+            _query_parameters["length"] = length
         if index_name is not None:
-            _query_parameters.append(("indexName", index_name))
+            _query_parameters["indexName"] = index_name
         if type is not None:
-            _query_parameters.append(("type", type))
+            _query_parameters["type"] = type
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -7444,11 +7547,14 @@ class SearchClientSync:
                 description="Index for which to retrieve log entries. By default, log entries are retrieved for all indices. "
             ),
         ] = None,
-        type: Annotated[
-            Optional[LogType],
-            Field(
-                description="Type of log entries to retrieve. By default, all log entries are retrieved. "
-            ),
+        type: Union[
+            Annotated[
+                Optional[LogType],
+                Field(
+                    description="Type of log entries to retrieve. By default, all log entries are retrieved. "
+                ),
+            ],
+            str,
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetLogsResponse:
@@ -7515,10 +7621,10 @@ class SearchClientSync:
                 "Parameter `object_id` is required when calling `get_object`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if attributes_to_retrieve is not None:
-            _query_parameters.append(("attributesToRetrieve", attributes_to_retrieve))
+            _query_parameters["attributesToRetrieve"] = attributes_to_retrieve
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -7569,8 +7675,9 @@ class SearchClientSync:
 
     def get_objects_with_http_info(
         self,
-        get_objects_params: Annotated[
-            GetObjectsParams, Field(description="Request object.")
+        get_objects_params: Union[
+            Annotated[GetObjectsParams, Field(description="Request object.")],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -7599,7 +7706,7 @@ class SearchClientSync:
             verb=Verb.POST,
             path="/1/indexes/*/objects",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -7607,8 +7714,9 @@ class SearchClientSync:
 
     def get_objects(
         self,
-        get_objects_params: Annotated[
-            GetObjectsParams, Field(description="Request object.")
+        get_objects_params: Union[
+            Annotated[GetObjectsParams, Field(description="Request object.")],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetObjectsResponse:
@@ -8057,10 +8165,10 @@ class SearchClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if get_clusters is not None:
-            _query_parameters.append(("getClusters", get_clusters))
+            _query_parameters["getClusters"] = get_clusters
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -8197,12 +8305,12 @@ class SearchClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if hits_per_page is not None:
-            _query_parameters.append(("hitsPerPage", hits_per_page))
+            _query_parameters["hitsPerPage"] = hits_per_page
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -8270,12 +8378,12 @@ class SearchClientSync:
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if page is not None:
-            _query_parameters.append(("page", page))
+            _query_parameters["page"] = page
         if hits_per_page is not None:
-            _query_parameters.append(("hitsPerPage", hits_per_page))
+            _query_parameters["hitsPerPage"] = hits_per_page
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -8318,7 +8426,7 @@ class SearchClientSync:
 
     def multiple_batch_with_http_info(
         self,
-        batch_params: BatchParams,
+        batch_params: Union[BatchParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8344,7 +8452,7 @@ class SearchClientSync:
             verb=Verb.POST,
             path="/1/indexes/*/batch",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8352,7 +8460,7 @@ class SearchClientSync:
 
     def multiple_batch(
         self,
-        batch_params: BatchParams,
+        batch_params: Union[BatchParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> MultipleBatchResponse:
         """
@@ -8373,7 +8481,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        operation_index_params: OperationIndexParams,
+        operation_index_params: Union[OperationIndexParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8410,7 +8518,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8422,7 +8530,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        operation_index_params: OperationIndexParams,
+        operation_index_params: Union[OperationIndexParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
@@ -8492,10 +8600,10 @@ class SearchClientSync:
                 "Parameter `attributes_to_update` is required when calling `partial_update_object`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if create_if_not_exists is not None:
-            _query_parameters.append(("createIfNotExists", create_if_not_exists))
+            _query_parameters["createIfNotExists"] = create_if_not_exists
 
         _data = {}
         if attributes_to_update is not None:
@@ -8508,7 +8616,7 @@ class SearchClientSync:
             ).replace("{objectID}", quote(str(object_id), safe="")),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8622,7 +8730,10 @@ class SearchClientSync:
 
     def replace_sources_with_http_info(
         self,
-        source: Annotated[List[Source], Field(description="Allowed sources.")],
+        source: Union[
+            Annotated[List[Source], Field(description="Allowed sources.")],
+            list[dict[str, Any]],
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8650,7 +8761,7 @@ class SearchClientSync:
             verb=Verb.PUT,
             path="/1/security/sources",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8658,7 +8769,10 @@ class SearchClientSync:
 
     def replace_sources(
         self,
-        source: Annotated[List[Source], Field(description="Allowed sources.")],
+        source: Union[
+            Annotated[List[Source], Field(description="Allowed sources.")],
+            list[dict[str, Any]],
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ReplaceSourceResponse:
         """
@@ -8771,7 +8885,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8816,7 +8930,7 @@ class SearchClientSync:
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
         ],
-        rule: Rule,
+        rule: Union[Rule, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -8854,10 +8968,10 @@ class SearchClientSync:
         if rule is None:
             raise ValueError("Parameter `rule` is required when calling `save_rule`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         _data = {}
         if rule is not None:
@@ -8870,7 +8984,7 @@ class SearchClientSync:
             ).replace("{objectID}", quote(str(object_id), safe="")),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8885,7 +8999,7 @@ class SearchClientSync:
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a rule object.")
         ],
-        rule: Rule,
+        rule: Union[Rule, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -8920,7 +9034,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        rules: List[Rule],
+        rules: Union[List[Rule], list[dict[str, Any]]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -8959,12 +9073,12 @@ class SearchClientSync:
         if rules is None:
             raise ValueError("Parameter `rules` is required when calling `save_rules`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
         if clear_existing_rules is not None:
-            _query_parameters.append(("clearExistingRules", clear_existing_rules))
+            _query_parameters["clearExistingRules"] = clear_existing_rules
 
         _data = {}
         if rules is not None:
@@ -8977,7 +9091,7 @@ class SearchClientSync:
             ),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8989,7 +9103,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        rules: List[Rule],
+        rules: Union[List[Rule], list[dict[str, Any]]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -9037,7 +9151,7 @@ class SearchClientSync:
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
         ],
-        synonym_hit: SynonymHit,
+        synonym_hit: Union[SynonymHit, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -9077,10 +9191,10 @@ class SearchClientSync:
                 "Parameter `synonym_hit` is required when calling `save_synonym`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         _data = {}
         if synonym_hit is not None:
@@ -9093,7 +9207,7 @@ class SearchClientSync:
             ).replace("{objectID}", quote(str(object_id), safe="")),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9108,7 +9222,7 @@ class SearchClientSync:
         object_id: Annotated[
             StrictStr, Field(description="Unique identifier of a synonym object.")
         ],
-        synonym_hit: SynonymHit,
+        synonym_hit: Union[SynonymHit, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -9143,7 +9257,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        synonym_hit: List[SynonymHit],
+        synonym_hit: Union[List[SynonymHit], list[dict[str, Any]]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -9184,14 +9298,12 @@ class SearchClientSync:
                 "Parameter `synonym_hit` is required when calling `save_synonyms`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
         if replace_existing_synonyms is not None:
-            _query_parameters.append(
-                ("replaceExistingSynonyms", replace_existing_synonyms)
-            )
+            _query_parameters["replaceExistingSynonyms"] = replace_existing_synonyms
 
         _data = {}
         if synonym_hit is not None:
@@ -9204,7 +9316,7 @@ class SearchClientSync:
             ),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9216,7 +9328,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        synonym_hit: List[SynonymHit],
+        synonym_hit: Union[List[SynonymHit], list[dict[str, Any]]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -9257,11 +9369,14 @@ class SearchClientSync:
 
     def search_with_http_info(
         self,
-        search_method_params: Annotated[
-            SearchMethodParams,
-            Field(
-                description="Muli-search request body. Results are returned in the same order as the requests."
-            ),
+        search_method_params: Union[
+            Annotated[
+                SearchMethodParams,
+                Field(
+                    description="Muli-search request body. Results are returned in the same order as the requests."
+                ),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -9290,7 +9405,7 @@ class SearchClientSync:
             verb=Verb.POST,
             path="/1/indexes/*/queries",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -9298,11 +9413,14 @@ class SearchClientSync:
 
     def search(
         self,
-        search_method_params: Annotated[
-            SearchMethodParams,
-            Field(
-                description="Muli-search request body. Results are returned in the same order as the requests."
-            ),
+        search_method_params: Union[
+            Annotated[
+                SearchMethodParams,
+                Field(
+                    description="Muli-search request body. Results are returned in the same order as the requests."
+                ),
+            ],
+            dict[str, Any],
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchResponses:
@@ -9322,10 +9440,15 @@ class SearchClientSync:
 
     def search_dictionary_entries_with_http_info(
         self,
-        dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary type in which to search.")
+        dictionary_name: Union[
+            Annotated[
+                DictionaryType, Field(description="Dictionary type in which to search.")
+            ],
+            str,
         ],
-        search_dictionary_entries_params: SearchDictionaryEntriesParams,
+        search_dictionary_entries_params: Union[
+            SearchDictionaryEntriesParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9362,7 +9485,7 @@ class SearchClientSync:
                 "{dictionaryName}", quote(str(dictionary_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -9370,10 +9493,15 @@ class SearchClientSync:
 
     def search_dictionary_entries(
         self,
-        dictionary_name: Annotated[
-            DictionaryType, Field(description="Dictionary type in which to search.")
+        dictionary_name: Union[
+            Annotated[
+                DictionaryType, Field(description="Dictionary type in which to search.")
+            ],
+            str,
         ],
-        search_dictionary_entries_params: SearchDictionaryEntriesParams,
+        search_dictionary_entries_params: Union[
+            SearchDictionaryEntriesParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchDictionaryEntriesResponse:
         """
@@ -9406,7 +9534,9 @@ class SearchClientSync:
                 description="Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier. "
             ),
         ],
-        search_for_facet_values_request: Optional[SearchForFacetValuesRequest] = None,
+        search_for_facet_values_request: Union[
+            Optional[SearchForFacetValuesRequest], dict[str, Any]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9445,7 +9575,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{facetName}", quote(str(facet_name), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -9463,7 +9593,9 @@ class SearchClientSync:
                 description="Facet attribute in which to search for values.  This attribute must be included in the `attributesForFaceting` index setting with the `searchable()` modifier. "
             ),
         ],
-        search_for_facet_values_request: Optional[SearchForFacetValuesRequest] = None,
+        search_for_facet_values_request: Union[
+            Optional[SearchForFacetValuesRequest], dict[str, Any]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchForFacetValuesResponse:
         """
@@ -9492,7 +9624,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_rules_params: Optional[SearchRulesParams] = None,
+        search_rules_params: Union[Optional[SearchRulesParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9524,7 +9656,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -9536,7 +9668,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_rules_params: Optional[SearchRulesParams] = None,
+        search_rules_params: Union[Optional[SearchRulesParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRulesResponse:
         """
@@ -9563,7 +9695,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_params: Optional[SearchParams] = None,
+        search_params: Union[Optional[SearchParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9595,7 +9727,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -9607,7 +9739,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_params: Optional[SearchParams] = None,
+        search_params: Union[Optional[SearchParams], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchResponse:
         """
@@ -9634,9 +9766,12 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_synonyms_params: Annotated[
-            Optional[SearchSynonymsParams],
-            Field(description="Body of the `searchSynonyms` operation."),
+        search_synonyms_params: Union[
+            Annotated[
+                Optional[SearchSynonymsParams],
+                Field(description="Body of the `searchSynonyms` operation."),
+            ],
+            dict[str, Any],
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -9669,7 +9804,7 @@ class SearchClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -9681,9 +9816,12 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        search_synonyms_params: Annotated[
-            Optional[SearchSynonymsParams],
-            Field(description="Body of the `searchSynonyms` operation."),
+        search_synonyms_params: Union[
+            Annotated[
+                Optional[SearchSynonymsParams],
+                Field(description="Body of the `searchSynonyms` operation."),
+            ],
+            dict[str, Any],
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchSynonymsResponse:
@@ -9707,7 +9845,7 @@ class SearchClientSync:
 
     def search_user_ids_with_http_info(
         self,
-        search_user_ids_params: SearchUserIdsParams,
+        search_user_ids_params: Union[SearchUserIdsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9735,7 +9873,7 @@ class SearchClientSync:
             verb=Verb.POST,
             path="/1/clusters/mapping/search",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -9743,7 +9881,7 @@ class SearchClientSync:
 
     def search_user_ids(
         self,
-        search_user_ids_params: SearchUserIdsParams,
+        search_user_ids_params: Union[SearchUserIdsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchUserIdsResponse:
         """
@@ -9764,7 +9902,7 @@ class SearchClientSync:
 
     def set_dictionary_settings_with_http_info(
         self,
-        dictionary_settings_params: DictionarySettingsParams,
+        dictionary_settings_params: Union[DictionarySettingsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9792,7 +9930,7 @@ class SearchClientSync:
             verb=Verb.PUT,
             path="/1/dictionaries/*/settings",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9800,7 +9938,7 @@ class SearchClientSync:
 
     def set_dictionary_settings(
         self,
-        dictionary_settings_params: DictionarySettingsParams,
+        dictionary_settings_params: Union[DictionarySettingsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdatedAtResponse:
         """
@@ -9825,7 +9963,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        index_settings: IndexSettings,
+        index_settings: Union[IndexSettings, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -9858,10 +9996,10 @@ class SearchClientSync:
                 "Parameter `index_settings` is required when calling `set_settings`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
-            _query_parameters.append(("forwardToReplicas", forward_to_replicas))
+            _query_parameters["forwardToReplicas"] = forward_to_replicas
 
         _data = {}
         if index_settings is not None:
@@ -9874,7 +10012,7 @@ class SearchClientSync:
             ),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9886,7 +10024,7 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        index_settings: IndexSettings,
+        index_settings: Union[IndexSettings, dict[str, Any]],
         forward_to_replicas: Annotated[
             Optional[StrictBool],
             Field(description="Whether changes are applied to replica indices."),
@@ -9916,7 +10054,7 @@ class SearchClientSync:
     def update_api_key_with_http_info(
         self,
         key: Annotated[StrictStr, Field(description="API key.")],
-        api_key: ApiKey,
+        api_key: Union[ApiKey, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9951,7 +10089,7 @@ class SearchClientSync:
             verb=Verb.PUT,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9960,7 +10098,7 @@ class SearchClientSync:
     def update_api_key(
         self,
         key: Annotated[StrictStr, Field(description="API key.")],
-        api_key: ApiKey,
+        api_key: Union[ApiKey, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UpdateApiKeyResponse:
         """

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,25 +20,34 @@ else:
 
 from algoliasearch.ingestion.models.authentication_create import AuthenticationCreate
 
+_ALIASES = {
+    "code": "code",
+    "sample_record": "sampleRecord",
+    "authentications": "authentications",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class TransformationTry(BaseModel):
     """
     TransformationTry
     """
 
-    code: str = Field(alias="code")
+    code: str
     """ The source code of the transformation. """
-    sample_record: object = Field(alias="sampleRecord")
+    sample_record: object
     """ The record to apply the given code to. """
-    authentications: Optional[List[AuthenticationCreate]] = Field(
-        default=None, alias="authentications"
-    )
+    authentications: Optional[List[AuthenticationCreate]] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

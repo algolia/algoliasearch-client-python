@@ -30,7 +30,7 @@ class RemoveStopWords(BaseModel):
     """ ISO code for languages for which stop words should be removed. This overrides languages you set in `queryLanguges`. """
     oneof_schema_2_validator: Optional[bool] = Field(default=None)
     """ If true, stop words are removed for all languages you included in `queryLanguages`, or for all supported languages, if `queryLanguages` is empty. If false, stop words are not removed.  """
-    actual_instance: Optional[Union[List[SupportedLanguage], bool]] = None
+    actual_instance: Union[List[SupportedLanguage], bool, None] = None
     one_of_schemas: Set[str] = {"List[SupportedLanguage]", "bool"}
 
     def __init__(self, *args, **kwargs) -> None:
@@ -43,12 +43,14 @@ class RemoveStopWords(BaseModel):
                 raise ValueError(
                     "If a position argument is used, keyword arguments cannot be used."
                 )
-            super().__init__(actual_instance=args[0])
+            super().__init__(actual_instance=args[0])  # pyright: ignore
         else:
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[List[SupportedLanguage], bool]]:
+    def unwrap_actual_instance(
+        self,
+    ) -> Union[List[SupportedLanguage], bool, Self, None]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -91,9 +93,9 @@ class RemoveStopWords(BaseModel):
             return "null"
 
         if hasattr(self.actual_instance, "to_json") and callable(
-            self.actual_instance.to_json
+            self.actual_instance.to_json  # pyright: ignore
         ):
-            return self.actual_instance.to_json()
+            return self.actual_instance.to_json()  # pyright: ignore
         else:
             return dumps(self.actual_instance)
 
@@ -103,8 +105,8 @@ class RemoveStopWords(BaseModel):
             return None
 
         if hasattr(self.actual_instance, "to_dict") and callable(
-            self.actual_instance.to_dict
+            self.actual_instance.to_dict  # pyright: ignore
         ):
-            return self.actual_instance.to_dict()
+            return self.actual_instance.to_dict()  # pyright: ignore
         else:
-            return self.actual_instance
+            return self.actual_instance  # pyright: ignore

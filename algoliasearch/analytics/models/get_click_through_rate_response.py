@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,19 +22,30 @@ from algoliasearch.analytics.models.daily_click_through_rates import (
     DailyClickThroughRates,
 )
 
+_ALIASES = {
+    "rate": "rate",
+    "click_count": "clickCount",
+    "tracked_search_count": "trackedSearchCount",
+    "dates": "dates",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class GetClickThroughRateResponse(BaseModel):
     """
     GetClickThroughRateResponse
     """
 
-    rate: float = Field(alias="rate")
+    rate: float
     """ Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    click_count: int = Field(alias="clickCount")
+    click_count: int
     """ Number of clicks associated with this search. """
-    tracked_search_count: int = Field(alias="trackedSearchCount")
+    tracked_search_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
-    dates: List[DailyClickThroughRates] = Field(alias="dates")
+    dates: List[DailyClickThroughRates]
     """ Daily click-through rates. """
 
     model_config = ConfigDict(
@@ -42,6 +53,7 @@ class GetClickThroughRateResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,25 +20,37 @@ else:
 
 from algoliasearch.search.models.supported_language import SupportedLanguage
 
+_ALIASES = {
+    "query": "query",
+    "page": "page",
+    "hits_per_page": "hitsPerPage",
+    "language": "language",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SearchDictionaryEntriesParams(BaseModel):
     """
     Search parameter.
     """
 
-    query: str = Field(alias="query")
+    query: str
     """ Search query. """
-    page: Optional[int] = Field(default=None, alias="page")
+    page: Optional[int] = None
     """ Page of search results to retrieve. """
-    hits_per_page: Optional[int] = Field(default=None, alias="hitsPerPage")
+    hits_per_page: Optional[int] = None
     """ Number of hits per page. """
-    language: Optional[SupportedLanguage] = Field(default=None, alias="language")
+    language: Optional[SupportedLanguage] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

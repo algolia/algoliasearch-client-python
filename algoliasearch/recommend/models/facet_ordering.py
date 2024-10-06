@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,14 +21,23 @@ else:
 from algoliasearch.recommend.models.index_settings_facets import IndexSettingsFacets
 from algoliasearch.recommend.models.value import Value
 
+_ALIASES = {
+    "facets": "facets",
+    "values": "values",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class FacetOrdering(BaseModel):
     """
     Order of facet names and facet values in your UI.
     """
 
-    facets: Optional[IndexSettingsFacets] = Field(default=None, alias="facets")
-    values: Optional[Dict[str, Value]] = Field(default=None, alias="values")
+    facets: Optional[IndexSettingsFacets] = None
+    values: Optional[Dict[str, Value]] = None
     """ Order of facet values. One object for each facet. """
 
     model_config = ConfigDict(
@@ -36,6 +45,7 @@ class FacetOrdering(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

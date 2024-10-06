@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,26 +18,39 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "transformation_id": "transformationID",
+    "authentication_ids": "authenticationIDs",
+    "code": "code",
+    "name": "name",
+    "description": "description",
+    "created_at": "createdAt",
+    "updated_at": "updatedAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class Transformation(BaseModel):
     """
     Transformation
     """
 
-    transformation_id: str = Field(alias="transformationID")
+    transformation_id: str
     """ Universally unique identifier (UUID) of a transformation. """
-    authentication_ids: Optional[List[str]] = Field(
-        default=None, alias="authenticationIDs"
-    )
+    authentication_ids: Optional[List[str]] = None
     """ The authentications associated for the current transformation. """
-    code: str = Field(alias="code")
+    code: str
     """ The source code of the transformation. """
-    name: str = Field(alias="name")
+    name: str
     """ The uniquely identified name of your transformation. """
-    description: Optional[str] = Field(default=None, alias="description")
+    description: Optional[str] = None
     """ A descriptive name for your transformation of what it does. """
-    created_at: str = Field(alias="createdAt")
+    created_at: str
     """ Date of creation in RFC 3339 format. """
-    updated_at: Optional[str] = Field(default=None, alias="updatedAt")
+    updated_at: Optional[str] = None
     """ Date of last update in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -45,6 +58,7 @@ class Transformation(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

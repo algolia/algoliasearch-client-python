@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,18 +18,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "currency": "currency",
+    "revenue": "revenue",
+    "mean": "mean",
+    "standard_deviation": "standardDeviation",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class Currency(BaseModel):
     """
     Currency
     """
 
-    currency: Optional[str] = Field(default=None, alias="currency")
+    currency: Optional[str] = None
     """ Currency code. """
-    revenue: Optional[float] = Field(default=None, alias="revenue")
+    revenue: Optional[float] = None
     """ Revenue for this currency. """
-    mean: Optional[float] = Field(default=None, alias="mean")
+    mean: Optional[float] = None
     """ Mean for this currency. """
-    standard_deviation: Optional[float] = Field(default=None, alias="standardDeviation")
+    standard_deviation: Optional[float] = None
     """ Standard deviation for this currency. """
 
     model_config = ConfigDict(
@@ -37,6 +49,7 @@ class Currency(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

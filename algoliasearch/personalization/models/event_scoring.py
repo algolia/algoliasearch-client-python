@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,23 +20,34 @@ else:
 
 from algoliasearch.personalization.models.event_type import EventType
 
+_ALIASES = {
+    "score": "score",
+    "event_name": "eventName",
+    "event_type": "eventType",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class EventScoring(BaseModel):
     """
     EventScoring
     """
 
-    score: int = Field(alias="score")
+    score: int
     """ Event score. """
-    event_name: str = Field(alias="eventName")
+    event_name: str
     """ Event name. """
-    event_type: EventType = Field(alias="eventType")
+    event_type: EventType
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

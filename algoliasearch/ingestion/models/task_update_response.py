@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "task_id": "taskID",
+    "updated_at": "updatedAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class TaskUpdateResponse(BaseModel):
     """
     API response for updating a task.
     """
 
-    task_id: str = Field(alias="taskID")
+    task_id: str
     """ Universally unique identifier (UUID) of a task. """
-    updated_at: str = Field(alias="updatedAt")
+    updated_at: str
     """ Date of last update in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class TaskUpdateResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

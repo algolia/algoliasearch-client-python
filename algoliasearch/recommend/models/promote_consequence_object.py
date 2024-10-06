@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "object_id": "objectID",
+    "position": "position",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class PromoteConsequenceObject(BaseModel):
     """
     Object ID and position of the recommendation you want to pin.
     """
 
-    object_id: Optional[str] = Field(default=None, alias="objectID")
+    object_id: Optional[str] = None
     """ Unique record identifier. """
-    position: Optional[int] = Field(default=None, alias="position")
+    position: Optional[int] = None
     """ Index in the list of recommendations where to place this item. """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class PromoteConsequenceObject(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

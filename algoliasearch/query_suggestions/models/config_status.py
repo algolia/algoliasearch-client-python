@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,24 +18,33 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "index_name": "indexName",
+    "is_running": "isRunning",
+    "last_built_at": "lastBuiltAt",
+    "last_successful_built_at": "lastSuccessfulBuiltAt",
+    "last_successful_build_duration": "lastSuccessfulBuildDuration",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class ConfigStatus(BaseModel):
     """
     ConfigStatus
     """
 
-    index_name: Optional[str] = Field(default=None, alias="indexName")
+    index_name: Optional[str] = None
     """ Name of the Query Suggestions index (case-sensitive). """
-    is_running: Optional[bool] = Field(default=None, alias="isRunning")
+    is_running: Optional[bool] = None
     """ Whether the creation or update of the Query Suggestions index is in progress. """
-    last_built_at: Optional[str] = Field(default=None, alias="lastBuiltAt")
+    last_built_at: Optional[str] = None
     """ Date and time when the Query Suggestions index was last built, in RFC 3339 format. """
-    last_successful_built_at: Optional[str] = Field(
-        default=None, alias="lastSuccessfulBuiltAt"
-    )
+    last_successful_built_at: Optional[str] = None
     """ Date and time when the Query Suggestions index was last updated successfully. """
-    last_successful_build_duration: Optional[str] = Field(
-        default=None, alias="lastSuccessfulBuildDuration"
-    )
+    last_successful_build_duration: Optional[str] = None
     """ Duration of the last successful build in seconds. """
 
     model_config = ConfigDict(
@@ -43,6 +52,7 @@ class ConfigStatus(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

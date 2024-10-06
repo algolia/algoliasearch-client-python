@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,30 +20,46 @@ else:
 
 from algoliasearch.query_suggestions.models.facet import Facet
 
+_ALIASES = {
+    "index_name": "indexName",
+    "replicas": "replicas",
+    "analytics_tags": "analyticsTags",
+    "facets": "facets",
+    "min_hits": "minHits",
+    "min_letters": "minLetters",
+    "generate": "generate",
+    "external": "external",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SourceIndex(BaseModel):
     """
     Configuration of an Algolia index for Query Suggestions.
     """
 
-    index_name: str = Field(alias="indexName")
+    index_name: str
     """ Name of the Algolia index (case-sensitive) to use as source for query suggestions. """
-    replicas: Optional[bool] = Field(default=None, alias="replicas")
+    replicas: Optional[bool] = None
     """ If true, Query Suggestions uses all replica indices to find popular searches. If false, only the primary index is used.  """
-    analytics_tags: Optional[List[str]] = Field(default=None, alias="analyticsTags")
-    facets: Optional[List[Facet]] = Field(default=None, alias="facets")
-    min_hits: Optional[int] = Field(default=None, alias="minHits")
+    analytics_tags: Optional[List[str]] = None
+    facets: Optional[List[Facet]] = None
+    min_hits: Optional[int] = None
     """ Minimum number of hits required to be included as a suggestion.  A search query must at least generate `minHits` search results to be included in the Query Suggestions index.  """
-    min_letters: Optional[int] = Field(default=None, alias="minLetters")
+    min_letters: Optional[int] = None
     """ Minimum letters required to be included as a suggestion.  A search query must be at least `minLetters` long to be included in the Query Suggestions index.  """
-    generate: Optional[List[List[str]]] = Field(default=None, alias="generate")
-    external: Optional[List[str]] = Field(default=None, alias="external")
+    generate: Optional[List[List[str]]] = None
+    external: Optional[List[str]] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,22 +22,35 @@ from algoliasearch.search.models.condition import Condition
 from algoliasearch.search.models.consequence import Consequence
 from algoliasearch.search.models.time_range import TimeRange
 
+_ALIASES = {
+    "object_id": "objectID",
+    "conditions": "conditions",
+    "consequence": "consequence",
+    "description": "description",
+    "enabled": "enabled",
+    "validity": "validity",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Rule(BaseModel):
     """
     Rule object.
     """
 
-    object_id: str = Field(alias="objectID")
+    object_id: str
     """ Unique identifier of a rule object. """
-    conditions: Optional[List[Condition]] = Field(default=None, alias="conditions")
+    conditions: Optional[List[Condition]] = None
     """ Conditions that trigger a rule.  Some consequences require specific conditions or don't require any condition. For more information, see [Conditions](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#conditions).  """
-    consequence: Optional[Consequence] = Field(default=None, alias="consequence")
-    description: Optional[str] = Field(default=None, alias="description")
+    consequence: Optional[Consequence] = None
+    description: Optional[str] = None
     """ Description of the rule's purpose to help you distinguish between different rules. """
-    enabled: Optional[bool] = Field(default=None, alias="enabled")
+    enabled: Optional[bool] = None
     """ Whether the rule is active. """
-    validity: Optional[List[TimeRange]] = Field(default=None, alias="validity")
+    validity: Optional[List[TimeRange]] = None
     """ Time periods when the rule is active. """
 
     model_config = ConfigDict(
@@ -45,6 +58,7 @@ class Rule(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

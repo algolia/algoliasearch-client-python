@@ -11,7 +11,7 @@ from re import match
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 if version_info >= (3, 11):
     from typing import Self
@@ -24,33 +24,49 @@ from algoliasearch.insights.models.conversion_event import ConversionEvent
 from algoliasearch.insights.models.object_data import ObjectData
 from algoliasearch.insights.models.value import Value
 
+_ALIASES = {
+    "event_name": "eventName",
+    "event_type": "eventType",
+    "event_subtype": "eventSubtype",
+    "index": "index",
+    "object_ids": "objectIDs",
+    "user_token": "userToken",
+    "authenticated_user_token": "authenticatedUserToken",
+    "currency": "currency",
+    "object_data": "objectData",
+    "timestamp": "timestamp",
+    "value": "value",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class AddedToCartObjectIDs(BaseModel):
     """
     Use this event to track when users add items to their shopping cart unrelated to a previous Algolia request. For example, if you don't use Algolia to build your category pages, use this event.  To track add-to-cart events related to Algolia requests, use the \"Added to cart object IDs after search\" event.
     """
 
-    event_name: str = Field(alias="eventName")
+    event_name: str
     """ Event name, up to 64 ASCII characters.  Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework.  """
-    event_type: ConversionEvent = Field(alias="eventType")
-    event_subtype: AddToCartEvent = Field(alias="eventSubtype")
-    index: str = Field(alias="index")
+    event_type: ConversionEvent
+    event_subtype: AddToCartEvent
+    index: str
     """ Index name (case-sensitive) to which the event's items belong. """
-    object_ids: List[str] = Field(alias="objectIDs")
+    object_ids: List[str]
     """ Object IDs of the records that are part of the event. """
-    user_token: str = Field(alias="userToken")
+    user_token: str
     """ Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/).  """
-    authenticated_user_token: Optional[str] = Field(
-        default=None, alias="authenticatedUserToken"
-    )
+    authenticated_user_token: Optional[str] = None
     """ Identifier for authenticated users.  When the user signs in, you can get an identifier from your system and send it as `authenticatedUserToken`. This lets you keep using the `userToken` from before the user signed in, while providing a reliable way to identify users across sessions. Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/).  """
-    currency: Optional[str] = Field(default=None, alias="currency")
+    currency: Optional[str] = None
     """ Three-letter [currency code](https://www.iso.org/iso-4217-currency-codes.html). """
-    object_data: Optional[List[ObjectData]] = Field(default=None, alias="objectData")
+    object_data: Optional[List[ObjectData]] = None
     """ Extra information about the records involved in a purchase or add-to-cart event.  If specified, it must have the same length as `objectIDs`.  """
-    timestamp: Optional[int] = Field(default=None, alias="timestamp")
+    timestamp: Optional[int] = None
     """ Timestamp of the event, measured in milliseconds since the Unix epoch. By default, the Insights API uses the time it receives an event as its timestamp.  """
-    value: Optional[Value] = Field(default=None, alias="value")
+    value: Optional[Value] = None
 
     @field_validator("event_name")
     def event_name_validate_regular_expression(cls, value):
@@ -87,6 +103,7 @@ class AddedToCartObjectIDs(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

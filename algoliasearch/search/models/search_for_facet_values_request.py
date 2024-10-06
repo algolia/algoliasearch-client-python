@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "params": "params",
+    "facet_query": "facetQuery",
+    "max_facet_hits": "maxFacetHits",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class SearchForFacetValuesRequest(BaseModel):
     """
     SearchForFacetValuesRequest
     """
 
-    params: Optional[str] = Field(default=None, alias="params")
+    params: Optional[str] = None
     """ Search parameters as a URL-encoded query string. """
-    facet_query: Optional[str] = Field(default=None, alias="facetQuery")
+    facet_query: Optional[str] = None
     """ Text to search inside the facet's values. """
-    max_facet_hits: Optional[int] = Field(default=None, alias="maxFacetHits")
+    max_facet_hits: Optional[int] = None
     """ Maximum number of facet values to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values). """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class SearchForFacetValuesRequest(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

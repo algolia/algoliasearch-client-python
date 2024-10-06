@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,21 +20,31 @@ else:
 
 from algoliasearch.monitoring.models.incident import Incident
 
+_ALIASES = {
+    "t": "t",
+    "v": "v",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class IncidentEntry(BaseModel):
     """
     IncidentEntry
     """
 
-    t: Optional[int] = Field(default=None, alias="t")
+    t: Optional[int] = None
     """ Timestamp, measured in milliseconds since the Unix epoch. """
-    v: Optional[Incident] = Field(default=None, alias="v")
+    v: Optional[Incident] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

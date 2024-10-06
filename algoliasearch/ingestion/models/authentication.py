@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,22 +22,36 @@ from algoliasearch.ingestion.models.auth_input_partial import AuthInputPartial
 from algoliasearch.ingestion.models.authentication_type import AuthenticationType
 from algoliasearch.ingestion.models.platform import Platform
 
+_ALIASES = {
+    "authentication_id": "authenticationID",
+    "type": "type",
+    "name": "name",
+    "platform": "platform",
+    "input": "input",
+    "created_at": "createdAt",
+    "updated_at": "updatedAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Authentication(BaseModel):
     """
     Resource representing the information required to authenticate with a source or a destination.
     """
 
-    authentication_id: str = Field(alias="authenticationID")
+    authentication_id: str
     """ Universally unique identifier (UUID) of an authentication resource. """
-    type: AuthenticationType = Field(alias="type")
-    name: str = Field(alias="name")
+    type: AuthenticationType
+    name: str
     """ Descriptive name for the resource. """
-    platform: Optional[Platform] = Field(default=None, alias="platform")
-    input: AuthInputPartial = Field(alias="input")
-    created_at: str = Field(alias="createdAt")
+    platform: Optional[Platform] = None
+    input: AuthInputPartial
+    created_at: str
     """ Date of creation in RFC 3339 format. """
-    updated_at: Optional[str] = Field(default=None, alias="updatedAt")
+    updated_at: Optional[str] = None
     """ Date of last update in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -45,6 +59,7 @@ class Authentication(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

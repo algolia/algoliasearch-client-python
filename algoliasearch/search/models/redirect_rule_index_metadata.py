@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,27 +20,40 @@ else:
 
 from algoliasearch.search.models.redirect_rule_index_data import RedirectRuleIndexData
 
+_ALIASES = {
+    "source": "source",
+    "dest": "dest",
+    "reason": "reason",
+    "succeed": "succeed",
+    "data": "data",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class RedirectRuleIndexMetadata(BaseModel):
     """
     RedirectRuleIndexMetadata
     """
 
-    source: str = Field(alias="source")
+    source: str
     """ Source index for the redirect rule. """
-    dest: str = Field(alias="dest")
+    dest: str
     """ Destination index for the redirect rule. """
-    reason: str = Field(alias="reason")
+    reason: str
     """ Reason for the redirect rule. """
-    succeed: bool = Field(alias="succeed")
+    succeed: bool
     """ Redirect rule status. """
-    data: RedirectRuleIndexData = Field(alias="data")
+    data: RedirectRuleIndexData
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,20 +21,30 @@ else:
 from algoliasearch.ingestion.models.shopify_market import ShopifyMarket
 from algoliasearch.ingestion.models.shopify_metafield import ShopifyMetafield
 
+_ALIASES = {
+    "metafields": "metafields",
+    "market": "market",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ShopifyInput(BaseModel):
     """
     Represents the required elements of the task input when using a `shopify` source.
     """
 
-    metafields: List[ShopifyMetafield] = Field(alias="metafields")
-    market: ShopifyMarket = Field(alias="market")
+    metafields: List[ShopifyMetafield]
+    market: ShopifyMarket
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

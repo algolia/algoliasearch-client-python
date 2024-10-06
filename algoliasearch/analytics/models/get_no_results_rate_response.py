@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,19 +20,30 @@ else:
 
 from algoliasearch.analytics.models.daily_no_results_rates import DailyNoResultsRates
 
+_ALIASES = {
+    "rate": "rate",
+    "count": "count",
+    "no_result_count": "noResultCount",
+    "dates": "dates",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class GetNoResultsRateResponse(BaseModel):
     """
     GetNoResultsRateResponse
     """
 
-    rate: float = Field(alias="rate")
+    rate: float
     """ No results rate, calculated as number of searches with zero results divided by the total number of searches. """
-    count: int = Field(alias="count")
+    count: int
     """ Number of searches. """
-    no_result_count: int = Field(alias="noResultCount")
+    no_result_count: int
     """ Number of searches without any results. """
-    dates: List[DailyNoResultsRates] = Field(alias="dates")
+    dates: List[DailyNoResultsRates]
     """ Daily no results rates. """
 
     model_config = ConfigDict(
@@ -40,6 +51,7 @@ class GetNoResultsRateResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

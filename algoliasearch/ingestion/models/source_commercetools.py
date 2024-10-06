@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,30 +22,40 @@ from algoliasearch.ingestion.models.commercetools_custom_fields import (
     CommercetoolsCustomFields,
 )
 
+_ALIASES = {
+    "store_keys": "storeKeys",
+    "locales": "locales",
+    "url": "url",
+    "project_key": "projectKey",
+    "fallback_is_in_stock_value": "fallbackIsInStockValue",
+    "custom_fields": "customFields",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SourceCommercetools(BaseModel):
     """
     SourceCommercetools
     """
 
-    store_keys: Optional[List[str]] = Field(default=None, alias="storeKeys")
-    locales: Optional[List[str]] = Field(default=None, alias="locales")
+    store_keys: Optional[List[str]] = None
+    locales: Optional[List[str]] = None
     """ Locales for your commercetools stores. """
-    url: str = Field(alias="url")
-    project_key: str = Field(alias="projectKey")
-    fallback_is_in_stock_value: Optional[bool] = Field(
-        default=None, alias="fallbackIsInStockValue"
-    )
+    url: str
+    project_key: str
+    fallback_is_in_stock_value: Optional[bool] = None
     """ Whether a fallback value is stored in the Algolia record if there's no inventory information about the product.  """
-    custom_fields: Optional[CommercetoolsCustomFields] = Field(
-        default=None, alias="customFields"
-    )
+    custom_fields: Optional[CommercetoolsCustomFields] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

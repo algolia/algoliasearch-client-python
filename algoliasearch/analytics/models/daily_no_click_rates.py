@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,18 +18,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "rate": "rate",
+    "count": "count",
+    "no_click_count": "noClickCount",
+    "var_date": "date",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class DailyNoClickRates(BaseModel):
     """
     DailyNoClickRates
     """
 
-    rate: float = Field(alias="rate")
+    rate: float
     """ No click rate, calculated as number of tracked searches without any click divided by the number of tracked searches. """
-    count: int = Field(alias="count")
+    count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
-    no_click_count: int = Field(alias="noClickCount")
+    no_click_count: int
     """ Number of times this search was returned as a result without any click. """
-    var_date: str = Field(alias="date")
+    var_date: str
     """ Date in the format YYYY-MM-DD. """
 
     model_config = ConfigDict(
@@ -37,6 +49,7 @@ class DailyNoClickRates(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

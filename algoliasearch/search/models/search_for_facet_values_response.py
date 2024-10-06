@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,17 +20,27 @@ else:
 
 from algoliasearch.search.models.facet_hits import FacetHits
 
+_ALIASES = {
+    "facet_hits": "facetHits",
+    "exhaustive_facets_count": "exhaustiveFacetsCount",
+    "processing_time_ms": "processingTimeMS",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SearchForFacetValuesResponse(BaseModel):
     """
     SearchForFacetValuesResponse
     """
 
-    facet_hits: List[FacetHits] = Field(alias="facetHits")
+    facet_hits: List[FacetHits]
     """ Matching facet values. """
-    exhaustive_facets_count: bool = Field(alias="exhaustiveFacetsCount")
+    exhaustive_facets_count: bool
     """ Whether the facet count is exhaustive (true) or approximate (false). For more information, see [Why are my facet and hit counts not accurate](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-).  """
-    processing_time_ms: Optional[int] = Field(default=None, alias="processingTimeMS")
+    processing_time_ms: Optional[int] = None
     """ Time the server took to process the request, in milliseconds. """
 
     model_config = ConfigDict(
@@ -38,6 +48,7 @@ class SearchForFacetValuesResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

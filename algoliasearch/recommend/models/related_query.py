@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,33 +22,44 @@ from algoliasearch.recommend.models.fallback_params import FallbackParams
 from algoliasearch.recommend.models.recommend_search_params import RecommendSearchParams
 from algoliasearch.recommend.models.related_model import RelatedModel
 
+_ALIASES = {
+    "index_name": "indexName",
+    "threshold": "threshold",
+    "max_recommendations": "maxRecommendations",
+    "query_parameters": "queryParameters",
+    "model": "model",
+    "object_id": "objectID",
+    "fallback_parameters": "fallbackParameters",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class RelatedQuery(BaseModel):
     """
     RelatedQuery
     """
 
-    index_name: str = Field(alias="indexName")
+    index_name: str
     """ Index name (case-sensitive). """
-    threshold: float = Field(alias="threshold")
+    threshold: float
     """ Minimum score a recommendation must have to be included in the response. """
-    max_recommendations: Optional[int] = Field(default=None, alias="maxRecommendations")
+    max_recommendations: Optional[int] = None
     """ Maximum number of recommendations to retrieve. By default, all recommendations are returned and no fallback request is made. Depending on the available recommendations and the other request parameters, the actual number of recommendations may be lower than this value.  """
-    query_parameters: Optional[RecommendSearchParams] = Field(
-        default=None, alias="queryParameters"
-    )
-    model: RelatedModel = Field(alias="model")
-    object_id: str = Field(alias="objectID")
+    query_parameters: Optional[RecommendSearchParams] = None
+    model: RelatedModel
+    object_id: str
     """ Unique record identifier. """
-    fallback_parameters: Optional[FallbackParams] = Field(
-        default=None, alias="fallbackParameters"
-    )
+    fallback_parameters: Optional[FallbackParams] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

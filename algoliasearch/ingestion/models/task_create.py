@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,25 +21,40 @@ else:
 from algoliasearch.ingestion.models.action_type import ActionType
 from algoliasearch.ingestion.models.task_input import TaskInput
 
+_ALIASES = {
+    "source_id": "sourceID",
+    "destination_id": "destinationID",
+    "action": "action",
+    "cron": "cron",
+    "enabled": "enabled",
+    "failure_threshold": "failureThreshold",
+    "input": "input",
+    "cursor": "cursor",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class TaskCreate(BaseModel):
     """
     API request body for creating a task.
     """
 
-    source_id: str = Field(alias="sourceID")
+    source_id: str
     """ Universally uniqud identifier (UUID) of a source. """
-    destination_id: str = Field(alias="destinationID")
+    destination_id: str
     """ Universally unique identifier (UUID) of a destination resource. """
-    action: ActionType = Field(alias="action")
-    cron: Optional[str] = Field(default=None, alias="cron")
+    action: ActionType
+    cron: Optional[str] = None
     """ Cron expression for the task's schedule. """
-    enabled: Optional[bool] = Field(default=None, alias="enabled")
+    enabled: Optional[bool] = None
     """ Whether the task is enabled. """
-    failure_threshold: Optional[int] = Field(default=None, alias="failureThreshold")
+    failure_threshold: Optional[int] = None
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
-    input: Optional[TaskInput] = Field(default=None, alias="input")
-    cursor: Optional[str] = Field(default=None, alias="cursor")
+    input: Optional[TaskInput] = None
+    cursor: Optional[str] = None
     """ Date of the last cursor in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -47,6 +62,7 @@ class TaskCreate(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

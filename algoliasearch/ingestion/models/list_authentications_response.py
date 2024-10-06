@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,20 +21,30 @@ else:
 from algoliasearch.ingestion.models.authentication import Authentication
 from algoliasearch.ingestion.models.pagination import Pagination
 
+_ALIASES = {
+    "authentications": "authentications",
+    "pagination": "pagination",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ListAuthenticationsResponse(BaseModel):
     """
     ListAuthenticationsResponse
     """
 
-    authentications: List[Authentication] = Field(alias="authentications")
-    pagination: Pagination = Field(alias="pagination")
+    authentications: List[Authentication]
+    pagination: Pagination
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

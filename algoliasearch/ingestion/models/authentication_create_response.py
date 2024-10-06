@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "authentication_id": "authenticationID",
+    "name": "name",
+    "created_at": "createdAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class AuthenticationCreateResponse(BaseModel):
     """
     API response for the successful creation of an authentication resource.
     """
 
-    authentication_id: str = Field(alias="authenticationID")
+    authentication_id: str
     """ Universally unique identifier (UUID) of an authentication resource. """
-    name: str = Field(alias="name")
+    name: str
     """ Descriptive name for the resource. """
-    created_at: str = Field(alias="createdAt")
+    created_at: str
     """ Date of creation in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class AuthenticationCreateResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

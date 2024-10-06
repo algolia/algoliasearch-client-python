@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,25 +20,37 @@ else:
 
 from algoliasearch.ingestion.models.entity_type import EntityType
 
+_ALIASES = {
+    "index_to_include": "indexToInclude",
+    "index_to_exclude": "indexToExclude",
+    "entity_ids": "entityIDs",
+    "entity_type": "entityType",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class RunSourcePayload(BaseModel):
     """
     RunSourcePayload
     """
 
-    index_to_include: Optional[List[str]] = Field(default=None, alias="indexToInclude")
+    index_to_include: Optional[List[str]] = None
     """ List of index names to include in reidexing/update. """
-    index_to_exclude: Optional[List[str]] = Field(default=None, alias="indexToExclude")
+    index_to_exclude: Optional[List[str]] = None
     """ List of index names to exclude in reidexing/update. """
-    entity_ids: Optional[List[str]] = Field(default=None, alias="entityIDs")
+    entity_ids: Optional[List[str]] = None
     """ List of entityID to update. """
-    entity_type: Optional[EntityType] = Field(default=None, alias="entityType")
+    entity_type: Optional[EntityType] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

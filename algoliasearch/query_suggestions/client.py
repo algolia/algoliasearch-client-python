@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import dumps
 from sys import version_info
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Union
 from urllib.parse import quote
 
 from pydantic import Field, StrictStr
@@ -20,8 +20,9 @@ else:
     from typing_extensions import Self
 
 from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.http.serializer import bodySerializer
+from algoliasearch.http.serializer import body_serializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
@@ -57,19 +58,21 @@ class QuerySuggestionsClient:
     """
 
     _transporter: Transporter
-    _config: QuerySuggestionsConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
         self,
         app_id: Optional[str] = None,
         api_key: Optional[str] = None,
-        region: str = None,
+        region: str = "",
         transporter: Optional[Transporter] = None,
         config: Optional[QuerySuggestionsConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = QuerySuggestionsConfig(
+                transporter.config.app_id, transporter.config.api_key, region
+            )
 
         if config is None:
             config = QuerySuggestionsConfig(app_id, api_key, region)
@@ -121,11 +124,11 @@ class QuerySuggestionsClient:
 
     async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     async def create_config_with_http_info(
         self,
-        configuration_with_index: ConfigurationWithIndex,
+        configuration_with_index: Union[ConfigurationWithIndex, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -153,7 +156,7 @@ class QuerySuggestionsClient:
             verb=Verb.POST,
             path="/1/configs",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -161,7 +164,7 @@ class QuerySuggestionsClient:
 
     async def create_config(
         self,
-        configuration_with_index: ConfigurationWithIndex,
+        configuration_with_index: Union[ConfigurationWithIndex, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
@@ -211,11 +214,11 @@ class QuerySuggestionsClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.DELETE,
@@ -286,11 +289,11 @@ class QuerySuggestionsClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -365,11 +368,11 @@ class QuerySuggestionsClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -380,7 +383,7 @@ class QuerySuggestionsClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -457,11 +460,11 @@ class QuerySuggestionsClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -472,7 +475,7 @@ class QuerySuggestionsClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -780,7 +783,7 @@ class QuerySuggestionsClient:
         index_name: Annotated[
             StrictStr, Field(description="Query Suggestions index name.")
         ],
-        configuration: Configuration,
+        configuration: Union[Configuration, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -817,7 +820,7 @@ class QuerySuggestionsClient:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -828,7 +831,7 @@ class QuerySuggestionsClient:
         index_name: Annotated[
             StrictStr, Field(description="Query Suggestions index name.")
         ],
-        configuration: Configuration,
+        configuration: Union[Configuration, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
@@ -869,19 +872,21 @@ class QuerySuggestionsClientSync:
     """
 
     _transporter: TransporterSync
-    _config: QuerySuggestionsConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
         self,
         app_id: Optional[str] = None,
         api_key: Optional[str] = None,
-        region: str = None,
+        region: str = "",
         transporter: Optional[TransporterSync] = None,
         config: Optional[QuerySuggestionsConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = QuerySuggestionsConfig(
+                transporter.config.app_id, transporter.config.api_key, region
+            )
 
         if config is None:
             config = QuerySuggestionsConfig(app_id, api_key, region)
@@ -934,11 +939,11 @@ class QuerySuggestionsClientSync:
 
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     def create_config_with_http_info(
         self,
-        configuration_with_index: ConfigurationWithIndex,
+        configuration_with_index: Union[ConfigurationWithIndex, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -966,7 +971,7 @@ class QuerySuggestionsClientSync:
             verb=Verb.POST,
             path="/1/configs",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -974,7 +979,7 @@ class QuerySuggestionsClientSync:
 
     def create_config(
         self,
-        configuration_with_index: ConfigurationWithIndex,
+        configuration_with_index: Union[ConfigurationWithIndex, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """
@@ -1024,11 +1029,11 @@ class QuerySuggestionsClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.DELETE,
@@ -1097,11 +1102,11 @@ class QuerySuggestionsClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -1176,11 +1181,11 @@ class QuerySuggestionsClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -1191,7 +1196,7 @@ class QuerySuggestionsClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1266,11 +1271,11 @@ class QuerySuggestionsClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -1281,7 +1286,7 @@ class QuerySuggestionsClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1587,7 +1592,7 @@ class QuerySuggestionsClientSync:
         index_name: Annotated[
             StrictStr, Field(description="Query Suggestions index name.")
         ],
-        configuration: Configuration,
+        configuration: Union[Configuration, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1624,7 +1629,7 @@ class QuerySuggestionsClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1635,7 +1640,7 @@ class QuerySuggestionsClientSync:
         index_name: Annotated[
             StrictStr, Field(description="Query Suggestions index name.")
         ],
-        configuration: Configuration,
+        configuration: Union[Configuration, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BaseResponse:
         """

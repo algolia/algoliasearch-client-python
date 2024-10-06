@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,18 +18,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "url": "url",
+    "client_id": "client_id",
+    "client_secret": "client_secret",
+    "scope": "scope",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class AuthOAuthPartial(BaseModel):
     """
     Credentials for authenticating with OAuth 2.0.
     """
 
-    url: Optional[str] = Field(default=None, alias="url")
+    url: Optional[str] = None
     """ URL for the OAuth endpoint. """
-    client_id: Optional[str] = Field(default=None, alias="client_id")
+    client_id: Optional[str] = None
     """ Client ID. """
-    client_secret: Optional[str] = Field(default=None, alias="client_secret")
+    client_secret: Optional[str] = None
     """ Client secret. This field is `null` in the API response. """
-    scope: Optional[str] = Field(default=None, alias="scope")
+    scope: Optional[str] = None
     """ OAuth scope. """
 
     model_config = ConfigDict(
@@ -37,6 +49,7 @@ class AuthOAuthPartial(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

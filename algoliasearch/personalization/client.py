@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import dumps
 from sys import version_info
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Union
 from urllib.parse import quote
 
 from pydantic import Field, StrictStr
@@ -20,8 +20,9 @@ else:
     from typing_extensions import Self
 
 from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.http.serializer import bodySerializer
+from algoliasearch.http.serializer import body_serializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
@@ -59,19 +60,21 @@ class PersonalizationClient:
     """
 
     _transporter: Transporter
-    _config: PersonalizationConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
         self,
         app_id: Optional[str] = None,
         api_key: Optional[str] = None,
-        region: str = None,
+        region: str = "",
         transporter: Optional[Transporter] = None,
         config: Optional[PersonalizationConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = PersonalizationConfig(
+                transporter.config.app_id, transporter.config.api_key, region
+            )
 
         if config is None:
             config = PersonalizationConfig(app_id, api_key, region)
@@ -123,7 +126,7 @@ class PersonalizationClient:
 
     async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     async def custom_delete_with_http_info(
         self,
@@ -156,11 +159,11 @@ class PersonalizationClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.DELETE,
@@ -231,11 +234,11 @@ class PersonalizationClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -310,11 +313,11 @@ class PersonalizationClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -325,7 +328,7 @@ class PersonalizationClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -402,11 +405,11 @@ class PersonalizationClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -417,7 +420,7 @@ class PersonalizationClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -626,7 +629,9 @@ class PersonalizationClient:
 
     async def set_personalization_strategy_with_http_info(
         self,
-        personalization_strategy_params: PersonalizationStrategyParams,
+        personalization_strategy_params: Union[
+            PersonalizationStrategyParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -654,7 +659,7 @@ class PersonalizationClient:
             verb=Verb.POST,
             path="/1/strategies/personalization",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -662,7 +667,9 @@ class PersonalizationClient:
 
     async def set_personalization_strategy(
         self,
-        personalization_strategy_params: PersonalizationStrategyParams,
+        personalization_strategy_params: Union[
+            PersonalizationStrategyParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SetPersonalizationStrategyResponse:
         """
@@ -701,19 +708,21 @@ class PersonalizationClientSync:
     """
 
     _transporter: TransporterSync
-    _config: PersonalizationConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
         self,
         app_id: Optional[str] = None,
         api_key: Optional[str] = None,
-        region: str = None,
+        region: str = "",
         transporter: Optional[TransporterSync] = None,
         config: Optional[PersonalizationConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = PersonalizationConfig(
+                transporter.config.app_id, transporter.config.api_key, region
+            )
 
         if config is None:
             config = PersonalizationConfig(app_id, api_key, region)
@@ -766,7 +775,7 @@ class PersonalizationClientSync:
 
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     def custom_delete_with_http_info(
         self,
@@ -799,11 +808,11 @@ class PersonalizationClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.DELETE,
@@ -872,11 +881,11 @@ class PersonalizationClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -951,11 +960,11 @@ class PersonalizationClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -966,7 +975,7 @@ class PersonalizationClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1041,11 +1050,11 @@ class PersonalizationClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -1056,7 +1065,7 @@ class PersonalizationClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1259,7 +1268,9 @@ class PersonalizationClientSync:
 
     def set_personalization_strategy_with_http_info(
         self,
-        personalization_strategy_params: PersonalizationStrategyParams,
+        personalization_strategy_params: Union[
+            PersonalizationStrategyParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1287,7 +1298,7 @@ class PersonalizationClientSync:
             verb=Verb.POST,
             path="/1/strategies/personalization",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1295,7 +1306,9 @@ class PersonalizationClientSync:
 
     def set_personalization_strategy(
         self,
-        personalization_strategy_params: PersonalizationStrategyParams,
+        personalization_strategy_params: Union[
+            PersonalizationStrategyParams, dict[str, Any]
+        ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SetPersonalizationStrategyResponse:
         """

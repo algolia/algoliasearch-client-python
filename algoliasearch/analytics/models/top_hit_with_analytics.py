@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,24 +18,39 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "hit": "hit",
+    "count": "count",
+    "click_through_rate": "clickThroughRate",
+    "conversion_rate": "conversionRate",
+    "tracked_hit_count": "trackedHitCount",
+    "click_count": "clickCount",
+    "conversion_count": "conversionCount",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class TopHitWithAnalytics(BaseModel):
     """
     TopHitWithAnalytics
     """
 
-    hit: str = Field(alias="hit")
+    hit: str
     """ Object ID of a record that's returned as a search result. """
-    count: int = Field(alias="count")
+    count: int
     """ Number of occurrences. """
-    click_through_rate: float = Field(alias="clickThroughRate")
+    click_through_rate: float
     """ Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    conversion_rate: float = Field(alias="conversionRate")
+    conversion_rate: float
     """ Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    tracked_hit_count: int = Field(alias="trackedHitCount")
+    tracked_hit_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
-    click_count: int = Field(alias="clickCount")
+    click_count: int
     """ Number of clicks associated with this search. """
-    conversion_count: int = Field(alias="conversionCount")
+    conversion_count: int
     """ Number of conversions from this search. """
 
     model_config = ConfigDict(
@@ -43,6 +58,7 @@ class TopHitWithAnalytics(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

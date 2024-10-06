@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "index": "index",
+    "ab_test_id": "abTestID",
+    "task_id": "taskID",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class ABTestResponse(BaseModel):
     """
     ABTestResponse
     """
 
-    index: str = Field(alias="index")
+    index: str
     """ Index name of the A/B test variant (case-sensitive). """
-    ab_test_id: int = Field(alias="abTestID")
+    ab_test_id: int
     """ Unique A/B test identifier. """
-    task_id: int = Field(alias="taskID")
+    task_id: int
     """ Unique identifier of a task.  A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the [`task` operation](#tag/Indices/operation/getTask) and this `taskID`.  """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class ABTestResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

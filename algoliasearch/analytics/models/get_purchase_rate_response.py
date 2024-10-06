@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,19 +20,30 @@ else:
 
 from algoliasearch.analytics.models.daily_purchase_rates import DailyPurchaseRates
 
+_ALIASES = {
+    "rate": "rate",
+    "tracked_search_count": "trackedSearchCount",
+    "purchase_count": "purchaseCount",
+    "dates": "dates",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class GetPurchaseRateResponse(BaseModel):
     """
     GetPurchaseRateResponse
     """
 
-    rate: float = Field(alias="rate")
+    rate: float
     """ Purchase rate, calculated as number of tracked searches with at least one purchase event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    tracked_search_count: int = Field(alias="trackedSearchCount")
+    tracked_search_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
-    purchase_count: int = Field(alias="purchaseCount")
+    purchase_count: int
     """ Number of purchase events from this search. """
-    dates: List[DailyPurchaseRates] = Field(alias="dates")
+    dates: List[DailyPurchaseRates]
     """ Daily purchase rates. """
 
     model_config = ConfigDict(
@@ -40,6 +51,7 @@ class GetPurchaseRateResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

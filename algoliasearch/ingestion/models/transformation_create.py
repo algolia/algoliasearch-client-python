@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,20 +18,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "code": "code",
+    "name": "name",
+    "description": "description",
+    "authentication_ids": "authenticationIDs",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class TransformationCreate(BaseModel):
     """
     API request body for creating a transformation.
     """
 
-    code: str = Field(alias="code")
+    code: str
     """ The source code of the transformation. """
-    name: str = Field(alias="name")
+    name: str
     """ The uniquely identified name of your transformation. """
-    description: Optional[str] = Field(default=None, alias="description")
+    description: Optional[str] = None
     """ A descriptive name for your transformation of what it does. """
-    authentication_ids: Optional[List[str]] = Field(
-        default=None, alias="authenticationIDs"
-    )
+    authentication_ids: Optional[List[str]] = None
     """ The authentications associated for the current transformation. """
 
     model_config = ConfigDict(
@@ -39,6 +49,7 @@ class TransformationCreate(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

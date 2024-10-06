@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "average": "average",
+    "click_count": "clickCount",
+    "var_date": "date",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class DailyAverageClicks(BaseModel):
     """
     DailyAverageClicks
     """
 
-    average: float = Field(alias="average")
+    average: float
     """ Average position of a clicked search result in the list of search results. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    click_count: int = Field(alias="clickCount")
+    click_count: int
     """ Number of clicks associated with this search. """
-    var_date: str = Field(alias="date")
+    var_date: str
     """ Date in the format YYYY-MM-DD. """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class DailyAverageClicks(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

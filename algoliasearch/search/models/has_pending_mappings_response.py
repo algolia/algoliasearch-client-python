@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "pending": "pending",
+    "clusters": "clusters",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class HasPendingMappingsResponse(BaseModel):
     """
     HasPendingMappingsResponse
     """
 
-    pending: bool = Field(alias="pending")
+    pending: bool
     """ Whether there are clusters undergoing migration, creation, or deletion. """
-    clusters: Optional[Dict[str, List[str]]] = Field(default=None, alias="clusters")
+    clusters: Optional[Dict[str, List[str]]] = None
     """ Cluster pending mapping state: migrating, creating, deleting.  """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class HasPendingMappingsResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,19 +22,28 @@ from algoliasearch.ingestion.models.subscription_trigger_type import (
     SubscriptionTriggerType,
 )
 
+_ALIASES = {
+    "type": "type",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SubscriptionTrigger(BaseModel):
     """
     Trigger input for subscription tasks.
     """
 
-    type: SubscriptionTriggerType = Field(alias="type")
+    type: SubscriptionTriggerType
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

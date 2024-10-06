@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,19 +20,30 @@ else:
 
 from algoliasearch.abtesting.models.add_ab_tests_variant import AddABTestsVariant
 
+_ALIASES = {
+    "name": "name",
+    "variants": "variants",
+    "scheduled_at": "scheduledAt",
+    "end_at": "endAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ScheduleABTestsRequest(BaseModel):
     """
     ScheduleABTestsRequest
     """
 
-    name: str = Field(alias="name")
+    name: str
     """ A/B test name. """
-    variants: List[AddABTestsVariant] = Field(alias="variants")
+    variants: List[AddABTestsVariant]
     """ A/B test variants. """
-    scheduled_at: str = Field(alias="scheduledAt")
+    scheduled_at: str
     """ Date and time when the A/B test is scheduled to start, in RFC 3339 format. """
-    end_at: str = Field(alias="endAt")
+    end_at: str
     """ End date and time of the A/B test, in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -40,6 +51,7 @@ class ScheduleABTestsRequest(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

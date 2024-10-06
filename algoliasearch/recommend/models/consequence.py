@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -24,25 +24,34 @@ from algoliasearch.recommend.models.promote_consequence_object import (
     PromoteConsequenceObject,
 )
 
+_ALIASES = {
+    "hide": "hide",
+    "promote": "promote",
+    "params": "params",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Consequence(BaseModel):
     """
     Effect of the rule.
     """
 
-    hide: Optional[List[HideConsequenceObject]] = Field(default=None, alias="hide")
+    hide: Optional[List[HideConsequenceObject]] = None
     """ Exclude items from recommendations. """
-    promote: Optional[List[PromoteConsequenceObject]] = Field(
-        default=None, alias="promote"
-    )
+    promote: Optional[List[PromoteConsequenceObject]] = None
     """ Place items at specific positions in the list of recommendations. """
-    params: Optional[ParamsConsequence] = Field(default=None, alias="params")
+    params: Optional[ParamsConsequence] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

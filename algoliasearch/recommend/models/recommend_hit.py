@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,25 +22,34 @@ from algoliasearch.recommend.models.highlight_result import HighlightResult
 from algoliasearch.recommend.models.ranking_info import RankingInfo
 from algoliasearch.recommend.models.snippet_result import SnippetResult
 
+_ALIASES = {
+    "object_id": "objectID",
+    "highlight_result": "_highlightResult",
+    "snippet_result": "_snippetResult",
+    "ranking_info": "_rankingInfo",
+    "distinct_seq_id": "_distinctSeqID",
+    "score": "_score",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class RecommendHit(BaseModel):
     """
     Recommend hit.
     """
 
-    object_id: str = Field(alias="objectID")
+    object_id: str
     """ Unique record identifier. """
-    highlight_result: Optional[Dict[str, HighlightResult]] = Field(
-        default=None, alias="_highlightResult"
-    )
+    highlight_result: Optional[Dict[str, HighlightResult]] = None
     """ Surround words that match the query with HTML tags for highlighting. """
-    snippet_result: Optional[Dict[str, SnippetResult]] = Field(
-        default=None, alias="_snippetResult"
-    )
+    snippet_result: Optional[Dict[str, SnippetResult]] = None
     """ Snippets that show the context around a matching search query. """
-    ranking_info: Optional[RankingInfo] = Field(default=None, alias="_rankingInfo")
-    distinct_seq_id: Optional[int] = Field(default=None, alias="_distinctSeqID")
-    score: float = Field(alias="_score")
+    ranking_info: Optional[RankingInfo] = None
+    distinct_seq_id: Optional[int] = None
+    score: float
     """ Recommendation score. """
 
     model_config = ConfigDict(
@@ -48,6 +57,7 @@ class RecommendHit(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
         extra="allow",
     )
 

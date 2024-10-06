@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -23,22 +23,36 @@ from algoliasearch.recommend.models.consequence import Consequence
 from algoliasearch.recommend.models.rule_metadata import RuleMetadata
 from algoliasearch.recommend.models.time_range import TimeRange
 
+_ALIASES = {
+    "metadata": "_metadata",
+    "object_id": "objectID",
+    "condition": "condition",
+    "consequence": "consequence",
+    "description": "description",
+    "enabled": "enabled",
+    "validity": "validity",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class RecommendRule(BaseModel):
     """
     Recommend rule.
     """
 
-    metadata: Optional[RuleMetadata] = Field(default=None, alias="_metadata")
-    object_id: Optional[str] = Field(default=None, alias="objectID")
+    metadata: Optional[RuleMetadata] = None
+    object_id: Optional[str] = None
     """ Unique identifier of a rule object. """
-    condition: Optional[Condition] = Field(default=None, alias="condition")
-    consequence: Optional[Consequence] = Field(default=None, alias="consequence")
-    description: Optional[str] = Field(default=None, alias="description")
+    condition: Optional[Condition] = None
+    consequence: Optional[Consequence] = None
+    description: Optional[str] = None
     """ Description of the rule's purpose. This can be helpful for display in the Algolia dashboard. """
-    enabled: Optional[bool] = Field(default=None, alias="enabled")
+    enabled: Optional[bool] = None
     """ Indicates whether to enable the rule. If it isn't enabled, it isn't applied at query time. """
-    validity: Optional[List[TimeRange]] = Field(default=None, alias="validity")
+    validity: Optional[List[TimeRange]] = None
     """ Time periods when the rule is active. """
 
     model_config = ConfigDict(
@@ -46,6 +60,7 @@ class RecommendRule(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

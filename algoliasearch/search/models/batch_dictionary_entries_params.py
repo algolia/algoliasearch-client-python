@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,17 +22,24 @@ from algoliasearch.search.models.batch_dictionary_entries_request import (
     BatchDictionaryEntriesRequest,
 )
 
+_ALIASES = {
+    "clear_existing_dictionary_entries": "clearExistingDictionaryEntries",
+    "requests": "requests",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class BatchDictionaryEntriesParams(BaseModel):
     """
     Request body for updating dictionary entries.
     """
 
-    clear_existing_dictionary_entries: Optional[bool] = Field(
-        default=None, alias="clearExistingDictionaryEntries"
-    )
+    clear_existing_dictionary_entries: Optional[bool] = None
     """ Whether to replace all custom entries in the dictionary with the ones sent with this request. """
-    requests: List[BatchDictionaryEntriesRequest] = Field(alias="requests")
+    requests: List[BatchDictionaryEntriesRequest]
     """ List of additions and deletions to your dictionaries. """
 
     model_config = ConfigDict(
@@ -40,6 +47,7 @@ class BatchDictionaryEntriesParams(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,20 +21,30 @@ else:
 from algoliasearch.ingestion.models.action import Action
 from algoliasearch.ingestion.models.push_task_records import PushTaskRecords
 
+_ALIASES = {
+    "action": "action",
+    "records": "records",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class PushTaskPayload(BaseModel):
     """
     PushTaskPayload
     """
 
-    action: Action = Field(alias="action")
-    records: List[PushTaskRecords] = Field(alias="records")
+    action: Action
+    records: List[PushTaskRecords]
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

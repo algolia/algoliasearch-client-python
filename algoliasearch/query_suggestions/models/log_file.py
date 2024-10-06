@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,18 +20,29 @@ else:
 
 from algoliasearch.query_suggestions.models.log_level import LogLevel
 
+_ALIASES = {
+    "timestamp": "timestamp",
+    "level": "level",
+    "message": "message",
+    "context_level": "contextLevel",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class LogFile(BaseModel):
     """
     LogFile
     """
 
-    timestamp: Optional[str] = Field(default=None, alias="timestamp")
+    timestamp: Optional[str] = None
     """ Date and time of the log entry, in RFC 3339 format. """
-    level: Optional[LogLevel] = Field(default=None, alias="level")
-    message: Optional[str] = Field(default=None, alias="message")
+    level: Optional[LogLevel] = None
+    message: Optional[str] = None
     """ Details about this log entry. """
-    context_level: Optional[int] = Field(default=None, alias="contextLevel")
+    context_level: Optional[int] = None
     """ Level indicating the position of a suggestion in a hierarchy of records.  For example, a `contextLevel` of 1 indicates that this suggestion belongs to a previous suggestion with `contextLevel` 0.  """
 
     model_config = ConfigDict(
@@ -39,6 +50,7 @@ class LogFile(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -24,23 +24,32 @@ from algoliasearch.abtesting.models.minimum_detectable_effect import (
 )
 from algoliasearch.abtesting.models.outliers import Outliers
 
+_ALIASES = {
+    "outliers": "outliers",
+    "empty_search": "emptySearch",
+    "minimum_detectable_effect": "minimumDetectableEffect",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ABTestConfiguration(BaseModel):
     """
     A/B test configuration.
     """
 
-    outliers: Outliers = Field(alias="outliers")
-    empty_search: Optional[EmptySearch] = Field(default=None, alias="emptySearch")
-    minimum_detectable_effect: Optional[MinimumDetectableEffect] = Field(
-        default=None, alias="minimumDetectableEffect"
-    )
+    outliers: Outliers
+    empty_search: Optional[EmptySearch] = None
+    minimum_detectable_effect: Optional[MinimumDetectableEffect] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -11,7 +11,7 @@ from re import match
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,20 +21,32 @@ else:
 
 from algoliasearch.search.models.anchoring import Anchoring
 
+_ALIASES = {
+    "pattern": "pattern",
+    "anchoring": "anchoring",
+    "alternatives": "alternatives",
+    "context": "context",
+    "filters": "filters",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Condition(BaseModel):
     """
     Condition
     """
 
-    pattern: Optional[str] = Field(default=None, alias="pattern")
+    pattern: Optional[str] = None
     """ Query pattern that triggers the rule.  You can use either a literal string, or a special pattern `{facet:ATTRIBUTE}`, where `ATTRIBUTE` is a facet name. The rule is triggered if the query matches the literal string or a value of the specified facet. For example, with `pattern: {facet:genre}`, the rule is triggered when users search for a genre, such as \"comedy\".  """
-    anchoring: Optional[Anchoring] = Field(default=None, alias="anchoring")
-    alternatives: Optional[bool] = Field(default=None, alias="alternatives")
+    anchoring: Optional[Anchoring] = None
+    alternatives: Optional[bool] = None
     """ Whether the pattern should match plurals, synonyms, and typos. """
-    context: Optional[str] = Field(default=None, alias="context")
+    context: Optional[str] = None
     """ An additional restriction that only triggers the rule, when the search has the same value as `ruleContexts` parameter. For example, if `context: mobile`, the rule is only triggered when the search request has a matching `ruleContexts: mobile`. A rule context must only contain alphanumeric characters.  """
-    filters: Optional[str] = Field(default=None, alias="filters")
+    filters: Optional[str] = None
     """ Filters that trigger the rule.  You can add add filters using the syntax `facet:value` so that the rule is triggered, when the specific filter is selected. You can use `filters` on its own or combine it with the `pattern` parameter.  """
 
     @field_validator("context")
@@ -52,6 +64,7 @@ class Condition(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

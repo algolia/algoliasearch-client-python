@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,20 +21,30 @@ else:
 from algoliasearch.ingestion.models.mapping_format_schema import MappingFormatSchema
 from algoliasearch.ingestion.models.mapping_kit_action import MappingKitAction
 
+_ALIASES = {
+    "format": "format",
+    "actions": "actions",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class MappingInput(BaseModel):
     """
     Transformations to apply to the source, serialized as a JSON string.
     """
 
-    format: MappingFormatSchema = Field(alias="format")
-    actions: List[MappingKitAction] = Field(alias="actions")
+    format: MappingFormatSchema
+    actions: List[MappingKitAction]
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,41 +20,63 @@ else:
 
 from algoliasearch.search.models.log_query import LogQuery
 
+_ALIASES = {
+    "timestamp": "timestamp",
+    "method": "method",
+    "answer_code": "answer_code",
+    "query_body": "query_body",
+    "answer": "answer",
+    "url": "url",
+    "ip": "ip",
+    "query_headers": "query_headers",
+    "sha1": "sha1",
+    "nb_api_calls": "nb_api_calls",
+    "processing_time_ms": "processing_time_ms",
+    "index": "index",
+    "var_query_params": "query_params",
+    "query_nb_hits": "query_nb_hits",
+    "inner_queries": "inner_queries",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Log(BaseModel):
     """
     Log
     """
 
-    timestamp: str = Field(alias="timestamp")
+    timestamp: str
     """ Date and time of the API request, in RFC 3339 format. """
-    method: str = Field(alias="method")
+    method: str
     """ HTTP method of the request. """
-    answer_code: str = Field(alias="answer_code")
+    answer_code: str
     """ HTTP status code of the response. """
-    query_body: str = Field(alias="query_body")
+    query_body: str
     """ Request body. """
-    answer: str = Field(alias="answer")
+    answer: str
     """ Response body. """
-    url: str = Field(alias="url")
+    url: str
     """ URL of the API endpoint. """
-    ip: str = Field(alias="ip")
+    ip: str
     """ IP address of the client that performed the request. """
-    query_headers: str = Field(alias="query_headers")
+    query_headers: str
     """ Request headers (API keys are obfuscated). """
-    sha1: str = Field(alias="sha1")
+    sha1: str
     """ SHA1 signature of the log entry. """
-    nb_api_calls: str = Field(alias="nb_api_calls")
+    nb_api_calls: str
     """ Number of API requests. """
-    processing_time_ms: str = Field(alias="processing_time_ms")
+    processing_time_ms: str
     """ Processing time for the query in milliseconds. This doesn't include latency due to the network.  """
-    index: Optional[str] = Field(default=None, alias="index")
+    index: Optional[str] = None
     """ Index targeted by the query. """
-    var_query_params: Optional[str] = Field(default=None, alias="query_params")
+    var_query_params: Optional[str] = None
     """ Query parameters sent with the request. """
-    query_nb_hits: Optional[str] = Field(default=None, alias="query_nb_hits")
+    query_nb_hits: Optional[str] = None
     """ Number of search results (hits) returned for the query. """
-    inner_queries: Optional[List[LogQuery]] = Field(default=None, alias="inner_queries")
+    inner_queries: Optional[List[LogQuery]] = None
     """ Queries performed for the given request. """
 
     model_config = ConfigDict(
@@ -62,6 +84,7 @@ class Log(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

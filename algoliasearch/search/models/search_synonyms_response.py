@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,15 +20,24 @@ else:
 
 from algoliasearch.search.models.synonym_hit import SynonymHit
 
+_ALIASES = {
+    "hits": "hits",
+    "nb_hits": "nbHits",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SearchSynonymsResponse(BaseModel):
     """
     SearchSynonymsResponse
     """
 
-    hits: List[SynonymHit] = Field(alias="hits")
+    hits: List[SynonymHit]
     """ Matching synonyms. """
-    nb_hits: int = Field(alias="nbHits")
+    nb_hits: int
     """ Number of results (hits). """
 
     model_config = ConfigDict(
@@ -36,6 +45,7 @@ class SearchSynonymsResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
         extra="allow",
     )
 

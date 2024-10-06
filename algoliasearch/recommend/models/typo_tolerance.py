@@ -30,7 +30,7 @@ class TypoTolerance(BaseModel):
     """ Whether typo tolerance is active. If true, matches with typos are included in the search results and rank after exact matches. """
     oneof_schema_2_validator: Optional[TypoToleranceEnum] = Field(default=None)
 
-    actual_instance: Optional[Union[TypoToleranceEnum, bool]] = None
+    actual_instance: Union[TypoToleranceEnum, bool, None] = None
     one_of_schemas: Set[str] = {"TypoToleranceEnum", "bool"}
 
     def __init__(self, *args, **kwargs) -> None:
@@ -43,12 +43,12 @@ class TypoTolerance(BaseModel):
                 raise ValueError(
                     "If a position argument is used, keyword arguments cannot be used."
                 )
-            super().__init__(actual_instance=args[0])
+            super().__init__(actual_instance=args[0])  # pyright: ignore
         else:
             super().__init__(**kwargs)
 
     @model_serializer
-    def unwrap_actual_instance(self) -> Optional[Union[TypoToleranceEnum, bool]]:
+    def unwrap_actual_instance(self) -> Union[TypoToleranceEnum, bool, Self, None]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -90,9 +90,9 @@ class TypoTolerance(BaseModel):
             return "null"
 
         if hasattr(self.actual_instance, "to_json") and callable(
-            self.actual_instance.to_json
+            self.actual_instance.to_json  # pyright: ignore
         ):
-            return self.actual_instance.to_json()
+            return self.actual_instance.to_json()  # pyright: ignore
         else:
             return dumps(self.actual_instance)
 
@@ -102,8 +102,8 @@ class TypoTolerance(BaseModel):
             return None
 
         if hasattr(self.actual_instance, "to_dict") and callable(
-            self.actual_instance.to_dict
+            self.actual_instance.to_dict  # pyright: ignore
         ):
-            return self.actual_instance.to_dict()
+            return self.actual_instance.to_dict()  # pyright: ignore
         else:
-            return self.actual_instance
+            return self.actual_instance  # pyright: ignore

@@ -11,7 +11,7 @@ from re import match
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,23 +21,36 @@ else:
 
 from algoliasearch.search.models.user_highlight_result import UserHighlightResult
 
+_ALIASES = {
+    "user_id": "userID",
+    "cluster_name": "clusterName",
+    "nb_records": "nbRecords",
+    "data_size": "dataSize",
+    "object_id": "objectID",
+    "highlight_result": "_highlightResult",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class UserHit(BaseModel):
     """
     UserHit
     """
 
-    user_id: str = Field(alias="userID")
+    user_id: str
     """ Unique identifier of the user who makes the search request. """
-    cluster_name: str = Field(alias="clusterName")
+    cluster_name: str
     """ Cluster name. """
-    nb_records: int = Field(alias="nbRecords")
+    nb_records: int
     """ Number of records in the cluster. """
-    data_size: int = Field(alias="dataSize")
+    data_size: int
     """ Data size taken by all the users assigned to the cluster. """
-    object_id: str = Field(alias="objectID")
+    object_id: str
     """ userID of the requested user. Same as userID. """
-    highlight_result: UserHighlightResult = Field(alias="_highlightResult")
+    highlight_result: UserHighlightResult
 
     @field_validator("user_id")
     def user_id_validate_regular_expression(cls, value):
@@ -53,6 +66,7 @@ class UserHit(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

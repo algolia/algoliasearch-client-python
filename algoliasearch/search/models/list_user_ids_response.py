@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,13 +20,21 @@ else:
 
 from algoliasearch.search.models.user_id import UserId
 
+_ALIASES = {
+    "user_ids": "userIDs",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ListUserIdsResponse(BaseModel):
     """
     User ID data.
     """
 
-    user_ids: List[UserId] = Field(alias="userIDs")
+    user_ids: List[UserId]
     """ User IDs. """
 
     model_config = ConfigDict(
@@ -34,6 +42,7 @@ class ListUserIdsResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

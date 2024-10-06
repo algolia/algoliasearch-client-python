@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,35 +21,55 @@ else:
 from algoliasearch.ingestion.models.action_type import ActionType
 from algoliasearch.ingestion.models.task_input import TaskInput
 
+_ALIASES = {
+    "task_id": "taskID",
+    "source_id": "sourceID",
+    "destination_id": "destinationID",
+    "cron": "cron",
+    "last_run": "lastRun",
+    "next_run": "nextRun",
+    "input": "input",
+    "enabled": "enabled",
+    "failure_threshold": "failureThreshold",
+    "action": "action",
+    "cursor": "cursor",
+    "created_at": "createdAt",
+    "updated_at": "updatedAt",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Task(BaseModel):
     """
     Task
     """
 
-    task_id: str = Field(alias="taskID")
+    task_id: str
     """ Universally unique identifier (UUID) of a task. """
-    source_id: str = Field(alias="sourceID")
+    source_id: str
     """ Universally uniqud identifier (UUID) of a source. """
-    destination_id: str = Field(alias="destinationID")
+    destination_id: str
     """ Universally unique identifier (UUID) of a destination resource. """
-    cron: Optional[str] = Field(default=None, alias="cron")
+    cron: Optional[str] = None
     """ Cron expression for the task's schedule. """
-    last_run: Optional[str] = Field(default=None, alias="lastRun")
+    last_run: Optional[str] = None
     """ The last time the scheduled task ran in RFC 3339 format. """
-    next_run: Optional[str] = Field(default=None, alias="nextRun")
+    next_run: Optional[str] = None
     """ The next scheduled run of the task in RFC 3339 format. """
-    input: Optional[TaskInput] = Field(default=None, alias="input")
-    enabled: bool = Field(alias="enabled")
+    input: Optional[TaskInput] = None
+    enabled: bool
     """ Whether the task is enabled. """
-    failure_threshold: Optional[int] = Field(default=None, alias="failureThreshold")
+    failure_threshold: Optional[int] = None
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
-    action: ActionType = Field(alias="action")
-    cursor: Optional[str] = Field(default=None, alias="cursor")
+    action: ActionType
+    cursor: Optional[str] = None
     """ Date of the last cursor in RFC 3339 format. """
-    created_at: str = Field(alias="createdAt")
+    created_at: str
     """ Date of creation in RFC 3339 format. """
-    updated_at: Optional[str] = Field(default=None, alias="updatedAt")
+    updated_at: Optional[str] = None
     """ Date of last update in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -57,6 +77,7 @@ class Task(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

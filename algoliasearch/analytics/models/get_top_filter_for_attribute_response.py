@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,13 +22,21 @@ from algoliasearch.analytics.models.get_top_filter_for_attribute import (
     GetTopFilterForAttribute,
 )
 
+_ALIASES = {
+    "values": "values",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class GetTopFilterForAttributeResponse(BaseModel):
     """
     GetTopFilterForAttributeResponse
     """
 
-    values: List[GetTopFilterForAttribute] = Field(alias="values")
+    values: List[GetTopFilterForAttribute]
     """ Filter values for an attribute. """
 
     model_config = ConfigDict(
@@ -36,6 +44,7 @@ class GetTopFilterForAttributeResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

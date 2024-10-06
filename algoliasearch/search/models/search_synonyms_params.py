@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,18 +20,29 @@ else:
 
 from algoliasearch.search.models.synonym_type import SynonymType
 
+_ALIASES = {
+    "query": "query",
+    "type": "type",
+    "page": "page",
+    "hits_per_page": "hitsPerPage",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SearchSynonymsParams(BaseModel):
     """
     SearchSynonymsParams
     """
 
-    query: Optional[str] = Field(default=None, alias="query")
+    query: Optional[str] = None
     """ Search query. """
-    type: Optional[SynonymType] = Field(default=None, alias="type")
-    page: Optional[int] = Field(default=None, alias="page")
+    type: Optional[SynonymType] = None
+    page: Optional[int] = None
     """ Page of search results to retrieve. """
-    hits_per_page: Optional[int] = Field(default=None, alias="hitsPerPage")
+    hits_per_page: Optional[int] = None
     """ Number of hits per page. """
 
     model_config = ConfigDict(
@@ -39,6 +50,7 @@ class SearchSynonymsParams(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

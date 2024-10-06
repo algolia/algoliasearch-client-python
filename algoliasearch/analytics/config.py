@@ -7,10 +7,18 @@ from algoliasearch.http.user_agent import UserAgent
 
 
 class AnalyticsConfig(BaseConfig):
-    def __init__(self, app_id: str, api_key: str, region: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        app_id: Optional[str],
+        api_key: Optional[str],
+        region: Optional[str] = None,
+    ) -> None:
         super().__init__(app_id, api_key)
 
         user_agent = UserAgent().add("Analytics")
+
+        assert app_id, "`app_id` is missing."
+        assert api_key, "`api_key` is missing."
 
         self.headers = {
             "x-algolia-application-id": app_id,
@@ -42,7 +50,9 @@ class AnalyticsConfig(BaseConfig):
                 Host(
                     "analytics.algolia.com"
                     if region is None
-                    else "analytics.{region}.algolia.com".replace("{region}", region)
+                    else "analytics.{region}.algolia.com".replace(
+                        "{region}", region or ""
+                    )
                 )
             ]
         )

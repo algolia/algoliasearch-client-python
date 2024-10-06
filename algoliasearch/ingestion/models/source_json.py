@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,23 +20,34 @@ else:
 
 from algoliasearch.ingestion.models.method_type import MethodType
 
+_ALIASES = {
+    "url": "url",
+    "unique_id_column": "uniqueIDColumn",
+    "method": "method",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SourceJSON(BaseModel):
     """
     SourceJSON
     """
 
-    url: str = Field(alias="url")
+    url: str
     """ URL of the file. """
-    unique_id_column: Optional[str] = Field(default=None, alias="uniqueIDColumn")
+    unique_id_column: Optional[str] = None
     """ Name of a column that contains a unique ID which will be used as `objectID` in Algolia. """
-    method: Optional[MethodType] = Field(default=None, alias="method")
+    method: Optional[MethodType] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

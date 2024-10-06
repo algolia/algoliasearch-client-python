@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,19 +20,30 @@ else:
 
 from algoliasearch.search.models.rule import Rule
 
+_ALIASES = {
+    "hits": "hits",
+    "nb_hits": "nbHits",
+    "page": "page",
+    "nb_pages": "nbPages",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SearchRulesResponse(BaseModel):
     """
     SearchRulesResponse
     """
 
-    hits: List[Rule] = Field(alias="hits")
+    hits: List[Rule]
     """ Rules that matched the search criteria. """
-    nb_hits: int = Field(alias="nbHits")
+    nb_hits: int
     """ Number of rules that matched the search criteria. """
-    page: int = Field(alias="page")
+    page: int
     """ Current page. """
-    nb_pages: int = Field(alias="nbPages")
+    nb_pages: int
     """ Number of pages. """
 
     model_config = ConfigDict(
@@ -40,6 +51,7 @@ class SearchRulesResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

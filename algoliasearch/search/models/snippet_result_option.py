@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,21 +20,31 @@ else:
 
 from algoliasearch.search.models.match_level import MatchLevel
 
+_ALIASES = {
+    "value": "value",
+    "match_level": "matchLevel",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SnippetResultOption(BaseModel):
     """
     Snippets that show the context around a matching search query.
     """
 
-    value: str = Field(alias="value")
+    value: str
     """ Highlighted attribute value, including HTML tags. """
-    match_level: MatchLevel = Field(alias="matchLevel")
+    match_level: MatchLevel
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

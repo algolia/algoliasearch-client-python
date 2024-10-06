@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,13 +22,21 @@ from algoliasearch.analytics.models.top_hit_with_revenue_analytics import (
     TopHitWithRevenueAnalytics,
 )
 
+_ALIASES = {
+    "hits": "hits",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class TopHitsResponseWithRevenueAnalytics(BaseModel):
     """
     TopHitsResponseWithRevenueAnalytics
     """
 
-    hits: List[TopHitWithRevenueAnalytics] = Field(alias="hits")
+    hits: List[TopHitWithRevenueAnalytics]
     """ Most frequent search results with click, conversion, and revenue metrics. """
 
     model_config = ConfigDict(
@@ -36,6 +44,7 @@ class TopHitsResponseWithRevenueAnalytics(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

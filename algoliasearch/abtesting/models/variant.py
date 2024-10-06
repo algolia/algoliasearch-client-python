@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,56 +21,77 @@ else:
 from algoliasearch.abtesting.models.currency import Currency
 from algoliasearch.abtesting.models.filter_effects import FilterEffects
 
+_ALIASES = {
+    "add_to_cart_count": "addToCartCount",
+    "add_to_cart_rate": "addToCartRate",
+    "average_click_position": "averageClickPosition",
+    "click_count": "clickCount",
+    "click_through_rate": "clickThroughRate",
+    "conversion_count": "conversionCount",
+    "conversion_rate": "conversionRate",
+    "currencies": "currencies",
+    "description": "description",
+    "estimated_sample_size": "estimatedSampleSize",
+    "filter_effects": "filterEffects",
+    "index": "index",
+    "no_result_count": "noResultCount",
+    "purchase_count": "purchaseCount",
+    "purchase_rate": "purchaseRate",
+    "search_count": "searchCount",
+    "tracked_search_count": "trackedSearchCount",
+    "traffic_percentage": "trafficPercentage",
+    "user_count": "userCount",
+    "tracked_user_count": "trackedUserCount",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Variant(BaseModel):
     """
     Variant
     """
 
-    add_to_cart_count: int = Field(alias="addToCartCount")
+    add_to_cart_count: int
     """ Number of add-to-cart events for this variant. """
-    add_to_cart_rate: Optional[float] = Field(default=None, alias="addToCartRate")
+    add_to_cart_rate: Optional[float] = None
     """ [Add-to-cart rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#add-to-cart-rate) for this variant.  """
-    average_click_position: Optional[int] = Field(
-        default=None, alias="averageClickPosition"
-    )
+    average_click_position: Optional[int] = None
     """ [Average click position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position) for this variant.  """
-    click_count: int = Field(alias="clickCount")
+    click_count: int
     """ Number of click events for this variant. """
-    click_through_rate: Optional[float] = Field(default=None, alias="clickThroughRate")
+    click_through_rate: Optional[float] = None
     """ [Click-through rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-through-rate) for this variant.  """
-    conversion_count: int = Field(alias="conversionCount")
+    conversion_count: int
     """ Number of click events for this variant. """
-    conversion_rate: Optional[float] = Field(default=None, alias="conversionRate")
+    conversion_rate: Optional[float] = None
     """ [Conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate) for this variant.  """
-    currencies: Optional[Dict[str, Currency]] = Field(default=None, alias="currencies")
+    currencies: Optional[Dict[str, Currency]] = None
     """ A/B test currencies. """
-    description: str = Field(alias="description")
+    description: str
     """ Description for this variant. """
-    estimated_sample_size: Optional[int] = Field(
-        default=None, alias="estimatedSampleSize"
-    )
+    estimated_sample_size: Optional[int] = None
     """ Estimated number of searches required to achieve the desired statistical significance.  The A/B test configuration must include a `mininmumDetectableEffect` setting for this number to be included in the response.  """
-    filter_effects: Optional[FilterEffects] = Field(default=None, alias="filterEffects")
-    index: str = Field(alias="index")
+    filter_effects: Optional[FilterEffects] = None
+    index: str
     """ Index name of the A/B test variant (case-sensitive). """
-    no_result_count: int = Field(alias="noResultCount")
+    no_result_count: int
     """ Number of [searches without results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results) for this variant. """
-    purchase_count: int = Field(alias="purchaseCount")
+    purchase_count: int
     """ Number of purchase events for this variant. """
-    purchase_rate: Optional[float] = Field(default=None, alias="purchaseRate")
+    purchase_rate: Optional[float] = None
     """ [Purchase rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#purchase-rate) for this variant.  """
-    search_count: int = Field(alias="searchCount")
+    search_count: int
     """ Number of searches for this variant. """
-    tracked_search_count: Optional[int] = Field(
-        default=None, alias="trackedSearchCount"
-    )
+    tracked_search_count: Optional[int] = None
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
-    traffic_percentage: int = Field(alias="trafficPercentage")
+    traffic_percentage: int
     """ Percentage of search requests each variant receives. """
-    user_count: int = Field(alias="userCount")
+    user_count: int
     """ Number of users that made searches to this variant. """
-    tracked_user_count: int = Field(alias="trackedUserCount")
+    tracked_user_count: int
     """ Number of users that made tracked searches to this variant. """
 
     model_config = ConfigDict(
@@ -78,6 +99,7 @@ class Variant(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

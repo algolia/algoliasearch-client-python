@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "field_key": "fieldKey",
+    "value": "value",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class MappingFieldDirective(BaseModel):
     """
     Describes how a field should be resolved by applying a set of directives.
     """
 
-    field_key: str = Field(alias="fieldKey")
+    field_key: str
     """ Destination field key. """
-    value: Dict[str, object] = Field(alias="value")
+    value: Dict[str, object]
     """ How the destination field should be resolved from the source. """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class MappingFieldDirective(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

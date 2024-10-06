@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,22 +21,33 @@ else:
 from algoliasearch.insights.models.discount import Discount
 from algoliasearch.insights.models.price import Price
 
+_ALIASES = {
+    "price": "price",
+    "quantity": "quantity",
+    "discount": "discount",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ObjectData(BaseModel):
     """
     ObjectData
     """
 
-    price: Optional[Price] = Field(default=None, alias="price")
-    quantity: Optional[int] = Field(default=None, alias="quantity")
+    price: Optional[Price] = None
+    quantity: Optional[int] = None
     """ Quantity of a product that has been purchased or added to the cart. The total purchase value is the sum of `quantity` multiplied with the `price` for each purchased item.  """
-    discount: Optional[Discount] = Field(default=None, alias="discount")
+    discount: Optional[Discount] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

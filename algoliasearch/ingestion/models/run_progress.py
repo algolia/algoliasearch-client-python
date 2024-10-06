@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,23 +18,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "expected_nb_of_events": "expectedNbOfEvents",
+    "received_nb_of_events": "receivedNbOfEvents",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class RunProgress(BaseModel):
     """
     RunProgress
     """
 
-    expected_nb_of_events: Optional[int] = Field(
-        default=None, alias="expectedNbOfEvents"
-    )
-    received_nb_of_events: Optional[int] = Field(
-        default=None, alias="receivedNbOfEvents"
-    )
+    expected_nb_of_events: Optional[int] = None
+    received_nb_of_events: Optional[int] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

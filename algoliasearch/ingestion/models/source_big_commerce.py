@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,28 +21,37 @@ else:
 from algoliasearch.ingestion.models.big_commerce_channel import BigCommerceChannel
 from algoliasearch.ingestion.models.big_commerce_metafield import BigCommerceMetafield
 
+_ALIASES = {
+    "store_hash": "storeHash",
+    "channel": "channel",
+    "custom_fields": "customFields",
+    "product_metafields": "productMetafields",
+    "variant_metafields": "variantMetafields",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SourceBigCommerce(BaseModel):
     """
     SourceBigCommerce
     """
 
-    store_hash: str = Field(alias="storeHash")
+    store_hash: str
     """ Store hash identifying your BigCommerce store. """
-    channel: Optional[BigCommerceChannel] = Field(default=None, alias="channel")
-    custom_fields: Optional[List[str]] = Field(default=None, alias="customFields")
-    product_metafields: Optional[List[BigCommerceMetafield]] = Field(
-        default=None, alias="productMetafields"
-    )
-    variant_metafields: Optional[List[BigCommerceMetafield]] = Field(
-        default=None, alias="variantMetafields"
-    )
+    channel: Optional[BigCommerceChannel] = None
+    custom_fields: Optional[List[str]] = None
+    product_metafields: Optional[List[BigCommerceMetafield]] = None
+    variant_metafields: Optional[List[BigCommerceMetafield]] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,12 +18,21 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "exclude": "exclude",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class EmptySearch(BaseModel):
     """
     Configuration for handling empty searches.
     """
 
-    exclude: Optional[bool] = Field(default=None, alias="exclude")
+    exclude: Optional[bool] = None
     """ Whether to exclude empty searches when calculating A/B test results. """
 
     model_config = ConfigDict(
@@ -31,6 +40,7 @@ class EmptySearch(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

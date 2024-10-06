@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,24 +18,37 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "index": "index",
+    "traffic_percentage": "trafficPercentage",
+    "description": "description",
+    "custom_search_parameters": "customSearchParameters",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class AbTestsVariantSearchParams(BaseModel):
     """
     AbTestsVariantSearchParams
     """
 
-    index: str = Field(alias="index")
+    index: str
     """ Index name of the A/B test variant (case-sensitive). """
-    traffic_percentage: int = Field(alias="trafficPercentage")
+    traffic_percentage: int
     """ Percentage of search requests each variant receives. """
-    description: Optional[str] = Field(default=None, alias="description")
+    description: Optional[str] = None
     """ Description for this variant. """
-    custom_search_parameters: object = Field(alias="customSearchParameters")
+    custom_search_parameters: object
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

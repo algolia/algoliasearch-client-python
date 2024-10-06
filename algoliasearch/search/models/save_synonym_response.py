@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "task_id": "taskID",
+    "updated_at": "updatedAt",
+    "id": "id",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class SaveSynonymResponse(BaseModel):
     """
     SaveSynonymResponse
     """
 
-    task_id: int = Field(alias="taskID")
+    task_id: int
     """ Unique identifier of a task.  A successful API response means that a task was added to a queue. It might not run immediately. You can check the task's progress with the [`task` operation](#tag/Indices/operation/getTask) and this `taskID`.  """
-    updated_at: str = Field(alias="updatedAt")
+    updated_at: str
     """ Date and time when the object was updated, in RFC 3339 format. """
-    id: str = Field(alias="id")
+    id: str
     """ Unique identifier of a synonym object. """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class SaveSynonymResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

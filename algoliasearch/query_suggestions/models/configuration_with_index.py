@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,25 +21,34 @@ else:
 from algoliasearch.query_suggestions.models.languages import Languages
 from algoliasearch.query_suggestions.models.source_index import SourceIndex
 
+_ALIASES = {
+    "source_indices": "sourceIndices",
+    "languages": "languages",
+    "exclude": "exclude",
+    "enable_personalization": "enablePersonalization",
+    "allow_special_characters": "allowSpecialCharacters",
+    "index_name": "indexName",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ConfigurationWithIndex(BaseModel):
     """
     Query Suggestions configuration.
     """
 
-    source_indices: List[SourceIndex] = Field(alias="sourceIndices")
+    source_indices: List[SourceIndex]
     """ Algolia indices from which to get the popular searches for query suggestions. """
-    languages: Optional[Languages] = Field(default=None, alias="languages")
-    exclude: Optional[List[str]] = Field(default=None, alias="exclude")
-    enable_personalization: Optional[bool] = Field(
-        default=None, alias="enablePersonalization"
-    )
+    languages: Optional[Languages] = None
+    exclude: Optional[List[str]] = None
+    enable_personalization: Optional[bool] = None
     """ Whether to turn on personalized query suggestions. """
-    allow_special_characters: Optional[bool] = Field(
-        default=None, alias="allowSpecialCharacters"
-    )
+    allow_special_characters: Optional[bool] = None
     """ Whether to include suggestions with special characters. """
-    index_name: str = Field(alias="indexName")
+    index_name: str
     """ Name of the Query Suggestions index (case-sensitive). """
 
     model_config = ConfigDict(
@@ -47,6 +56,7 @@ class ConfigurationWithIndex(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

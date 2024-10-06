@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,34 +18,54 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "name": "name",
+    "created_at": "createdAt",
+    "updated_at": "updatedAt",
+    "entries": "entries",
+    "data_size": "dataSize",
+    "file_size": "fileSize",
+    "last_build_time_s": "lastBuildTimeS",
+    "number_of_pending_tasks": "numberOfPendingTasks",
+    "pending_task": "pendingTask",
+    "primary": "primary",
+    "replicas": "replicas",
+    "virtual": "virtual",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class FetchedIndex(BaseModel):
     """
     FetchedIndex
     """
 
-    name: str = Field(alias="name")
+    name: str
     """ Index name. """
-    created_at: str = Field(alias="createdAt")
+    created_at: str
     """ Index creation date. An empty string means that the index has no records. """
-    updated_at: str = Field(alias="updatedAt")
+    updated_at: str
     """ Date and time when the object was updated, in RFC 3339 format. """
-    entries: int = Field(alias="entries")
+    entries: int
     """ Number of records contained in the index. """
-    data_size: int = Field(alias="dataSize")
+    data_size: int
     """ Number of bytes of the index in minified format. """
-    file_size: int = Field(alias="fileSize")
+    file_size: int
     """ Number of bytes of the index binary file. """
-    last_build_time_s: int = Field(alias="lastBuildTimeS")
+    last_build_time_s: int
     """ Last build time. """
-    number_of_pending_tasks: int = Field(alias="numberOfPendingTasks")
+    number_of_pending_tasks: int
     """ Number of pending indexing operations. This value is deprecated and should not be used. """
-    pending_task: bool = Field(alias="pendingTask")
+    pending_task: bool
     """ A boolean which says whether the index has pending tasks. This value is deprecated and should not be used. """
-    primary: Optional[str] = Field(default=None, alias="primary")
+    primary: Optional[str] = None
     """ Only present if the index is a replica. Contains the name of the related primary index. """
-    replicas: Optional[List[str]] = Field(default=None, alias="replicas")
+    replicas: Optional[List[str]] = None
     """ Only present if the index is a primary index with replicas. Contains the names of all linked replicas. """
-    virtual: Optional[bool] = Field(default=None, alias="virtual")
+    virtual: Optional[bool] = None
     """ Only present if the index is a [virtual replica](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/sort-an-index-alphabetically/#virtual-replicas). """
 
     model_config = ConfigDict(
@@ -53,6 +73,7 @@ class FetchedIndex(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

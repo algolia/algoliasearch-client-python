@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "inventory": "inventory",
+    "price": "price",
+    "category": "category",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class CommercetoolsCustomFields(BaseModel):
     """
     Custom fields from commercetools to add to the records.  For more information, see [Using Custom Types and Custom Fields](https://docs.commercetools.com/tutorials/custom-types).
     """
 
-    inventory: Optional[List[str]] = Field(default=None, alias="inventory")
+    inventory: Optional[List[str]] = None
     """ Inventory custom fields. """
-    price: Optional[List[str]] = Field(default=None, alias="price")
+    price: Optional[List[str]] = None
     """ Price custom fields. """
-    category: Optional[List[str]] = Field(default=None, alias="category")
+    category: Optional[List[str]] = None
     """ Category custom fields. """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class CommercetoolsCustomFields(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

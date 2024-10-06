@@ -11,7 +11,7 @@ from re import match
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,18 +22,29 @@ else:
 from algoliasearch.insights.models.discount import Discount
 from algoliasearch.insights.models.price import Price
 
+_ALIASES = {
+    "query_id": "queryID",
+    "price": "price",
+    "quantity": "quantity",
+    "discount": "discount",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ObjectDataAfterSearch(BaseModel):
     """
     ObjectDataAfterSearch
     """
 
-    query_id: Optional[str] = Field(default=None, alias="queryID")
+    query_id: Optional[str] = None
     """ Unique identifier for a search query, used to track purchase events with multiple records that originate from different searches. """
-    price: Optional[Price] = Field(default=None, alias="price")
-    quantity: Optional[int] = Field(default=None, alias="quantity")
+    price: Optional[Price] = None
+    quantity: Optional[int] = None
     """ Quantity of a product that has been purchased or added to the cart. The total purchase value is the sum of `quantity` multiplied with the `price` for each purchased item.  """
-    discount: Optional[Discount] = Field(default=None, alias="discount")
+    discount: Optional[Discount] = None
 
     @field_validator("query_id")
     def query_id_validate_regular_expression(cls, value):
@@ -50,6 +61,7 @@ class ObjectDataAfterSearch(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

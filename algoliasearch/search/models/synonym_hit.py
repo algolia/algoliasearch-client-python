@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,26 +20,41 @@ else:
 
 from algoliasearch.search.models.synonym_type import SynonymType
 
+_ALIASES = {
+    "object_id": "objectID",
+    "type": "type",
+    "synonyms": "synonyms",
+    "input": "input",
+    "word": "word",
+    "corrections": "corrections",
+    "placeholder": "placeholder",
+    "replacements": "replacements",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SynonymHit(BaseModel):
     """
     Synonym object.
     """
 
-    object_id: str = Field(alias="objectID")
+    object_id: str
     """ Unique identifier of a synonym object. """
-    type: SynonymType = Field(alias="type")
-    synonyms: Optional[List[str]] = Field(default=None, alias="synonyms")
+    type: SynonymType
+    synonyms: Optional[List[str]] = None
     """ Words or phrases considered equivalent. """
-    input: Optional[str] = Field(default=None, alias="input")
+    input: Optional[str] = None
     """ Word or phrase to appear in query strings (for [`onewaysynonym`s](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/one-way-synonyms/)). """
-    word: Optional[str] = Field(default=None, alias="word")
+    word: Optional[str] = None
     """ Word or phrase to appear in query strings (for [`altcorrection1` and `altcorrection2`](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-alternative-corrections/)). """
-    corrections: Optional[List[str]] = Field(default=None, alias="corrections")
+    corrections: Optional[List[str]] = None
     """ Words to be matched in records. """
-    placeholder: Optional[str] = Field(default=None, alias="placeholder")
+    placeholder: Optional[str] = None
     """ [Placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/) to be put inside records.  """
-    replacements: Optional[List[str]] = Field(default=None, alias="replacements")
+    replacements: Optional[List[str]] = None
     """ Query words that will match the [placeholder token](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/in-depth/synonyms-placeholders/). """
 
     model_config = ConfigDict(
@@ -47,6 +62,7 @@ class SynonymHit(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

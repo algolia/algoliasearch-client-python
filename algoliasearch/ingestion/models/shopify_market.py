@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,20 +18,32 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "countries": "countries",
+    "currencies": "currencies",
+    "locales": "locales",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class ShopifyMarket(BaseModel):
     """
     Represents a market in Shopify.
     """
 
-    countries: List[str] = Field(alias="countries")
-    currencies: List[str] = Field(alias="currencies")
-    locales: List[str] = Field(alias="locales")
+    countries: List[str]
+    currencies: List[str]
+    locales: List[str]
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

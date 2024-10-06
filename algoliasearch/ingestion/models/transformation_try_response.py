@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,21 +20,31 @@ else:
 
 from algoliasearch.ingestion.models.transformation_error import TransformationError
 
+_ALIASES = {
+    "payloads": "payloads",
+    "error": "error",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class TransformationTryResponse(BaseModel):
     """
     TransformationTryResponse
     """
 
-    payloads: List[object] = Field(alias="payloads")
+    payloads: List[object]
     """ The array of records returned by the transformation service. """
-    error: Optional[TransformationError] = Field(default=None, alias="error")
+    error: Optional[TransformationError] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

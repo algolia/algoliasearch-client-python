@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,41 +21,55 @@ else:
 from algoliasearch.recommend.models.matched_geo_location import MatchedGeoLocation
 from algoliasearch.recommend.models.personalization import Personalization
 
+_ALIASES = {
+    "filters": "filters",
+    "first_matched_word": "firstMatchedWord",
+    "geo_distance": "geoDistance",
+    "geo_precision": "geoPrecision",
+    "matched_geo_location": "matchedGeoLocation",
+    "personalization": "personalization",
+    "nb_exact_words": "nbExactWords",
+    "nb_typos": "nbTypos",
+    "promoted": "promoted",
+    "proximity_distance": "proximityDistance",
+    "user_score": "userScore",
+    "words": "words",
+    "promoted_by_re_ranking": "promotedByReRanking",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class RankingInfo(BaseModel):
     """
     Object with detailed information about the record's ranking.
     """
 
-    filters: Optional[int] = Field(default=None, alias="filters")
+    filters: Optional[int] = None
     """ Whether a filter matched the query. """
-    first_matched_word: int = Field(alias="firstMatchedWord")
+    first_matched_word: int
     """ Position of the first matched word in the best matching attribute of the record. """
-    geo_distance: int = Field(alias="geoDistance")
+    geo_distance: int
     """ Distance between the geo location in the search query and the best matching geo location in the record, divided by the geo precision (in meters). """
-    geo_precision: Optional[int] = Field(default=None, alias="geoPrecision")
+    geo_precision: Optional[int] = None
     """ Precision used when computing the geo distance, in meters. """
-    matched_geo_location: Optional[MatchedGeoLocation] = Field(
-        default=None, alias="matchedGeoLocation"
-    )
-    personalization: Optional[Personalization] = Field(
-        default=None, alias="personalization"
-    )
-    nb_exact_words: int = Field(alias="nbExactWords")
+    matched_geo_location: Optional[MatchedGeoLocation] = None
+    personalization: Optional[Personalization] = None
+    nb_exact_words: int
     """ Number of exactly matched words. """
-    nb_typos: int = Field(alias="nbTypos")
+    nb_typos: int
     """ Number of typos encountered when matching the record. """
-    promoted: Optional[bool] = Field(default=None, alias="promoted")
+    promoted: Optional[bool] = None
     """ Whether the record was promoted by a rule. """
-    proximity_distance: Optional[int] = Field(default=None, alias="proximityDistance")
+    proximity_distance: Optional[int] = None
     """ Number of words between multiple matches in the query plus 1. For single word queries, `proximityDistance` is 0. """
-    user_score: int = Field(alias="userScore")
+    user_score: int
     """ Overall ranking of the record, expressed as a single integer. This attribute is internal. """
-    words: Optional[int] = Field(default=None, alias="words")
+    words: Optional[int] = None
     """ Number of matched words. """
-    promoted_by_re_ranking: Optional[bool] = Field(
-        default=None, alias="promotedByReRanking"
-    )
+    promoted_by_re_ranking: Optional[bool] = None
     """ Whether the record is re-ranked. """
 
     model_config = ConfigDict(
@@ -63,6 +77,7 @@ class RankingInfo(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

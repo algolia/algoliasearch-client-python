@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,16 +20,26 @@ else:
 
 from algoliasearch.search.models.edit_type import EditType
 
+_ALIASES = {
+    "type": "type",
+    "delete": "delete",
+    "insert": "insert",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Edit(BaseModel):
     """
     Edit
     """
 
-    type: Optional[EditType] = Field(default=None, alias="type")
-    delete: Optional[str] = Field(default=None, alias="delete")
+    type: Optional[EditType] = None
+    delete: Optional[str] = None
     """ Text or patterns to remove from the query string. """
-    insert: Optional[str] = Field(default=None, alias="insert")
+    insert: Optional[str] = None
     """ Text to be added in place of the deleted text inside the query string. """
 
     model_config = ConfigDict(
@@ -37,6 +47,7 @@ class Edit(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

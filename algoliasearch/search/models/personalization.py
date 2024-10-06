@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,16 +18,27 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "filters_score": "filtersScore",
+    "ranking_score": "rankingScore",
+    "score": "score",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class Personalization(BaseModel):
     """
     Personalization
     """
 
-    filters_score: Optional[int] = Field(default=None, alias="filtersScore")
+    filters_score: Optional[int] = None
     """ The score of the filters. """
-    ranking_score: Optional[int] = Field(default=None, alias="rankingScore")
+    ranking_score: Optional[int] = None
     """ The score of the ranking. """
-    score: Optional[int] = Field(default=None, alias="score")
+    score: Optional[int] = None
     """ The score of the event. """
 
     model_config = ConfigDict(
@@ -35,6 +46,7 @@ class Personalization(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

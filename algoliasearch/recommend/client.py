@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import dumps
 from sys import version_info
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Union
 from urllib.parse import quote
 
 from pydantic import Field, StrictInt, StrictStr
@@ -20,8 +20,9 @@ else:
     from typing_extensions import Self
 
 from algoliasearch.http.api_response import ApiResponse
+from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.request_options import RequestOptions
-from algoliasearch.http.serializer import bodySerializer
+from algoliasearch.http.serializer import body_serializer
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
@@ -68,7 +69,7 @@ class RecommendClient:
     """
 
     _transporter: Transporter
-    _config: RecommendConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
@@ -79,7 +80,9 @@ class RecommendClient:
         config: Optional[RecommendConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = RecommendConfig(
+                transporter.config.app_id, transporter.config.api_key
+            )
 
         if config is None:
             config = RecommendConfig(app_id, api_key)
@@ -130,7 +133,7 @@ class RecommendClient:
 
     async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     async def batch_recommend_rules_with_http_info(
         self,
@@ -138,13 +141,18 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
-        recommend_rule: Optional[List[RecommendRule]] = None,
+        recommend_rule: Union[
+            Optional[List[RecommendRule]], list[dict[str, Any]]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -183,7 +191,7 @@ class RecommendClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{model}", quote(str(model), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -195,13 +203,18 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
-        recommend_rule: Optional[List[RecommendRule]] = None,
+        recommend_rule: Union[
+            Optional[List[RecommendRule]], list[dict[str, Any]]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RecommendUpdatedAtResponse:
         """
@@ -255,11 +268,11 @@ class RecommendClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.DELETE,
@@ -330,11 +343,11 @@ class RecommendClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -409,11 +422,11 @@ class RecommendClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -424,7 +437,7 @@ class RecommendClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -501,11 +514,11 @@ class RecommendClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -516,7 +529,7 @@ class RecommendClient:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -564,11 +577,14 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -623,11 +639,14 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -658,11 +677,14 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -717,11 +739,14 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -752,11 +777,14 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -811,11 +839,14 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -842,7 +873,7 @@ class RecommendClient:
 
     async def get_recommendations_with_http_info(
         self,
-        get_recommendations_params: GetRecommendationsParams,
+        get_recommendations_params: Union[GetRecommendationsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -870,7 +901,7 @@ class RecommendClient:
             verb=Verb.POST,
             path="/1/indexes/*/recommendations",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -878,7 +909,7 @@ class RecommendClient:
 
     async def get_recommendations(
         self,
-        get_recommendations_params: GetRecommendationsParams,
+        get_recommendations_params: Union[GetRecommendationsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetRecommendationsResponse:
         """
@@ -903,13 +934,18 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
-        search_recommend_rules_params: Optional[SearchRecommendRulesParams] = None,
+        search_recommend_rules_params: Union[
+            Optional[SearchRecommendRulesParams], dict[str, Any]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -948,7 +984,7 @@ class RecommendClient:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{model}", quote(str(model), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -960,13 +996,18 @@ class RecommendClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
-        search_recommend_rules_params: Optional[SearchRecommendRulesParams] = None,
+        search_recommend_rules_params: Union[
+            Optional[SearchRecommendRulesParams], dict[str, Any]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRecommendRulesResponse:
         """
@@ -1009,7 +1050,7 @@ class RecommendClientSync:
     """
 
     _transporter: TransporterSync
-    _config: RecommendConfig
+    _config: BaseConfig
     _request_options: RequestOptions
 
     def __init__(
@@ -1020,7 +1061,9 @@ class RecommendClientSync:
         config: Optional[RecommendConfig] = None,
     ) -> None:
         if transporter is not None and config is None:
-            config = transporter._config
+            config = RecommendConfig(
+                transporter.config.app_id, transporter.config.api_key
+            )
 
         if config is None:
             config = RecommendConfig(app_id, api_key)
@@ -1070,7 +1113,7 @@ class RecommendClientSync:
 
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
-        self._transporter._config.set_client_api_key(api_key)
+        self._transporter.config.set_client_api_key(api_key)
 
     def batch_recommend_rules_with_http_info(
         self,
@@ -1078,13 +1121,18 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
-        recommend_rule: Optional[List[RecommendRule]] = None,
+        recommend_rule: Union[
+            Optional[List[RecommendRule]], list[dict[str, Any]]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1123,7 +1171,7 @@ class RecommendClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{model}", quote(str(model), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1135,13 +1183,18 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
-        recommend_rule: Optional[List[RecommendRule]] = None,
+        recommend_rule: Union[
+            Optional[List[RecommendRule]], list[dict[str, Any]]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RecommendUpdatedAtResponse:
         """
@@ -1195,11 +1248,11 @@ class RecommendClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.DELETE,
@@ -1268,11 +1321,11 @@ class RecommendClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -1347,11 +1400,11 @@ class RecommendClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -1362,7 +1415,7 @@ class RecommendClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1437,11 +1490,11 @@ class RecommendClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
-        _query_parameters: List[Tuple[str, str]] = []
+        _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
             for _qpkey, _qpvalue in parameters.items():
-                _query_parameters.append((_qpkey, _qpvalue))
+                _query_parameters[_qpkey] = _qpvalue
 
         _data = {}
         if body is not None:
@@ -1452,7 +1505,7 @@ class RecommendClientSync:
             path="/{path}".replace("{path}", path),
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1498,11 +1551,14 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -1557,11 +1613,14 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -1592,11 +1651,14 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -1651,11 +1713,14 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         object_id: Annotated[StrictStr, Field(description="Unique record identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -1686,11 +1751,14 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -1745,11 +1813,14 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
         task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -1776,7 +1847,7 @@ class RecommendClientSync:
 
     def get_recommendations_with_http_info(
         self,
-        get_recommendations_params: GetRecommendationsParams,
+        get_recommendations_params: Union[GetRecommendationsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1804,7 +1875,7 @@ class RecommendClientSync:
             verb=Verb.POST,
             path="/1/indexes/*/recommendations",
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -1812,7 +1883,7 @@ class RecommendClientSync:
 
     def get_recommendations(
         self,
-        get_recommendations_params: GetRecommendationsParams,
+        get_recommendations_params: Union[GetRecommendationsParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetRecommendationsResponse:
         """
@@ -1837,13 +1908,18 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
-        search_recommend_rules_params: Optional[SearchRecommendRulesParams] = None,
+        search_recommend_rules_params: Union[
+            Optional[SearchRecommendRulesParams], dict[str, Any]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1882,7 +1958,7 @@ class RecommendClientSync:
                 "{indexName}", quote(str(index_name), safe="")
             ).replace("{model}", quote(str(model), safe="")),
             request_options=self._request_options.merge(
-                data=dumps(bodySerializer(_data)),
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=True,
@@ -1894,13 +1970,18 @@ class RecommendClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
-        model: Annotated[
-            RecommendModels,
-            Field(
-                description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
-            ),
+        model: Union[
+            Annotated[
+                RecommendModels,
+                Field(
+                    description="[Recommend model](https://www.algolia.com/doc/guides/algolia-recommend/overview/#recommend-models). "
+                ),
+            ],
+            str,
         ],
-        search_recommend_rules_params: Optional[SearchRecommendRulesParams] = None,
+        search_recommend_rules_params: Union[
+            Optional[SearchRecommendRulesParams], dict[str, Any]
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRecommendRulesResponse:
         """

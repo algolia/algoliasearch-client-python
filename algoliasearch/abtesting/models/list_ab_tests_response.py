@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,17 +20,27 @@ else:
 
 from algoliasearch.abtesting.models.ab_test import ABTest
 
+_ALIASES = {
+    "abtests": "abtests",
+    "count": "count",
+    "total": "total",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ListABTestsResponse(BaseModel):
     """
     ListABTestsResponse
     """
 
-    abtests: List[ABTest] = Field(alias="abtests")
+    abtests: List[ABTest]
     """ A/B tests. """
-    count: int = Field(alias="count")
+    count: int
     """ Number of A/B tests. """
-    total: int = Field(alias="total")
+    total: int
     """ Number of retrievable A/B tests. """
 
     model_config = ConfigDict(
@@ -38,6 +48,7 @@ class ListABTestsResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

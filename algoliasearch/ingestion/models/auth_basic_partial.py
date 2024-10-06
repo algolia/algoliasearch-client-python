@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,14 +18,24 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "username": "username",
+    "password": "password",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class AuthBasicPartial(BaseModel):
     """
     Credentials for authenticating with user name and password.
     """
 
-    username: Optional[str] = Field(default=None, alias="username")
+    username: Optional[str] = None
     """ Username. """
-    password: Optional[str] = Field(default=None, alias="password")
+    password: Optional[str] = None
     """ Password. This field is `null` in the API response. """
 
     model_config = ConfigDict(
@@ -33,6 +43,7 @@ class AuthBasicPartial(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

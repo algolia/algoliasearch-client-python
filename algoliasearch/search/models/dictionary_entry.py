@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -22,29 +22,44 @@ from algoliasearch.search.models.dictionary_entry_state import DictionaryEntrySt
 from algoliasearch.search.models.dictionary_entry_type import DictionaryEntryType
 from algoliasearch.search.models.supported_language import SupportedLanguage
 
+_ALIASES = {
+    "object_id": "objectID",
+    "language": "language",
+    "word": "word",
+    "words": "words",
+    "decomposition": "decomposition",
+    "state": "state",
+    "type": "type",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class DictionaryEntry(BaseModel):
     """
     Dictionary entry.
     """
 
-    object_id: str = Field(alias="objectID")
+    object_id: str
     """ Unique identifier for the dictionary entry. """
-    language: Optional[SupportedLanguage] = Field(default=None, alias="language")
-    word: Optional[str] = Field(default=None, alias="word")
+    language: Optional[SupportedLanguage] = None
+    word: Optional[str] = None
     """ Matching dictionary word for `stopwords` and `compounds` dictionaries. """
-    words: Optional[List[str]] = Field(default=None, alias="words")
+    words: Optional[List[str]] = None
     """ Matching words in the `plurals` dictionary including declensions. """
-    decomposition: Optional[List[str]] = Field(default=None, alias="decomposition")
+    decomposition: Optional[List[str]] = None
     """ Invividual components of a compound word in the `compounds` dictionary. """
-    state: Optional[DictionaryEntryState] = Field(default=None, alias="state")
-    type: Optional[DictionaryEntryType] = Field(default=None, alias="type")
+    state: Optional[DictionaryEntryState] = None
+    type: Optional[DictionaryEntryType] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
         extra="allow",
     )
 

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,22 +20,35 @@ else:
 
 from algoliasearch.search.models.anchoring import Anchoring
 
+_ALIASES = {
+    "query": "query",
+    "anchoring": "anchoring",
+    "context": "context",
+    "page": "page",
+    "hits_per_page": "hitsPerPage",
+    "enabled": "enabled",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SearchRulesParams(BaseModel):
     """
     Rules search parameters.
     """
 
-    query: Optional[str] = Field(default=None, alias="query")
+    query: Optional[str] = None
     """ Search query for rules. """
-    anchoring: Optional[Anchoring] = Field(default=None, alias="anchoring")
-    context: Optional[str] = Field(default=None, alias="context")
+    anchoring: Optional[Anchoring] = None
+    context: Optional[str] = None
     """ Only return rules that match the context (exact match). """
-    page: Optional[int] = Field(default=None, alias="page")
+    page: Optional[int] = None
     """ Requested page of the API response. """
-    hits_per_page: Optional[int] = Field(default=None, alias="hitsPerPage")
+    hits_per_page: Optional[int] = None
     """ Maximum number of hits per page. """
-    enabled: Optional[bool] = Field(default=None, alias="enabled")
+    enabled: Optional[bool] = None
     """ If `true`, return only enabled rules. If `false`, return only inactive rules. By default, _all_ rules are returned.  """
 
     model_config = ConfigDict(
@@ -43,6 +56,7 @@ class SearchRulesParams(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

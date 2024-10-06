@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,19 +20,30 @@ else:
 
 from algoliasearch.analytics.models.daily_conversion_rates import DailyConversionRates
 
+_ALIASES = {
+    "rate": "rate",
+    "tracked_search_count": "trackedSearchCount",
+    "conversion_count": "conversionCount",
+    "dates": "dates",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class GetConversionRateResponse(BaseModel):
     """
     GetConversionRateResponse
     """
 
-    rate: float = Field(alias="rate")
+    rate: float
     """ Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    tracked_search_count: int = Field(alias="trackedSearchCount")
+    tracked_search_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
-    conversion_count: int = Field(alias="conversionCount")
+    conversion_count: int
     """ Number of conversions from this search. """
-    dates: List[DailyConversionRates] = Field(alias="dates")
+    dates: List[DailyConversionRates]
     """ Daily conversion rates. """
 
     model_config = ConfigDict(
@@ -40,6 +51,7 @@ class GetConversionRateResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,17 +20,27 @@ else:
 
 from algoliasearch.analytics.models.daily_average_clicks import DailyAverageClicks
 
+_ALIASES = {
+    "average": "average",
+    "click_count": "clickCount",
+    "dates": "dates",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class GetAverageClickPositionResponse(BaseModel):
     """
     GetAverageClickPositionResponse
     """
 
-    average: float = Field(alias="average")
+    average: float
     """ Average position of a clicked search result in the list of search results. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    click_count: int = Field(alias="clickCount")
+    click_count: int
     """ Number of clicks associated with this search. """
-    dates: List[DailyAverageClicks] = Field(alias="dates")
+    dates: List[DailyAverageClicks]
     """ Daily average click positions. """
 
     model_config = ConfigDict(
@@ -38,6 +48,7 @@ class GetAverageClickPositionResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

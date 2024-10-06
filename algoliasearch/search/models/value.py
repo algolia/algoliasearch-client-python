@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,18 +20,26 @@ else:
 
 from algoliasearch.search.models.sort_remaining_by import SortRemainingBy
 
+_ALIASES = {
+    "order": "order",
+    "sort_remaining_by": "sortRemainingBy",
+    "hide": "hide",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class Value(BaseModel):
     """
     Value
     """
 
-    order: Optional[List[str]] = Field(default=None, alias="order")
+    order: Optional[List[str]] = None
     """ Explicit order of facets or facet values.  This setting lets you always show specific facets or facet values at the top of the list.  """
-    sort_remaining_by: Optional[SortRemainingBy] = Field(
-        default=None, alias="sortRemainingBy"
-    )
-    hide: Optional[List[str]] = Field(default=None, alias="hide")
+    sort_remaining_by: Optional[SortRemainingBy] = None
+    hide: Optional[List[str]] = None
     """ Hide facet values. """
 
     model_config = ConfigDict(
@@ -39,6 +47,7 @@ class Value(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

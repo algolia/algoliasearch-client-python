@@ -11,7 +11,7 @@ from re import match
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,28 +21,41 @@ else:
 
 from algoliasearch.insights.models.conversion_event import ConversionEvent
 
+_ALIASES = {
+    "event_name": "eventName",
+    "event_type": "eventType",
+    "index": "index",
+    "object_ids": "objectIDs",
+    "query_id": "queryID",
+    "user_token": "userToken",
+    "authenticated_user_token": "authenticatedUserToken",
+    "timestamp": "timestamp",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ConvertedObjectIDsAfterSearch(BaseModel):
     """
     Use this event to track when users convert after a previous Algolia request. For example, a user clicks on an item in the search results to view the product detail page. Then, the user adds the item to their shopping cart.  If you're building your category pages with Algolia, you'll also use this event.
     """
 
-    event_name: str = Field(alias="eventName")
+    event_name: str
     """ Event name, up to 64 ASCII characters.  Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework.  """
-    event_type: ConversionEvent = Field(alias="eventType")
-    index: str = Field(alias="index")
+    event_type: ConversionEvent
+    index: str
     """ Index name (case-sensitive) to which the event's items belong. """
-    object_ids: List[str] = Field(alias="objectIDs")
+    object_ids: List[str]
     """ Object IDs of the records that are part of the event. """
-    query_id: str = Field(alias="queryID")
+    query_id: str
     """ Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response.  """
-    user_token: str = Field(alias="userToken")
+    user_token: str
     """ Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/).  """
-    authenticated_user_token: Optional[str] = Field(
-        default=None, alias="authenticatedUserToken"
-    )
+    authenticated_user_token: Optional[str] = None
     """ Identifier for authenticated users.  When the user signs in, you can get an identifier from your system and send it as `authenticatedUserToken`. This lets you keep using the `userToken` from before the user signed in, while providing a reliable way to identify users across sessions. Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/).  """
-    timestamp: Optional[int] = Field(default=None, alias="timestamp")
+    timestamp: Optional[int] = None
     """ Timestamp of the event, measured in milliseconds since the Unix epoch. By default, the Insights API uses the time it receives an event as its timestamp.  """
 
     @field_validator("event_name")
@@ -87,6 +100,7 @@ class ConvertedObjectIDsAfterSearch(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

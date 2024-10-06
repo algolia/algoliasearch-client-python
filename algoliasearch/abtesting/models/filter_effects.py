@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,20 +21,30 @@ else:
 from algoliasearch.abtesting.models.empty_search_filter import EmptySearchFilter
 from algoliasearch.abtesting.models.outliers_filter import OutliersFilter
 
+_ALIASES = {
+    "outliers": "outliers",
+    "empty_search": "emptySearch",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class FilterEffects(BaseModel):
     """
     A/B test filter effects resulting from configuration settings.
     """
 
-    outliers: Optional[OutliersFilter] = Field(default=None, alias="outliers")
-    empty_search: Optional[EmptySearchFilter] = Field(default=None, alias="emptySearch")
+    outliers: Optional[OutliersFilter] = None
+    empty_search: Optional[EmptySearchFilter] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

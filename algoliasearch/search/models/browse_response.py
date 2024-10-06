@@ -11,7 +11,7 @@ from re import match
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 if version_info >= (3, 11):
     from typing import Self
@@ -25,82 +25,114 @@ from algoliasearch.search.models.hit import Hit
 from algoliasearch.search.models.redirect import Redirect
 from algoliasearch.search.models.rendering_content import RenderingContent
 
+_ALIASES = {
+    "ab_test_id": "abTestID",
+    "ab_test_variant_id": "abTestVariantID",
+    "around_lat_lng": "aroundLatLng",
+    "automatic_radius": "automaticRadius",
+    "exhaustive": "exhaustive",
+    "exhaustive_facets_count": "exhaustiveFacetsCount",
+    "exhaustive_nb_hits": "exhaustiveNbHits",
+    "exhaustive_typo": "exhaustiveTypo",
+    "facets": "facets",
+    "facets_stats": "facets_stats",
+    "index": "index",
+    "index_used": "indexUsed",
+    "message": "message",
+    "nb_sorted_hits": "nbSortedHits",
+    "parsed_query": "parsedQuery",
+    "processing_time_ms": "processingTimeMS",
+    "processing_timings_ms": "processingTimingsMS",
+    "query_after_removal": "queryAfterRemoval",
+    "redirect": "redirect",
+    "rendering_content": "renderingContent",
+    "server_time_ms": "serverTimeMS",
+    "server_used": "serverUsed",
+    "user_data": "userData",
+    "query_id": "queryID",
+    "automatic_insights": "_automaticInsights",
+    "page": "page",
+    "nb_hits": "nbHits",
+    "nb_pages": "nbPages",
+    "hits_per_page": "hitsPerPage",
+    "hits": "hits",
+    "query": "query",
+    "params": "params",
+    "cursor": "cursor",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class BrowseResponse(BaseModel):
     """
     BrowseResponse
     """
 
-    ab_test_id: Optional[int] = Field(default=None, alias="abTestID")
+    ab_test_id: Optional[int] = None
     """ A/B test ID. This is only included in the response for indices that are part of an A/B test. """
-    ab_test_variant_id: Optional[int] = Field(default=None, alias="abTestVariantID")
+    ab_test_variant_id: Optional[int] = None
     """ Variant ID. This is only included in the response for indices that are part of an A/B test. """
-    around_lat_lng: Optional[str] = Field(default=None, alias="aroundLatLng")
+    around_lat_lng: Optional[str] = None
     """ Computed geographical location. """
-    automatic_radius: Optional[str] = Field(default=None, alias="automaticRadius")
+    automatic_radius: Optional[str] = None
     """ Distance from a central coordinate provided by `aroundLatLng`. """
-    exhaustive: Optional[Exhaustive] = Field(default=None, alias="exhaustive")
-    exhaustive_facets_count: Optional[bool] = Field(
-        default=None, alias="exhaustiveFacetsCount"
-    )
+    exhaustive: Optional[Exhaustive] = None
+    exhaustive_facets_count: Optional[bool] = None
     """ See the `facetsCount` field of the `exhaustive` object in the response. """
-    exhaustive_nb_hits: Optional[bool] = Field(default=None, alias="exhaustiveNbHits")
+    exhaustive_nb_hits: Optional[bool] = None
     """ See the `nbHits` field of the `exhaustive` object in the response. """
-    exhaustive_typo: Optional[bool] = Field(default=None, alias="exhaustiveTypo")
+    exhaustive_typo: Optional[bool] = None
     """ See the `typo` field of the `exhaustive` object in the response. """
-    facets: Optional[Dict[str, Dict[str, int]]] = Field(default=None, alias="facets")
+    facets: Optional[Dict[str, Dict[str, int]]] = None
     """ Facet counts. """
-    facets_stats: Optional[Dict[str, FacetStats]] = Field(
-        default=None, alias="facets_stats"
-    )
+    facets_stats: Optional[Dict[str, FacetStats]] = None
     """ Statistics for numerical facets. """
-    index: Optional[str] = Field(default=None, alias="index")
+    index: Optional[str] = None
     """ Index name used for the query. """
-    index_used: Optional[str] = Field(default=None, alias="indexUsed")
+    index_used: Optional[str] = None
     """ Index name used for the query. During A/B testing, the targeted index isn't always the index used by the query. """
-    message: Optional[str] = Field(default=None, alias="message")
+    message: Optional[str] = None
     """ Warnings about the query. """
-    nb_sorted_hits: Optional[int] = Field(default=None, alias="nbSortedHits")
+    nb_sorted_hits: Optional[int] = None
     """ Number of hits selected and sorted by the relevant sort algorithm. """
-    parsed_query: Optional[str] = Field(default=None, alias="parsedQuery")
+    parsed_query: Optional[str] = None
     """ Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched. """
-    processing_time_ms: int = Field(alias="processingTimeMS")
+    processing_time_ms: int
     """ Time the server took to process the request, in milliseconds. """
-    processing_timings_ms: Optional[object] = Field(
-        default=None, alias="processingTimingsMS"
-    )
+    processing_timings_ms: Optional[object] = None
     """ Experimental. List of processing steps and their times, in milliseconds. You can use this list to investigate performance issues. """
-    query_after_removal: Optional[str] = Field(default=None, alias="queryAfterRemoval")
+    query_after_removal: Optional[str] = None
     """ Markup text indicating which parts of the original query have been removed to retrieve a non-empty result set. """
-    redirect: Optional[Redirect] = Field(default=None, alias="redirect")
-    rendering_content: Optional[RenderingContent] = Field(
-        default=None, alias="renderingContent"
-    )
-    server_time_ms: Optional[int] = Field(default=None, alias="serverTimeMS")
+    redirect: Optional[Redirect] = None
+    rendering_content: Optional[RenderingContent] = None
+    server_time_ms: Optional[int] = None
     """ Time the server took to process the request, in milliseconds. """
-    server_used: Optional[str] = Field(default=None, alias="serverUsed")
+    server_used: Optional[str] = None
     """ Host name of the server that processed the request. """
-    user_data: Optional[object] = Field(default=None, alias="userData")
+    user_data: Optional[object] = None
     """ An object with custom data.  You can store up to 32kB as custom data.  """
-    query_id: Optional[str] = Field(default=None, alias="queryID")
+    query_id: Optional[str] = None
     """ Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics/). """
-    automatic_insights: Optional[bool] = Field(default=None, alias="_automaticInsights")
+    automatic_insights: Optional[bool] = None
     """ Whether automatic events collection is enabled for the application. """
-    page: Optional[int] = Field(default=None, alias="page")
+    page: Optional[int] = None
     """ Page of search results to retrieve. """
-    nb_hits: Optional[int] = Field(default=None, alias="nbHits")
+    nb_hits: Optional[int] = None
     """ Number of results (hits). """
-    nb_pages: Optional[int] = Field(default=None, alias="nbPages")
+    nb_pages: Optional[int] = None
     """ Number of pages of results. """
-    hits_per_page: Optional[int] = Field(default=None, alias="hitsPerPage")
+    hits_per_page: Optional[int] = None
     """ Number of hits per page. """
-    hits: List[Hit] = Field(alias="hits")
+    hits: List[Hit]
     """ Search results (hits).  Hits are records from your index that match the search criteria, augmented with additional attributes, such as, for highlighting.  """
-    query: str = Field(alias="query")
+    query: str
     """ Search query. """
-    params: str = Field(alias="params")
+    params: str
     """ URL-encoded string of all search parameters. """
-    cursor: Optional[str] = Field(default=None, alias="cursor")
+    cursor: Optional[str] = None
     """ Cursor to get the next page of the response.  The parameter must match the value returned in the response of a previous request. The last page of the response does not return a `cursor` attribute.  """
 
     @field_validator("around_lat_lng")
@@ -120,6 +152,7 @@ class BrowseResponse(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

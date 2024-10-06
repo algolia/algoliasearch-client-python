@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,14 +20,23 @@ else:
 
 from algoliasearch.ingestion.models.on_demand_trigger_type import OnDemandTriggerType
 
+_ALIASES = {
+    "type": "type",
+    "last_run": "lastRun",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class OnDemandTrigger(BaseModel):
     """
     Trigger information for manually-triggered tasks.
     """
 
-    type: OnDemandTriggerType = Field(alias="type")
-    last_run: Optional[str] = Field(default=None, alias="lastRun")
+    type: OnDemandTriggerType
+    last_run: Optional[str] = None
     """ The last time the scheduled task ran in RFC 3339 format. """
 
     model_config = ConfigDict(
@@ -35,6 +44,7 @@ class OnDemandTrigger(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

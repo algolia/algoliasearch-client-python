@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,18 +18,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "query": "query",
+    "cluster_name": "clusterName",
+    "page": "page",
+    "hits_per_page": "hitsPerPage",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class SearchUserIdsParams(BaseModel):
     """
     OK
     """
 
-    query: str = Field(alias="query")
+    query: str
     """ Query to search. The search is a prefix search with [typo tolerance](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/) enabled. An empty query will retrieve all users. """
-    cluster_name: Optional[str] = Field(default=None, alias="clusterName")
+    cluster_name: Optional[str] = None
     """ Cluster name. """
-    page: Optional[int] = Field(default=None, alias="page")
+    page: Optional[int] = None
     """ Page of search results to retrieve. """
-    hits_per_page: Optional[int] = Field(default=None, alias="hitsPerPage")
+    hits_per_page: Optional[int] = None
     """ Number of hits per page. """
 
     model_config = ConfigDict(
@@ -37,6 +49,7 @@ class SearchUserIdsParams(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

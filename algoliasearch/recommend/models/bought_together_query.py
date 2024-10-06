@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,23 +21,34 @@ else:
 from algoliasearch.recommend.models.fbt_model import FbtModel
 from algoliasearch.recommend.models.recommend_search_params import RecommendSearchParams
 
+_ALIASES = {
+    "index_name": "indexName",
+    "threshold": "threshold",
+    "max_recommendations": "maxRecommendations",
+    "query_parameters": "queryParameters",
+    "model": "model",
+    "object_id": "objectID",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class BoughtTogetherQuery(BaseModel):
     """
     BoughtTogetherQuery
     """
 
-    index_name: str = Field(alias="indexName")
+    index_name: str
     """ Index name (case-sensitive). """
-    threshold: float = Field(alias="threshold")
+    threshold: float
     """ Minimum score a recommendation must have to be included in the response. """
-    max_recommendations: Optional[int] = Field(default=None, alias="maxRecommendations")
+    max_recommendations: Optional[int] = None
     """ Maximum number of recommendations to retrieve. By default, all recommendations are returned and no fallback request is made. Depending on the available recommendations and the other request parameters, the actual number of recommendations may be lower than this value.  """
-    query_parameters: Optional[RecommendSearchParams] = Field(
-        default=None, alias="queryParameters"
-    )
-    model: FbtModel = Field(alias="model")
-    object_id: str = Field(alias="objectID")
+    query_parameters: Optional[RecommendSearchParams] = None
+    model: FbtModel
+    object_id: str
     """ Unique record identifier. """
 
     model_config = ConfigDict(
@@ -45,6 +56,7 @@ class BoughtTogetherQuery(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

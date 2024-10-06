@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,25 +20,37 @@ else:
 
 from algoliasearch.ingestion.models.mapping_field_directive import MappingFieldDirective
 
+_ALIASES = {
+    "id": "id",
+    "enabled": "enabled",
+    "trigger": "trigger",
+    "field_directives": "fieldDirectives",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class MappingKitAction(BaseModel):
     """
     Describes how a destination object should be resolved by means of applying a set of directives.
     """
 
-    id: Optional[str] = Field(default=None, alias="id")
+    id: Optional[str] = None
     """ ID to uniquely identify this action. """
-    enabled: bool = Field(alias="enabled")
+    enabled: bool
     """ Whether this action has any effect. """
-    trigger: str = Field(alias="trigger")
+    trigger: str
     """ Condition which must be satisfied to apply the action. If this evaluates to false, the action is not applied, and the process attempts to apply the next action, if any. """
-    field_directives: List[MappingFieldDirective] = Field(alias="fieldDirectives")
+    field_directives: List[MappingFieldDirective]
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -18,26 +18,42 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "query": "query",
+    "context": "context",
+    "page": "page",
+    "hits_per_page": "hitsPerPage",
+    "enabled": "enabled",
+    "filters": "filters",
+    "facets": "facets",
+    "max_values_per_facet": "maxValuesPerFacet",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class SearchRecommendRulesParams(BaseModel):
     """
     Recommend rules parameters.
     """
 
-    query: Optional[str] = Field(default=None, alias="query")
+    query: Optional[str] = None
     """ Search query. """
-    context: Optional[str] = Field(default=None, alias="context")
+    context: Optional[str] = None
     """ Only search for rules with matching context. """
-    page: Optional[int] = Field(default=None, alias="page")
+    page: Optional[int] = None
     """ Requested page of the API response. """
-    hits_per_page: Optional[int] = Field(default=None, alias="hitsPerPage")
+    hits_per_page: Optional[int] = None
     """ Maximum number of hits per page. """
-    enabled: Optional[bool] = Field(default=None, alias="enabled")
+    enabled: Optional[bool] = None
     """ Whether to only show rules where the value of their `enabled` property matches this parameter. If absent, show all rules, regardless of their `enabled` property.  """
-    filters: Optional[str] = Field(default=None, alias="filters")
+    filters: Optional[str] = None
     """ Filter expression. This only searches for rules matching the filter expression. """
-    facets: Optional[List[str]] = Field(default=None, alias="facets")
+    facets: Optional[List[str]] = None
     """ Include facets and facet values in the response. Use `['*']` to include all facets. """
-    max_values_per_facet: Optional[int] = Field(default=None, alias="maxValuesPerFacet")
+    max_values_per_facet: Optional[int] = None
     """ Maximum number of values to return for each facet. """
 
     model_config = ConfigDict(
@@ -45,6 +61,7 @@ class SearchRecommendRulesParams(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

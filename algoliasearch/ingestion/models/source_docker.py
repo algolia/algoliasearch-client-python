@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,19 +21,31 @@ else:
 from algoliasearch.ingestion.models.docker_image_type import DockerImageType
 from algoliasearch.ingestion.models.docker_registry import DockerRegistry
 
+_ALIASES = {
+    "image_type": "imageType",
+    "registry": "registry",
+    "image": "image",
+    "version": "version",
+    "configuration": "configuration",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SourceDocker(BaseModel):
     """
     SourceDocker
     """
 
-    image_type: DockerImageType = Field(alias="imageType")
-    registry: DockerRegistry = Field(alias="registry")
-    image: str = Field(alias="image")
+    image_type: DockerImageType
+    registry: DockerRegistry
+    image: str
     """ Docker image name. """
-    version: Optional[str] = Field(default=None, alias="version")
+    version: Optional[str] = None
     """ Docker image version. """
-    configuration: object = Field(alias="configuration")
+    configuration: object
     """ Configuration of the spec. """
 
     model_config = ConfigDict(
@@ -41,6 +53,7 @@ class SourceDocker(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

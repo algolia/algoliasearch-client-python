@@ -11,7 +11,7 @@ from re import match
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 if version_info >= (3, 11):
     from typing import Self
@@ -19,18 +19,30 @@ else:
     from typing_extensions import Self
 
 
+_ALIASES = {
+    "user_id": "userID",
+    "cluster_name": "clusterName",
+    "nb_records": "nbRecords",
+    "data_size": "dataSize",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
+
 class UserId(BaseModel):
     """
     Unique user ID.
     """
 
-    user_id: str = Field(alias="userID")
+    user_id: str
     """ Unique identifier of the user who makes the search request. """
-    cluster_name: str = Field(alias="clusterName")
+    cluster_name: str
     """ Cluster to which the user is assigned. """
-    nb_records: int = Field(alias="nbRecords")
+    nb_records: int
     """ Number of records belonging to the user. """
-    data_size: int = Field(alias="dataSize")
+    data_size: int
     """ Data size used by the user. """
 
     @field_validator("user_id")
@@ -47,6 +59,7 @@ class UserId(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:

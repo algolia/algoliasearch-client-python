@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -21,20 +21,32 @@ else:
 from algoliasearch.ingestion.models.mapping_type_csv import MappingTypeCSV
 from algoliasearch.ingestion.models.method_type import MethodType
 
+_ALIASES = {
+    "url": "url",
+    "unique_id_column": "uniqueIDColumn",
+    "mapping": "mapping",
+    "method": "method",
+    "delimiter": "delimiter",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class SourceCSV(BaseModel):
     """
     SourceCSV
     """
 
-    url: str = Field(alias="url")
+    url: str
     """ URL of the file. """
-    unique_id_column: Optional[str] = Field(default=None, alias="uniqueIDColumn")
+    unique_id_column: Optional[str] = None
     """ Name of a column that contains a unique ID which will be used as `objectID` in Algolia. """
-    mapping: Optional[Dict[str, MappingTypeCSV]] = Field(default=None, alias="mapping")
+    mapping: Optional[Dict[str, MappingTypeCSV]] = None
     """ Key-value pairs of column names and their expected types.  """
-    method: Optional[MethodType] = Field(default=None, alias="method")
-    delimiter: Optional[str] = Field(default=None, alias="delimiter")
+    method: Optional[MethodType] = None
+    delimiter: Optional[str] = None
     """ The character used to split the value on each line, default to a comma (\\r, \\n, 0xFFFD, and space are forbidden). """
 
     model_config = ConfigDict(
@@ -42,6 +54,7 @@ class SourceCSV(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:
@@ -69,7 +82,9 @@ class SourceCSV(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["mapping"] = dict((_k, _v) for _k, _v in obj.get("mapping").items())
+        mapping = obj.get("mapping")
+        if mapping is not None:
+            obj["mapping"] = dict((_k, _v) for _k, _v in mapping.items())
         obj["method"] = obj.get("method")
 
         return cls.model_validate(obj)

@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,6 +20,17 @@ else:
 
 from algoliasearch.recommend.models.facet_ordering import FacetOrdering
 from algoliasearch.recommend.models.redirect_url import RedirectURL
+from algoliasearch.recommend.models.widgets import Widgets
+
+_ALIASES = {
+    "facet_ordering": "facetOrdering",
+    "redirect": "redirect",
+    "widgets": "widgets",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
 
 
 class RenderingContent(BaseModel):
@@ -27,14 +38,16 @@ class RenderingContent(BaseModel):
     Extra data that can be used in the search UI.  You can use this to control aspects of your search UI, such as, the order of facet names and values without changing your frontend code.
     """
 
-    facet_ordering: Optional[FacetOrdering] = Field(default=None, alias="facetOrdering")
-    redirect: Optional[RedirectURL] = Field(default=None, alias="redirect")
+    facet_ordering: Optional[FacetOrdering] = None
+    redirect: Optional[RedirectURL] = None
+    widgets: Optional[Widgets] = None
 
     model_config = ConfigDict(
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:
@@ -70,6 +83,11 @@ class RenderingContent(BaseModel):
         obj["redirect"] = (
             RedirectURL.from_dict(obj["redirect"])
             if obj.get("redirect") is not None
+            else None
+        )
+        obj["widgets"] = (
+            Widgets.from_dict(obj["widgets"])
+            if obj.get("widgets") is not None
             else None
         )
 

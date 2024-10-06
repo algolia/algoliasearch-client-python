@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 if version_info >= (3, 11):
     from typing import Self
@@ -20,14 +20,23 @@ else:
 
 from algoliasearch.ingestion.models.schedule_trigger_type import ScheduleTriggerType
 
+_ALIASES = {
+    "type": "type",
+    "cron": "cron",
+}
+
+
+def _alias_generator(name: str) -> str:
+    return _ALIASES.get(name, name)
+
 
 class ScheduleTriggerInput(BaseModel):
     """
     Trigger input for scheduled tasks.
     """
 
-    type: ScheduleTriggerType = Field(alias="type")
-    cron: str = Field(alias="cron")
+    type: ScheduleTriggerType
+    cron: str
     """ Cron expression for the task's schedule. """
 
     model_config = ConfigDict(
@@ -35,6 +44,7 @@ class ScheduleTriggerInput(BaseModel):
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
+        alias_generator=_alias_generator,
     )
 
     def to_json(self) -> str:
