@@ -5,6 +5,9 @@
 - [6b42a2601](https://github.com/algolia/api-clients-automation/commit/6b42a2601) chore(python): proper type hinting ([#3839](https://github.com/algolia/api-clients-automation/pull/3839)) by [@Fluf22](https://github.com/Fluf22/)
 - [bed119166](https://github.com/algolia/api-clients-automation/commit/bed119166) feat(specs): add support for widgets / banners in search for the csharp client ([#3870](https://github.com/algolia/api-clients-automation/pull/3870)) by [@Kalmar99](https://github.com/Kalmar99/)
 - [844e57f35](https://github.com/algolia/api-clients-automation/commit/844e57f35) fix(specs): correct typos is Search API ([#3898](https://github.com/algolia/api-clients-automation/pull/3898)) by [@gazconroy](https://github.com/gazconroy/)
+- [8d896f0d2](https://github.com/algolia/api-clients-automation/commit/8d896f0d2) chore: prepare release 2024-10-07 ([#3917](https://github.com/algolia/api-clients-automation/pull/3917)) by [@shortcuts](https://github.com/shortcuts/)
+- [aa23ba891](https://github.com/algolia/api-clients-automation/commit/aa23ba891) chore: release 2024-10-07 [skip ci]
+- [fa55c04ce](https://github.com/algolia/api-clients-automation/commit/fa55c04ce) chore: revert "chore: prepare release 2024-10-07 " (#3919) ([#3917](https://github.com/algolia/api-clients-automation/pull/3917)) by [@shortcuts](https://github.com/shortcuts/)
 
 ## [4.5.0](https://github.com/algolia/algoliasearch-client-python/compare/4.4.6...4.5.0)
 
