@@ -41,7 +41,7 @@ class Transformation(BaseModel):
     transformation_id: str
     """ Universally unique identifier (UUID) of a transformation. """
     authentication_ids: Optional[List[str]] = None
-    """ The authentications associated for the current transformation. """
+    """ The authentications associated with the current transformation. """
     code: str
     """ The source code of the transformation. """
     name: str

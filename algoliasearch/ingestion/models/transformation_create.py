@@ -42,7 +42,7 @@ class TransformationCreate(BaseModel):
     description: Optional[str] = None
     """ A descriptive name for your transformation of what it does. """
     authentication_ids: Optional[List[str]] = None
-    """ The authentications associated for the current transformation. """
+    """ The authentications associated with the current transformation. """
 
     model_config = ConfigDict(
         use_enum_values=True,

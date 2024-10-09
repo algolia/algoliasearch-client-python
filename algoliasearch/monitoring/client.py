@@ -461,7 +461,7 @@ class MonitoringClient:
     async def get_cluster_incidents_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -469,7 +469,7 @@ class MonitoringClient:
         Retrieves known incidents for the selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -494,7 +494,7 @@ class MonitoringClient:
     async def get_cluster_incidents(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> IncidentsResponse:
@@ -502,7 +502,7 @@ class MonitoringClient:
         Retrieves known incidents for the selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IncidentsResponse' result object.
@@ -515,7 +515,7 @@ class MonitoringClient:
     async def get_cluster_status_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -523,7 +523,7 @@ class MonitoringClient:
         Retrieves the status of selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -548,7 +548,7 @@ class MonitoringClient:
     async def get_cluster_status(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> StatusResponse:
@@ -556,7 +556,7 @@ class MonitoringClient:
         Retrieves the status of selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'StatusResponse' result object.
@@ -600,7 +600,7 @@ class MonitoringClient:
     async def get_indexing_time_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -608,7 +608,7 @@ class MonitoringClient:
         Retrieves average times for indexing operations for selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -633,7 +633,7 @@ class MonitoringClient:
     async def get_indexing_time(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> IndexingTimeResponse:
@@ -641,7 +641,7 @@ class MonitoringClient:
         Retrieves average times for indexing operations for selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IndexingTimeResponse' result object.
@@ -652,7 +652,7 @@ class MonitoringClient:
     async def get_latency_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -660,7 +660,7 @@ class MonitoringClient:
         Retrieves the average latency for search requests for selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -685,7 +685,7 @@ class MonitoringClient:
     async def get_latency(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> LatencyResponse:
@@ -693,7 +693,7 @@ class MonitoringClient:
         Retrieves the average latency for search requests for selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'LatencyResponse' result object.
@@ -795,7 +795,7 @@ class MonitoringClient:
     async def get_reachability_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -803,7 +803,7 @@ class MonitoringClient:
         Test whether clusters are reachable or not.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -828,7 +828,7 @@ class MonitoringClient:
     async def get_reachability(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, Dict[str, bool]]:
@@ -836,7 +836,7 @@ class MonitoringClient:
         Test whether clusters are reachable or not.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Dict[str, Dict[str, bool]]' result object.
@@ -1326,7 +1326,7 @@ class MonitoringClientSync:
     def get_cluster_incidents_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -1334,7 +1334,7 @@ class MonitoringClientSync:
         Retrieves known incidents for the selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1359,7 +1359,7 @@ class MonitoringClientSync:
     def get_cluster_incidents(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> IncidentsResponse:
@@ -1367,7 +1367,7 @@ class MonitoringClientSync:
         Retrieves known incidents for the selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IncidentsResponse' result object.
@@ -1378,7 +1378,7 @@ class MonitoringClientSync:
     def get_cluster_status_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -1386,7 +1386,7 @@ class MonitoringClientSync:
         Retrieves the status of selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1411,7 +1411,7 @@ class MonitoringClientSync:
     def get_cluster_status(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> StatusResponse:
@@ -1419,7 +1419,7 @@ class MonitoringClientSync:
         Retrieves the status of selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'StatusResponse' result object.
@@ -1463,7 +1463,7 @@ class MonitoringClientSync:
     def get_indexing_time_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -1471,7 +1471,7 @@ class MonitoringClientSync:
         Retrieves average times for indexing operations for selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1496,7 +1496,7 @@ class MonitoringClientSync:
     def get_indexing_time(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> IndexingTimeResponse:
@@ -1504,7 +1504,7 @@ class MonitoringClientSync:
         Retrieves average times for indexing operations for selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'IndexingTimeResponse' result object.
@@ -1515,7 +1515,7 @@ class MonitoringClientSync:
     def get_latency_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -1523,7 +1523,7 @@ class MonitoringClientSync:
         Retrieves the average latency for search requests for selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1548,7 +1548,7 @@ class MonitoringClientSync:
     def get_latency(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> LatencyResponse:
@@ -1556,7 +1556,7 @@ class MonitoringClientSync:
         Retrieves the average latency for search requests for selected clusters.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'LatencyResponse' result object.
@@ -1658,7 +1658,7 @@ class MonitoringClientSync:
     def get_reachability_with_http_info(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
@@ -1666,7 +1666,7 @@ class MonitoringClientSync:
         Test whether clusters are reachable or not.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -1691,7 +1691,7 @@ class MonitoringClientSync:
     def get_reachability(
         self,
         clusters: Annotated[
-            StrictStr, Field(description="Subset of clusters, separated by comma.")
+            StrictStr, Field(description="Subset of clusters, separated by commas.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, Dict[str, bool]]:
@@ -1699,7 +1699,7 @@ class MonitoringClientSync:
         Test whether clusters are reachable or not.
 
 
-        :param clusters: Subset of clusters, separated by comma. (required)
+        :param clusters: Subset of clusters, separated by commas. (required)
         :type clusters: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Dict[str, Dict[str, bool]]' result object.

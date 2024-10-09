@@ -2371,7 +2371,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieves a list of events for a task run, identified by it's ID.
+        Retrieves a list of events for a task run, identified by its ID.
 
         Required API Key ACLs:
           - addObject
@@ -2490,7 +2490,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListEventsResponse:
         """
-        Retrieves a list of events for a task run, identified by it's ID.
+        Retrieves a list of events for a task run, identified by its ID.
 
         Required API Key ACLs:
           - addObject
@@ -7085,7 +7085,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieves a list of events for a task run, identified by it's ID.
+        Retrieves a list of events for a task run, identified by its ID.
 
         Required API Key ACLs:
           - addObject
@@ -7204,7 +7204,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListEventsResponse:
         """
-        Retrieves a list of events for a task run, identified by it's ID.
+        Retrieves a list of events for a task run, identified by its ID.
 
         Required API Key ACLs:
           - addObject
