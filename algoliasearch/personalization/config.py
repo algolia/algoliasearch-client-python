@@ -14,8 +14,11 @@ class PersonalizationConfig(BaseConfig):
 
         user_agent = UserAgent().add("Personalization")
 
-        assert app_id, "`app_id` is missing."
-        assert api_key, "`api_key` is missing."
+        if app_id is None or not app_id:
+            raise ValueError("`app_id` is missing.")
+
+        if api_key is None or not api_key:
+            raise ValueError("`api_key` is missing.")
 
         self.headers = {
             "x-algolia-application-id": app_id,
