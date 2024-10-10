@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -35,7 +35,7 @@ class BannerImage(BaseModel):
     image of a search banner.
     """
 
-    urls: Optional[BannerImageUrl] = None
+    urls: Optional[List[BannerImageUrl]] = None
     title: Optional[str] = None
 
     model_config = ConfigDict(
@@ -72,7 +72,7 @@ class BannerImage(BaseModel):
             return cls.model_validate(obj)
 
         obj["urls"] = (
-            BannerImageUrl.from_dict(obj["urls"])
+            [BannerImageUrl.from_dict(_item) for _item in obj["urls"]]
             if obj.get("urls") is not None
             else None
         )

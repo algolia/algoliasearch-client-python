@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,7 +18,7 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.search.models.banners import Banners
+from algoliasearch.search.models.banner import Banner
 
 _ALIASES = {
     "banners": "banners",
@@ -34,7 +34,8 @@ class Widgets(BaseModel):
     widgets returned from any rules that are applied to the current search.
     """
 
-    banners: Optional[Banners] = None
+    banners: Optional[List[Banner]] = None
+    """ banners defined in the merchandising studio for the given search. """
 
     model_config = ConfigDict(
         use_enum_values=True,
@@ -70,7 +71,7 @@ class Widgets(BaseModel):
             return cls.model_validate(obj)
 
         obj["banners"] = (
-            Banners.from_dict(obj["banners"])
+            [Banner.from_dict(_item) for _item in obj["banners"]]
             if obj.get("banners") is not None
             else None
         )
