@@ -1227,7 +1227,7 @@ class SearchClient:
                 data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
-            use_read_transporter=False,
+            use_read_transporter=True,
         )
 
     async def browse(
@@ -6228,7 +6228,7 @@ class SearchClientSync:
                 data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
-            use_read_transporter=False,
+            use_read_transporter=True,
         )
 
     def browse(
