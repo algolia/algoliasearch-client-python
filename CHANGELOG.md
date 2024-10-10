@@ -1,3 +1,10 @@
+## [4.6.1](https://github.com/algolia/algoliasearch-client-python/compare/4.6.0...4.6.1)
+
+- [f516d0243](https://github.com/algolia/api-clients-automation/commit/f516d0243) fix(specs): Typos in API descriptions ([#3932](https://github.com/algolia/api-clients-automation/pull/3932)) by [@gazconroy](https://github.com/gazconroy/)
+- [434c99f80](https://github.com/algolia/api-clients-automation/commit/434c99f80) fix(specs): use the read transporter for browse ([#3938](https://github.com/algolia/api-clients-automation/pull/3938)) by [@millotp](https://github.com/millotp/)
+- [6b07138e7](https://github.com/algolia/api-clients-automation/commit/6b07138e7) chore: apply codacy fixes ([#3935](https://github.com/algolia/api-clients-automation/pull/3935)) by [@millotp](https://github.com/millotp/)
+- [45d433d0a](https://github.com/algolia/api-clients-automation/commit/45d433d0a) fix(specs): correct type for banners [skip-bc] ([#3939](https://github.com/algolia/api-clients-automation/pull/3939)) by [@millotp](https://github.com/millotp/)
+
 ## [4.6.0](https://github.com/algolia/algoliasearch-client-python/compare/4.5.0...4.6.0)
 
 - [f37764030](https://github.com/algolia/api-clients-automation/commit/f37764030) feat(templates): add request_options to python helpers consistently ([#3868](https://github.com/algolia/api-clients-automation/pull/3868)) by [@kai687](https://github.com/kai687/)
