@@ -49,7 +49,7 @@ class RecommendHit(BaseModel):
     """ Snippets that show the context around a matching search query. """
     ranking_info: Optional[RankingInfo] = None
     distinct_seq_id: Optional[int] = None
-    score: float
+    score: Optional[float] = None
     """ Recommendation score. """
 
     model_config = ConfigDict(

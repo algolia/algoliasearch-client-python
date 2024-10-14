@@ -34,7 +34,7 @@ class TrendingFacetHit(BaseModel):
     Trending facet hit.
     """
 
-    score: float
+    score: Optional[float] = None
     """ Recommendation score. """
     facet_name: str
     """ Facet attribute. To be used in combination with `facetValue`. If specified, only recommendations matching the facet filter will be returned.  """
