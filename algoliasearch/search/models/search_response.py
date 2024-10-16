@@ -31,6 +31,7 @@ _ALIASES = {
     "around_lat_lng": "aroundLatLng",
     "automatic_radius": "automaticRadius",
     "exhaustive": "exhaustive",
+    "applied_rules": "appliedRules",
     "exhaustive_facets_count": "exhaustiveFacetsCount",
     "exhaustive_nb_hits": "exhaustiveNbHits",
     "exhaustive_typo": "exhaustiveTypo",
@@ -79,6 +80,8 @@ class SearchResponse(BaseModel):
     automatic_radius: Optional[str] = None
     """ Distance from a central coordinate provided by `aroundLatLng`. """
     exhaustive: Optional[Exhaustive] = None
+    applied_rules: Optional[List[object]] = None
+    """ Rules applied to the query. """
     exhaustive_facets_count: Optional[bool] = None
     """ See the `facetsCount` field of the `exhaustive` object in the response. """
     exhaustive_nb_hits: Optional[bool] = None

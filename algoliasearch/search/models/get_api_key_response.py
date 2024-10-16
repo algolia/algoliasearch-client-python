@@ -43,7 +43,7 @@ class GetApiKeyResponse(BaseModel):
     GetApiKeyResponse
     """
 
-    value: Optional[str] = None
+    value: str
     """ API key. """
     created_at: int
     """ Timestamp when the object was created, in milliseconds since the Unix epoch. """

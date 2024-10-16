@@ -70,7 +70,7 @@ class Variant(BaseModel):
     """ [Conversion rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#conversion-rate) for this variant.  """
     currencies: Optional[Dict[str, Currency]] = None
     """ A/B test currencies. """
-    description: str
+    description: Optional[str] = None
     """ Description for this variant. """
     estimated_sample_size: Optional[int] = None
     """ Estimated number of searches required to achieve the desired statistical significance.  The A/B test configuration must include a `mininmumDetectableEffect` setting for this number to be included in the response.  """

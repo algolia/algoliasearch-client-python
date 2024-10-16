@@ -40,7 +40,7 @@ class ABTestConfiguration(BaseModel):
     A/B test configuration.
     """
 
-    outliers: Outliers
+    outliers: Optional[Outliers] = None
     empty_search: Optional[EmptySearch] = None
     minimum_detectable_effect: Optional[MinimumDetectableEffect] = None
 
