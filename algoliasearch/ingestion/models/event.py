@@ -24,7 +24,6 @@ from algoliasearch.ingestion.models.event_type import EventType
 _ALIASES = {
     "event_id": "eventID",
     "run_id": "runID",
-    "parent_id": "parentID",
     "status": "status",
     "type": "type",
     "batch_size": "batchSize",
@@ -46,8 +45,6 @@ class Event(BaseModel):
     """ Universally unique identifier (UUID) of an event. """
     run_id: str
     """ Universally unique identifier (UUID) of a task run. """
-    parent_id: Optional[str] = None
-    """ The parent event, the cause of this event. """
     status: EventStatus
     type: EventType
     batch_size: int
