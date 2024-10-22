@@ -1,3 +1,7 @@
+## [4.6.4](https://github.com/algolia/algoliasearch-client-python/compare/4.6.3...4.6.4)
+
+- [0001e9bd3](https://github.com/algolia/api-clients-automation/commit/0001e9bd3) fix(python): required aggregator parameter in browse_* ([#4016](https://github.com/algolia/api-clients-automation/pull/4016)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.6.3](https://github.com/algolia/algoliasearch-client-python/compare/4.6.2...4.6.3)
 
 - [fe2c8440e](https://github.com/algolia/api-clients-automation/commit/fe2c8440e) docs(analytics): constrain pagination only to limit query parameter ([#4012](https://github.com/algolia/api-clients-automation/pull/4012)) by [@febeck](https://github.com/febeck/)
