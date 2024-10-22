@@ -344,7 +344,7 @@ class SearchClient:
     async def browse_objects(
         self,
         index_name: str,
-        aggregator: Optional[Callable[[BrowseResponse], None]],
+        aggregator: Callable[[BrowseResponse], None],
         browse_params: BrowseParamsObject = BrowseParamsObject(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
@@ -370,7 +370,7 @@ class SearchClient:
     async def browse_rules(
         self,
         index_name: str,
-        aggregator: Optional[Callable[[SearchRulesResponse], None]],
+        aggregator: Callable[[SearchRulesResponse], None],
         search_rules_params: SearchRulesParams = SearchRulesParams(hits_per_page=1000),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRulesResponse:
@@ -5349,7 +5349,7 @@ class SearchClientSync:
     def browse_objects(
         self,
         index_name: str,
-        aggregator: Optional[Callable[[BrowseResponse], None]],
+        aggregator: Callable[[BrowseResponse], None],
         browse_params: BrowseParamsObject = BrowseParamsObject(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
@@ -5375,7 +5375,7 @@ class SearchClientSync:
     def browse_rules(
         self,
         index_name: str,
-        aggregator: Optional[Callable[[SearchRulesResponse], None]],
+        aggregator: Callable[[SearchRulesResponse], None],
         search_rules_params: SearchRulesParams = SearchRulesParams(hits_per_page=1000),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRulesResponse:
