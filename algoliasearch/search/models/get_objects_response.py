@@ -32,7 +32,7 @@ class GetObjectsResponse(BaseModel):
     GetObjectsResponse
     """
 
-    results: Optional[List[object]] = None
+    results: List[object]
     """ Retrieved records. """
 
     model_config = ConfigDict(
