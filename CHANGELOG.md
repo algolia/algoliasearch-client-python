@@ -1,3 +1,7 @@
+## [4.6.5](https://github.com/algolia/algoliasearch-client-python/compare/4.6.4...4.6.5)
+
+- [1f36e8f93](https://github.com/algolia/api-clients-automation/commit/1f36e8f93) fix(specs): results in getObjects is required ([#4024](https://github.com/algolia/api-clients-automation/pull/4024)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.6.4](https://github.com/algolia/algoliasearch-client-python/compare/4.6.3...4.6.4)
 
 - [0001e9bd3](https://github.com/algolia/api-clients-automation/commit/0001e9bd3) fix(python): required aggregator parameter in browse_* ([#4016](https://github.com/algolia/api-clients-automation/pull/4016)) by [@shortcuts](https://github.com/shortcuts/)
