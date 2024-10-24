@@ -19,6 +19,7 @@ else:
 
 
 _ALIASES = {
+    "message": "message",
     "results": "results",
 }
 
@@ -32,6 +33,8 @@ class GetObjectsResponse(BaseModel):
     GetObjectsResponse
     """
 
+    message: Optional[str] = None
+    """ An optional status message. """
     results: List[object]
     """ Retrieved records. """
 
