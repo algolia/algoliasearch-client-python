@@ -491,6 +491,7 @@ class SearchClient:
         self,
         index_name: str,
         objects: List[Dict[str, Any]],
+        wait_for_tasks: bool = False,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
@@ -500,6 +501,7 @@ class SearchClient:
             index_name=index_name,
             objects=objects,
             action=Action.ADDOBJECT,
+            wait_for_tasks=wait_for_tasks,
             request_options=request_options,
         )
 
@@ -507,6 +509,7 @@ class SearchClient:
         self,
         index_name: str,
         object_ids: List[str],
+        wait_for_tasks: bool = False,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
@@ -516,6 +519,7 @@ class SearchClient:
             index_name=index_name,
             objects=[{"objectID": id} for id in object_ids],
             action=Action.DELETEOBJECT,
+            wait_for_tasks=wait_for_tasks,
             request_options=request_options,
         )
 
@@ -524,6 +528,7 @@ class SearchClient:
         index_name: str,
         objects: List[Dict[str, Any]],
         create_if_not_exists: bool = False,
+        wait_for_tasks: bool = False,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
@@ -535,6 +540,7 @@ class SearchClient:
             action=Action.PARTIALUPDATEOBJECT
             if create_if_not_exists
             else Action.PARTIALUPDATEOBJECTNOCREATE,
+            wait_for_tasks=wait_for_tasks,
             request_options=request_options,
         )
 
@@ -5494,6 +5500,7 @@ class SearchClientSync:
         self,
         index_name: str,
         objects: List[Dict[str, Any]],
+        wait_for_tasks: bool = False,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
@@ -5503,6 +5510,7 @@ class SearchClientSync:
             index_name=index_name,
             objects=objects,
             action=Action.ADDOBJECT,
+            wait_for_tasks=wait_for_tasks,
             request_options=request_options,
         )
 
@@ -5510,6 +5518,7 @@ class SearchClientSync:
         self,
         index_name: str,
         object_ids: List[str],
+        wait_for_tasks: bool = False,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
@@ -5519,6 +5528,7 @@ class SearchClientSync:
             index_name=index_name,
             objects=[{"objectID": id} for id in object_ids],
             action=Action.DELETEOBJECT,
+            wait_for_tasks=wait_for_tasks,
             request_options=request_options,
         )
 
@@ -5527,6 +5537,7 @@ class SearchClientSync:
         index_name: str,
         objects: List[Dict[str, Any]],
         create_if_not_exists: bool = False,
+        wait_for_tasks: bool = False,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[BatchResponse]:
         """
@@ -5538,6 +5549,7 @@ class SearchClientSync:
             action=Action.PARTIALUPDATEOBJECT
             if create_if_not_exists
             else Action.PARTIALUPDATEOBJECTNOCREATE,
+            wait_for_tasks=wait_for_tasks,
             request_options=request_options,
         )
 
