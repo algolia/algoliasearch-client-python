@@ -24,7 +24,7 @@ class MappingFormatSchema(str, Enum):
     """
     allowed enum values
     """
-    MAPPINGKIT_SLASH_V1 = "mappingkit/v1"
+    MAPPINGKIT_V_1 = "mappingkit/v1"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

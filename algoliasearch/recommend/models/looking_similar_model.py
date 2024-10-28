@@ -24,7 +24,7 @@ class LookingSimilarModel(str, Enum):
     """
     allowed enum values
     """
-    LOOKING_MINUS_SIMILAR = "looking-similar"
+    LOOKING_SIMILAR = "looking-similar"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

@@ -24,13 +24,13 @@ class RecommendModels(str, Enum):
     """
     allowed enum values
     """
-    RELATED_MINUS_PRODUCTS = "related-products"
+    RELATED_PRODUCTS = "related-products"
 
-    BOUGHT_MINUS_TOGETHER = "bought-together"
+    BOUGHT_TOGETHER = "bought-together"
 
-    TRENDING_MINUS_FACETS = "trending-facets"
+    TRENDING_FACETS = "trending-facets"
 
-    TRENDING_MINUS_ITEMS = "trending-items"
+    TRENDING_ITEMS = "trending-items"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

@@ -24,7 +24,7 @@ class TrendingFacetsModel(str, Enum):
     """
     allowed enum values
     """
-    TRENDING_MINUS_FACETS = "trending-facets"
+    TRENDING_FACETS = "trending-facets"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

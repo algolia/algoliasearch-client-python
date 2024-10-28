@@ -24,7 +24,7 @@ class RelatedModel(str, Enum):
     """
     allowed enum values
     """
-    RELATED_MINUS_PRODUCTS = "related-products"
+    RELATED_PRODUCTS = "related-products"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

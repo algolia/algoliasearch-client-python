@@ -24,7 +24,7 @@ class RecommendedForYouModel(str, Enum):
     """
     allowed enum values
     """
-    RECOMMENDED_MINUS_FOR_MINUS_YOU = "recommended-for-you"
+    RECOMMENDED_FOR_YOU = "recommended-for-you"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

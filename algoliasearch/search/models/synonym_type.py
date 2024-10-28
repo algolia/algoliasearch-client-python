@@ -28,11 +28,17 @@ class SynonymType(str, Enum):
 
     ONEWAYSYNONYM = "onewaysynonym"
 
-    ALTCORRECTION1 = "altcorrection1"
+    ALTCORRECTION_1 = "altcorrection1"
 
-    ALTCORRECTION2 = "altcorrection2"
+    ALTCORRECTION_2 = "altcorrection2"
 
     PLACEHOLDER = "placeholder"
+
+    ONE_WAY_SYNONYM = "oneWaySynonym"
+
+    ALTCORRECTION1 = "altCorrection1"
+
+    ALTCORRECTION2 = "altCorrection2"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

@@ -122,7 +122,7 @@ class SupportedLanguage(str, Enum):
 
     PT = "pt"
 
-    PT_MINUS_BR = "pt-br"
+    PT_BR = "pt-br"
 
     QU = "qu"
 

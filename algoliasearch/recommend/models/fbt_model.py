@@ -24,7 +24,7 @@ class FbtModel(str, Enum):
     """
     allowed enum values
     """
-    BOUGHT_MINUS_TOGETHER = "bought-together"
+    BOUGHT_TOGETHER = "bought-together"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

@@ -24,9 +24,9 @@ class BigQueryDataType(str, Enum):
     """
     allowed enum values
     """
-    GA4 = "ga4"
+    GA_4 = "ga4"
 
-    GA360 = "ga360"
+    GA_360 = "ga360"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
