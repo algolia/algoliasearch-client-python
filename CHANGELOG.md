@@ -1,3 +1,10 @@
+## [4.7.0](https://github.com/algolia/algoliasearch-client-python/compare/4.6.5...4.7.0)
+
+- [312d33731](https://github.com/algolia/api-clients-automation/commit/312d33731) feat(specs): add missing message attribute to GetObjectsResponse [skip-bc] ([#4029](https://github.com/algolia/api-clients-automation/pull/4029)) by [@kombucha](https://github.com/kombucha/)
+- [32f9f4d16](https://github.com/algolia/api-clients-automation/commit/32f9f4d16) fix(specs): support synonyms type in camel case [skip-bc] ([#4031](https://github.com/algolia/api-clients-automation/pull/4031)) by [@shortcuts](https://github.com/shortcuts/)
+- [be9231793](https://github.com/algolia/api-clients-automation/commit/be9231793) chore(deps): dependencies 2024-10-28 [skip-bc] ([#4032](https://github.com/algolia/api-clients-automation/pull/4032)) by [@algolia-bot](https://github.com/algolia-bot/)
+- [7f5fe6b68](https://github.com/algolia/api-clients-automation/commit/7f5fe6b68) feat(clients): expose waitForTasks to batch helpers [skip-bc] ([#4030](https://github.com/algolia/api-clients-automation/pull/4030)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.6.5](https://github.com/algolia/algoliasearch-client-python/compare/4.6.4...4.6.5)
 
 - [1f36e8f93](https://github.com/algolia/api-clients-automation/commit/1f36e8f93) fix(specs): results in getObjects is required ([#4024](https://github.com/algolia/api-clients-automation/pull/4024)) by [@shortcuts](https://github.com/shortcuts/)
