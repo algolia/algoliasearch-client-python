@@ -1,3 +1,7 @@
+## [4.8.0](https://github.com/algolia/algoliasearch-client-python/compare/4.7.0...4.8.0)
+
+- [be40cf61d](https://github.com/algolia/api-clients-automation/commit/be40cf61d) feat(specs): add secrets authentications to ingestion ([#4054](https://github.com/algolia/api-clients-automation/pull/4054)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.7.0](https://github.com/algolia/algoliasearch-client-python/compare/4.6.5...4.7.0)
 
 - [312d33731](https://github.com/algolia/api-clients-automation/commit/312d33731) feat(specs): add missing message attribute to GetObjectsResponse [skip-bc] ([#4029](https://github.com/algolia/api-clients-automation/pull/4029)) by [@kombucha](https://github.com/kombucha/)
