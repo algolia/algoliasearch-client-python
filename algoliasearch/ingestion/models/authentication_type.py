@@ -36,6 +36,8 @@ class AuthenticationType(str, Enum):
 
     ALGOLIAINSIGHTS = "algoliaInsights"
 
+    SECRETS = "secrets"
+
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of AuthenticationType from a JSON string"""
