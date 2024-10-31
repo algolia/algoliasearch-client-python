@@ -351,6 +351,7 @@ class SearchClient:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
+        browse_params.hits_per_page = browse_params.hits_per_page or 1000
 
         async def _func(_prev: Optional[BrowseResponse]) -> BrowseResponse:
             if _prev is not None and _prev.cursor is not None:
@@ -392,7 +393,7 @@ class SearchClient:
 
         return await create_iterable(
             func=_func,
-            validate=lambda _resp: _resp.nb_hits < hits_per_page,
+            validate=lambda _resp: len(_resp.hits) < hits_per_page,
             aggregator=aggregator,
         )
 
@@ -427,7 +428,7 @@ class SearchClient:
 
         return await create_iterable(
             func=_func,
-            validate=lambda _resp: _resp.nb_hits < hits_per_page,
+            validate=lambda _resp: len(_resp.hits) < hits_per_page,
             aggregator=aggregator,
         )
 
@@ -5362,6 +5363,7 @@ class SearchClientSync:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
+        browse_params.hits_per_page = browse_params.hits_per_page or 1000
 
         def _func(_prev: Optional[BrowseResponse]) -> BrowseResponse:
             if _prev is not None and _prev.cursor is not None:
@@ -5403,7 +5405,7 @@ class SearchClientSync:
 
         return create_iterable_sync(
             func=_func,
-            validate=lambda _resp: _resp.nb_hits < hits_per_page,
+            validate=lambda _resp: len(_resp.hits) < hits_per_page,
             aggregator=aggregator,
         )
 
@@ -5436,7 +5438,7 @@ class SearchClientSync:
 
         return create_iterable_sync(
             func=_func,
-            validate=lambda _resp: _resp.nb_hits < hits_per_page,
+            validate=lambda _resp: len(_resp.hits) < hits_per_page,
             aggregator=aggregator,
         )
 
