@@ -18,11 +18,10 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.abtesting.models.effect_metric import EffectMetric
-
 _ALIASES = {
-    "size": "size",
-    "metric": "metric",
+    "duration_days": "durationDays",
+    "control_sample_size": "controlSampleSize",
+    "experiment_sample_size": "experimentSampleSize",
 }
 
 
@@ -30,14 +29,17 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class MinimumDetectableEffect(BaseModel):
+class EstimateABTestResponse(BaseModel):
     """
-    Configuration for the smallest difference between test variants you want to detect.
+    EstimateABTestResponse
     """
 
-    size: float
-    """ Smallest difference in an observable metric between variants. For example, to detect a 10% difference between variants, set this value to 0.1.  """
-    metric: EffectMetric
+    duration_days: Optional[int] = None
+    """ Estimated number of days needed to reach the sample sizes required for detecting the configured effect. This value is based on historical traffic. """
+    control_sample_size: Optional[int] = None
+    """ Number of tracked searches needed to be able to detect the configured effect for the control variant. """
+    experiment_sample_size: Optional[int] = None
+    """ Number of tracked searches needed to be able to detect the configured effect for the experiment variant. """
 
     model_config = ConfigDict(
         use_enum_values=True,
@@ -52,7 +54,7 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a JSON string"""
+        """Create an instance of EstimateABTestResponse from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -65,13 +67,11 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a dict"""
+        """Create an instance of EstimateABTestResponse from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
-
-        obj["metric"] = obj.get("metric")
 
         return cls.model_validate(obj)

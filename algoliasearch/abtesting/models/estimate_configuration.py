@@ -18,11 +18,16 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.abtesting.models.effect_metric import EffectMetric
+from algoliasearch.abtesting.models.empty_search import EmptySearch
+from algoliasearch.abtesting.models.minimum_detectable_effect import (
+    MinimumDetectableEffect,
+)
+from algoliasearch.abtesting.models.outliers import Outliers
 
 _ALIASES = {
-    "size": "size",
-    "metric": "metric",
+    "outliers": "outliers",
+    "empty_search": "emptySearch",
+    "minimum_detectable_effect": "minimumDetectableEffect",
 }
 
 
@@ -30,14 +35,14 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class MinimumDetectableEffect(BaseModel):
+class EstimateConfiguration(BaseModel):
     """
-    Configuration for the smallest difference between test variants you want to detect.
+    A/B test configuration for estimating the sample size and duration using minimum detectable effect.
     """
 
-    size: float
-    """ Smallest difference in an observable metric between variants. For example, to detect a 10% difference between variants, set this value to 0.1.  """
-    metric: EffectMetric
+    outliers: Optional[Outliers] = None
+    empty_search: Optional[EmptySearch] = None
+    minimum_detectable_effect: MinimumDetectableEffect
 
     model_config = ConfigDict(
         use_enum_values=True,
@@ -52,7 +57,7 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a JSON string"""
+        """Create an instance of EstimateConfiguration from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -65,13 +70,27 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a dict"""
+        """Create an instance of EstimateConfiguration from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["metric"] = obj.get("metric")
+        obj["outliers"] = (
+            Outliers.from_dict(obj["outliers"])
+            if obj.get("outliers") is not None
+            else None
+        )
+        obj["emptySearch"] = (
+            EmptySearch.from_dict(obj["emptySearch"])
+            if obj.get("emptySearch") is not None
+            else None
+        )
+        obj["minimumDetectableEffect"] = (
+            MinimumDetectableEffect.from_dict(obj["minimumDetectableEffect"])
+            if obj.get("minimumDetectableEffect") is not None
+            else None
+        )
 
         return cls.model_validate(obj)

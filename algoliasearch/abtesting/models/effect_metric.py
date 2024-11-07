@@ -16,7 +16,7 @@ else:
     from typing_extensions import Self
 
 
-class Effect(str, Enum):
+class EffectMetric(str, Enum):
     """
     Metric for which you want to detect the smallest relative difference.
     """
@@ -34,5 +34,5 @@ class Effect(str, Enum):
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of Effect from a JSON string"""
+        """Create an instance of EffectMetric from a JSON string"""
         return cls(loads(json_str))

@@ -23,6 +23,12 @@ from algoliasearch.abtesting.config import AbtestingConfig
 from algoliasearch.abtesting.models.ab_test import ABTest
 from algoliasearch.abtesting.models.ab_test_response import ABTestResponse
 from algoliasearch.abtesting.models.add_ab_tests_request import AddABTestsRequest
+from algoliasearch.abtesting.models.estimate_ab_test_request import (
+    EstimateABTestRequest,
+)
+from algoliasearch.abtesting.models.estimate_ab_test_response import (
+    EstimateABTestResponse,
+)
 from algoliasearch.abtesting.models.list_ab_tests_response import ListABTestsResponse
 from algoliasearch.abtesting.models.schedule_ab_test_response import (
     ScheduleABTestResponse,
@@ -566,6 +572,63 @@ class AbtestingClient:
         """
         resp = await self.delete_ab_test_with_http_info(id, request_options)
         return resp.deserialize(ABTestResponse, resp.raw_data)
+
+    async def estimate_ab_test_with_http_info(
+        self,
+        estimate_ab_test_request: Union[EstimateABTestRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param estimate_ab_test_request: (required)
+        :type estimate_ab_test_request: EstimateABTestRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if estimate_ab_test_request is None:
+            raise ValueError(
+                "Parameter `estimate_ab_test_request` is required when calling `estimate_ab_test`."
+            )
+
+        _data = {}
+        if estimate_ab_test_request is not None:
+            _data = estimate_ab_test_request
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/2/abtests/estimate",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def estimate_ab_test(
+        self,
+        estimate_ab_test_request: Union[EstimateABTestRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> EstimateABTestResponse:
+        """
+        Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param estimate_ab_test_request: (required)
+        :type estimate_ab_test_request: EstimateABTestRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'EstimateABTestResponse' result object.
+        """
+        resp = await self.estimate_ab_test_with_http_info(
+            estimate_ab_test_request, request_options
+        )
+        return resp.deserialize(EstimateABTestResponse, resp.raw_data)
 
     async def get_ab_test_with_http_info(
         self,
@@ -1346,6 +1409,63 @@ class AbtestingClientSync:
         """
         resp = self.delete_ab_test_with_http_info(id, request_options)
         return resp.deserialize(ABTestResponse, resp.raw_data)
+
+    def estimate_ab_test_with_http_info(
+        self,
+        estimate_ab_test_request: Union[EstimateABTestRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param estimate_ab_test_request: (required)
+        :type estimate_ab_test_request: EstimateABTestRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if estimate_ab_test_request is None:
+            raise ValueError(
+                "Parameter `estimate_ab_test_request` is required when calling `estimate_ab_test`."
+            )
+
+        _data = {}
+        if estimate_ab_test_request is not None:
+            _data = estimate_ab_test_request
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/2/abtests/estimate",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def estimate_ab_test(
+        self,
+        estimate_ab_test_request: Union[EstimateABTestRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> EstimateABTestResponse:
+        """
+        Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param estimate_ab_test_request: (required)
+        :type estimate_ab_test_request: EstimateABTestRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'EstimateABTestResponse' result object.
+        """
+        resp = self.estimate_ab_test_with_http_info(
+            estimate_ab_test_request, request_options
+        )
+        return resp.deserialize(EstimateABTestResponse, resp.raw_data)
 
     def get_ab_test_with_http_info(
         self,

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,11 +18,12 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.abtesting.models.effect_metric import EffectMetric
+from algoliasearch.abtesting.models.add_ab_tests_variant import AddABTestsVariant
+from algoliasearch.abtesting.models.estimate_configuration import EstimateConfiguration
 
 _ALIASES = {
-    "size": "size",
-    "metric": "metric",
+    "configuration": "configuration",
+    "variants": "variants",
 }
 
 
@@ -30,14 +31,14 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class MinimumDetectableEffect(BaseModel):
+class EstimateABTestRequest(BaseModel):
     """
-    Configuration for the smallest difference between test variants you want to detect.
+    EstimateABTestRequest
     """
 
-    size: float
-    """ Smallest difference in an observable metric between variants. For example, to detect a 10% difference between variants, set this value to 0.1.  """
-    metric: EffectMetric
+    configuration: EstimateConfiguration
+    variants: List[AddABTestsVariant]
+    """ A/B test variants. """
 
     model_config = ConfigDict(
         use_enum_values=True,
@@ -52,7 +53,7 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a JSON string"""
+        """Create an instance of EstimateABTestRequest from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -65,13 +66,22 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a dict"""
+        """Create an instance of EstimateABTestRequest from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["metric"] = obj.get("metric")
+        obj["configuration"] = (
+            EstimateConfiguration.from_dict(obj["configuration"])
+            if obj.get("configuration") is not None
+            else None
+        )
+        obj["variants"] = (
+            [AddABTestsVariant.from_dict(_item) for _item in obj["variants"]]
+            if obj.get("variants") is not None
+            else None
+        )
 
         return cls.model_validate(obj)
