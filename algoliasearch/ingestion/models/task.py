@@ -64,7 +64,7 @@ class Task(BaseModel):
     """ Whether the task is enabled. """
     failure_threshold: Optional[int] = None
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
-    action: ActionType
+    action: Optional[ActionType] = None
     cursor: Optional[str] = None
     """ Date of the last cursor in RFC 3339 format. """
     created_at: str
