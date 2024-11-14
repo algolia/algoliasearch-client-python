@@ -1,3 +1,8 @@
+## [4.9.0](https://github.com/algolia/algoliasearch-client-python/compare/4.8.1...4.9.0)
+
+- [4c73f4c9a](https://github.com/algolia/api-clients-automation/commit/4c73f4c9a) feat(specs): add estimate path and responses ([#4057](https://github.com/algolia/api-clients-automation/pull/4057)) by [@cdhawke](https://github.com/cdhawke/)
+- [39ad05495](https://github.com/algolia/api-clients-automation/commit/39ad05495) feat(specs): update estimate response type ([#4101](https://github.com/algolia/api-clients-automation/pull/4101)) by [@cdhawke](https://github.com/cdhawke/)
+
 ## [4.8.1](https://github.com/algolia/algoliasearch-client-python/compare/4.8.0...4.8.1)
 
 - [801241e12](https://github.com/algolia/api-clients-automation/commit/801241e12) fix(specs): add secrets payload for updates ([#4061](https://github.com/algolia/api-clients-automation/pull/4061)) by [@shortcuts](https://github.com/shortcuts/)
