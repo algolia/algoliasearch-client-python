@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -20,8 +20,7 @@ else:
 
 _ALIASES = {
     "duration_days": "durationDays",
-    "control_sample_size": "controlSampleSize",
-    "experiment_sample_size": "experimentSampleSize",
+    "sample_sizes": "sampleSizes",
 }
 
 
@@ -36,10 +35,8 @@ class EstimateABTestResponse(BaseModel):
 
     duration_days: Optional[int] = None
     """ Estimated number of days needed to reach the sample sizes required for detecting the configured effect. This value is based on historical traffic. """
-    control_sample_size: Optional[int] = None
-    """ Number of tracked searches needed to be able to detect the configured effect for the control variant. """
-    experiment_sample_size: Optional[int] = None
-    """ Number of tracked searches needed to be able to detect the configured effect for the experiment variant. """
+    sample_sizes: Optional[List[int]] = None
+    """ Sample size estimates for each variant. The first element is the control variant. Each element is the estimated number of searches required to achieve the desired statistical significance.  """
 
     model_config = ConfigDict(
         use_enum_values=True,
