@@ -20,6 +20,7 @@ else:
 
 from algoliasearch.search.models.around_radius import AroundRadius
 from algoliasearch.search.models.facet_filters import FacetFilters
+from algoliasearch.search.models.inside_bounding_box import InsideBoundingBox
 from algoliasearch.search.models.numeric_filters import NumericFilters
 from algoliasearch.search.models.tag_filters import TagFilters
 
@@ -52,8 +53,7 @@ class DeleteByParams(BaseModel):
     around_lat_lng: Optional[str] = None
     """ Coordinates for the center of a circle, expressed as a comma-separated string of latitude and longitude.  Only records included within a circle around this central location are included in the results. The radius of the circle is determined by the `aroundRadius` and `minimumAroundRadius` settings. This parameter is ignored if you also specify `insidePolygon` or `insideBoundingBox`.  """
     around_radius: Optional[AroundRadius] = None
-    inside_bounding_box: Optional[List[List[float]]] = None
-    """ Coordinates for a rectangular area in which to search.  Each bounding box is defined by the two opposite points of its diagonal, and expressed as latitude and longitude pair: `[p1 lat, p1 long, p2 lat, p2 long]`. Provide multiple bounding boxes as nested arrays. For more information, see [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas).  """
+    inside_bounding_box: Optional[InsideBoundingBox] = None
     inside_polygon: Optional[List[List[float]]] = None
     """ Coordinates of a polygon in which to search.  Polygons are defined by 3 to 10,000 points. Each point is represented by its latitude and longitude. Provide multiple polygons as nested arrays. For more information, see [filtering inside polygons](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas). This parameter is ignored if you also specify `insideBoundingBox`.  """
 
@@ -108,6 +108,11 @@ class DeleteByParams(BaseModel):
         obj["aroundRadius"] = (
             AroundRadius.from_dict(obj["aroundRadius"])
             if obj.get("aroundRadius") is not None
+            else None
+        )
+        obj["insideBoundingBox"] = (
+            InsideBoundingBox.from_dict(obj["insideBoundingBox"])
+            if obj.get("insideBoundingBox") is not None
             else None
         )
 

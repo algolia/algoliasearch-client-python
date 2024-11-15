@@ -30,8 +30,10 @@ from algoliasearch.recommend.models.exact_on_single_word_query import (
 )
 from algoliasearch.recommend.models.facet_filters import FacetFilters
 from algoliasearch.recommend.models.ignore_plurals import IgnorePlurals
+from algoliasearch.recommend.models.inside_bounding_box import InsideBoundingBox
 from algoliasearch.recommend.models.numeric_filters import NumericFilters
 from algoliasearch.recommend.models.optional_filters import OptionalFilters
+from algoliasearch.recommend.models.optional_words import OptionalWords
 from algoliasearch.recommend.models.query_type import QueryType
 from algoliasearch.recommend.models.re_ranking_apply_filter import ReRankingApplyFilter
 from algoliasearch.recommend.models.remove_stop_words import RemoveStopWords
@@ -90,6 +92,7 @@ _ALIASES = {
     "user_data": "userData",
     "custom_normalization": "customNormalization",
     "attribute_for_distinct": "attributeForDistinct",
+    "max_facet_hits": "maxFacetHits",
     "attributes_to_retrieve": "attributesToRetrieve",
     "ranking": "ranking",
     "relevancy_strictness": "relevancyStrictness",
@@ -122,7 +125,6 @@ _ALIASES = {
     "replace_synonyms_in_highlight": "replaceSynonymsInHighlight",
     "min_proximity": "minProximity",
     "response_fields": "responseFields",
-    "max_facet_hits": "maxFacetHits",
     "max_values_per_facet": "maxValuesPerFacet",
     "sort_facet_values_by": "sortFacetValuesBy",
     "attribute_criteria_computed_by_min_proximity": "attributeCriteriaComputedByMinProximity",
@@ -165,8 +167,7 @@ class RecommendSearchParams(BaseModel):
     around_precision: Optional[AroundPrecision] = None
     minimum_around_radius: Optional[int] = None
     """ Minimum radius (in meters) for a search around a location when `aroundRadius` isn't set. """
-    inside_bounding_box: Optional[List[List[float]]] = None
-    """ Coordinates for a rectangular area in which to search.  Each bounding box is defined by the two opposite points of its diagonal, and expressed as latitude and longitude pair: `[p1 lat, p1 long, p2 lat, p2 long]`. Provide multiple bounding boxes as nested arrays. For more information, see [rectangular area](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas).  """
+    inside_bounding_box: Optional[InsideBoundingBox] = None
     inside_polygon: Optional[List[List[float]]] = None
     """ Coordinates of a polygon in which to search.  Polygons are defined by 3 to 10,000 points. Each point is represented by its latitude and longitude. Provide multiple polygons as nested arrays. For more information, see [filtering inside polygons](https://www.algolia.com/doc/guides/managing-results/refine-results/geolocation/#filtering-inside-rectangular-or-polygonal-areas). This parameter is ignored if you also specify `insideBoundingBox`.  """
     natural_languages: Optional[List[SupportedLanguage]] = None
@@ -227,6 +228,8 @@ class RecommendSearchParams(BaseModel):
     """ Characters and their normalized replacements. This overrides Algolia's default [normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/).  """
     attribute_for_distinct: Optional[str] = None
     """ Attribute that should be used to establish groups of results. Attribute names are case-sensitive.  All records with the same value for this attribute are considered a group. You can combine `attributeForDistinct` with the `distinct` search parameter to control how many items per group are included in the search results.  If you want to use the same attribute also for faceting, use the `afterDistinct` modifier of the `attributesForFaceting` setting. This applies faceting _after_ deduplication, which will result in accurate facet counts.  """
+    max_facet_hits: Optional[int] = None
+    """ Maximum number of facet values to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values). """
     attributes_to_retrieve: Optional[List[str]] = None
     """ Attributes to include in the API response.  To reduce the size of your response, you can retrieve only some of the attributes. Attribute names are case-sensitive.  - `*` retrieves all attributes, except attributes included in the `customRanking` and `unretrievableAttributes` settings. - To retrieve all attributes except a specific one, prefix the attribute with a dash and combine it with the `*`: `[\"*\", \"-ATTRIBUTE\"]`. - The `objectID` attribute is always included.  """
     ranking: Optional[List[str]] = None
@@ -268,8 +271,7 @@ class RecommendSearchParams(BaseModel):
     remove_words_if_no_results: Optional[RemoveWordsIfNoResults] = None
     advanced_syntax: Optional[bool] = None
     """ Whether to support phrase matching and excluding words from search queries.  Use the `advancedSyntaxFeatures` parameter to control which feature is supported.  """
-    optional_words: Optional[List[str]] = None
-    """ Words that should be considered optional when found in the query.  By default, records must match all words in the search query to be included in the search results. Adding optional words can help to increase the number of search results by running an additional search query that doesn't include the optional words. For example, if the search query is \"action video\" and \"video\" is an optional word, the search engine runs two queries. One for \"action video\" and one for \"action\". Records that match all words are ranked higher.  For a search query with 4 or more words **and** all its words are optional, the number of matched words required for a record to be included in the search results increases for every 1,000 records:  - If `optionalWords` has less than 10 words, the required number of matched words increases by 1:   results 1 to 1,000 require 1 matched word, results 1,001 to 2000 need 2 matched words. - If `optionalWords` has 10 or more words, the number of required matched words increases by the number of optional words divided by 5 (rounded down).   For example, with 18 optional words: results 1 to 1,000 require 1 matched word, results 1,001 to 2000 need 4 matched words.  For more information, see [Optional words](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/empty-or-insufficient-results/#creating-a-list-of-optional-words).  """
+    optional_words: Optional[OptionalWords] = None
     disable_exact_on_attributes: Optional[List[str]] = None
     """ Searchable attributes for which you want to [turn off the Exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes). Attribute names are case-sensitive.  This can be useful for attributes with long values, where the likelihood of an exact match is high, such as product descriptions. Turning off the Exact ranking criterion for these attributes favors exact matching on other attributes. This reduces the impact of individual attributes with a lot of content on ranking.  """
     exact_on_single_word_query: Optional[ExactOnSingleWordQuery] = None
@@ -284,8 +286,6 @@ class RecommendSearchParams(BaseModel):
     """ Minimum proximity score for two matching words.  This adjusts the [Proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity) by equally scoring matches that are farther apart.  For example, if `minProximity` is 2, neighboring matches and matches with one word between them would have the same score.  """
     response_fields: Optional[List[str]] = None
     """ Properties to include in the API response of `search` and `browse` requests.  By default, all response properties are included. To reduce the response size, you can select, which attributes should be included.  You can't exclude these properties: `message`, `warning`, `cursor`, `serverUsed`, `indexUsed`, `abTestVariantID`, `parsedQuery`, or any property triggered by the `getRankingInfo` parameter.  Don't exclude properties that you might need in your search UI.  """
-    max_facet_hits: Optional[int] = None
-    """ Maximum number of facet values to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values). """
     max_values_per_facet: Optional[int] = None
     """ Maximum number of facet values to return for each facet. """
     sort_facet_values_by: Optional[str] = None
@@ -360,6 +360,11 @@ class RecommendSearchParams(BaseModel):
             if obj.get("aroundPrecision") is not None
             else None
         )
+        obj["insideBoundingBox"] = (
+            InsideBoundingBox.from_dict(obj["insideBoundingBox"])
+            if obj.get("insideBoundingBox") is not None
+            else None
+        )
         obj["naturalLanguages"] = obj.get("naturalLanguages")
         obj["indexLanguages"] = obj.get("indexLanguages")
         obj["typoTolerance"] = (
@@ -380,6 +385,11 @@ class RecommendSearchParams(BaseModel):
         obj["queryLanguages"] = obj.get("queryLanguages")
         obj["queryType"] = obj.get("queryType")
         obj["removeWordsIfNoResults"] = obj.get("removeWordsIfNoResults")
+        obj["optionalWords"] = (
+            OptionalWords.from_dict(obj["optionalWords"])
+            if obj.get("optionalWords") is not None
+            else None
+        )
         obj["exactOnSingleWordQuery"] = obj.get("exactOnSingleWordQuery")
         obj["alternativesAsExact"] = obj.get("alternativesAsExact")
         obj["advancedSyntaxFeatures"] = obj.get("advancedSyntaxFeatures")
