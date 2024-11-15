@@ -20,9 +20,6 @@ else:
 
 from algoliasearch.recommend.models.bought_together_query import BoughtTogetherQuery
 from algoliasearch.recommend.models.looking_similar_query import LookingSimilarQuery
-from algoliasearch.recommend.models.recommended_for_you_query import (
-    RecommendedForYouQuery,
-)
 from algoliasearch.recommend.models.related_query import RelatedQuery
 from algoliasearch.recommend.models.trending_facets_query import TrendingFacetsQuery
 from algoliasearch.recommend.models.trending_items_query import TrendingItemsQuery
@@ -43,12 +40,9 @@ class RecommendationsRequest(BaseModel):
 
     oneof_schema_5_validator: Optional[LookingSimilarQuery] = Field(default=None)
 
-    oneof_schema_6_validator: Optional[RecommendedForYouQuery] = Field(default=None)
-
     actual_instance: Union[
         BoughtTogetherQuery,
         LookingSimilarQuery,
-        RecommendedForYouQuery,
         RelatedQuery,
         TrendingFacetsQuery,
         TrendingItemsQuery,
@@ -57,7 +51,6 @@ class RecommendationsRequest(BaseModel):
     one_of_schemas: Set[str] = {
         "BoughtTogetherQuery",
         "LookingSimilarQuery",
-        "RecommendedForYouQuery",
         "RelatedQuery",
         "TrendingFacetsQuery",
         "TrendingItemsQuery",
@@ -83,7 +76,6 @@ class RecommendationsRequest(BaseModel):
     ) -> Union[
         BoughtTogetherQuery,
         LookingSimilarQuery,
-        RecommendedForYouQuery,
         RelatedQuery,
         TrendingFacetsQuery,
         TrendingItemsQuery,
@@ -136,15 +128,9 @@ class RecommendationsRequest(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        try:
-            instance.actual_instance = RecommendedForYouQuery.from_json(json_str)
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into RecommendationsRequest with oneOf schemas: BoughtTogetherQuery, LookingSimilarQuery, RecommendedForYouQuery, RelatedQuery, TrendingFacetsQuery, TrendingItemsQuery. Details: "
+            "No match found when deserializing the JSON string into RecommendationsRequest with oneOf schemas: BoughtTogetherQuery, LookingSimilarQuery, RelatedQuery, TrendingFacetsQuery, TrendingItemsQuery. Details: "
             + ", ".join(error_messages)
         )
 
@@ -167,7 +153,6 @@ class RecommendationsRequest(BaseModel):
             Dict[str, Any],
             BoughtTogetherQuery,
             LookingSimilarQuery,
-            RecommendedForYouQuery,
             RelatedQuery,
             TrendingFacetsQuery,
             TrendingItemsQuery,
