@@ -1919,7 +1919,7 @@ class SearchClient:
         ],
         delete_by_params: Union[DeleteByParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> DeletedAtResponse:
+    ) -> UpdatedAtResponse:
         """
         This operation doesn't accept empty queries or filters.  It's more efficient to get a list of object IDs with the [`browse` operation](#tag/Search/operation/browse), and then delete the records using the [`batch` operation](#tag/Records/operation/batch).
 
@@ -1931,12 +1931,12 @@ class SearchClient:
         :param delete_by_params: (required)
         :type delete_by_params: DeleteByParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
         resp = await self.delete_by_with_http_info(
             index_name, delete_by_params, request_options
         )
-        return resp.deserialize(DeletedAtResponse, resp.raw_data)
+        return resp.deserialize(UpdatedAtResponse, resp.raw_data)
 
     async def delete_index_with_http_info(
         self,
@@ -6919,7 +6919,7 @@ class SearchClientSync:
         ],
         delete_by_params: Union[DeleteByParams, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> DeletedAtResponse:
+    ) -> UpdatedAtResponse:
         """
         This operation doesn't accept empty queries or filters.  It's more efficient to get a list of object IDs with the [`browse` operation](#tag/Search/operation/browse), and then delete the records using the [`batch` operation](#tag/Records/operation/batch).
 
@@ -6931,12 +6931,12 @@ class SearchClientSync:
         :param delete_by_params: (required)
         :type delete_by_params: DeleteByParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'DeletedAtResponse' result object.
+        :return: Returns the deserialized response in a 'UpdatedAtResponse' result object.
         """
         resp = self.delete_by_with_http_info(
             index_name, delete_by_params, request_options
         )
-        return resp.deserialize(DeletedAtResponse, resp.raw_data)
+        return resp.deserialize(UpdatedAtResponse, resp.raw_data)
 
     def delete_index_with_http_info(
         self,
