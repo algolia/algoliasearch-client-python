@@ -23,8 +23,8 @@ async-timeout = ">= 4.0.3"
 pydantic = ">= 2"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "== 0.7.1"
-pyright = "== 1.1.386"
+ruff = "== 0.7.4"
+pyright = "== 1.1.389"
 
 [tool.ruff]
 line-length = 88
