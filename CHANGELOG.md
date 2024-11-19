@@ -1,3 +1,8 @@
+## [4.9.2](https://github.com/algolia/algoliasearch-client-python/compare/4.9.1...4.9.2)
+
+- [f246995a7](https://github.com/algolia/api-clients-automation/commit/f246995a7) chore(deps): dependencies 2024-11-18 ([#4109](https://github.com/algolia/api-clients-automation/pull/4109)) by [@algolia-bot](https://github.com/algolia-bot/)
+- [691df71e8](https://github.com/algolia/api-clients-automation/commit/691df71e8) chore(deps): upgrade openapi-generator to v7.10.0 ([#4131](https://github.com/algolia/api-clients-automation/pull/4131)) by [@millotp](https://github.com/millotp/)
+
 ## [4.9.1](https://github.com/algolia/algoliasearch-client-python/compare/4.9.0...4.9.1)
 
 - [36d583e35](https://github.com/algolia/api-clients-automation/commit/36d583e35) fix(specs): make the searchParams compatible with v4 ([#4108](https://github.com/algolia/api-clients-automation/pull/4108)) by [@millotp](https://github.com/millotp/)
