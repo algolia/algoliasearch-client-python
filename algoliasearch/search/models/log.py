@@ -66,7 +66,7 @@ class Log(BaseModel):
     """ Request headers (API keys are obfuscated). """
     sha1: str
     """ SHA1 signature of the log entry. """
-    nb_api_calls: str
+    nb_api_calls: Optional[str] = None
     """ Number of API requests. """
     processing_time_ms: str
     """ Processing time for the query in milliseconds. This doesn't include latency due to the network.  """
