@@ -118,6 +118,10 @@ class InsightsClient:
         """Sets a new API key to authenticate requests."""
         self._transporter.config.set_client_api_key(api_key)
 
+    async def add_user_agent(self, segment: str, version: Optional[str] = None) -> None:
+        """adds a segment to the default user agent, and update the headers sent with each requests as well"""
+        self._transporter.config.add_user_agent(segment, version)
+
     async def custom_delete_with_http_info(
         self,
         path: Annotated[
@@ -652,6 +656,10 @@ class InsightsClientSync:
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self._transporter.config.set_client_api_key(api_key)
+
+    def add_user_agent(self, segment: str, version: Optional[str] = None) -> None:
+        """adds a segment to the default user agent, and update the headers sent with each requests as well"""
+        self._transporter.config.add_user_agent(segment, version)
 
     def custom_delete_with_http_info(
         self,

@@ -1,6 +1,7 @@
 from os import environ
 from typing import Optional
 
+from algoliasearch import __version__
 from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.hosts import Host, HostsCollection
 from algoliasearch.http.user_agent import UserAgent
@@ -15,7 +16,8 @@ class AnalyticsConfig(BaseConfig):
     ) -> None:
         super().__init__(app_id, api_key)
 
-        user_agent = UserAgent().add("Analytics")
+        self._user_agent = UserAgent()
+        self.add_user_agent("Analytics", __version__)
 
         if app_id is None or not app_id:
             raise ValueError("`app_id` is missing.")
@@ -26,7 +28,7 @@ class AnalyticsConfig(BaseConfig):
         self.headers = {
             "x-algolia-application-id": app_id,
             "x-algolia-api-key": api_key,
-            "user-agent": user_agent.get(),
+            "user-agent": self._user_agent.get(),
             "content-type": "application/json",
         }
 
