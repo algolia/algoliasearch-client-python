@@ -45,7 +45,7 @@ class Rule(BaseModel):
     """ Unique identifier of a rule object. """
     conditions: Optional[List[Condition]] = None
     """ Conditions that trigger a rule.  Some consequences require specific conditions or don't require any condition. For more information, see [Conditions](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/#conditions).  """
-    consequence: Optional[Consequence] = None
+    consequence: Consequence
     description: Optional[str] = None
     """ Description of the rule's purpose to help you distinguish between different rules. """
     enabled: Optional[bool] = None
