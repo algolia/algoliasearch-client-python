@@ -349,13 +349,17 @@ class SearchClient:
         self,
         index_name: str,
         aggregator: Callable[[BrowseResponse], None],
-        browse_params: BrowseParamsObject = BrowseParamsObject(),
+        browse_params: Optional[BrowseParamsObject] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
-        browse_params.hits_per_page = browse_params.hits_per_page or 1000
+        if browse_params is None:
+            browse_params = BrowseParamsObject(hits_per_page=1000)
+
+        if browse_params.hits_per_page is None:
+            browse_params.hits_per_page = 1000
 
         async def _func(_prev: Optional[BrowseResponse]) -> BrowseResponse:
             if _prev is not None and _prev.cursor is not None:
@@ -376,14 +380,18 @@ class SearchClient:
         self,
         index_name: str,
         aggregator: Callable[[SearchRulesResponse], None],
-        search_rules_params: SearchRulesParams = SearchRulesParams(hits_per_page=1000),
+        search_rules_params: Optional[SearchRulesParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRulesResponse:
         """
         Helper: Iterate on the `search_rules` method of the client to allow aggregating rules of an index.
         """
+        if search_rules_params is None:
+            search_rules_params = SearchRulesParams(hits_per_page=1000)
+
         if search_rules_params.hits_per_page is None:
             search_rules_params.hits_per_page = 1000
+
         hits_per_page = search_rules_params.hits_per_page
 
         async def _func(_prev: Optional[SearchRulesResponse]) -> SearchRulesResponse:
@@ -405,14 +413,14 @@ class SearchClient:
         self,
         index_name: str,
         aggregator: Callable[[SearchSynonymsResponse], None],
-        search_synonyms_params: SearchSynonymsParams = SearchSynonymsParams(
-            hits_per_page=1000
-        ),
+        search_synonyms_params: Optional[SearchSynonymsParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchSynonymsResponse:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
+        if search_synonyms_params is None:
+            search_synonyms_params = SearchSynonymsParams(hits_per_page=1000, page=0)
         hits_per_page = 1000
         page = search_synonyms_params.page or 0
         search_synonyms_params.hits_per_page = hits_per_page
@@ -439,13 +447,13 @@ class SearchClient:
     async def generate_secured_api_key(
         self,
         parent_api_key: str,
-        restrictions: Optional[
-            Union[dict, SecuredApiKeyRestrictions]
-        ] = SecuredApiKeyRestrictions(),
+        restrictions: Optional[Union[dict, SecuredApiKeyRestrictions]] = None,
     ) -> str:
         """
         Helper: Generates a secured API key based on the given `parent_api_key` and given `restrictions`.
         """
+        if restrictions is None:
+            restrictions = SecuredApiKeyRestrictions()
         restrictions_dict = {}
         if isinstance(restrictions, SecuredApiKeyRestrictions):
             restrictions_dict = restrictions.to_dict()
@@ -5365,13 +5373,17 @@ class SearchClientSync:
         self,
         index_name: str,
         aggregator: Callable[[BrowseResponse], None],
-        browse_params: BrowseParamsObject = BrowseParamsObject(),
+        browse_params: Optional[BrowseParamsObject] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> BrowseResponse:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
-        browse_params.hits_per_page = browse_params.hits_per_page or 1000
+        if browse_params is None:
+            browse_params = BrowseParamsObject(hits_per_page=1000)
+
+        if browse_params.hits_per_page is None:
+            browse_params.hits_per_page = 1000
 
         def _func(_prev: Optional[BrowseResponse]) -> BrowseResponse:
             if _prev is not None and _prev.cursor is not None:
@@ -5392,14 +5404,18 @@ class SearchClientSync:
         self,
         index_name: str,
         aggregator: Callable[[SearchRulesResponse], None],
-        search_rules_params: SearchRulesParams = SearchRulesParams(hits_per_page=1000),
+        search_rules_params: Optional[SearchRulesParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchRulesResponse:
         """
         Helper: Iterate on the `search_rules` method of the client to allow aggregating rules of an index.
         """
+        if search_rules_params is None:
+            search_rules_params = SearchRulesParams(hits_per_page=1000)
+
         if search_rules_params.hits_per_page is None:
             search_rules_params.hits_per_page = 1000
+
         hits_per_page = search_rules_params.hits_per_page
 
         def _func(_prev: Optional[SearchRulesResponse]) -> SearchRulesResponse:
@@ -5421,14 +5437,14 @@ class SearchClientSync:
         self,
         index_name: str,
         aggregator: Callable[[SearchSynonymsResponse], None],
-        search_synonyms_params: SearchSynonymsParams = SearchSynonymsParams(
-            hits_per_page=1000
-        ),
+        search_synonyms_params: Optional[SearchSynonymsParams] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchSynonymsResponse:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
+        if search_synonyms_params is None:
+            search_synonyms_params = SearchSynonymsParams(hits_per_page=1000, page=0)
         hits_per_page = 1000
         page = search_synonyms_params.page or 0
         search_synonyms_params.hits_per_page = hits_per_page
@@ -5453,13 +5469,13 @@ class SearchClientSync:
     def generate_secured_api_key(
         self,
         parent_api_key: str,
-        restrictions: Optional[
-            Union[dict, SecuredApiKeyRestrictions]
-        ] = SecuredApiKeyRestrictions(),
+        restrictions: Optional[Union[dict, SecuredApiKeyRestrictions]] = None,
     ) -> str:
         """
         Helper: Generates a secured API key based on the given `parent_api_key` and given `restrictions`.
         """
+        if restrictions is None:
+            restrictions = SecuredApiKeyRestrictions()
         restrictions_dict = {}
         if isinstance(restrictions, SecuredApiKeyRestrictions):
             restrictions_dict = restrictions.to_dict()
