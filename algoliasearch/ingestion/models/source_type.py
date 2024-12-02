@@ -40,8 +40,6 @@ class SourceType(str, Enum):
 
     SHOPIFY = "shopify"
 
-    SFCC = "sfcc"
-
     PUSH = "push"
 
     @classmethod
