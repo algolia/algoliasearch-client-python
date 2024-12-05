@@ -11,6 +11,11 @@ class RecommendConfig(BaseConfig):
     def __init__(self, app_id: Optional[str], api_key: Optional[str]) -> None:
         super().__init__(app_id, api_key)
 
+        # In milliseconds
+        self.read_timeout = 5000
+        self.write_timeout = 30000
+        self.connect_timeout = 2000
+
         self._user_agent = UserAgent()
         self.add_user_agent("Recommend", __version__)
 

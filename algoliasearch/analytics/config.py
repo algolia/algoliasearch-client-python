@@ -16,6 +16,11 @@ class AnalyticsConfig(BaseConfig):
     ) -> None:
         super().__init__(app_id, api_key)
 
+        # In milliseconds
+        self.read_timeout = 5000
+        self.write_timeout = 30000
+        self.connect_timeout = 2000
+
         self._user_agent = UserAgent()
         self.add_user_agent("Analytics", __version__)
 

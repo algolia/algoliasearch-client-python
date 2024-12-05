@@ -13,6 +13,11 @@ class IngestionConfig(BaseConfig):
     ) -> None:
         super().__init__(app_id, api_key)
 
+        # In milliseconds
+        self.read_timeout = 25000
+        self.write_timeout = 25000
+        self.connect_timeout = 25000
+
         self._user_agent = UserAgent()
         self.add_user_agent("Ingestion", __version__)
 
