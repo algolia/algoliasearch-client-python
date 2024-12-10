@@ -3459,6 +3459,12 @@ class IngestionClient:
             ],
             dict[str, Any],
         ],
+        watch: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3473,6 +3479,8 @@ class IngestionClient:
         :type task_id: str
         :param push_task_payload: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
         :type push_task_payload: PushTaskPayload
+        :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
+        :type watch: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -3487,6 +3495,11 @@ class IngestionClient:
                 "Parameter `push_task_payload` is required when calling `push_task`."
             )
 
+        _query_parameters: Dict[str, Any] = {}
+
+        if watch is not None:
+            _query_parameters["watch"] = watch
+
         _data = {}
         if push_task_payload is not None:
             _data = push_task_payload
@@ -3497,6 +3510,7 @@ class IngestionClient:
                 "{taskID}", quote(str(task_id), safe="")
             ),
             request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
                 data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
@@ -3517,6 +3531,12 @@ class IngestionClient:
             ],
             dict[str, Any],
         ],
+        watch: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
@@ -3531,11 +3551,13 @@ class IngestionClient:
         :type task_id: str
         :param push_task_payload: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
         :type push_task_payload: PushTaskPayload
+        :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
+        :type watch: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunResponse' result object.
         """
         resp = await self.push_task_with_http_info(
-            task_id, push_task_payload, request_options
+            task_id, push_task_payload, watch, request_options
         )
         return resp.deserialize(RunResponse, resp.raw_data)
 
@@ -8192,6 +8214,12 @@ class IngestionClientSync:
             ],
             dict[str, Any],
         ],
+        watch: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8206,6 +8234,8 @@ class IngestionClientSync:
         :type task_id: str
         :param push_task_payload: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
         :type push_task_payload: PushTaskPayload
+        :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
+        :type watch: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -8220,6 +8250,11 @@ class IngestionClientSync:
                 "Parameter `push_task_payload` is required when calling `push_task`."
             )
 
+        _query_parameters: Dict[str, Any] = {}
+
+        if watch is not None:
+            _query_parameters["watch"] = watch
+
         _data = {}
         if push_task_payload is not None:
             _data = push_task_payload
@@ -8230,6 +8265,7 @@ class IngestionClientSync:
                 "{taskID}", quote(str(task_id), safe="")
             ),
             request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
                 data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
@@ -8250,6 +8286,12 @@ class IngestionClientSync:
             ],
             dict[str, Any],
         ],
+        watch: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
@@ -8264,11 +8306,13 @@ class IngestionClientSync:
         :type task_id: str
         :param push_task_payload: Request body of a Search API `batch` request that will be pushed in the Connectors pipeline. (required)
         :type push_task_payload: PushTaskPayload
+        :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
+        :type watch: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunResponse' result object.
         """
         resp = self.push_task_with_http_info(
-            task_id, push_task_payload, request_options
+            task_id, push_task_payload, watch, request_options
         )
         return resp.deserialize(RunResponse, resp.raw_data)
 
