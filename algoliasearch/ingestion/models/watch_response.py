@@ -32,15 +32,15 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class SourceWatchResponse(BaseModel):
+class WatchResponse(BaseModel):
     """
-    SourceWatchResponse
+    WatchResponse
     """
 
     run_id: Optional[str] = None
     """ Universally unique identifier (UUID) of a task run. """
     data: Optional[List[object]] = None
-    """ depending on the source type, the validation returns sampling data of your source (JSON, CSV, BigQuery). """
+    """ when used with discovering or validating sources, the sampled data of your source is returned. """
     events: Optional[List[Event]] = None
     """ in case of error, observability events will be added to the response, if any. """
     message: str
@@ -59,7 +59,7 @@ class SourceWatchResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SourceWatchResponse from a JSON string"""
+        """Create an instance of WatchResponse from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -72,7 +72,7 @@ class SourceWatchResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SourceWatchResponse from a dict"""
+        """Create an instance of WatchResponse from a dict"""
         if obj is None:
             return None
 

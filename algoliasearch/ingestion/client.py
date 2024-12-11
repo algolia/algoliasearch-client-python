@@ -92,7 +92,6 @@ from algoliasearch.ingestion.models.source_sort_keys import SourceSortKeys
 from algoliasearch.ingestion.models.source_type import SourceType
 from algoliasearch.ingestion.models.source_update import SourceUpdate
 from algoliasearch.ingestion.models.source_update_response import SourceUpdateResponse
-from algoliasearch.ingestion.models.source_watch_response import SourceWatchResponse
 from algoliasearch.ingestion.models.task import Task
 from algoliasearch.ingestion.models.task_create import TaskCreate
 from algoliasearch.ingestion.models.task_create_response import TaskCreateResponse
@@ -120,6 +119,7 @@ from algoliasearch.ingestion.models.transformation_update_response import (
     TransformationUpdateResponse,
 )
 from algoliasearch.ingestion.models.trigger_type import TriggerType
+from algoliasearch.ingestion.models.watch_response import WatchResponse
 
 
 class IngestionClient:
@@ -3538,7 +3538,7 @@ class IngestionClient:
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> RunResponse:
+    ) -> WatchResponse:
         """
         Push a `batch` request payload through the Pipeline. You can check the status of task pushes with the observability endpoints.
 
@@ -3554,12 +3554,12 @@ class IngestionClient:
         :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
         :type watch: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'RunResponse' result object.
+        :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = await self.push_task_with_http_info(
             task_id, push_task_payload, watch, request_options
         )
-        return resp.deserialize(RunResponse, resp.raw_data)
+        return resp.deserialize(WatchResponse, resp.raw_data)
 
     async def run_source_with_http_info(
         self,
@@ -4155,7 +4155,7 @@ class IngestionClient:
             StrictStr, Field(description="Unique identifier of a source.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> SourceWatchResponse:
+    ) -> WatchResponse:
         """
         Triggers a stream-listing request for a source. Triggering stream-listing requests only works with sources with `type: docker` and `imageType: singer`.
 
@@ -4167,12 +4167,12 @@ class IngestionClient:
         :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
+        :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = await self.trigger_docker_source_discover_with_http_info(
             source_id, request_options
         )
-        return resp.deserialize(SourceWatchResponse, resp.raw_data)
+        return resp.deserialize(WatchResponse, resp.raw_data)
 
     async def try_transformation_with_http_info(
         self,
@@ -4792,7 +4792,7 @@ class IngestionClient:
         self,
         source_create: Union[Optional[SourceCreate], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> SourceWatchResponse:
+    ) -> WatchResponse:
         """
         Validates a source payload to ensure it can be created and that the data source can be reached by Algolia.
 
@@ -4804,10 +4804,10 @@ class IngestionClient:
         :param source_create:
         :type source_create: SourceCreate
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
+        :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = await self.validate_source_with_http_info(source_create, request_options)
-        return resp.deserialize(SourceWatchResponse, resp.raw_data)
+        return resp.deserialize(WatchResponse, resp.raw_data)
 
     async def validate_source_before_update_with_http_info(
         self,
@@ -4866,7 +4866,7 @@ class IngestionClient:
         ],
         source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> SourceWatchResponse:
+    ) -> WatchResponse:
         """
         Validates an update of a source payload to ensure it can be created and that the data source can be reached by Algolia.
 
@@ -4880,12 +4880,12 @@ class IngestionClient:
         :param source_update: (required)
         :type source_update: SourceUpdate
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
+        :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = await self.validate_source_before_update_with_http_info(
             source_id, source_update, request_options
         )
-        return resp.deserialize(SourceWatchResponse, resp.raw_data)
+        return resp.deserialize(WatchResponse, resp.raw_data)
 
 
 class IngestionClientSync:
@@ -8293,7 +8293,7 @@ class IngestionClientSync:
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> RunResponse:
+    ) -> WatchResponse:
         """
         Push a `batch` request payload through the Pipeline. You can check the status of task pushes with the observability endpoints.
 
@@ -8309,12 +8309,12 @@ class IngestionClientSync:
         :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
         :type watch: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'RunResponse' result object.
+        :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = self.push_task_with_http_info(
             task_id, push_task_payload, watch, request_options
         )
-        return resp.deserialize(RunResponse, resp.raw_data)
+        return resp.deserialize(WatchResponse, resp.raw_data)
 
     def run_source_with_http_info(
         self,
@@ -8910,7 +8910,7 @@ class IngestionClientSync:
             StrictStr, Field(description="Unique identifier of a source.")
         ],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> SourceWatchResponse:
+    ) -> WatchResponse:
         """
         Triggers a stream-listing request for a source. Triggering stream-listing requests only works with sources with `type: docker` and `imageType: singer`.
 
@@ -8922,12 +8922,12 @@ class IngestionClientSync:
         :param source_id: Unique identifier of a source. (required)
         :type source_id: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
+        :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = self.trigger_docker_source_discover_with_http_info(
             source_id, request_options
         )
-        return resp.deserialize(SourceWatchResponse, resp.raw_data)
+        return resp.deserialize(WatchResponse, resp.raw_data)
 
     def try_transformation_with_http_info(
         self,
@@ -9543,7 +9543,7 @@ class IngestionClientSync:
         self,
         source_create: Union[Optional[SourceCreate], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> SourceWatchResponse:
+    ) -> WatchResponse:
         """
         Validates a source payload to ensure it can be created and that the data source can be reached by Algolia.
 
@@ -9555,10 +9555,10 @@ class IngestionClientSync:
         :param source_create:
         :type source_create: SourceCreate
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
+        :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = self.validate_source_with_http_info(source_create, request_options)
-        return resp.deserialize(SourceWatchResponse, resp.raw_data)
+        return resp.deserialize(WatchResponse, resp.raw_data)
 
     def validate_source_before_update_with_http_info(
         self,
@@ -9617,7 +9617,7 @@ class IngestionClientSync:
         ],
         source_update: Union[SourceUpdate, dict[str, Any]],
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> SourceWatchResponse:
+    ) -> WatchResponse:
         """
         Validates an update of a source payload to ensure it can be created and that the data source can be reached by Algolia.
 
@@ -9631,9 +9631,9 @@ class IngestionClientSync:
         :param source_update: (required)
         :type source_update: SourceUpdate
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'SourceWatchResponse' result object.
+        :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = self.validate_source_before_update_with_http_info(
             source_id, source_update, request_options
         )
-        return resp.deserialize(SourceWatchResponse, resp.raw_data)
+        return resp.deserialize(WatchResponse, resp.raw_data)
