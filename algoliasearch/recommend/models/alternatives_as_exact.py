@@ -30,6 +30,8 @@ class AlternativesAsExact(str, Enum):
 
     MULTIWORDSSYNONYM = "multiWordsSynonym"
 
+    IGNORECONJUGATIONS = "ignoreConjugations"
+
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of AlternativesAsExact from a JSON string"""
