@@ -46,11 +46,13 @@ class LogFile(BaseModel):
     """ Level indicating the position of a suggestion in a hierarchy of records.  For example, a `contextLevel` of 1 indicates that this suggestion belongs to a previous suggestion with `contextLevel` 0.  """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
         alias_generator=_alias_generator,
+        extra="allow",
     )
 
     def to_json(self) -> str:

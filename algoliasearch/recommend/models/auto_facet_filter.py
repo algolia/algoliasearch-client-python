@@ -39,11 +39,13 @@ class AutoFacetFilter(BaseModel):
     """ Whether the filter is negative. If true, recommendations must not have the same value for the `facet` attribute. If false, recommendations must have the same value for the `facet` attribute.  """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
         alias_generator=_alias_generator,
+        extra="allow",
     )
 
     def to_json(self) -> str:

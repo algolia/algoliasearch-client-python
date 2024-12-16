@@ -51,11 +51,13 @@ class Consequence(BaseModel):
     """ A JSON object with custom data that will be appended to the `userData` array in the response. This object isn't interpreted by the API and is limited to 1&nbsp;kB of minified JSON.  """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
         alias_generator=_alias_generator,
+        extra="allow",
     )
 
     def to_json(self) -> str:

@@ -36,11 +36,13 @@ class SemanticSearch(BaseModel):
     """ Indices from which to collect click and conversion events.  If null, the current index and all its replicas are used.  """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
         alias_generator=_alias_generator,
+        extra="allow",
     )
 
     def to_json(self) -> str:

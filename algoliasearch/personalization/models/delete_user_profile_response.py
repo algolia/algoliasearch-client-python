@@ -39,11 +39,13 @@ class DeleteUserProfileResponse(BaseModel):
     """ Date and time when the user profile can be safely considered to be deleted. Any events received after the `deletedUntil` date start a new user profile.  """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
         alias_generator=_alias_generator,
+        extra="allow",
     )
 
     def to_json(self) -> str:

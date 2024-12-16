@@ -50,6 +50,7 @@ class Hit(BaseModel):
     distinct_seq_id: Optional[int] = None
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,

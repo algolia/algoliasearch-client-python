@@ -39,11 +39,13 @@ class PromoteObjectID(BaseModel):
     """ Position in the search results where you want to show the promoted records. """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
         alias_generator=_alias_generator,
+        extra="allow",
     )
 
     def to_json(self) -> str:

@@ -36,6 +36,7 @@ class PushTaskRecords(BaseModel):
     """ Unique record identifier. """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,

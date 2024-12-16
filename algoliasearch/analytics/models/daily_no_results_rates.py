@@ -45,11 +45,13 @@ class DailyNoResultsRates(BaseModel):
     """ No results rate, calculated as number of searches with zero results divided by the total number of searches. """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
         alias_generator=_alias_generator,
+        extra="allow",
     )
 
     def to_json(self) -> str:

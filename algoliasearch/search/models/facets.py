@@ -36,11 +36,13 @@ class Facets(BaseModel):
     """ Explicit order of facets or facet values.  This setting lets you always show specific facets or facet values at the top of the list.  """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
         alias_generator=_alias_generator,
+        extra="allow",
     )
 
     def to_json(self) -> str:

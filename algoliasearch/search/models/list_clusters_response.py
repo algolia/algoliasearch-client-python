@@ -36,11 +36,13 @@ class ListClustersResponse(BaseModel):
     """ Key-value pairs with cluster names as keys and lists of users with the highest number of records per cluster as values. """
 
     model_config = ConfigDict(
+        strict=False,
         use_enum_values=True,
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
         alias_generator=_alias_generator,
+        extra="allow",
     )
 
     def to_json(self) -> str:
