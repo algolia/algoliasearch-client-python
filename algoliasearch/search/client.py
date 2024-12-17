@@ -354,6 +354,9 @@ class SearchClient:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
+        if isinstance(browse_params, dict):
+            browse_params = BrowseParamsObject().from_dict(browse_params)
+
         if browse_params is None:
             browse_params = BrowseParamsObject(hits_per_page=1000)
 
@@ -385,6 +388,9 @@ class SearchClient:
         """
         Helper: Iterate on the `search_rules` method of the client to allow aggregating rules of an index.
         """
+        if isinstance(search_rules_params, dict):
+            search_rules_params = SearchRulesParams().from_dict(search_rules_params)
+
         if search_rules_params is None:
             search_rules_params = SearchRulesParams(hits_per_page=1000)
 
@@ -418,6 +424,11 @@ class SearchClient:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
+        if isinstance(search_synonyms_params, dict):
+            search_synonyms_params = SearchSynonymsParams().from_dict(
+                search_synonyms_params
+            )
+
         if search_synonyms_params is None:
             search_synonyms_params = SearchSynonymsParams(hits_per_page=1000, page=0)
         hits_per_page = 1000
@@ -453,6 +464,7 @@ class SearchClient:
         """
         if restrictions is None:
             restrictions = SecuredApiKeyRestrictions()
+
         restrictions_dict = {}
         if isinstance(restrictions, SecuredApiKeyRestrictions):
             restrictions_dict = restrictions.to_dict()
@@ -5384,6 +5396,9 @@ class SearchClientSync:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
+        if isinstance(browse_params, dict):
+            browse_params = BrowseParamsObject().from_dict(browse_params)
+
         if browse_params is None:
             browse_params = BrowseParamsObject(hits_per_page=1000)
 
@@ -5415,6 +5430,9 @@ class SearchClientSync:
         """
         Helper: Iterate on the `search_rules` method of the client to allow aggregating rules of an index.
         """
+        if isinstance(search_rules_params, dict):
+            search_rules_params = SearchRulesParams().from_dict(search_rules_params)
+
         if search_rules_params is None:
             search_rules_params = SearchRulesParams(hits_per_page=1000)
 
@@ -5448,6 +5466,11 @@ class SearchClientSync:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
+        if isinstance(search_synonyms_params, dict):
+            search_synonyms_params = SearchSynonymsParams().from_dict(
+                search_synonyms_params
+            )
+
         if search_synonyms_params is None:
             search_synonyms_params = SearchSynonymsParams(hits_per_page=1000, page=0)
         hits_per_page = 1000
@@ -5481,6 +5504,7 @@ class SearchClientSync:
         """
         if restrictions is None:
             restrictions = SecuredApiKeyRestrictions()
+
         restrictions_dict = {}
         if isinstance(restrictions, SecuredApiKeyRestrictions):
             restrictions_dict = restrictions.to_dict()
