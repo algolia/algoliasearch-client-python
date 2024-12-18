@@ -58,6 +58,7 @@ class RequestOptions:
         query_parameters: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, str]] = None,
         data: Optional[str] = None,
+        timeouts: Dict[str, int] = {},
         user_request_options: Optional[Union[Self, Dict[str, Any]]] = None,
     ) -> Self:
         """
@@ -74,9 +75,9 @@ class RequestOptions:
             "headers": headers,
             "query_parameters": query_parameters,
             "timeouts": {
-                "read": self._config.read_timeout,
-                "write": self._config.write_timeout,
-                "connect": self._config.connect_timeout,
+                "read": timeouts.get("read", self._config.read_timeout),
+                "write": timeouts.get("write", self._config.write_timeout),
+                "connect": timeouts.get("connect", self._config.connect_timeout),
             },
             "data": data,
         }

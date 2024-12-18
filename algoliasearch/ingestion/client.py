@@ -3512,6 +3512,11 @@ class IngestionClient:
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 data=dumps(body_serializer(_data)),
+                timeouts={
+                    "read": 180000,
+                    "write": 180000,
+                    "connect": 180000,
+                },
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4144,6 +4149,11 @@ class IngestionClient:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             request_options=self._request_options.merge(
+                timeouts={
+                    "read": 180000,
+                    "write": 180000,
+                    "connect": 180000,
+                },
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4783,6 +4793,11 @@ class IngestionClient:
             path="/1/sources/validate",
             request_options=self._request_options.merge(
                 data=dumps(body_serializer(_data)),
+                timeouts={
+                    "read": 180000,
+                    "write": 180000,
+                    "connect": 180000,
+                },
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4854,6 +4869,11 @@ class IngestionClient:
             ),
             request_options=self._request_options.merge(
                 data=dumps(body_serializer(_data)),
+                timeouts={
+                    "read": 180000,
+                    "write": 180000,
+                    "connect": 180000,
+                },
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8267,6 +8287,11 @@ class IngestionClientSync:
             request_options=self._request_options.merge(
                 query_parameters=_query_parameters,
                 data=dumps(body_serializer(_data)),
+                timeouts={
+                    "read": 180000,
+                    "write": 180000,
+                    "connect": 180000,
+                },
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8899,6 +8924,11 @@ class IngestionClientSync:
                 "{sourceID}", quote(str(source_id), safe="")
             ),
             request_options=self._request_options.merge(
+                timeouts={
+                    "read": 180000,
+                    "write": 180000,
+                    "connect": 180000,
+                },
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9534,6 +9564,11 @@ class IngestionClientSync:
             path="/1/sources/validate",
             request_options=self._request_options.merge(
                 data=dumps(body_serializer(_data)),
+                timeouts={
+                    "read": 180000,
+                    "write": 180000,
+                    "connect": 180000,
+                },
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9605,6 +9640,11 @@ class IngestionClientSync:
             ),
             request_options=self._request_options.merge(
                 data=dumps(body_serializer(_data)),
+                timeouts={
+                    "read": 180000,
+                    "write": 180000,
+                    "connect": 180000,
+                },
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
