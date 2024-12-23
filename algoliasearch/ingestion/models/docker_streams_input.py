@@ -31,7 +31,7 @@ def _alias_generator(name: str) -> str:
 
 class DockerStreamsInput(BaseModel):
     """
-    The selected streams of a singer or airbyte connector.
+    The selected streams of an airbyte connector.
     """
 
     streams: List[DockerStreams]

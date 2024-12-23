@@ -24,8 +24,6 @@ class DockerImageType(str, Enum):
     """
     allowed enum values
     """
-    SINGER = "singer"
-
     CUSTOM = "custom"
 
     AIRBYTE = "airbyte"
