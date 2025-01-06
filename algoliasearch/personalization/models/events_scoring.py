@@ -18,9 +18,12 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.personalization.models.event_type import EventType
+
 _ALIASES = {
     "score": "score",
-    "facet_name": "facetName",
+    "event_name": "eventName",
+    "event_type": "eventType",
 }
 
 
@@ -28,15 +31,16 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class FacetScoring(BaseModel):
+class EventsScoring(BaseModel):
     """
-    FacetScoring
+    EventsScoring
     """
 
     score: int
     """ Event score. """
-    facet_name: str
-    """ Facet attribute name. """
+    event_name: str
+    """ Event name. """
+    event_type: EventType
 
     model_config = ConfigDict(
         strict=False,
@@ -53,7 +57,7 @@ class FacetScoring(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of FacetScoring from a JSON string"""
+        """Create an instance of EventsScoring from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -66,11 +70,13 @@ class FacetScoring(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of FacetScoring from a dict"""
+        """Create an instance of EventsScoring from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
+
+        obj["eventType"] = obj.get("eventType")
 
         return cls.model_validate(obj)

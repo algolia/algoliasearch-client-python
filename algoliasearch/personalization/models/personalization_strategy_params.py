@@ -18,12 +18,12 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.personalization.models.event_scoring import EventScoring
-from algoliasearch.personalization.models.facet_scoring import FacetScoring
+from algoliasearch.personalization.models.events_scoring import EventsScoring
+from algoliasearch.personalization.models.facets_scoring import FacetsScoring
 
 _ALIASES = {
-    "event_scoring": "eventScoring",
-    "facet_scoring": "facetScoring",
+    "events_scoring": "eventsScoring",
+    "facets_scoring": "facetsScoring",
     "personalization_impact": "personalizationImpact",
 }
 
@@ -37,9 +37,9 @@ class PersonalizationStrategyParams(BaseModel):
     PersonalizationStrategyParams
     """
 
-    event_scoring: List[EventScoring]
+    events_scoring: List[EventsScoring]
     """ Scores associated with each event.  The higher the scores, the higher the impact of those events on the personalization of search results.  """
-    facet_scoring: List[FacetScoring]
+    facets_scoring: List[FacetsScoring]
     """ Scores associated with each facet.  The higher the scores, the higher the impact of those events on the personalization of search results.  """
     personalization_impact: int
     """ Impact of personalization on the search results.  If set to 0, personalization has no impact on the search results.  """
@@ -79,14 +79,14 @@ class PersonalizationStrategyParams(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["eventScoring"] = (
-            [EventScoring.from_dict(_item) for _item in obj["eventScoring"]]
-            if obj.get("eventScoring") is not None
+        obj["eventsScoring"] = (
+            [EventsScoring.from_dict(_item) for _item in obj["eventsScoring"]]
+            if obj.get("eventsScoring") is not None
             else None
         )
-        obj["facetScoring"] = (
-            [FacetScoring.from_dict(_item) for _item in obj["facetScoring"]]
-            if obj.get("facetScoring") is not None
+        obj["facetsScoring"] = (
+            [FacetsScoring.from_dict(_item) for _item in obj["facetsScoring"]]
+            if obj.get("facetsScoring") is not None
             else None
         )
 
