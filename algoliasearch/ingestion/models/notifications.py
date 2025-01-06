@@ -18,18 +18,10 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.ingestion.models.notifications import Notifications
-from algoliasearch.ingestion.models.policies import Policies
-from algoliasearch.ingestion.models.task_input import TaskInput
+from algoliasearch.ingestion.models.email_notifications import EmailNotifications
 
 _ALIASES = {
-    "destination_id": "destinationID",
-    "cron": "cron",
-    "input": "input",
-    "enabled": "enabled",
-    "failure_threshold": "failureThreshold",
-    "notifications": "notifications",
-    "policies": "policies",
+    "email": "email",
 }
 
 
@@ -37,22 +29,12 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class TaskUpdate(BaseModel):
+class Notifications(BaseModel):
     """
-    API request body for updating a task.
+    Notifications settings for a task.
     """
 
-    destination_id: Optional[str] = None
-    """ Universally unique identifier (UUID) of a destination resource. """
-    cron: Optional[str] = None
-    """ Cron expression for the task's schedule. """
-    input: Optional[TaskInput] = None
-    enabled: Optional[bool] = None
-    """ Whether the task is enabled. """
-    failure_threshold: Optional[int] = None
-    """ Maximum accepted percentage of failures for a task run to finish successfully. """
-    notifications: Optional[Notifications] = None
-    policies: Optional[Policies] = None
+    email: EmailNotifications
 
     model_config = ConfigDict(
         strict=False,
@@ -69,7 +51,7 @@ class TaskUpdate(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TaskUpdate from a JSON string"""
+        """Create an instance of Notifications from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -82,24 +64,16 @@ class TaskUpdate(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TaskUpdate from a dict"""
+        """Create an instance of Notifications from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["input"] = (
-            TaskInput.from_dict(obj["input"]) if obj.get("input") is not None else None
-        )
-        obj["notifications"] = (
-            Notifications.from_dict(obj["notifications"])
-            if obj.get("notifications") is not None
-            else None
-        )
-        obj["policies"] = (
-            Policies.from_dict(obj["policies"])
-            if obj.get("policies") is not None
+        obj["email"] = (
+            EmailNotifications.from_dict(obj["email"])
+            if obj.get("email") is not None
             else None
         )
 

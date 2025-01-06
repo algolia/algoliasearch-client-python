@@ -19,6 +19,8 @@ else:
 
 
 from algoliasearch.ingestion.models.action_type import ActionType
+from algoliasearch.ingestion.models.notifications import Notifications
+from algoliasearch.ingestion.models.policies import Policies
 from algoliasearch.ingestion.models.task_input import TaskInput
 
 _ALIASES = {
@@ -30,6 +32,8 @@ _ALIASES = {
     "failure_threshold": "failureThreshold",
     "input": "input",
     "cursor": "cursor",
+    "notifications": "notifications",
+    "policies": "policies",
 }
 
 
@@ -56,6 +60,8 @@ class TaskCreate(BaseModel):
     input: Optional[TaskInput] = None
     cursor: Optional[str] = None
     """ Date of the last cursor in RFC 3339 format. """
+    notifications: Optional[Notifications] = None
+    policies: Optional[Policies] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -95,6 +101,16 @@ class TaskCreate(BaseModel):
         obj["action"] = obj.get("action")
         obj["input"] = (
             TaskInput.from_dict(obj["input"]) if obj.get("input") is not None else None
+        )
+        obj["notifications"] = (
+            Notifications.from_dict(obj["notifications"])
+            if obj.get("notifications") is not None
+            else None
+        )
+        obj["policies"] = (
+            Policies.from_dict(obj["policies"])
+            if obj.get("policies") is not None
+            else None
         )
 
         return cls.model_validate(obj)

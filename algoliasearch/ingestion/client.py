@@ -2933,6 +2933,12 @@ class IngestionClient:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
+        with_email_notifications: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="If specified, the response only includes tasks with notifications.email.enabled set to this value."
+            ),
+        ] = None,
         sort: Union[
             Annotated[
                 Optional[TaskSortKeys],
@@ -2975,6 +2981,8 @@ class IngestionClient:
         :type destination_id: List[str]
         :param trigger_type: Type of task trigger for filtering the list of tasks.
         :type trigger_type: List[TriggerType]
+        :param with_email_notifications: If specified, the response only includes tasks with notifications.email.enabled set to this value.
+        :type with_email_notifications: bool
         :param sort: Property by which to sort the list of tasks.
         :type sort: TaskSortKeys
         :param order: Sort order of the response, ascending or descending.
@@ -3001,6 +3009,8 @@ class IngestionClient:
             _query_parameters["destinationID"] = destination_id
         if trigger_type is not None:
             _query_parameters["triggerType"] = trigger_type
+        if with_email_notifications is not None:
+            _query_parameters["withEmailNotifications"] = with_email_notifications
         if sort is not None:
             _query_parameters["sort"] = sort
         if order is not None:
@@ -3052,6 +3062,12 @@ class IngestionClient:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
+        with_email_notifications: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="If specified, the response only includes tasks with notifications.email.enabled set to this value."
+            ),
+        ] = None,
         sort: Union[
             Annotated[
                 Optional[TaskSortKeys],
@@ -3094,6 +3110,8 @@ class IngestionClient:
         :type destination_id: List[str]
         :param trigger_type: Type of task trigger for filtering the list of tasks.
         :type trigger_type: List[TriggerType]
+        :param with_email_notifications: If specified, the response only includes tasks with notifications.email.enabled set to this value.
+        :type with_email_notifications: bool
         :param sort: Property by which to sort the list of tasks.
         :type sort: TaskSortKeys
         :param order: Sort order of the response, ascending or descending.
@@ -3110,6 +3128,7 @@ class IngestionClient:
             source_type,
             destination_id,
             trigger_type,
+            with_email_notifications,
             sort,
             order,
             request_options,
@@ -7708,6 +7727,12 @@ class IngestionClientSync:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
+        with_email_notifications: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="If specified, the response only includes tasks with notifications.email.enabled set to this value."
+            ),
+        ] = None,
         sort: Union[
             Annotated[
                 Optional[TaskSortKeys],
@@ -7750,6 +7775,8 @@ class IngestionClientSync:
         :type destination_id: List[str]
         :param trigger_type: Type of task trigger for filtering the list of tasks.
         :type trigger_type: List[TriggerType]
+        :param with_email_notifications: If specified, the response only includes tasks with notifications.email.enabled set to this value.
+        :type with_email_notifications: bool
         :param sort: Property by which to sort the list of tasks.
         :type sort: TaskSortKeys
         :param order: Sort order of the response, ascending or descending.
@@ -7776,6 +7803,8 @@ class IngestionClientSync:
             _query_parameters["destinationID"] = destination_id
         if trigger_type is not None:
             _query_parameters["triggerType"] = trigger_type
+        if with_email_notifications is not None:
+            _query_parameters["withEmailNotifications"] = with_email_notifications
         if sort is not None:
             _query_parameters["sort"] = sort
         if order is not None:
@@ -7827,6 +7856,12 @@ class IngestionClientSync:
             Optional[List[TriggerType]],
             Field(description="Type of task trigger for filtering the list of tasks."),
         ] = None,
+        with_email_notifications: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="If specified, the response only includes tasks with notifications.email.enabled set to this value."
+            ),
+        ] = None,
         sort: Union[
             Annotated[
                 Optional[TaskSortKeys],
@@ -7869,6 +7904,8 @@ class IngestionClientSync:
         :type destination_id: List[str]
         :param trigger_type: Type of task trigger for filtering the list of tasks.
         :type trigger_type: List[TriggerType]
+        :param with_email_notifications: If specified, the response only includes tasks with notifications.email.enabled set to this value.
+        :type with_email_notifications: bool
         :param sort: Property by which to sort the list of tasks.
         :type sort: TaskSortKeys
         :param order: Sort order of the response, ascending or descending.
@@ -7885,6 +7922,7 @@ class IngestionClientSync:
             source_type,
             destination_id,
             trigger_type,
+            with_email_notifications,
             sort,
             order,
             request_options,
