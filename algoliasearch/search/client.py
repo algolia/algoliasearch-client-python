@@ -95,7 +95,6 @@ from algoliasearch.search.models.replace_source_response import ReplaceSourceRes
 from algoliasearch.search.models.rule import Rule
 from algoliasearch.search.models.save_object_response import SaveObjectResponse
 from algoliasearch.search.models.save_synonym_response import SaveSynonymResponse
-from algoliasearch.search.models.scope_type import ScopeType
 from algoliasearch.search.models.search_dictionary_entries_params import (
     SearchDictionaryEntriesParams,
 )
@@ -611,6 +610,7 @@ class SearchClient:
         index_name: str,
         objects: List[Dict[str, Any]],
         batch_size: int = 1000,
+        scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ReplaceAllObjectsResponse:
         """
@@ -628,11 +628,7 @@ class SearchClient:
                     operation_index_params=OperationIndexParams(
                         operation=OperationType.COPY,
                         destination=tmp_index_name,
-                        scope=[
-                            ScopeType("settings"),
-                            ScopeType("rules"),
-                            ScopeType("synonyms"),
-                        ],
+                        scope=scopes,
                     ),
                     request_options=request_options,
                 )
@@ -5655,6 +5651,7 @@ class SearchClientSync:
         index_name: str,
         objects: List[Dict[str, Any]],
         batch_size: int = 1000,
+        scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ReplaceAllObjectsResponse:
         """
@@ -5672,11 +5669,7 @@ class SearchClientSync:
                     operation_index_params=OperationIndexParams(
                         operation=OperationType.COPY,
                         destination=tmp_index_name,
-                        scope=[
-                            ScopeType("settings"),
-                            ScopeType("rules"),
-                            ScopeType("synonyms"),
-                        ],
+                        scope=scopes,
                     ),
                     request_options=request_options,
                 )
