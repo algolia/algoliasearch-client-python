@@ -18,14 +18,8 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.ingestion.models.docker_image_type import DockerImageType
-from algoliasearch.ingestion.models.docker_registry import DockerRegistry
-
 _ALIASES = {
-    "image_type": "imageType",
-    "registry": "registry",
     "image": "image",
-    "version": "version",
     "configuration": "configuration",
 }
 
@@ -39,12 +33,8 @@ class SourceDocker(BaseModel):
     SourceDocker
     """
 
-    image_type: DockerImageType
-    registry: DockerRegistry
     image: str
-    """ Docker image name. """
-    version: Optional[str] = None
-    """ Docker image version. """
+    """ Shortname of the image, as returned by the referential. """
     configuration: object
     """ Configuration of the spec. """
 
@@ -82,8 +72,5 @@ class SourceDocker(BaseModel):
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
-
-        obj["imageType"] = obj.get("imageType")
-        obj["registry"] = obj.get("registry")
 
         return cls.model_validate(obj)

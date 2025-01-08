@@ -18,12 +18,7 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.ingestion.models.docker_registry import DockerRegistry
-
 _ALIASES = {
-    "registry": "registry",
-    "image": "image",
-    "version": "version",
     "configuration": "configuration",
 }
 
@@ -37,11 +32,6 @@ class SourceUpdateDocker(BaseModel):
     SourceUpdateDocker
     """
 
-    registry: Optional[DockerRegistry] = None
-    image: Optional[str] = None
-    """ Docker image name. """
-    version: Optional[str] = None
-    """ Docker image version. """
     configuration: object
     """ Configuration of the spec. """
 
@@ -79,7 +69,5 @@ class SourceUpdateDocker(BaseModel):
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
-
-        obj["registry"] = obj.get("registry")
 
         return cls.model_validate(obj)
