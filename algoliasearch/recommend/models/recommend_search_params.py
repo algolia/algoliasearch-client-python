@@ -93,6 +93,8 @@ _ALIASES = {
     "custom_normalization": "customNormalization",
     "attribute_for_distinct": "attributeForDistinct",
     "max_facet_hits": "maxFacetHits",
+    "keep_diacritics_on_characters": "keepDiacriticsOnCharacters",
+    "custom_ranking": "customRanking",
     "attributes_to_retrieve": "attributesToRetrieve",
     "ranking": "ranking",
     "relevancy_strictness": "relevancyStrictness",
@@ -230,6 +232,10 @@ class RecommendSearchParams(BaseModel):
     """ Attribute that should be used to establish groups of results. Attribute names are case-sensitive.  All records with the same value for this attribute are considered a group. You can combine `attributeForDistinct` with the `distinct` search parameter to control how many items per group are included in the search results.  If you want to use the same attribute also for faceting, use the `afterDistinct` modifier of the `attributesForFaceting` setting. This applies faceting _after_ deduplication, which will result in accurate facet counts.  """
     max_facet_hits: Optional[int] = None
     """ Maximum number of facet values to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values). """
+    keep_diacritics_on_characters: Optional[str] = None
+    """ Characters for which diacritics should be preserved.  By default, Algolia removes diacritics from letters. For example, `é` becomes `e`. If this causes issues in your search, you can specify characters that should keep their diacritics.  """
+    custom_ranking: Optional[List[str]] = None
+    """ Attributes to use as [custom ranking](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/). Attribute names are case-sensitive.  The custom ranking attributes decide which items are shown first if the other ranking criteria are equal.  Records with missing values for your selected custom ranking attributes are always sorted last. Boolean attributes are sorted based on their alphabetical order.  **Modifiers**  - `asc(\"ATTRIBUTE\")`.   Sort the index by the values of an attribute, in ascending order.  - `desc(\"ATTRIBUTE\")`.   Sort the index by the values of an attribute, in descending order.  If you use two or more custom ranking attributes, [reduce the precision](https://www.algolia.com/doc/guides/managing-results/must-do/custom-ranking/how-to/controlling-custom-ranking-metrics-precision/) of your first attributes, or the other attributes will never be applied.  """
     attributes_to_retrieve: Optional[List[str]] = None
     """ Attributes to include in the API response.  To reduce the size of your response, you can retrieve only some of the attributes. Attribute names are case-sensitive.  - `*` retrieves all attributes, except attributes included in the `customRanking` and `unretrievableAttributes` settings. - To retrieve all attributes except a specific one, prefix the attribute with a dash and combine it with the `*`: `[\"*\", \"-ATTRIBUTE\"]`. - The `objectID` attribute is always included.  """
     ranking: Optional[List[str]] = None
