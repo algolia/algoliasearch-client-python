@@ -139,7 +139,7 @@ class ApiException(AlgoliaException):
 
     def __str__(self):
         """Custom error messages for exception"""
-        error_message = "({0})\n" "Reason: {1}\n".format(
+        error_message = "({0})\nReason: {1}\n".format(
             self.status_code, self.error_message
         )
 
