@@ -33,8 +33,8 @@ class RunProgress(BaseModel):
     RunProgress
     """
 
-    expected_nb_of_events: Optional[int] = None
-    received_nb_of_events: Optional[int] = None
+    expected_nb_of_events: int
+    received_nb_of_events: int
 
     model_config = ConfigDict(
         strict=False,
