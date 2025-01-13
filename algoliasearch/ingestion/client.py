@@ -466,6 +466,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) create_task_v1
         Creates a new task using the v1 endpoint, please use `createTask` instead.
 
 
@@ -474,6 +475,8 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/tasks is deprecated.", DeprecationWarning)
 
         if task_create is None:
             raise ValueError(
@@ -505,6 +508,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskCreateResponse:
         """
+        (Deprecated) create_task_v1
         Creates a new task using the v1 endpoint, please use `createTask` instead.
 
 
@@ -1159,6 +1163,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) delete_task_v1
         Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
 
 
@@ -1167,6 +1172,8 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("DELETE /1/tasks/{taskID} is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -1190,6 +1197,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
+        (Deprecated) delete_task_v1
         Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
 
 
@@ -1447,6 +1455,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) enable_task_v1
         Enables a task using the v1 endpoint, please use `enableTask` instead.
 
         Required API Key ACLs:
@@ -1459,6 +1468,8 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("PUT /1/tasks/{taskID}/enable is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -1484,6 +1495,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
+        (Deprecated) enable_task_v1
         Enables a task using the v1 endpoint, please use `enableTask` instead.
 
         Required API Key ACLs:
@@ -1878,6 +1890,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) get_task_v1
         Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
 
         Required API Key ACLs:
@@ -1890,6 +1903,8 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/tasks/{taskID} is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -1913,6 +1928,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskV1:
         """
+        (Deprecated) get_task_v1
         Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
 
         Required API Key ACLs:
@@ -3186,6 +3202,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) list_tasks_v1
         Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
 
         Required API Key ACLs:
@@ -3214,6 +3231,8 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/tasks is deprecated.", DeprecationWarning)
 
         _query_parameters: Dict[str, Any] = {}
 
@@ -3297,6 +3316,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTasksResponseV1:
         """
+        (Deprecated) list_tasks_v1
         Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
 
         Required API Key ACLs:
@@ -3724,6 +3744,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) run_task_v1
         Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
@@ -3736,6 +3757,8 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/tasks/{taskID}/run is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -3761,6 +3784,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
+        (Deprecated) run_task_v1
         Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
@@ -4022,6 +4046,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) search_tasks_v1
         Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
 
         Required API Key ACLs:
@@ -4034,6 +4059,8 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/tasks/search is deprecated.", DeprecationWarning)
 
         if task_search is None:
             raise ValueError(
@@ -4060,6 +4087,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[TaskV1]:
         """
+        (Deprecated) search_tasks_v1
         Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
 
         Required API Key ACLs:
@@ -4655,6 +4683,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) update_task_v1
         Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
 
 
@@ -4665,6 +4694,8 @@ class IngestionClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("PATCH /1/tasks/{taskID} is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -4699,6 +4730,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
+        (Deprecated) update_task_v1
         Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
 
 
@@ -5270,6 +5302,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) create_task_v1
         Creates a new task using the v1 endpoint, please use `createTask` instead.
 
 
@@ -5278,6 +5311,8 @@ class IngestionClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/tasks is deprecated.", DeprecationWarning)
 
         if task_create is None:
             raise ValueError(
@@ -5309,6 +5344,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskCreateResponse:
         """
+        (Deprecated) create_task_v1
         Creates a new task using the v1 endpoint, please use `createTask` instead.
 
 
@@ -5955,6 +5991,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) delete_task_v1
         Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
 
 
@@ -5963,6 +6000,8 @@ class IngestionClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("DELETE /1/tasks/{taskID} is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -5986,6 +6025,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> DeleteResponse:
         """
+        (Deprecated) delete_task_v1
         Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
 
 
@@ -6243,6 +6283,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) enable_task_v1
         Enables a task using the v1 endpoint, please use `enableTask` instead.
 
         Required API Key ACLs:
@@ -6255,6 +6296,8 @@ class IngestionClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("PUT /1/tasks/{taskID}/enable is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -6280,6 +6323,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
+        (Deprecated) enable_task_v1
         Enables a task using the v1 endpoint, please use `enableTask` instead.
 
         Required API Key ACLs:
@@ -6672,6 +6716,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) get_task_v1
         Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
 
         Required API Key ACLs:
@@ -6684,6 +6729,8 @@ class IngestionClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/tasks/{taskID} is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -6707,6 +6754,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskV1:
         """
+        (Deprecated) get_task_v1
         Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
 
         Required API Key ACLs:
@@ -7980,6 +8028,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) list_tasks_v1
         Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
 
         Required API Key ACLs:
@@ -8008,6 +8057,8 @@ class IngestionClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/tasks is deprecated.", DeprecationWarning)
 
         _query_parameters: Dict[str, Any] = {}
 
@@ -8091,6 +8142,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTasksResponseV1:
         """
+        (Deprecated) list_tasks_v1
         Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
 
         Required API Key ACLs:
@@ -8518,6 +8570,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) run_task_v1
         Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
@@ -8530,6 +8583,8 @@ class IngestionClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/tasks/{taskID}/run is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -8555,6 +8610,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
+        (Deprecated) run_task_v1
         Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
@@ -8816,6 +8872,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) search_tasks_v1
         Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
 
         Required API Key ACLs:
@@ -8828,6 +8885,8 @@ class IngestionClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/tasks/search is deprecated.", DeprecationWarning)
 
         if task_search is None:
             raise ValueError(
@@ -8854,6 +8913,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[TaskV1]:
         """
+        (Deprecated) search_tasks_v1
         Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
 
         Required API Key ACLs:
@@ -9447,6 +9507,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) update_task_v1
         Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
 
 
@@ -9457,6 +9518,8 @@ class IngestionClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("PATCH /1/tasks/{taskID} is deprecated.", DeprecationWarning)
 
         if task_id is None:
             raise ValueError(
@@ -9491,6 +9554,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
+        (Deprecated) update_task_v1
         Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
 
 
