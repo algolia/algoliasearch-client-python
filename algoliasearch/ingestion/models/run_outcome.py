@@ -28,8 +28,6 @@ class RunOutcome(str, Enum):
 
     FAILURE = "failure"
 
-    PROCESSING = "processing"
-
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of RunOutcome from a JSON string"""
