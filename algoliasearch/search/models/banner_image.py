@@ -32,7 +32,7 @@ def _alias_generator(name: str) -> str:
 
 class BannerImage(BaseModel):
     """
-    image of a search banner.
+    Image to show inside a banner.
     """
 
     urls: Optional[List[BannerImageUrl]] = None

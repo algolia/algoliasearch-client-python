@@ -29,7 +29,7 @@ def _alias_generator(name: str) -> str:
 
 class BannerLink(BaseModel):
     """
-    link for a banner defined in merchandising studio.
+    Link for a banner defined in the Merchandising Studio.
     """
 
     url: Optional[str] = None

@@ -31,11 +31,11 @@ def _alias_generator(name: str) -> str:
 
 class Widgets(BaseModel):
     """
-    widgets returned from any rules that are applied to the current search.
+    Widgets returned from any rules that are applied to the current search.
     """
 
     banners: Optional[List[Banner]] = None
-    """ banners defined in the merchandising studio for the given search. """
+    """ Banners defined in the Merchandising Studio for a given search. """
 
     model_config = ConfigDict(
         strict=False,
