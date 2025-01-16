@@ -38,7 +38,7 @@ class GetAddToCartRateResponse(BaseModel):
     """
 
     rate: float
-    """ Add-to-cart rate, calculated as number of tracked searches with at least one add-to-cart event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    """ Add-to-cart rate: calculated as the number of tracked searches with at least one add-to-cart event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     tracked_search_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
     add_to_cart_count: int

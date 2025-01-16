@@ -54,13 +54,13 @@ class TopSearchWithRevenueAnalytics(BaseModel):
     count: int
     """ Number of searches. """
     click_through_rate: float
-    """ Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    """ Click-through rate: calculated as the number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     average_click_position: float
     """ Average position of a clicked search result in the list of search results. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     click_positions: List[ClickPosition]
     """ List of positions in the search results and clicks associated with this search. """
     conversion_rate: float
-    """ Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    """ Conversion rate: calculated as the number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     tracked_search_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
     click_count: int
@@ -70,13 +70,13 @@ class TopSearchWithRevenueAnalytics(BaseModel):
     nb_hits: int
     """ Number of results (hits). """
     currencies: Dict[str, CurrencyCode]
-    """ Revenue associated with this search, broken-down by currencies. """
+    """ Revenue associated with this search: broken down by currency.  """
     add_to_cart_rate: float
-    """ Add-to-cart rate, calculated as number of tracked searches with at least one add-to-cart event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    """ Add-to-cart rate: calculated as the number of tracked searches with at least one add-to-cart event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     add_to_cart_count: int
     """ Number of add-to-cart events from this search. """
     purchase_rate: float
-    """ Purchase rate, calculated as number of tracked searches with at least one purchase event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    """ Purchase rate: calculated as the number of tracked searches with at least one purchase event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     purchase_count: int
     """ Number of purchase events from this search. """
 

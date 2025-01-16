@@ -38,7 +38,7 @@ class GetConversionRateResponse(BaseModel):
     """
 
     rate: float
-    """ Conversion rate, calculated as number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    """ Conversion rate: calculated as the number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     tracked_search_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
     conversion_count: int

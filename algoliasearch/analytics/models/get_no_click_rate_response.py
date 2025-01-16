@@ -38,7 +38,7 @@ class GetNoClickRateResponse(BaseModel):
     """
 
     rate: float
-    """ No click rate, calculated as number of tracked searches without any click divided by the number of tracked searches. """
+    """ No click rate: calculated as the number of tracked searches without clicks divided by the number of tracked searches.  """
     count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
     no_click_count: int

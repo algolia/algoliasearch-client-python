@@ -37,7 +37,7 @@ class GetRevenue(BaseModel):
     """
 
     currencies: Dict[str, CurrencyCode]
-    """ Revenue associated with this search, broken-down by currencies. """
+    """ Revenue associated with this search: broken down by currency.  """
     dates: List[DailyRevenue]
     """ Daily revenue. """
 

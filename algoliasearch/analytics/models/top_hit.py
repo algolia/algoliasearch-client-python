@@ -34,7 +34,7 @@ class TopHit(BaseModel):
     """
 
     hit: str
-    """ Object ID of a record that's returned as a search result. """
+    """ Object ID of a record returned as a search result. """
     count: int
     """ Number of occurrences. """
 

@@ -36,7 +36,7 @@ class DailyRevenue(BaseModel):
     """
 
     currencies: Dict[str, CurrencyCode]
-    """ Revenue associated with this search, broken-down by currencies. """
+    """ Revenue associated with this search: broken down by currency.  """
     var_date: str
     """ Date in the format YYYY-MM-DD. """
 

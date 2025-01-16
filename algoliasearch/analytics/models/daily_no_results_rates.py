@@ -42,7 +42,7 @@ class DailyNoResultsRates(BaseModel):
     count: int
     """ Number of searches. """
     rate: float
-    """ No results rate, calculated as number of searches with zero results divided by the total number of searches. """
+    """ No results rate: calculated as the number of searches with zero results divided by the total number of searches.  """
 
     model_config = ConfigDict(
         strict=False,

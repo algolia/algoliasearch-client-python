@@ -38,7 +38,7 @@ class GetNoResultsRateResponse(BaseModel):
     """
 
     rate: float
-    """ No results rate, calculated as number of searches with zero results divided by the total number of searches. """
+    """ No results rate: calculated as the number of searches with zero results divided by the total number of searches.  """
     count: int
     """ Number of searches. """
     no_result_count: int

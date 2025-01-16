@@ -40,7 +40,7 @@ class GetClickThroughRateResponse(BaseModel):
     """
 
     rate: float
-    """ Click-through rate, calculated as number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
+    """ Click-through rate: calculated as the number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     click_count: int
     """ Number of clicks associated with this search. """
     tracked_search_count: int
