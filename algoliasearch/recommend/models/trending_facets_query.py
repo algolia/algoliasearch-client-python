@@ -49,7 +49,7 @@ class TrendingFacetsQuery(BaseModel):
     max_recommendations: Optional[int] = None
     """ Maximum number of recommendations to retrieve. By default, all recommendations are returned and no fallback request is made. Depending on the available recommendations and the other request parameters, the actual number of recommendations may be lower than this value.  """
     query_parameters: Optional[RecommendSearchParams] = None
-    facet_name: object
+    facet_name: str
     """ Facet attribute for which to retrieve trending facet values. """
     model: TrendingFacetsModel
     fallback_parameters: Optional[FallbackParams] = None
