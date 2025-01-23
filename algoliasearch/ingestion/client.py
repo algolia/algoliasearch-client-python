@@ -2016,9 +2016,12 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[AuthenticationType]],
-            Field(description="Type of authentication resource to retrieve."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[AuthenticationType]],
+                Field(description="Type of authentication resource to retrieve."),
+            ],
         ] = None,
         platform: Union[
             Annotated[
@@ -2027,6 +2030,7 @@ class IngestionClient:
                     description="Ecommerce platform for which to retrieve authentications."
                 ),
             ],
+            list[str],
             list[dict[str, Any]],
         ] = None,
         sort: Union[
@@ -2108,9 +2112,12 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[AuthenticationType]],
-            Field(description="Type of authentication resource to retrieve."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[AuthenticationType]],
+                Field(description="Type of authentication resource to retrieve."),
+            ],
         ] = None,
         platform: Union[
             Annotated[
@@ -2119,6 +2126,7 @@ class IngestionClient:
                     description="Ecommerce platform for which to retrieve authentications."
                 ),
             ],
+            list[str],
             list[dict[str, Any]],
         ] = None,
         sort: Union[
@@ -2179,8 +2187,11 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[DestinationType]], Field(description="Destination type.")
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[DestinationType]], Field(description="Destination type.")
+            ],
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
@@ -2271,8 +2282,11 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[DestinationType]], Field(description="Destination type.")
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[DestinationType]], Field(description="Destination type.")
+            ],
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
@@ -2350,13 +2364,19 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        status: Annotated[
-            Optional[List[EventStatus]],
-            Field(description="Event status for filtering the list of task runs."),
+        status: Union[
+            list[str],
+            Annotated[
+                Optional[List[EventStatus]],
+                Field(description="Event status for filtering the list of task runs."),
+            ],
         ] = None,
-        type: Annotated[
-            Optional[List[EventType]],
-            Field(description="Event type for filtering the list of task runs."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[EventType]],
+                Field(description="Event type for filtering the list of task runs."),
+            ],
         ] = None,
         sort: Union[
             Annotated[
@@ -2469,13 +2489,19 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        status: Annotated[
-            Optional[List[EventStatus]],
-            Field(description="Event status for filtering the list of task runs."),
+        status: Union[
+            list[str],
+            Annotated[
+                Optional[List[EventStatus]],
+                Field(description="Event status for filtering the list of task runs."),
+            ],
         ] = None,
-        type: Annotated[
-            Optional[List[EventType]],
-            Field(description="Event type for filtering the list of task runs."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[EventType]],
+                Field(description="Event type for filtering the list of task runs."),
+            ],
         ] = None,
         sort: Union[
             Annotated[
@@ -2562,13 +2588,19 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        status: Annotated[
-            Optional[List[RunStatus]],
-            Field(description="Run status for filtering the list of task runs."),
+        status: Union[
+            list[str],
+            Annotated[
+                Optional[List[RunStatus]],
+                Field(description="Run status for filtering the list of task runs."),
+            ],
         ] = None,
-        type: Annotated[
-            Optional[List[RunType]],
-            Field(description="Run type for filtering the list of task runs."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[RunType]],
+                Field(description="Run type for filtering the list of task runs."),
+            ],
         ] = None,
         task_id: Annotated[
             Optional[StrictStr],
@@ -2675,13 +2707,19 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        status: Annotated[
-            Optional[List[RunStatus]],
-            Field(description="Run status for filtering the list of task runs."),
+        status: Union[
+            list[str],
+            Annotated[
+                Optional[List[RunStatus]],
+                Field(description="Run status for filtering the list of task runs."),
+            ],
         ] = None,
-        type: Annotated[
-            Optional[List[RunType]],
-            Field(description="Run type for filtering the list of task runs."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[RunType]],
+                Field(description="Run type for filtering the list of task runs."),
+            ],
         ] = None,
         task_id: Annotated[
             Optional[StrictStr],
@@ -2770,9 +2808,12 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[SourceType]],
-            Field(description="Source type. Some sources require authentication."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[SourceType]],
+                Field(description="Source type. Some sources require authentication."),
+            ],
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
@@ -2857,9 +2898,12 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[SourceType]],
-            Field(description="Source type. Some sources require authentication."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[SourceType]],
+                Field(description="Source type. Some sources require authentication."),
+            ],
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
@@ -2923,9 +2967,12 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        action: Annotated[
-            Optional[List[ActionType]],
-            Field(description="Actions for filtering the list of tasks."),
+        action: Union[
+            list[str],
+            Annotated[
+                Optional[List[ActionType]],
+                Field(description="Actions for filtering the list of tasks."),
+            ],
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
@@ -2937,17 +2984,25 @@ class IngestionClient:
             Optional[List[StrictStr]],
             Field(description="Source IDs for filtering the list of tasks."),
         ] = None,
-        source_type: Annotated[
-            Optional[List[SourceType]],
-            Field(description="Filters the tasks with the specified source type."),
+        source_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[SourceType]],
+                Field(description="Filters the tasks with the specified source type."),
+            ],
         ] = None,
         destination_id: Annotated[
             Optional[List[StrictStr]],
             Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
-        trigger_type: Annotated[
-            Optional[List[TriggerType]],
-            Field(description="Type of task trigger for filtering the list of tasks."),
+        trigger_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[TriggerType]],
+                Field(
+                    description="Type of task trigger for filtering the list of tasks."
+                ),
+            ],
         ] = None,
         with_email_notifications: Annotated[
             Optional[StrictBool],
@@ -3052,9 +3107,12 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        action: Annotated[
-            Optional[List[ActionType]],
-            Field(description="Actions for filtering the list of tasks."),
+        action: Union[
+            list[str],
+            Annotated[
+                Optional[List[ActionType]],
+                Field(description="Actions for filtering the list of tasks."),
+            ],
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
@@ -3066,17 +3124,25 @@ class IngestionClient:
             Optional[List[StrictStr]],
             Field(description="Source IDs for filtering the list of tasks."),
         ] = None,
-        source_type: Annotated[
-            Optional[List[SourceType]],
-            Field(description="Filters the tasks with the specified source type."),
+        source_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[SourceType]],
+                Field(description="Filters the tasks with the specified source type."),
+            ],
         ] = None,
         destination_id: Annotated[
             Optional[List[StrictStr]],
             Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
-        trigger_type: Annotated[
-            Optional[List[TriggerType]],
-            Field(description="Type of task trigger for filtering the list of tasks."),
+        trigger_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[TriggerType]],
+                Field(
+                    description="Type of task trigger for filtering the list of tasks."
+                ),
+            ],
         ] = None,
         with_email_notifications: Annotated[
             Optional[StrictBool],
@@ -3161,9 +3227,12 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        action: Annotated[
-            Optional[List[ActionType]],
-            Field(description="Actions for filtering the list of tasks."),
+        action: Union[
+            list[str],
+            Annotated[
+                Optional[List[ActionType]],
+                Field(description="Actions for filtering the list of tasks."),
+            ],
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
@@ -3179,9 +3248,14 @@ class IngestionClient:
             Optional[List[StrictStr]],
             Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
-        trigger_type: Annotated[
-            Optional[List[TriggerType]],
-            Field(description="Type of task trigger for filtering the list of tasks."),
+        trigger_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[TriggerType]],
+                Field(
+                    description="Type of task trigger for filtering the list of tasks."
+                ),
+            ],
         ] = None,
         sort: Union[
             Annotated[
@@ -3275,9 +3349,12 @@ class IngestionClient:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        action: Annotated[
-            Optional[List[ActionType]],
-            Field(description="Actions for filtering the list of tasks."),
+        action: Union[
+            list[str],
+            Annotated[
+                Optional[List[ActionType]],
+                Field(description="Actions for filtering the list of tasks."),
+            ],
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
@@ -3293,9 +3370,14 @@ class IngestionClient:
             Optional[List[StrictStr]],
             Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
-        trigger_type: Annotated[
-            Optional[List[TriggerType]],
-            Field(description="Type of task trigger for filtering the list of tasks."),
+        trigger_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[TriggerType]],
+                Field(
+                    description="Type of task trigger for filtering the list of tasks."
+                ),
+            ],
         ] = None,
         sort: Union[
             Annotated[
@@ -6842,9 +6924,12 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[AuthenticationType]],
-            Field(description="Type of authentication resource to retrieve."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[AuthenticationType]],
+                Field(description="Type of authentication resource to retrieve."),
+            ],
         ] = None,
         platform: Union[
             Annotated[
@@ -6853,6 +6938,7 @@ class IngestionClientSync:
                     description="Ecommerce platform for which to retrieve authentications."
                 ),
             ],
+            list[str],
             list[dict[str, Any]],
         ] = None,
         sort: Union[
@@ -6934,9 +7020,12 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[AuthenticationType]],
-            Field(description="Type of authentication resource to retrieve."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[AuthenticationType]],
+                Field(description="Type of authentication resource to retrieve."),
+            ],
         ] = None,
         platform: Union[
             Annotated[
@@ -6945,6 +7034,7 @@ class IngestionClientSync:
                     description="Ecommerce platform for which to retrieve authentications."
                 ),
             ],
+            list[str],
             list[dict[str, Any]],
         ] = None,
         sort: Union[
@@ -7005,8 +7095,11 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[DestinationType]], Field(description="Destination type.")
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[DestinationType]], Field(description="Destination type.")
+            ],
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
@@ -7097,8 +7190,11 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[DestinationType]], Field(description="Destination type.")
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[DestinationType]], Field(description="Destination type.")
+            ],
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
@@ -7176,13 +7272,19 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        status: Annotated[
-            Optional[List[EventStatus]],
-            Field(description="Event status for filtering the list of task runs."),
+        status: Union[
+            list[str],
+            Annotated[
+                Optional[List[EventStatus]],
+                Field(description="Event status for filtering the list of task runs."),
+            ],
         ] = None,
-        type: Annotated[
-            Optional[List[EventType]],
-            Field(description="Event type for filtering the list of task runs."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[EventType]],
+                Field(description="Event type for filtering the list of task runs."),
+            ],
         ] = None,
         sort: Union[
             Annotated[
@@ -7295,13 +7397,19 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        status: Annotated[
-            Optional[List[EventStatus]],
-            Field(description="Event status for filtering the list of task runs."),
+        status: Union[
+            list[str],
+            Annotated[
+                Optional[List[EventStatus]],
+                Field(description="Event status for filtering the list of task runs."),
+            ],
         ] = None,
-        type: Annotated[
-            Optional[List[EventType]],
-            Field(description="Event type for filtering the list of task runs."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[EventType]],
+                Field(description="Event type for filtering the list of task runs."),
+            ],
         ] = None,
         sort: Union[
             Annotated[
@@ -7388,13 +7496,19 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        status: Annotated[
-            Optional[List[RunStatus]],
-            Field(description="Run status for filtering the list of task runs."),
+        status: Union[
+            list[str],
+            Annotated[
+                Optional[List[RunStatus]],
+                Field(description="Run status for filtering the list of task runs."),
+            ],
         ] = None,
-        type: Annotated[
-            Optional[List[RunType]],
-            Field(description="Run type for filtering the list of task runs."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[RunType]],
+                Field(description="Run type for filtering the list of task runs."),
+            ],
         ] = None,
         task_id: Annotated[
             Optional[StrictStr],
@@ -7501,13 +7615,19 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        status: Annotated[
-            Optional[List[RunStatus]],
-            Field(description="Run status for filtering the list of task runs."),
+        status: Union[
+            list[str],
+            Annotated[
+                Optional[List[RunStatus]],
+                Field(description="Run status for filtering the list of task runs."),
+            ],
         ] = None,
-        type: Annotated[
-            Optional[List[RunType]],
-            Field(description="Run type for filtering the list of task runs."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[RunType]],
+                Field(description="Run type for filtering the list of task runs."),
+            ],
         ] = None,
         task_id: Annotated[
             Optional[StrictStr],
@@ -7596,9 +7716,12 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[SourceType]],
-            Field(description="Source type. Some sources require authentication."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[SourceType]],
+                Field(description="Source type. Some sources require authentication."),
+            ],
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
@@ -7683,9 +7806,12 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        type: Annotated[
-            Optional[List[SourceType]],
-            Field(description="Source type. Some sources require authentication."),
+        type: Union[
+            list[str],
+            Annotated[
+                Optional[List[SourceType]],
+                Field(description="Source type. Some sources require authentication."),
+            ],
         ] = None,
         authentication_id: Annotated[
             Optional[List[StrictStr]],
@@ -7749,9 +7875,12 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        action: Annotated[
-            Optional[List[ActionType]],
-            Field(description="Actions for filtering the list of tasks."),
+        action: Union[
+            list[str],
+            Annotated[
+                Optional[List[ActionType]],
+                Field(description="Actions for filtering the list of tasks."),
+            ],
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
@@ -7763,17 +7892,25 @@ class IngestionClientSync:
             Optional[List[StrictStr]],
             Field(description="Source IDs for filtering the list of tasks."),
         ] = None,
-        source_type: Annotated[
-            Optional[List[SourceType]],
-            Field(description="Filters the tasks with the specified source type."),
+        source_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[SourceType]],
+                Field(description="Filters the tasks with the specified source type."),
+            ],
         ] = None,
         destination_id: Annotated[
             Optional[List[StrictStr]],
             Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
-        trigger_type: Annotated[
-            Optional[List[TriggerType]],
-            Field(description="Type of task trigger for filtering the list of tasks."),
+        trigger_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[TriggerType]],
+                Field(
+                    description="Type of task trigger for filtering the list of tasks."
+                ),
+            ],
         ] = None,
         with_email_notifications: Annotated[
             Optional[StrictBool],
@@ -7878,9 +8015,12 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        action: Annotated[
-            Optional[List[ActionType]],
-            Field(description="Actions for filtering the list of tasks."),
+        action: Union[
+            list[str],
+            Annotated[
+                Optional[List[ActionType]],
+                Field(description="Actions for filtering the list of tasks."),
+            ],
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
@@ -7892,17 +8032,25 @@ class IngestionClientSync:
             Optional[List[StrictStr]],
             Field(description="Source IDs for filtering the list of tasks."),
         ] = None,
-        source_type: Annotated[
-            Optional[List[SourceType]],
-            Field(description="Filters the tasks with the specified source type."),
+        source_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[SourceType]],
+                Field(description="Filters the tasks with the specified source type."),
+            ],
         ] = None,
         destination_id: Annotated[
             Optional[List[StrictStr]],
             Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
-        trigger_type: Annotated[
-            Optional[List[TriggerType]],
-            Field(description="Type of task trigger for filtering the list of tasks."),
+        trigger_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[TriggerType]],
+                Field(
+                    description="Type of task trigger for filtering the list of tasks."
+                ),
+            ],
         ] = None,
         with_email_notifications: Annotated[
             Optional[StrictBool],
@@ -7987,9 +8135,12 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        action: Annotated[
-            Optional[List[ActionType]],
-            Field(description="Actions for filtering the list of tasks."),
+        action: Union[
+            list[str],
+            Annotated[
+                Optional[List[ActionType]],
+                Field(description="Actions for filtering the list of tasks."),
+            ],
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
@@ -8005,9 +8156,14 @@ class IngestionClientSync:
             Optional[List[StrictStr]],
             Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
-        trigger_type: Annotated[
-            Optional[List[TriggerType]],
-            Field(description="Type of task trigger for filtering the list of tasks."),
+        trigger_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[TriggerType]],
+                Field(
+                    description="Type of task trigger for filtering the list of tasks."
+                ),
+            ],
         ] = None,
         sort: Union[
             Annotated[
@@ -8101,9 +8257,12 @@ class IngestionClientSync:
             Optional[Annotated[int, Field(strict=True, ge=1)]],
             Field(description="Page number of the paginated API response."),
         ] = None,
-        action: Annotated[
-            Optional[List[ActionType]],
-            Field(description="Actions for filtering the list of tasks."),
+        action: Union[
+            list[str],
+            Annotated[
+                Optional[List[ActionType]],
+                Field(description="Actions for filtering the list of tasks."),
+            ],
         ] = None,
         enabled: Annotated[
             Optional[StrictBool],
@@ -8119,9 +8278,14 @@ class IngestionClientSync:
             Optional[List[StrictStr]],
             Field(description="Destination IDs for filtering the list of tasks."),
         ] = None,
-        trigger_type: Annotated[
-            Optional[List[TriggerType]],
-            Field(description="Type of task trigger for filtering the list of tasks."),
+        trigger_type: Union[
+            list[str],
+            Annotated[
+                Optional[List[TriggerType]],
+                Field(
+                    description="Type of task trigger for filtering the list of tasks."
+                ),
+            ],
         ] = None,
         sort: Union[
             Annotated[
