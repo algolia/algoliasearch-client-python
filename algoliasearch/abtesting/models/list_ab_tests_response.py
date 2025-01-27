@@ -37,7 +37,7 @@ class ListABTestsResponse(BaseModel):
     """
 
     abtests: List[ABTest]
-    """ A/B tests. """
+    """ The list of A/B tests, null if no A/B tests are configured for this application. """
     count: int
     """ Number of A/B tests. """
     total: int

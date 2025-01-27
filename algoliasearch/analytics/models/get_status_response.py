@@ -33,7 +33,7 @@ class GetStatusResponse(BaseModel):
     """
 
     updated_at: str
-    """ Date and time when the object was updated, in RFC 3339 format.  """
+    """ Date and time when the object was updated, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,
