@@ -69,7 +69,7 @@ class RequestOptions:
             query_parameters = {}
         if headers is None:
             headers = {}
-        headers.update(self._config.headers or {})
+        headers.update(self._config.headers)
 
         request_options = {
             "headers": headers,
