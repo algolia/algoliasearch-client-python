@@ -202,7 +202,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -249,7 +249,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -279,7 +279,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -324,7 +324,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -356,7 +356,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -412,7 +412,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -448,7 +448,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -504,7 +504,7 @@ class QuerySuggestionsClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -1021,7 +1021,7 @@ class QuerySuggestionsClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -1068,7 +1068,7 @@ class QuerySuggestionsClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -1096,7 +1096,7 @@ class QuerySuggestionsClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -1141,7 +1141,7 @@ class QuerySuggestionsClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -1173,7 +1173,7 @@ class QuerySuggestionsClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -1229,7 +1229,7 @@ class QuerySuggestionsClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -1263,7 +1263,7 @@ class QuerySuggestionsClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
@@ -1319,7 +1319,7 @@ class QuerySuggestionsClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> object:
         """
-        This method allow you to send requests to the Algolia REST API.
+        This method lets you send requests to the Algolia REST API.
 
 
         :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
