@@ -18,6 +18,7 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.ingestion.models.action_type import ActionType
 from algoliasearch.ingestion.models.notifications import Notifications
 from algoliasearch.ingestion.models.policies import Policies
 from algoliasearch.ingestion.models.task_input import TaskInput
@@ -27,6 +28,7 @@ _ALIASES = {
     "cron": "cron",
     "input": "input",
     "enabled": "enabled",
+    "subscription_action": "subscriptionAction",
     "failure_threshold": "failureThreshold",
     "notifications": "notifications",
     "policies": "policies",
@@ -49,6 +51,7 @@ class TaskUpdate(BaseModel):
     input: Optional[TaskInput] = None
     enabled: Optional[bool] = None
     """ Whether the task is enabled. """
+    subscription_action: Optional[ActionType] = None
     failure_threshold: Optional[int] = None
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
     notifications: Optional[Notifications] = None
@@ -92,6 +95,7 @@ class TaskUpdate(BaseModel):
         obj["input"] = (
             TaskInput.from_dict(obj["input"]) if obj.get("input") is not None else None
         )
+        obj["subscriptionAction"] = obj.get("subscriptionAction")
         obj["notifications"] = (
             Notifications.from_dict(obj["notifications"])
             if obj.get("notifications") is not None

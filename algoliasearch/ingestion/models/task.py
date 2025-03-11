@@ -34,6 +34,7 @@ _ALIASES = {
     "enabled": "enabled",
     "failure_threshold": "failureThreshold",
     "action": "action",
+    "subscription_action": "subscriptionAction",
     "cursor": "cursor",
     "notifications": "notifications",
     "policies": "policies",
@@ -69,6 +70,7 @@ class Task(BaseModel):
     failure_threshold: Optional[int] = None
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
     action: Optional[ActionType] = None
+    subscription_action: Optional[ActionType] = None
     cursor: Optional[str] = None
     """ Date of the last cursor in RFC 3339 format. """
     notifications: Optional[Notifications] = None
@@ -117,6 +119,7 @@ class Task(BaseModel):
             TaskInput.from_dict(obj["input"]) if obj.get("input") is not None else None
         )
         obj["action"] = obj.get("action")
+        obj["subscriptionAction"] = obj.get("subscriptionAction")
         obj["notifications"] = (
             Notifications.from_dict(obj["notifications"])
             if obj.get("notifications") is not None

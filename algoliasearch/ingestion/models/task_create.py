@@ -27,6 +27,7 @@ _ALIASES = {
     "source_id": "sourceID",
     "destination_id": "destinationID",
     "action": "action",
+    "subscription_action": "subscriptionAction",
     "cron": "cron",
     "enabled": "enabled",
     "failure_threshold": "failureThreshold",
@@ -51,6 +52,7 @@ class TaskCreate(BaseModel):
     destination_id: str
     """ Universally unique identifier (UUID) of a destination resource. """
     action: ActionType
+    subscription_action: Optional[ActionType] = None
     cron: Optional[str] = None
     """ Cron expression for the task's schedule. """
     enabled: Optional[bool] = None
@@ -99,6 +101,7 @@ class TaskCreate(BaseModel):
             return cls.model_validate(obj)
 
         obj["action"] = obj.get("action")
+        obj["subscriptionAction"] = obj.get("subscriptionAction")
         obj["input"] = (
             TaskInput.from_dict(obj["input"]) if obj.get("input") is not None else None
         )
