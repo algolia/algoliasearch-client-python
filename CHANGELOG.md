@@ -1,3 +1,7 @@
+## [4.14.0](https://github.com/algolia/algoliasearch-client-python/compare/4.13.3...4.14.0)
+
+- [ab623194e](https://github.com/algolia/api-clients-automation/commit/ab623194e) feat(specs): add `subscriptionAction` to ingestion specs ([#4587](https://github.com/algolia/api-clients-automation/pull/4587)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.13.3](https://github.com/algolia/algoliasearch-client-python/compare/4.13.2...4.13.3)
 
 - [5dd667ba1a](https://github.com/algolia/api-clients-automation/commit/5dd667ba1a) chore(guides): some missing snippets + guides ([#4477](https://github.com/algolia/api-clients-automation/pull/4477)) by [@Fluf22](https://github.com/Fluf22/)
