@@ -89,6 +89,9 @@ class RequestOptions:
                 _user_request_options = user_request_options
 
             for key, value in _user_request_options.items():
-                request_options[key].update(value)
+                if request_options[key] is None:
+                    request_options[key] = value
+                else:
+                    request_options[key].update(value)
 
         return self.from_dict(request_options)
