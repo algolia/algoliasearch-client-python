@@ -25,6 +25,7 @@ _ALIASES = {
     "destination_id": "destinationID",
     "type": "type",
     "name": "name",
+    "owner": "owner",
     "input": "input",
     "created_at": "createdAt",
     "updated_at": "updatedAt",
@@ -47,6 +48,8 @@ class Destination(BaseModel):
     type: DestinationType
     name: str
     """ Descriptive name for the resource. """
+    owner: Optional[str] = None
+    """ Owner of the resource. """
     input: DestinationInput
     created_at: str
     """ Date of creation in RFC 3339 format. """

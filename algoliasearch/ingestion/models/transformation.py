@@ -24,6 +24,7 @@ _ALIASES = {
     "code": "code",
     "name": "name",
     "description": "description",
+    "owner": "owner",
     "created_at": "createdAt",
     "updated_at": "updatedAt",
 }
@@ -48,6 +49,8 @@ class Transformation(BaseModel):
     """ The uniquely identified name of your transformation. """
     description: Optional[str] = None
     """ A descriptive name for your transformation of what it does. """
+    owner: Optional[str] = None
+    """ Owner of the resource. """
     created_at: str
     """ Date of creation in RFC 3339 format. """
     updated_at: Optional[str] = None

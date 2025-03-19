@@ -30,6 +30,7 @@ _ALIASES = {
     "cron": "cron",
     "last_run": "lastRun",
     "next_run": "nextRun",
+    "owner": "owner",
     "input": "input",
     "enabled": "enabled",
     "failure_threshold": "failureThreshold",
@@ -64,6 +65,8 @@ class Task(BaseModel):
     """ The last time the scheduled task ran in RFC 3339 format. """
     next_run: Optional[str] = None
     """ The next scheduled run of the task in RFC 3339 format. """
+    owner: Optional[str] = None
+    """ Owner of the resource. """
     input: Optional[TaskInput] = None
     enabled: bool
     """ Whether the task is enabled. """

@@ -25,6 +25,7 @@ _ALIASES = {
     "source_id": "sourceID",
     "type": "type",
     "name": "name",
+    "owner": "owner",
     "input": "input",
     "authentication_id": "authenticationID",
     "created_at": "createdAt",
@@ -45,6 +46,8 @@ class Source(BaseModel):
     """ Universally uniqud identifier (UUID) of a source. """
     type: SourceType
     name: str
+    owner: Optional[str] = None
+    """ Owner of the resource. """
     input: Optional[SourceInput] = None
     authentication_id: Optional[str] = None
     """ Universally unique identifier (UUID) of an authentication resource. """
