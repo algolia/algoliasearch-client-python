@@ -1,4 +1,5 @@
 from json import dumps
+from decimal import Decimal
 from typing import Any, Dict, Optional
 from urllib.parse import urlencode
 
@@ -42,6 +43,7 @@ def body_serializer(obj: Any) -> Any:
 
     If obj is None, return None.
     If obj is str, int, long, float, bool, return directly.
+    If obj is Decimal, convert to float and return.
     If obj is list, sanitize each element in the list.
     If obj is dict, return the dict.
     If obj is OpenAPI model, return the properties dict.
@@ -54,6 +56,8 @@ def body_serializer(obj: Any) -> Any:
         return None
     elif isinstance(obj, PRIMITIVE_TYPES):
         return obj
+    elif isinstance(obj, Decimal):
+        return float(obj)
     elif isinstance(obj, list):
         return [body_serializer(sub_obj) for sub_obj in obj]
     elif isinstance(obj, tuple):
