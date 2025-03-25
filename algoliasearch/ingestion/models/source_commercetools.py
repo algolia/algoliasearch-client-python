@@ -28,6 +28,7 @@ _ALIASES = {
     "url": "url",
     "project_key": "projectKey",
     "fallback_is_in_stock_value": "fallbackIsInStockValue",
+    "product_query_predicate": "productQueryPredicate",
     "custom_fields": "customFields",
 }
 
@@ -48,6 +49,8 @@ class SourceCommercetools(BaseModel):
     project_key: str
     fallback_is_in_stock_value: Optional[bool] = None
     """ Whether a fallback value is stored in the Algolia record if there's no inventory information about the product.  """
+    product_query_predicate: Optional[str] = None
+    """ Predicate to filter out specific products when indexing. For more information, see [Query Predicate](https://docs.commercetools.com/api/predicates/query).  """
     custom_fields: Optional[CommercetoolsCustomFields] = None
 
     model_config = ConfigDict(
