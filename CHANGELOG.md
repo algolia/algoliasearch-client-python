@@ -1,3 +1,7 @@
+## [4.16.0](https://github.com/algolia/algoliasearch-client-python/compare/4.15.0...4.16.0)
+
+- [c3addb449](https://github.com/algolia/api-clients-automation/commit/c3addb449) feat(specs): add CT Query predicate property ([#4654](https://github.com/algolia/api-clients-automation/pull/4654)) by [@morganleroi](https://github.com/morganleroi/)
+
 ## [4.15.0](https://github.com/algolia/algoliasearch-client-python/compare/4.14.0...4.15.0)
 
 - [03a7074763](https://github.com/algolia/api-clients-automation/commit/03a7074763) chore(deps): dependencies 2025-03-10 ([#4566](https://github.com/algolia/api-clients-automation/pull/4566)) by [@algolia-bot](https://github.com/algolia-bot/)
