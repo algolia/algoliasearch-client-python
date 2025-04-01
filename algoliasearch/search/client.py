@@ -16,6 +16,7 @@ from sys import version_info
 from time import time
 from typing import Any, Callable, Dict, List, Optional, Union
 from urllib.parse import quote
+from warnings import warn
 
 from pydantic import Field, StrictBool, StrictInt, StrictStr
 from typing_extensions import Annotated
@@ -911,6 +912,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) assign_user_id
         Assigns or moves a user ID to a cluster.  The time it takes to move a user is proportional to the amount of data linked to the user ID.
 
         Required API Key ACLs:
@@ -923,6 +925,8 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/clusters/mapping is deprecated.", DeprecationWarning)
 
         if x_algolia_user_id is None:
             raise ValueError(
@@ -967,6 +971,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
+        (Deprecated) assign_user_id
         Assigns or moves a user ID to a cluster.  The time it takes to move a user is proportional to the amount of data linked to the user ID.
 
         Required API Key ACLs:
@@ -1067,6 +1072,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) batch_assign_user_ids
         Assigns multiple user IDs to a cluster.  **You can't move users with this operation**.
 
         Required API Key ACLs:
@@ -1079,6 +1085,8 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/clusters/mapping/batch is deprecated.", DeprecationWarning)
 
         if x_algolia_user_id is None:
             raise ValueError(
@@ -1123,6 +1131,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
+        (Deprecated) batch_assign_user_ids
         Assigns multiple user IDs to a cluster.  **You can't move users with this operation**.
 
         Required API Key ACLs:
@@ -3099,6 +3108,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
+        (Deprecated) get_top_user_ids
         Get the IDs of the 10 users with the highest number of records per cluster.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -3107,6 +3117,8 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters/mapping/top is deprecated.", DeprecationWarning)
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -3121,6 +3133,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> GetTopUserIdsResponse:
         """
+        (Deprecated) get_top_user_ids
         Get the IDs of the 10 users with the highest number of records per cluster.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -3144,6 +3157,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) get_user_id
         Returns the user ID data stored in the mapping.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -3154,6 +3168,8 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters/mapping/{userID} is deprecated.", DeprecationWarning)
 
         if user_id is None:
             raise ValueError(
@@ -3183,6 +3199,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UserId:
         """
+        (Deprecated) get_user_id
         Returns the user ID data stored in the mapping.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -3207,6 +3224,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) has_pending_mappings
         To determine when the time-consuming process of creating a large batch of users or migrating users from one cluster to another is complete, this operation retrieves the status of the process.
 
         Required API Key ACLs:
@@ -3217,6 +3235,8 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters/mapping/pending is deprecated.", DeprecationWarning)
 
         _query_parameters: Dict[str, Any] = {}
 
@@ -3244,6 +3264,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> HasPendingMappingsResponse:
         """
+        (Deprecated) has_pending_mappings
         To determine when the time-consuming process of creating a large batch of users or migrating users from one cluster to another is complete, this operation retrieves the status of the process.
 
         Required API Key ACLs:
@@ -3300,6 +3321,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
+        (Deprecated) list_clusters
         Lists the available clusters in a multi-cluster setup.
 
         Required API Key ACLs:
@@ -3308,6 +3330,8 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters is deprecated.", DeprecationWarning)
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -3322,6 +3346,7 @@ class SearchClient:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ListClustersResponse:
         """
+        (Deprecated) list_clusters
         Lists the available clusters in a multi-cluster setup.
 
         Required API Key ACLs:
@@ -3422,6 +3447,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) list_user_ids
         Lists the userIDs assigned to a multi-cluster application.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -3434,6 +3460,8 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters/mapping is deprecated.", DeprecationWarning)
 
         _query_parameters: Dict[str, Any] = {}
 
@@ -3466,6 +3494,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListUserIdsResponse:
         """
+        (Deprecated) list_user_ids
         Lists the userIDs assigned to a multi-cluster application.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -3735,6 +3764,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) remove_user_id
         Deletes a user ID and its associated data from the clusters.
 
         Required API Key ACLs:
@@ -3745,6 +3775,8 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("DELETE /1/clusters/mapping/{userID} is deprecated.", DeprecationWarning)
 
         if user_id is None:
             raise ValueError(
@@ -3774,6 +3806,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RemoveUserIdResponse:
         """
+        (Deprecated) remove_user_id
         Deletes a user ID and its associated data from the clusters.
 
         Required API Key ACLs:
@@ -4908,6 +4941,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) search_user_ids
         Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.  To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
 
         Required API Key ACLs:
@@ -4918,6 +4952,8 @@ class SearchClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/clusters/mapping/search is deprecated.", DeprecationWarning)
 
         if search_user_ids_params is None:
             raise ValueError(
@@ -4944,6 +4980,7 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchUserIdsResponse:
         """
+        (Deprecated) search_user_ids
         Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.  To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
 
         Required API Key ACLs:
@@ -5952,6 +5989,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) assign_user_id
         Assigns or moves a user ID to a cluster.  The time it takes to move a user is proportional to the amount of data linked to the user ID.
 
         Required API Key ACLs:
@@ -5964,6 +6002,8 @@ class SearchClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/clusters/mapping is deprecated.", DeprecationWarning)
 
         if x_algolia_user_id is None:
             raise ValueError(
@@ -6008,6 +6048,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
+        (Deprecated) assign_user_id
         Assigns or moves a user ID to a cluster.  The time it takes to move a user is proportional to the amount of data linked to the user ID.
 
         Required API Key ACLs:
@@ -6108,6 +6149,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) batch_assign_user_ids
         Assigns multiple user IDs to a cluster.  **You can't move users with this operation**.
 
         Required API Key ACLs:
@@ -6120,6 +6162,8 @@ class SearchClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/clusters/mapping/batch is deprecated.", DeprecationWarning)
 
         if x_algolia_user_id is None:
             raise ValueError(
@@ -6164,6 +6208,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CreatedAtResponse:
         """
+        (Deprecated) batch_assign_user_ids
         Assigns multiple user IDs to a cluster.  **You can't move users with this operation**.
 
         Required API Key ACLs:
@@ -8124,6 +8169,7 @@ class SearchClientSync:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
+        (Deprecated) get_top_user_ids
         Get the IDs of the 10 users with the highest number of records per cluster.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -8132,6 +8178,8 @@ class SearchClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters/mapping/top is deprecated.", DeprecationWarning)
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -8146,6 +8194,7 @@ class SearchClientSync:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> GetTopUserIdsResponse:
         """
+        (Deprecated) get_top_user_ids
         Get the IDs of the 10 users with the highest number of records per cluster.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -8169,6 +8218,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) get_user_id
         Returns the user ID data stored in the mapping.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -8179,6 +8229,8 @@ class SearchClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters/mapping/{userID} is deprecated.", DeprecationWarning)
 
         if user_id is None:
             raise ValueError(
@@ -8208,6 +8260,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> UserId:
         """
+        (Deprecated) get_user_id
         Returns the user ID data stored in the mapping.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -8232,6 +8285,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) has_pending_mappings
         To determine when the time-consuming process of creating a large batch of users or migrating users from one cluster to another is complete, this operation retrieves the status of the process.
 
         Required API Key ACLs:
@@ -8242,6 +8296,8 @@ class SearchClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters/mapping/pending is deprecated.", DeprecationWarning)
 
         _query_parameters: Dict[str, Any] = {}
 
@@ -8269,6 +8325,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> HasPendingMappingsResponse:
         """
+        (Deprecated) has_pending_mappings
         To determine when the time-consuming process of creating a large batch of users or migrating users from one cluster to another is complete, this operation retrieves the status of the process.
 
         Required API Key ACLs:
@@ -8323,6 +8380,7 @@ class SearchClientSync:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ApiResponse[str]:
         """
+        (Deprecated) list_clusters
         Lists the available clusters in a multi-cluster setup.
 
         Required API Key ACLs:
@@ -8331,6 +8389,8 @@ class SearchClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters is deprecated.", DeprecationWarning)
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -8345,6 +8405,7 @@ class SearchClientSync:
         self, request_options: Optional[Union[dict, RequestOptions]] = None
     ) -> ListClustersResponse:
         """
+        (Deprecated) list_clusters
         Lists the available clusters in a multi-cluster setup.
 
         Required API Key ACLs:
@@ -8443,6 +8504,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) list_user_ids
         Lists the userIDs assigned to a multi-cluster application.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -8455,6 +8517,8 @@ class SearchClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /1/clusters/mapping is deprecated.", DeprecationWarning)
 
         _query_parameters: Dict[str, Any] = {}
 
@@ -8487,6 +8551,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListUserIdsResponse:
         """
+        (Deprecated) list_user_ids
         Lists the userIDs assigned to a multi-cluster application.  Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.
 
         Required API Key ACLs:
@@ -8754,6 +8819,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) remove_user_id
         Deletes a user ID and its associated data from the clusters.
 
         Required API Key ACLs:
@@ -8764,6 +8830,8 @@ class SearchClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("DELETE /1/clusters/mapping/{userID} is deprecated.", DeprecationWarning)
 
         if user_id is None:
             raise ValueError(
@@ -8793,6 +8861,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RemoveUserIdResponse:
         """
+        (Deprecated) remove_user_id
         Deletes a user ID and its associated data from the clusters.
 
         Required API Key ACLs:
@@ -9927,6 +9996,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
+        (Deprecated) search_user_ids
         Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.  To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
 
         Required API Key ACLs:
@@ -9937,6 +10007,8 @@ class SearchClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /1/clusters/mapping/search is deprecated.", DeprecationWarning)
 
         if search_user_ids_params is None:
             raise ValueError(
@@ -9963,6 +10035,7 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchUserIdsResponse:
         """
+        (Deprecated) search_user_ids
         Since it can take a few seconds to get the data from the different clusters, the response isn't real-time.  To ensure rapid updates, the user IDs index isn't built at the same time as the mapping. Instead, it's built every 12 hours, at the same time as the update of user ID usage. For example, if you add or move a user ID, the search will show an old value until the next time the mapping is rebuilt (every 12 hours).
 
         Required API Key ACLs:
