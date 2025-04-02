@@ -53,7 +53,7 @@ class Transformation(BaseModel):
     """ Owner of the resource. """
     created_at: str
     """ Date of creation in RFC 3339 format. """
-    updated_at: Optional[str] = None
+    updated_at: str
     """ Date of last update in RFC 3339 format. """
 
     model_config = ConfigDict(

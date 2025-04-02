@@ -35,8 +35,8 @@ class TransformationTryResponse(BaseModel):
     TransformationTryResponse
     """
 
-    payloads: List[object]
-    """ The array of records returned by the transformation service. """
+    payloads: List[str]
+    """ The array of stringified records returned by the transformation service. """
     error: Optional[TransformationError] = None
 
     model_config = ConfigDict(
