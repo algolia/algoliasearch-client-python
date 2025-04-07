@@ -37,13 +37,13 @@ class WatchResponse(BaseModel):
     WatchResponse
     """
 
-    run_id: Optional[str] = None
+    run_id: str
     """ Universally unique identifier (UUID) of a task run. """
     data: Optional[List[object]] = None
     """ when used with discovering or validating sources, the sampled data of your source is returned. """
     events: Optional[List[Event]] = None
     """ in case of error, observability events will be added to the response, if any. """
-    message: str
+    message: Optional[str] = None
     """ a message describing the outcome of a validate run. """
 
     model_config = ConfigDict(
