@@ -2367,7 +2367,7 @@ class IngestionClient:
         status: Union[
             list[str],
             Annotated[
-                Optional[List[EventStatus]],
+                Optional[List[Optional[EventStatus]]],
                 Field(description="Event status for filtering the list of task runs."),
             ],
         ] = None,
@@ -2492,7 +2492,7 @@ class IngestionClient:
         status: Union[
             list[str],
             Annotated[
-                Optional[List[EventStatus]],
+                Optional[List[Optional[EventStatus]]],
                 Field(description="Event status for filtering the list of task runs."),
             ],
         ] = None,
@@ -7275,7 +7275,7 @@ class IngestionClientSync:
         status: Union[
             list[str],
             Annotated[
-                Optional[List[EventStatus]],
+                Optional[List[Optional[EventStatus]]],
                 Field(description="Event status for filtering the list of task runs."),
             ],
         ] = None,
@@ -7400,7 +7400,7 @@ class IngestionClientSync:
         status: Union[
             list[str],
             Annotated[
-                Optional[List[EventStatus]],
+                Optional[List[Optional[EventStatus]]],
                 Field(description="Event status for filtering the list of task runs."),
             ],
         ] = None,

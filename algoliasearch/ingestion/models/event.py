@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -45,7 +45,7 @@ class Event(BaseModel):
     """ Universally unique identifier (UUID) of an event. """
     run_id: str
     """ Universally unique identifier (UUID) of a task run. """
-    status: EventStatus
+    status: Union[EventStatus, None]
     type: EventType
     batch_size: int
     """ The extracted record batch size. """

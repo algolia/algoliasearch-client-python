@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -36,7 +36,7 @@ class ListABTestsResponse(BaseModel):
     ListABTestsResponse
     """
 
-    abtests: List[ABTest]
+    abtests: Union[List[ABTest], None]
     """ The list of A/B tests, null if no A/B tests are configured for this application. """
     count: int
     """ Number of A/B tests. """

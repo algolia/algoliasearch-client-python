@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -49,9 +49,9 @@ class TopHitWithRevenueAnalytics(BaseModel):
     """ Object ID of a record returned as a search result. """
     count: int
     """ Number of occurrences. """
-    click_through_rate: float
+    click_through_rate: Union[float, None]
     """ Click-through rate: calculated as the number of tracked searches with at least one click event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
-    conversion_rate: float
+    conversion_rate: Union[float, None]
     """ Conversion rate: calculated as the number of tracked searches with at least one conversion event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     tracked_hit_count: int
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
@@ -59,11 +59,11 @@ class TopHitWithRevenueAnalytics(BaseModel):
     """ Number of clicks associated with this search. """
     conversion_count: int
     """ Number of conversions from this search. """
-    add_to_cart_rate: float
+    add_to_cart_rate: Union[float, None]
     """ Add-to-cart rate: calculated as the number of tracked searches with at least one add-to-cart event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     add_to_cart_count: int
     """ Number of add-to-cart events from this search. """
-    purchase_rate: float
+    purchase_rate: Union[float, None]
     """ Purchase rate: calculated as the number of tracked searches with at least one purchase event divided by the number of tracked searches. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     purchase_count: int
     """ Number of purchase events from this search. """

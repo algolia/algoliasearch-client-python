@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -36,7 +36,7 @@ class GetTopFiltersNoResultsResponse(BaseModel):
     GetTopFiltersNoResultsResponse
     """
 
-    values: List[GetTopFiltersNoResultsValues]
+    values: Union[List[GetTopFiltersNoResultsValues], None]
     """ Filters for searches without any results. If null, the search term specified with the `search` parameter isn't a search without results, or the `search` parameter is absent from the request.  """
 
     model_config = ConfigDict(

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -36,9 +36,9 @@ class Languages(BaseModel):
     Dictionary language.
     """
 
-    plurals: DictionaryLanguage
-    stopwords: DictionaryLanguage
-    compounds: DictionaryLanguage
+    plurals: Union[DictionaryLanguage, None]
+    stopwords: Union[DictionaryLanguage, None]
+    compounds: Union[DictionaryLanguage, None]
 
     model_config = ConfigDict(
         strict=False,

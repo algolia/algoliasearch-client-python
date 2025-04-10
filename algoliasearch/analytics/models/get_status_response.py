@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -32,7 +32,7 @@ class GetStatusResponse(BaseModel):
     GetStatusResponse
     """
 
-    updated_at: str
+    updated_at: Union[str, None]
     """ Date and time when the object was updated, in RFC 3339 format. """
 
     model_config = ConfigDict(

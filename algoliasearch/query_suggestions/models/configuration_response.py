@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -48,7 +48,7 @@ class ConfigurationResponse(BaseModel):
     source_indices: List[SourceIndex]
     """ Algolia indices from which to get the popular searches for query suggestions. """
     languages: Languages
-    exclude: List[str]
+    exclude: Union[List[str], None]
     enable_personalization: bool
     """ Whether to turn on personalized query suggestions. """
     allow_special_characters: bool

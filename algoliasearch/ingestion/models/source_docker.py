@@ -34,7 +34,7 @@ class SourceDocker(BaseModel):
     """
 
     image: str
-    """ Shortname of the image, as returned by the referential. """
+    """ Name of the connector. """
     configuration: object
     """ Configuration of the spec. """
 

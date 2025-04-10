@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -77,21 +77,21 @@ class Variant(BaseModel):
     filter_effects: Optional[FilterEffects] = None
     index: str
     """ Index name of the A/B test variant (case-sensitive). """
-    no_result_count: int
+    no_result_count: Union[int, None]
     """ Number of [searches without results](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#searches-without-results) for this variant. """
     purchase_count: int
     """ Number of purchase events for this variant. """
     purchase_rate: Optional[float] = None
     """ [Purchase rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#purchase-rate) for this variant.  """
-    search_count: int
+    search_count: Union[int, None]
     """ Number of searches for this variant. """
     tracked_search_count: Optional[int] = None
     """ Number of tracked searches. Tracked searches are search requests where the `clickAnalytics` parameter is true. """
     traffic_percentage: int
     """ Percentage of search requests each variant receives. """
-    user_count: int
+    user_count: Union[int, None]
     """ Number of users that made searches to this variant. """
-    tracked_user_count: int
+    tracked_user_count: Union[int, None]
     """ Number of users that made tracked searches to this variant. """
 
     model_config = ConfigDict(

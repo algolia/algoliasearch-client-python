@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -36,7 +36,7 @@ class GetAverageClickPositionResponse(BaseModel):
     GetAverageClickPositionResponse
     """
 
-    average: float
+    average: Union[float, None]
     """ Average position of a clicked search result in the list of search results. If null, Algolia didn't receive any search requests with `clickAnalytics` set to true.  """
     click_count: int
     """ Number of clicks associated with this search. """
