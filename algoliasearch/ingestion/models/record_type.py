@@ -28,6 +28,8 @@ class RecordType(str, Enum):
 
     VARIANT = "variant"
 
+    COLLECTION = "collection"
+
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of RecordType from a JSON string"""
