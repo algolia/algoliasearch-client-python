@@ -22,9 +22,11 @@ from algoliasearch.ingestion.models.event import Event
 
 _ALIASES = {
     "run_id": "runID",
+    "event_id": "eventID",
     "data": "data",
     "events": "events",
     "message": "message",
+    "created_at": "createdAt",
 }
 
 
@@ -39,12 +41,16 @@ class WatchResponse(BaseModel):
 
     run_id: str
     """ Universally unique identifier (UUID) of a task run. """
+    event_id: Optional[str] = None
+    """ Universally unique identifier (UUID) of an event. """
     data: Optional[List[object]] = None
     """ when used with discovering or validating sources, the sampled data of your source is returned. """
     events: Optional[List[Event]] = None
     """ in case of error, observability events will be added to the response, if any. """
     message: Optional[str] = None
     """ a message describing the outcome of a validate run. """
+    created_at: Optional[str] = None
+    """ Date of creation in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,
