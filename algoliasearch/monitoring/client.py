@@ -72,9 +72,9 @@ class MonitoringClient:
             config = MonitoringConfig(
                 transporter.config.app_id, transporter.config.api_key
             )
-
-        if config is None:
+        elif config is None:
             config = MonitoringConfig(app_id, api_key)
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -948,9 +948,9 @@ class MonitoringClientSync:
             config = MonitoringConfig(
                 transporter.config.app_id, transporter.config.api_key
             )
-
-        if config is None:
+        elif config is None:
             config = MonitoringConfig(app_id, api_key)
+
         self._config = config
         self._request_options = RequestOptions(config)
 

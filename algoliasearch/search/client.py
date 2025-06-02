@@ -39,6 +39,9 @@ from algoliasearch.http.serializer import QueryParametersSerializer, body_serial
 from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
+from algoliasearch.ingestion.client import IngestionClient, IngestionClientSync
+from algoliasearch.ingestion.config import IngestionConfig
+from algoliasearch.ingestion.models.watch_response import WatchResponse
 from algoliasearch.search.config import SearchConfig
 from algoliasearch.search.models.action import Action
 from algoliasearch.search.models.add_api_key_response import AddApiKeyResponse
@@ -151,6 +154,7 @@ class SearchClient:
     """
 
     _transporter: Transporter
+    _ingestion_transporter: Optional[IngestionClient]
     _config: BaseConfig
     _request_options: RequestOptions
 
@@ -163,9 +167,13 @@ class SearchClient:
     ) -> None:
         if transporter is not None and config is None:
             config = SearchConfig(transporter.config.app_id, transporter.config.api_key)
-
-        if config is None:
+        elif config is None:
             config = SearchConfig(app_id, api_key)
+        elif config.region is not None:
+            self._ingestion_transporter = IngestionClient.create_with_config(
+                IngestionConfig(config.app_id, config.api_key, config.region)
+            )
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -531,6 +539,32 @@ class SearchClient:
             request_options=request_options,
         )
 
+    async def save_objects_with_transformation(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        wait_for_tasks: bool = False,
+        batch_size: int = 1000,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> WatchResponse:
+        """
+        Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client's config at instantiation.
+        """
+        if self._ingestion_transporter is None:
+            raise ValueError(
+                "`region` must be provided at client instantiation before calling this method."
+            )
+
+        return await self._ingestion_transporter.push(
+            index_name=index_name,
+            push_task_payload={
+                "action": Action.ADDOBJECT,
+                "records": objects,
+            },
+            watch=wait_for_tasks,
+            request_options=request_options,
+        )
+
     async def delete_objects(
         self,
         index_name: str,
@@ -571,6 +605,35 @@ class SearchClient:
             else Action.PARTIALUPDATEOBJECTNOCREATE,
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
+            request_options=request_options,
+        )
+
+    async def partial_update_objects_with_transformation(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        create_if_not_exists: bool = False,
+        wait_for_tasks: bool = False,
+        batch_size: int = 1000,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> WatchResponse:
+        """
+        Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client instantiation method.
+        """
+        if self._ingestion_transporter is None:
+            raise ValueError(
+                "`region` must be provided at client instantiation before calling this method."
+            )
+
+        return await self._ingestion_transporter.push(
+            index_name=index_name,
+            push_task_payload={
+                "action": Action.PARTIALUPDATEOBJECT
+                if create_if_not_exists
+                else Action.PARTIALUPDATEOBJECTNOCREATE,
+                "records": objects,
+            },
+            watch=wait_for_tasks,
             request_options=request_options,
         )
 
@@ -5233,6 +5296,7 @@ class SearchClientSync:
     """
 
     _transporter: TransporterSync
+    _ingestion_transporter: Optional[IngestionClientSync]
     _config: BaseConfig
     _request_options: RequestOptions
 
@@ -5245,9 +5309,13 @@ class SearchClientSync:
     ) -> None:
         if transporter is not None and config is None:
             config = SearchConfig(transporter.config.app_id, transporter.config.api_key)
-
-        if config is None:
+        elif config is None:
             config = SearchConfig(app_id, api_key)
+        elif config.region is not None:
+            self._ingestion_transporter = IngestionClientSync.create_with_config(
+                IngestionConfig(config.app_id, config.api_key, config.region)
+            )
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -5610,6 +5678,32 @@ class SearchClientSync:
             request_options=request_options,
         )
 
+    def save_objects_with_transformation(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        wait_for_tasks: bool = False,
+        batch_size: int = 1000,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> WatchResponse:
+        """
+        Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client's config at instantiation.
+        """
+        if self._ingestion_transporter is None:
+            raise ValueError(
+                "`region` must be provided at client instantiation before calling this method."
+            )
+
+        return self._ingestion_transporter.push(
+            index_name=index_name,
+            push_task_payload={
+                "action": Action.ADDOBJECT,
+                "records": objects,
+            },
+            watch=wait_for_tasks,
+            request_options=request_options,
+        )
+
     def delete_objects(
         self,
         index_name: str,
@@ -5650,6 +5744,35 @@ class SearchClientSync:
             else Action.PARTIALUPDATEOBJECTNOCREATE,
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
+            request_options=request_options,
+        )
+
+    def partial_update_objects_with_transformation(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        create_if_not_exists: bool = False,
+        wait_for_tasks: bool = False,
+        batch_size: int = 1000,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> WatchResponse:
+        """
+        Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client instantiation method.
+        """
+        if self._ingestion_transporter is None:
+            raise ValueError(
+                "`region` must be provided at client instantiation before calling this method."
+            )
+
+        return self._ingestion_transporter.push(
+            index_name=index_name,
+            push_task_payload={
+                "action": Action.PARTIALUPDATEOBJECT
+                if create_if_not_exists
+                else Action.PARTIALUPDATEOBJECTNOCREATE,
+                "records": objects,
+            },
+            watch=wait_for_tasks,
             request_options=request_options,
         )
 

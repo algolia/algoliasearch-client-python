@@ -156,9 +156,9 @@ class IngestionClient:
             config = IngestionConfig(
                 transporter.config.app_id, transporter.config.api_key, region
             )
-
-        if config is None:
+        elif config is None:
             config = IngestionConfig(app_id, api_key, region)
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -5164,9 +5164,9 @@ class IngestionClientSync:
             config = IngestionConfig(
                 transporter.config.app_id, transporter.config.api_key, region
             )
-
-        if config is None:
+        elif config is None:
             config = IngestionConfig(app_id, api_key, region)
+
         self._config = config
         self._request_options = RequestOptions(config)
 

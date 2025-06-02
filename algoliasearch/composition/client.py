@@ -70,9 +70,9 @@ class CompositionClient:
             config = CompositionConfig(
                 transporter.config.app_id, transporter.config.api_key
             )
-
-        if config is None:
+        elif config is None:
             config = CompositionConfig(app_id, api_key)
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -328,9 +328,9 @@ class CompositionClientSync:
             config = CompositionConfig(
                 transporter.config.app_id, transporter.config.api_key
             )
-
-        if config is None:
+        elif config is None:
             config = CompositionConfig(app_id, api_key)
+
         self._config = config
         self._request_options = RequestOptions(config)
 

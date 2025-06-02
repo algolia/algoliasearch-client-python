@@ -75,9 +75,9 @@ class PersonalizationClient:
             config = PersonalizationConfig(
                 transporter.config.app_id, transporter.config.api_key, region
             )
-
-        if config is None:
+        elif config is None:
             config = PersonalizationConfig(app_id, api_key, region)
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -727,9 +727,9 @@ class PersonalizationClientSync:
             config = PersonalizationConfig(
                 transporter.config.app_id, transporter.config.api_key, region
             )
-
-        if config is None:
+        elif config is None:
             config = PersonalizationConfig(app_id, api_key, region)
+
         self._config = config
         self._request_options = RequestOptions(config)
 

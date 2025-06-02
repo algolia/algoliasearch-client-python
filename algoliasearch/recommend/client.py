@@ -83,9 +83,9 @@ class RecommendClient:
             config = RecommendConfig(
                 transporter.config.app_id, transporter.config.api_key
             )
-
-        if config is None:
+        elif config is None:
             config = RecommendConfig(app_id, api_key)
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -1068,9 +1068,9 @@ class RecommendClientSync:
             config = RecommendConfig(
                 transporter.config.app_id, transporter.config.api_key
             )
-
-        if config is None:
+        elif config is None:
             config = RecommendConfig(app_id, api_key)
+
         self._config = config
         self._request_options = RequestOptions(config)
 

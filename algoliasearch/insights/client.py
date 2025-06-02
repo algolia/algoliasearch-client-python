@@ -65,9 +65,9 @@ class InsightsClient:
             config = InsightsConfig(
                 transporter.config.app_id, transporter.config.api_key, region
             )
-
-        if config is None:
+        elif config is None:
             config = InsightsConfig(app_id, api_key, region)
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -613,9 +613,9 @@ class InsightsClientSync:
             config = InsightsConfig(
                 transporter.config.app_id, transporter.config.api_key, region
             )
-
-        if config is None:
+        elif config is None:
             config = InsightsConfig(app_id, api_key, region)
+
         self._config = config
         self._request_options = RequestOptions(config)
 
