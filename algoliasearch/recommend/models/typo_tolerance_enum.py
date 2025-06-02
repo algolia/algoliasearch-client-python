@@ -28,6 +28,10 @@ class TypoToleranceEnum(str, Enum):
 
     STRICT = "strict"
 
+    TRUE = "true"
+
+    FALSE = "false"
+
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of TypoToleranceEnum from a JSON string"""
