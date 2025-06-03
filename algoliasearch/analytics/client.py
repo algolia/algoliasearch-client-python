@@ -20,62 +20,30 @@ else:
     from typing_extensions import Self
 
 from algoliasearch.analytics.config import AnalyticsConfig
-from algoliasearch.analytics.models.direction import Direction
-from algoliasearch.analytics.models.get_add_to_cart_rate_response import (
+from algoliasearch.analytics.models import (
+    Direction,
     GetAddToCartRateResponse,
-)
-from algoliasearch.analytics.models.get_average_click_position_response import (
     GetAverageClickPositionResponse,
-)
-from algoliasearch.analytics.models.get_click_positions_response import (
     GetClickPositionsResponse,
-)
-from algoliasearch.analytics.models.get_click_through_rate_response import (
     GetClickThroughRateResponse,
-)
-from algoliasearch.analytics.models.get_conversion_rate_response import (
     GetConversionRateResponse,
-)
-from algoliasearch.analytics.models.get_no_click_rate_response import (
     GetNoClickRateResponse,
-)
-from algoliasearch.analytics.models.get_no_results_rate_response import (
     GetNoResultsRateResponse,
-)
-from algoliasearch.analytics.models.get_purchase_rate_response import (
     GetPurchaseRateResponse,
-)
-from algoliasearch.analytics.models.get_revenue import GetRevenue
-from algoliasearch.analytics.models.get_searches_count_response import (
+    GetRevenue,
     GetSearchesCountResponse,
-)
-from algoliasearch.analytics.models.get_searches_no_clicks_response import (
     GetSearchesNoClicksResponse,
-)
-from algoliasearch.analytics.models.get_searches_no_results_response import (
     GetSearchesNoResultsResponse,
-)
-from algoliasearch.analytics.models.get_status_response import GetStatusResponse
-from algoliasearch.analytics.models.get_top_countries_response import (
+    GetStatusResponse,
     GetTopCountriesResponse,
-)
-from algoliasearch.analytics.models.get_top_filter_attributes_response import (
     GetTopFilterAttributesResponse,
-)
-from algoliasearch.analytics.models.get_top_filter_for_attribute_response import (
     GetTopFilterForAttributeResponse,
-)
-from algoliasearch.analytics.models.get_top_filters_no_results_response import (
     GetTopFiltersNoResultsResponse,
-)
-from algoliasearch.analytics.models.get_top_hits_response import GetTopHitsResponse
-from algoliasearch.analytics.models.get_top_searches_response import (
+    GetTopHitsResponse,
     GetTopSearchesResponse,
-)
-from algoliasearch.analytics.models.get_users_count_response import (
     GetUsersCountResponse,
+    OrderBy,
 )
-from algoliasearch.analytics.models.order_by import OrderBy
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.request_options import RequestOptions

@@ -28,98 +28,76 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.ingestion.config import IngestionConfig
-from algoliasearch.ingestion.models.action_type import ActionType
-from algoliasearch.ingestion.models.authentication import Authentication
-from algoliasearch.ingestion.models.authentication_create import AuthenticationCreate
-from algoliasearch.ingestion.models.authentication_create_response import (
+from algoliasearch.ingestion.models import (
+    ActionType,
+    Authentication,
+    AuthenticationCreate,
     AuthenticationCreateResponse,
-)
-from algoliasearch.ingestion.models.authentication_search import AuthenticationSearch
-from algoliasearch.ingestion.models.authentication_sort_keys import (
+    AuthenticationSearch,
     AuthenticationSortKeys,
-)
-from algoliasearch.ingestion.models.authentication_type import AuthenticationType
-from algoliasearch.ingestion.models.authentication_update import AuthenticationUpdate
-from algoliasearch.ingestion.models.authentication_update_response import (
+    AuthenticationType,
+    AuthenticationUpdate,
     AuthenticationUpdateResponse,
-)
-from algoliasearch.ingestion.models.delete_response import DeleteResponse
-from algoliasearch.ingestion.models.destination import Destination
-from algoliasearch.ingestion.models.destination_create import DestinationCreate
-from algoliasearch.ingestion.models.destination_create_response import (
+    DeleteResponse,
+    Destination,
+    DestinationCreate,
     DestinationCreateResponse,
-)
-from algoliasearch.ingestion.models.destination_search import DestinationSearch
-from algoliasearch.ingestion.models.destination_sort_keys import DestinationSortKeys
-from algoliasearch.ingestion.models.destination_type import DestinationType
-from algoliasearch.ingestion.models.destination_update import DestinationUpdate
-from algoliasearch.ingestion.models.destination_update_response import (
+    DestinationSearch,
+    DestinationSortKeys,
+    DestinationType,
+    DestinationUpdate,
     DestinationUpdateResponse,
-)
-from algoliasearch.ingestion.models.event import Event
-from algoliasearch.ingestion.models.event_sort_keys import EventSortKeys
-from algoliasearch.ingestion.models.event_status import EventStatus
-from algoliasearch.ingestion.models.event_type import EventType
-from algoliasearch.ingestion.models.list_authentications_response import (
+    Event,
+    EventSortKeys,
+    EventStatus,
+    EventType,
     ListAuthenticationsResponse,
-)
-from algoliasearch.ingestion.models.list_destinations_response import (
     ListDestinationsResponse,
-)
-from algoliasearch.ingestion.models.list_events_response import ListEventsResponse
-from algoliasearch.ingestion.models.list_sources_response import ListSourcesResponse
-from algoliasearch.ingestion.models.list_tasks_response import ListTasksResponse
-from algoliasearch.ingestion.models.list_tasks_response_v1 import ListTasksResponseV1
-from algoliasearch.ingestion.models.list_transformations_response import (
+    ListEventsResponse,
+    ListSourcesResponse,
+    ListTasksResponse,
+    ListTasksResponseV1,
     ListTransformationsResponse,
-)
-from algoliasearch.ingestion.models.order_keys import OrderKeys
-from algoliasearch.ingestion.models.platform_with_none import PlatformWithNone
-from algoliasearch.ingestion.models.push_task_payload import PushTaskPayload
-from algoliasearch.ingestion.models.run import Run
-from algoliasearch.ingestion.models.run_list_response import RunListResponse
-from algoliasearch.ingestion.models.run_response import RunResponse
-from algoliasearch.ingestion.models.run_sort_keys import RunSortKeys
-from algoliasearch.ingestion.models.run_source_payload import RunSourcePayload
-from algoliasearch.ingestion.models.run_source_response import RunSourceResponse
-from algoliasearch.ingestion.models.run_status import RunStatus
-from algoliasearch.ingestion.models.run_type import RunType
-from algoliasearch.ingestion.models.source import Source
-from algoliasearch.ingestion.models.source_create import SourceCreate
-from algoliasearch.ingestion.models.source_create_response import SourceCreateResponse
-from algoliasearch.ingestion.models.source_search import SourceSearch
-from algoliasearch.ingestion.models.source_sort_keys import SourceSortKeys
-from algoliasearch.ingestion.models.source_type import SourceType
-from algoliasearch.ingestion.models.source_update import SourceUpdate
-from algoliasearch.ingestion.models.source_update_response import SourceUpdateResponse
-from algoliasearch.ingestion.models.task import Task
-from algoliasearch.ingestion.models.task_create import TaskCreate
-from algoliasearch.ingestion.models.task_create_response import TaskCreateResponse
-from algoliasearch.ingestion.models.task_create_v1 import TaskCreateV1
-from algoliasearch.ingestion.models.task_search import TaskSearch
-from algoliasearch.ingestion.models.task_sort_keys import TaskSortKeys
-from algoliasearch.ingestion.models.task_update import TaskUpdate
-from algoliasearch.ingestion.models.task_update_response import TaskUpdateResponse
-from algoliasearch.ingestion.models.task_update_v1 import TaskUpdateV1
-from algoliasearch.ingestion.models.task_v1 import TaskV1
-from algoliasearch.ingestion.models.transformation import Transformation
-from algoliasearch.ingestion.models.transformation_create import TransformationCreate
-from algoliasearch.ingestion.models.transformation_create_response import (
+    OrderKeys,
+    PlatformWithNone,
+    PushTaskPayload,
+    Run,
+    RunListResponse,
+    RunResponse,
+    RunSortKeys,
+    RunSourcePayload,
+    RunSourceResponse,
+    RunStatus,
+    RunType,
+    Source,
+    SourceCreate,
+    SourceCreateResponse,
+    SourceSearch,
+    SourceSortKeys,
+    SourceType,
+    SourceUpdate,
+    SourceUpdateResponse,
+    Task,
+    TaskCreate,
+    TaskCreateResponse,
+    TaskCreateV1,
+    TaskSearch,
+    TaskSortKeys,
+    TaskUpdate,
+    TaskUpdateResponse,
+    TaskUpdateV1,
+    TaskV1,
+    Transformation,
+    TransformationCreate,
     TransformationCreateResponse,
-)
-from algoliasearch.ingestion.models.transformation_search import TransformationSearch
-from algoliasearch.ingestion.models.transformation_sort_keys import (
+    TransformationSearch,
     TransformationSortKeys,
-)
-from algoliasearch.ingestion.models.transformation_try import TransformationTry
-from algoliasearch.ingestion.models.transformation_try_response import (
+    TransformationTry,
     TransformationTryResponse,
-)
-from algoliasearch.ingestion.models.transformation_update_response import (
     TransformationUpdateResponse,
+    TriggerType,
+    WatchResponse,
 )
-from algoliasearch.ingestion.models.trigger_type import TriggerType
-from algoliasearch.ingestion.models.watch_response import WatchResponse
 
 
 class IngestionClient:

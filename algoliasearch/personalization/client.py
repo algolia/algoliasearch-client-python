@@ -27,16 +27,10 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.personalization.config import PersonalizationConfig
-from algoliasearch.personalization.models.delete_user_profile_response import (
+from algoliasearch.personalization.models import (
     DeleteUserProfileResponse,
-)
-from algoliasearch.personalization.models.get_user_token_response import (
     GetUserTokenResponse,
-)
-from algoliasearch.personalization.models.personalization_strategy_params import (
     PersonalizationStrategyParams,
-)
-from algoliasearch.personalization.models.set_personalization_strategy_response import (
     SetPersonalizationStrategyResponse,
 )
 

@@ -27,8 +27,7 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.insights.config import InsightsConfig
-from algoliasearch.insights.models.events_response import EventsResponse
-from algoliasearch.insights.models.insights_events import InsightsEvents
+from algoliasearch.insights.models import EventsResponse, InsightsEvents
 
 
 class InsightsClient:

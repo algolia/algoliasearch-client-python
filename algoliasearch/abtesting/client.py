@@ -20,20 +20,14 @@ else:
     from typing_extensions import Self
 
 from algoliasearch.abtesting.config import AbtestingConfig
-from algoliasearch.abtesting.models.ab_test import ABTest
-from algoliasearch.abtesting.models.ab_test_response import ABTestResponse
-from algoliasearch.abtesting.models.add_ab_tests_request import AddABTestsRequest
-from algoliasearch.abtesting.models.estimate_ab_test_request import (
+from algoliasearch.abtesting.models import (
+    ABTest,
+    ABTestResponse,
+    AddABTestsRequest,
     EstimateABTestRequest,
-)
-from algoliasearch.abtesting.models.estimate_ab_test_response import (
     EstimateABTestResponse,
-)
-from algoliasearch.abtesting.models.list_ab_tests_response import ListABTestsResponse
-from algoliasearch.abtesting.models.schedule_ab_test_response import (
+    ListABTestsResponse,
     ScheduleABTestResponse,
-)
-from algoliasearch.abtesting.models.schedule_ab_tests_request import (
     ScheduleABTestsRequest,
 )
 from algoliasearch.http.api_response import ApiResponse

@@ -27,16 +27,16 @@ from algoliasearch.http.transporter import Transporter
 from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.monitoring.config import MonitoringConfig
-from algoliasearch.monitoring.models.incidents_response import IncidentsResponse
-from algoliasearch.monitoring.models.indexing_time_response import IndexingTimeResponse
-from algoliasearch.monitoring.models.infrastructure_response import (
+from algoliasearch.monitoring.models import (
+    IncidentsResponse,
+    IndexingTimeResponse,
     InfrastructureResponse,
+    InventoryResponse,
+    LatencyResponse,
+    Metric,
+    Period,
+    StatusResponse,
 )
-from algoliasearch.monitoring.models.inventory_response import InventoryResponse
-from algoliasearch.monitoring.models.latency_response import LatencyResponse
-from algoliasearch.monitoring.models.metric import Metric
-from algoliasearch.monitoring.models.period import Period
-from algoliasearch.monitoring.models.status_response import StatusResponse
 
 
 class MonitoringClient:
