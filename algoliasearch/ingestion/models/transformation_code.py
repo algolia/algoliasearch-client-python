@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,12 +18,8 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.ingestion.models.authentication_create import AuthenticationCreate
-
 _ALIASES = {
     "code": "code",
-    "sample_record": "sampleRecord",
-    "authentications": "authentications",
 }
 
 
@@ -31,16 +27,13 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class TransformationTry(BaseModel):
+class TransformationCode(BaseModel):
     """
-    TransformationTry
+    Input for a transformation that contains the source code of the transformation.
     """
 
     code: str
-    """ It is deprecated. Use the `input` field with proper `type` instead to specify the transformation code. """
-    sample_record: object
-    """ The record to apply the given code to. """
-    authentications: Optional[List[AuthenticationCreate]] = None
+    """ The source code of the transformation. """
 
     model_config = ConfigDict(
         strict=False,
@@ -57,7 +50,7 @@ class TransformationTry(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TransformationTry from a JSON string"""
+        """Create an instance of TransformationCode from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -70,17 +63,11 @@ class TransformationTry(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TransformationTry from a dict"""
+        """Create an instance of TransformationCode from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
-
-        obj["authentications"] = (
-            [AuthenticationCreate.from_dict(_item) for _item in obj["authentications"]]
-            if obj.get("authentications") is not None
-            else None
-        )
 
         return cls.model_validate(obj)

@@ -18,9 +18,14 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.ingestion.models.transformation_input import TransformationInput
+from algoliasearch.ingestion.models.transformation_type import TransformationType
+
 _ALIASES = {
     "code": "code",
     "name": "name",
+    "type": "type",
+    "input": "input",
     "description": "description",
     "authentication_ids": "authenticationIDs",
 }
@@ -35,10 +40,12 @@ class TransformationCreate(BaseModel):
     API request body for creating a transformation.
     """
 
-    code: str
-    """ The source code of the transformation. """
+    code: Optional[str] = None
+    """ It is deprecated. Use the `input` field with proper `type` instead to specify the transformation code. """
     name: str
     """ The uniquely identified name of your transformation. """
+    type: TransformationType
+    input: TransformationInput
     description: Optional[str] = None
     """ A descriptive name for your transformation of what it does. """
     authentication_ids: Optional[List[str]] = None
@@ -78,5 +85,12 @@ class TransformationCreate(BaseModel):
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
+
+        obj["type"] = obj.get("type")
+        obj["input"] = (
+            TransformationInput.from_dict(obj["input"])
+            if obj.get("input") is not None
+            else None
+        )
 
         return cls.model_validate(obj)

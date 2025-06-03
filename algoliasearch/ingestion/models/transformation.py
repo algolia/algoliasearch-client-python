@@ -18,10 +18,15 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.ingestion.models.transformation_input import TransformationInput
+from algoliasearch.ingestion.models.transformation_type import TransformationType
+
 _ALIASES = {
     "transformation_id": "transformationID",
     "authentication_ids": "authenticationIDs",
     "code": "code",
+    "type": "type",
+    "input": "input",
     "name": "name",
     "description": "description",
     "owner": "owner",
@@ -44,7 +49,9 @@ class Transformation(BaseModel):
     authentication_ids: Optional[List[str]] = None
     """ The authentications associated with the current transformation. """
     code: str
-    """ The source code of the transformation. """
+    """ It is deprecated. Use the `input` field with proper `type` instead to specify the transformation code. """
+    type: Optional[TransformationType] = None
+    input: Optional[TransformationInput] = None
     name: str
     """ The uniquely identified name of your transformation. """
     description: Optional[str] = None
@@ -90,5 +97,12 @@ class Transformation(BaseModel):
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
+
+        obj["type"] = obj.get("type")
+        obj["input"] = (
+            TransformationInput.from_dict(obj["input"])
+            if obj.get("input") is not None
+            else None
+        )
 
         return cls.model_validate(obj)
