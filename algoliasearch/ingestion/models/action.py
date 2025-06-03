@@ -32,6 +32,12 @@ class Action(str, Enum):
 
     PARTIALUPDATEOBJECTNOCREATE = "partialUpdateObjectNoCreate"
 
+    DELETEOBJECT = "deleteObject"
+
+    DELETE = "delete"
+
+    CLEAR = "clear"
+
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of Action from a JSON string"""
