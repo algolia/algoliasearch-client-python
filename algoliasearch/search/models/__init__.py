@@ -62,6 +62,9 @@ from .distinct import Distinct
 from .edit import Edit
 from .edit_type import EditType
 from .error_base import ErrorBase
+from .event import Event
+from .event_status import EventStatus
+from .event_type import EventType
 from .exact_on_single_word_query import ExactOnSingleWordQuery
 from .exhaustive import Exhaustive
 from .facet_filters import FacetFilters
@@ -230,6 +233,9 @@ __all__ = (
     "Edit",
     "EditType",
     "ErrorBase",
+    "Event",
+    "EventStatus",
+    "EventType",
     "ExactOnSingleWordQuery",
     "Exhaustive",
     "FacetFilters",

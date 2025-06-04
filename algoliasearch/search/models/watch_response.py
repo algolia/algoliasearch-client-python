@@ -18,7 +18,7 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.ingestion.models.event import Event
+from algoliasearch.search.models.event import Event
 
 _ALIASES = {
     "run_id": "runID",

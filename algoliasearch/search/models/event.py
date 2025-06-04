@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,15 +18,17 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.ingestion.models.event import Event
+from algoliasearch.search.models.event_status import EventStatus
+from algoliasearch.search.models.event_type import EventType
 
 _ALIASES = {
-    "run_id": "runID",
     "event_id": "eventID",
+    "run_id": "runID",
+    "status": "status",
+    "type": "type",
+    "batch_size": "batchSize",
     "data": "data",
-    "events": "events",
-    "message": "message",
-    "created_at": "createdAt",
+    "published_at": "publishedAt",
 }
 
 
@@ -34,23 +36,22 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class WatchResponse(BaseModel):
+class Event(BaseModel):
     """
-    WatchResponse
+    An event describe a step of the task execution flow..
     """
 
+    event_id: str
+    """ Universally unique identifier (UUID) of an event. """
     run_id: str
     """ Universally unique identifier (UUID) of a task run. """
-    event_id: Optional[str] = None
-    """ Universally unique identifier (UUID) of an event. """
-    data: Optional[List[object]] = None
-    """ This field is always null when used with the Push endpoint. When used for a source discover or source validate run, it will include the sampled data of the source.  """
-    events: Optional[List[Event]] = None
-    """ in case of error, observability events will be added to the response. """
-    message: Optional[str] = None
-    """ a message describing the outcome of the operation that has been ran (push, discover or validate) run. """
-    created_at: Optional[str] = None
-    """ Date of creation in RFC 3339 format. """
+    status: Union[EventStatus, None]
+    type: EventType
+    batch_size: int
+    """ The extracted record batch size. """
+    data: Optional[Dict[str, object]] = None
+    published_at: str
+    """ Date of publish RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,
@@ -67,7 +68,7 @@ class WatchResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of WatchResponse from a JSON string"""
+        """Create an instance of Event from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -80,17 +81,14 @@ class WatchResponse(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of WatchResponse from a dict"""
+        """Create an instance of Event from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["events"] = (
-            [Event.from_dict(_item) for _item in obj["events"]]
-            if obj.get("events") is not None
-            else None
-        )
+        obj["status"] = obj.get("status")
+        obj["type"] = obj.get("type")
 
         return cls.model_validate(obj)
