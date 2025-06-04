@@ -2920,7 +2920,7 @@ class SearchClient:
         Retrieves an object with non-null index settings.
 
         Required API Key ACLs:
-          - search
+          - settings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
@@ -2956,7 +2956,7 @@ class SearchClient:
         Retrieves an object with non-null index settings.
 
         Required API Key ACLs:
-          - search
+          - settings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
@@ -8043,7 +8043,7 @@ class SearchClientSync:
         Retrieves an object with non-null index settings.
 
         Required API Key ACLs:
-          - search
+          - settings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
@@ -8079,7 +8079,7 @@ class SearchClientSync:
         Retrieves an object with non-null index settings.
 
         Required API Key ACLs:
-          - search
+          - settings
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
