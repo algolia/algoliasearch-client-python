@@ -1,3 +1,9 @@
+## [4.19.0](https://github.com/algolia/algoliasearch-client-python/compare/4.18.0...4.19.0)
+
+- [835daccb48](https://github.com/algolia/api-clients-automation/commit/835daccb48) feat(specs): add with transformation helpers ([#4931](https://github.com/algolia/api-clients-automation/pull/4931)) by [@shortcuts](https://github.com/shortcuts/)
+- [883b38a773](https://github.com/algolia/api-clients-automation/commit/883b38a773) chore: add tests for WithTransformation methods ([#4936](https://github.com/algolia/api-clients-automation/pull/4936)) by [@shortcuts](https://github.com/shortcuts/)
+- [d10edda9d3](https://github.com/algolia/api-clients-automation/commit/d10edda9d3) fix(clients): consistent naming in transformation region helper ([#4937](https://github.com/algolia/api-clients-automation/pull/4937)) by [@shortcuts](https://github.com/shortcuts/)
+
 ## [4.18.0](https://github.com/algolia/algoliasearch-client-python/compare/4.17.0...4.18.0)
 
 - [9db03b532b](https://github.com/algolia/api-clients-automation/commit/9db03b532b) fix(specs): typo ([#4854](https://github.com/algolia/api-clients-automation/pull/4854)) by [@kai687](https://github.com/kai687/)
