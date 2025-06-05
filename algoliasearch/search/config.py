@@ -63,6 +63,6 @@ class SearchConfig(BaseConfig):
 
         self.region = None
 
-    def with_transformation(self, region: str = ""):
+    def set_transformation_region(self, region: str = ""):
         "This method is required to be called with the appropriate region of your Algolia application if you wish to leverage the *_with_transformation methods."
         self.region = region
