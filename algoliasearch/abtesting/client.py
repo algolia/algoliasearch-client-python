@@ -103,13 +103,15 @@ class AbtestingClient:
         if transporter is None:
             transporter = Transporter(config)
 
-        return AbtestingClient(
+        client = AbtestingClient(
             app_id=config.app_id,
             api_key=config.api_key,
             region=config.region,
             transporter=transporter,
             config=config,
         )
+
+        return client
 
     async def __aenter__(self) -> Self:
         return self
@@ -953,13 +955,15 @@ class AbtestingClientSync:
         if transporter is None:
             transporter = TransporterSync(config)
 
-        return AbtestingClientSync(
+        client = AbtestingClientSync(
             app_id=config.app_id,
             api_key=config.api_key,
             region=config.region,
             transporter=transporter,
             config=config,
         )
+
+        return client
 
     def __enter__(self) -> Self:
         return self

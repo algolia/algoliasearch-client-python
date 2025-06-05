@@ -103,12 +103,14 @@ class RecommendClient:
         if transporter is None:
             transporter = Transporter(config)
 
-        return RecommendClient(
+        client = RecommendClient(
             app_id=config.app_id,
             api_key=config.api_key,
             transporter=transporter,
             config=config,
         )
+
+        return client
 
     async def __aenter__(self) -> Self:
         return self
@@ -1088,12 +1090,14 @@ class RecommendClientSync:
         if transporter is None:
             transporter = TransporterSync(config)
 
-        return RecommendClientSync(
+        client = RecommendClientSync(
             app_id=config.app_id,
             api_key=config.api_key,
             transporter=transporter,
             config=config,
         )
+
+        return client
 
     def __enter__(self) -> Self:
         return self

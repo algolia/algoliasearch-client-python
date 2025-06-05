@@ -99,13 +99,15 @@ class PersonalizationClient:
         if transporter is None:
             transporter = Transporter(config)
 
-        return PersonalizationClient(
+        client = PersonalizationClient(
             app_id=config.app_id,
             api_key=config.api_key,
             region=config.region,
             transporter=transporter,
             config=config,
         )
+
+        return client
 
     async def __aenter__(self) -> Self:
         return self
@@ -753,13 +755,15 @@ class PersonalizationClientSync:
         if transporter is None:
             transporter = TransporterSync(config)
 
-        return PersonalizationClientSync(
+        client = PersonalizationClientSync(
             app_id=config.app_id,
             api_key=config.api_key,
             region=config.region,
             transporter=transporter,
             config=config,
         )
+
+        return client
 
     def __enter__(self) -> Self:
         return self

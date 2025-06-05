@@ -98,12 +98,14 @@ class CompositionClient:
         if transporter is None:
             transporter = Transporter(config)
 
-        return CompositionClient(
+        client = CompositionClient(
             app_id=config.app_id,
             api_key=config.api_key,
             transporter=transporter,
             config=config,
         )
+
+        return client
 
     async def __aenter__(self) -> Self:
         return self
@@ -356,12 +358,14 @@ class CompositionClientSync:
         if transporter is None:
             transporter = TransporterSync(config)
 
-        return CompositionClientSync(
+        client = CompositionClientSync(
             app_id=config.app_id,
             api_key=config.api_key,
             transporter=transporter,
             config=config,
         )
+
+        return client
 
     def __enter__(self) -> Self:
         return self

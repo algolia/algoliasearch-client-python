@@ -147,10 +147,6 @@ class SearchClient:
             config = SearchConfig(transporter.config.app_id, transporter.config.api_key)
         elif config is None:
             config = SearchConfig(app_id, api_key)
-        elif config.region is not None:
-            self._ingestion_transporter = IngestionClient.create_with_config(
-                IngestionConfig(config.app_id, config.api_key, config.region)
-            )
 
         self._config = config
         self._request_options = RequestOptions(config)
@@ -179,12 +175,26 @@ class SearchClient:
         if transporter is None:
             transporter = Transporter(config)
 
-        return SearchClient(
+        client = SearchClient(
             app_id=config.app_id,
             api_key=config.api_key,
             transporter=transporter,
             config=config,
         )
+
+        if config.region is not None:
+            ingestion_config = IngestionConfig(
+                config.app_id, config.api_key, config.region
+            )
+
+            if config.hosts is not None:
+                ingestion_config.hosts = config.hosts
+
+            client._ingestion_transporter = IngestionClient.create_with_config(
+                ingestion_config
+            )
+
+        return client
 
     async def __aenter__(self) -> Self:
         return self
@@ -5289,10 +5299,6 @@ class SearchClientSync:
             config = SearchConfig(transporter.config.app_id, transporter.config.api_key)
         elif config is None:
             config = SearchConfig(app_id, api_key)
-        elif config.region is not None:
-            self._ingestion_transporter = IngestionClientSync.create_with_config(
-                IngestionConfig(config.app_id, config.api_key, config.region)
-            )
 
         self._config = config
         self._request_options = RequestOptions(config)
@@ -5321,12 +5327,26 @@ class SearchClientSync:
         if transporter is None:
             transporter = TransporterSync(config)
 
-        return SearchClientSync(
+        client = SearchClientSync(
             app_id=config.app_id,
             api_key=config.api_key,
             transporter=transporter,
             config=config,
         )
+
+        if config.region is not None:
+            ingestion_config = IngestionConfig(
+                config.app_id, config.api_key, config.region
+            )
+
+            if config.hosts is not None:
+                ingestion_config.hosts = config.hosts
+
+            client._ingestion_transporter = IngestionClientSync.create_with_config(
+                ingestion_config
+            )
+
+        return client
 
     def __enter__(self) -> Self:
         return self
