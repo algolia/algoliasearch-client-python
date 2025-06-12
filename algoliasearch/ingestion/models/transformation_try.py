@@ -19,9 +19,13 @@ else:
 
 
 from algoliasearch.ingestion.models.authentication_create import AuthenticationCreate
+from algoliasearch.ingestion.models.transformation_input import TransformationInput
+from algoliasearch.ingestion.models.transformation_type import TransformationType
 
 _ALIASES = {
     "code": "code",
+    "type": "type",
+    "input": "input",
     "sample_record": "sampleRecord",
     "authentications": "authentications",
 }
@@ -36,8 +40,10 @@ class TransformationTry(BaseModel):
     TransformationTry
     """
 
-    code: str
+    code: Optional[str] = None
     """ It is deprecated. Use the `input` field with proper `type` instead to specify the transformation code. """
+    type: Optional[TransformationType] = None
+    input: Optional[TransformationInput] = None
     sample_record: object
     """ The record to apply the given code to. """
     authentications: Optional[List[AuthenticationCreate]] = None
@@ -77,6 +83,12 @@ class TransformationTry(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
+        obj["type"] = obj.get("type")
+        obj["input"] = (
+            TransformationInput.from_dict(obj["input"])
+            if obj.get("input") is not None
+            else None
+        )
         obj["authentications"] = (
             [AuthenticationCreate.from_dict(_item) for _item in obj["authentications"]]
             if obj.get("authentications") is not None

@@ -44,8 +44,8 @@ class TransformationCreate(BaseModel):
     """ It is deprecated. Use the `input` field with proper `type` instead to specify the transformation code. """
     name: str
     """ The uniquely identified name of your transformation. """
-    type: TransformationType
-    input: TransformationInput
+    type: Optional[TransformationType] = None
+    input: Optional[TransformationInput] = None
     description: Optional[str] = None
     """ A descriptive name for your transformation of what it does. """
     authentication_ids: Optional[List[str]] = None
