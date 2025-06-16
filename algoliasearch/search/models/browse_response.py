@@ -103,7 +103,7 @@ class BrowseResponse(BaseModel):
     """ Number of hits selected and sorted by the relevant sort algorithm. """
     parsed_query: Optional[str] = None
     """ Post-[normalization](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/#what-does-normalization-mean) query string that will be searched. """
-    processing_time_ms: int
+    processing_time_ms: Optional[int] = None
     """ Time the server took to process the request, in milliseconds. """
     processing_timings_ms: Optional[object] = None
     """ Experimental. List of processing steps and their times, in milliseconds. You can use this list to investigate performance issues. """
