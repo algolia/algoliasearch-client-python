@@ -3559,6 +3559,12 @@ class IngestionClient:
                 description="When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding."
             ),
         ] = None,
+        reference_index_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="This is required when targeting an index that does not have a push connector setup (e.g. a tmp index), but you wish to attach another index's transformation to it (e.g. the source index name)."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3575,6 +3581,8 @@ class IngestionClient:
         :type push_task_payload: PushTaskPayload
         :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
         :type watch: bool
+        :param reference_index_name: This is required when targeting an index that does not have a push connector setup (e.g. a tmp index), but you wish to attach another index's transformation to it (e.g. the source index name).
+        :type reference_index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -3591,6 +3599,8 @@ class IngestionClient:
 
         if watch is not None:
             _query_parameters["watch"] = watch
+        if reference_index_name is not None:
+            _query_parameters["referenceIndexName"] = reference_index_name
 
         _data = {}
         if push_task_payload is not None:
@@ -3627,6 +3637,12 @@ class IngestionClient:
                 description="When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding."
             ),
         ] = None,
+        reference_index_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="This is required when targeting an index that does not have a push connector setup (e.g. a tmp index), but you wish to attach another index's transformation to it (e.g. the source index name)."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> WatchResponse:
         """
@@ -3643,11 +3659,13 @@ class IngestionClient:
         :type push_task_payload: PushTaskPayload
         :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
         :type watch: bool
+        :param reference_index_name: This is required when targeting an index that does not have a push connector setup (e.g. a tmp index), but you wish to attach another index's transformation to it (e.g. the source index name).
+        :type reference_index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = await self.push_with_http_info(
-            index_name, push_task_payload, watch, request_options
+            index_name, push_task_payload, watch, reference_index_name, request_options
         )
         return resp.deserialize(WatchResponse, resp.raw_data)
 
@@ -8558,6 +8576,12 @@ class IngestionClientSync:
                 description="When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding."
             ),
         ] = None,
+        reference_index_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="This is required when targeting an index that does not have a push connector setup (e.g. a tmp index), but you wish to attach another index's transformation to it (e.g. the source index name)."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8574,6 +8598,8 @@ class IngestionClientSync:
         :type push_task_payload: PushTaskPayload
         :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
         :type watch: bool
+        :param reference_index_name: This is required when targeting an index that does not have a push connector setup (e.g. a tmp index), but you wish to attach another index's transformation to it (e.g. the source index name).
+        :type reference_index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -8590,6 +8616,8 @@ class IngestionClientSync:
 
         if watch is not None:
             _query_parameters["watch"] = watch
+        if reference_index_name is not None:
+            _query_parameters["referenceIndexName"] = reference_index_name
 
         _data = {}
         if push_task_payload is not None:
@@ -8626,6 +8654,12 @@ class IngestionClientSync:
                 description="When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding."
             ),
         ] = None,
+        reference_index_name: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="This is required when targeting an index that does not have a push connector setup (e.g. a tmp index), but you wish to attach another index's transformation to it (e.g. the source index name)."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> WatchResponse:
         """
@@ -8642,11 +8676,13 @@ class IngestionClientSync:
         :type push_task_payload: PushTaskPayload
         :param watch: When provided, the push operation will be synchronous and the API will wait for the ingestion to be finished before responding.
         :type watch: bool
+        :param reference_index_name: This is required when targeting an index that does not have a push connector setup (e.g. a tmp index), but you wish to attach another index's transformation to it (e.g. the source index name).
+        :type reference_index_name: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'WatchResponse' result object.
         """
         resp = self.push_with_http_info(
-            index_name, push_task_payload, watch, request_options
+            index_name, push_task_payload, watch, reference_index_name, request_options
         )
         return resp.deserialize(WatchResponse, resp.raw_data)
 
