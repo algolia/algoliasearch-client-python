@@ -41,6 +41,7 @@ from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.ingestion.client import IngestionClient, IngestionClientSync
 from algoliasearch.ingestion.config import IngestionConfig
+from algoliasearch.ingestion.models import Action as IngestionAction
 from algoliasearch.ingestion.models import WatchResponse
 from algoliasearch.search.config import SearchConfig
 from algoliasearch.search.models import (
@@ -291,7 +292,7 @@ class SearchClient:
                 "`apiKey` is required when waiting for an `update` operation."
             )
 
-        async def _func(_prev: Optional[GetApiKeyResponse]) -> GetApiKeyResponse:
+        async def _func(_: Optional[GetApiKeyResponse]) -> GetApiKeyResponse:
             try:
                 return await self.get_api_key(key=key, request_options=request_options)
             except RequestException as e:
@@ -431,9 +432,7 @@ class SearchClient:
         page = search_synonyms_params.page or 0
         search_synonyms_params.hits_per_page = hits_per_page
 
-        async def _func(
-            _prev: Optional[SearchSynonymsResponse],
-        ) -> SearchSynonymsResponse:
+        async def _func(_: Optional[SearchSynonymsResponse]) -> SearchSynonymsResponse:
             nonlocal page
             resp = await self.search_synonyms(
                 index_name=index_name,
@@ -534,7 +533,7 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> WatchResponse:
+    ) -> List[WatchResponse]:
         """
         Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client's config at instantiation.
         """
@@ -542,14 +541,12 @@ class SearchClient:
             raise ValueError(
                 "`region` must be provided at client instantiation before calling this method."
             )
-
-        return await self._ingestion_transporter.push(
+        return await self._ingestion_transporter.chunked_push(
             index_name=index_name,
-            push_task_payload={
-                "action": Action.ADDOBJECT,
-                "records": objects,
-            },
-            watch=wait_for_tasks,
+            objects=objects,
+            action=IngestionAction.ADDOBJECT,
+            wait_for_tasks=wait_for_tasks,
+            batch_size=batch_size,
             request_options=request_options,
         )
 
@@ -604,7 +601,7 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> WatchResponse:
+    ) -> List[WatchResponse]:
         """
         Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client instantiation method.
         """
@@ -612,16 +609,14 @@ class SearchClient:
             raise ValueError(
                 "`region` must be provided at client instantiation before calling this method."
             )
-
-        return await self._ingestion_transporter.push(
+        return await self._ingestion_transporter.chunked_push(
             index_name=index_name,
-            push_task_payload={
-                "action": Action.PARTIALUPDATEOBJECT
-                if create_if_not_exists
-                else Action.PARTIALUPDATEOBJECTNOCREATE,
-                "records": objects,
-            },
-            watch=wait_for_tasks,
+            objects=objects,
+            action=IngestionAction.PARTIALUPDATEOBJECT
+            if create_if_not_exists
+            else IngestionAction.PARTIALUPDATEOBJECTNOCREATE,
+            wait_for_tasks=wait_for_tasks,
+            batch_size=batch_size,
             request_options=request_options,
         )
 
@@ -5426,7 +5421,7 @@ class SearchClientSync:
                 "`apiKey` is required when waiting for an `update` operation."
             )
 
-        def _func(_prev: Optional[GetApiKeyResponse]) -> GetApiKeyResponse:
+        def _func(_: Optional[GetApiKeyResponse]) -> GetApiKeyResponse:
             try:
                 return self.get_api_key(key=key, request_options=request_options)
             except RequestException as e:
@@ -5566,7 +5561,7 @@ class SearchClientSync:
         page = search_synonyms_params.page or 0
         search_synonyms_params.hits_per_page = hits_per_page
 
-        def _func(_prev: Optional[SearchSynonymsResponse]) -> SearchSynonymsResponse:
+        def _func(_: Optional[SearchSynonymsResponse]) -> SearchSynonymsResponse:
             nonlocal page
             resp = self.search_synonyms(
                 index_name=index_name,
@@ -5667,7 +5662,7 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> WatchResponse:
+    ) -> List[WatchResponse]:
         """
         Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client's config at instantiation.
         """
@@ -5675,14 +5670,12 @@ class SearchClientSync:
             raise ValueError(
                 "`region` must be provided at client instantiation before calling this method."
             )
-
-        return self._ingestion_transporter.push(
+        return self._ingestion_transporter.chunked_push(
             index_name=index_name,
-            push_task_payload={
-                "action": Action.ADDOBJECT,
-                "records": objects,
-            },
-            watch=wait_for_tasks,
+            objects=objects,
+            action=IngestionAction.ADDOBJECT,
+            wait_for_tasks=wait_for_tasks,
+            batch_size=batch_size,
             request_options=request_options,
         )
 
@@ -5737,7 +5730,7 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> WatchResponse:
+    ) -> List[WatchResponse]:
         """
         Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client instantiation method.
         """
@@ -5745,16 +5738,14 @@ class SearchClientSync:
             raise ValueError(
                 "`region` must be provided at client instantiation before calling this method."
             )
-
-        return self._ingestion_transporter.push(
+        return self._ingestion_transporter.chunked_push(
             index_name=index_name,
-            push_task_payload={
-                "action": Action.PARTIALUPDATEOBJECT
-                if create_if_not_exists
-                else Action.PARTIALUPDATEOBJECTNOCREATE,
-                "records": objects,
-            },
-            watch=wait_for_tasks,
+            objects=objects,
+            action=IngestionAction.PARTIALUPDATEOBJECT
+            if create_if_not_exists
+            else IngestionAction.PARTIALUPDATEOBJECTNOCREATE,
+            wait_for_tasks=wait_for_tasks,
+            batch_size=batch_size,
             request_options=request_options,
         )
 

@@ -22,6 +22,12 @@ else:
 
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.base_config import BaseConfig
+from algoliasearch.http.exceptions import RequestException
+from algoliasearch.http.helpers import (
+    RetryTimeout,
+    create_iterable,
+    create_iterable_sync,
+)
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import body_serializer
 from algoliasearch.http.transporter import Transporter
@@ -29,6 +35,7 @@ from algoliasearch.http.transporter_sync import TransporterSync
 from algoliasearch.http.verb import Verb
 from algoliasearch.ingestion.config import IngestionConfig
 from algoliasearch.ingestion.models import (
+    Action,
     ActionType,
     Authentication,
     AuthenticationCreate,
@@ -61,6 +68,7 @@ from algoliasearch.ingestion.models import (
     OrderKeys,
     PlatformWithNone,
     PushTaskPayload,
+    PushTaskRecords,
     Run,
     RunListResponse,
     RunResponse,
@@ -192,6 +200,75 @@ class IngestionClient:
     async def add_user_agent(self, segment: str, version: Optional[str] = None) -> None:
         """adds a segment to the default user agent, and update the headers sent with each requests as well"""
         self._transporter.config.add_user_agent(segment, version)
+
+    async def chunked_push(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        action: Action = Action.ADDOBJECT,
+        wait_for_tasks: bool = False,
+        batch_size: int = 1000,
+        reference_index_name: Optional[str] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[WatchResponse]:
+        """
+        Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `push` requests by leveraging the Transformation pipeline setup in the Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/).
+        """
+        records: List[PushTaskRecords] = []
+        responses: List[WatchResponse] = []
+        for i, obj in enumerate(objects):
+            records.append(obj)  # pyright: ignore
+            if len(records) == batch_size or i == len(objects) - 1:
+                responses.append(
+                    await self.push(
+                        index_name=index_name,
+                        push_task_payload={
+                            "action": action,
+                            "records": records,
+                        },
+                        reference_index_name=reference_index_name,
+                        request_options=request_options,
+                    )
+                )
+        if wait_for_tasks:
+            for response in responses:
+
+                async def _func(_: Optional[Event]) -> Event:
+                    if response.event_id is None:
+                        raise ValueError(
+                            "received unexpected response from the push endpoint, eventID must not be undefined"
+                        )
+                    try:
+                        return await self.get_event(
+                            run_id=response.run_id,
+                            event_id=response.event_id,
+                            request_options=request_options,
+                        )
+                    except RequestException as e:
+                        if e.status_code == 404:
+                            return None  # pyright: ignore
+                        raise e
+
+                _retry_count = 0
+
+                def _aggregator(_: Event | None) -> None:
+                    nonlocal _retry_count
+                    _retry_count += 1
+
+                def _validate(_resp: Event | None) -> bool:
+                    return _resp is not None
+
+                timeout = RetryTimeout()
+
+                await create_iterable(
+                    func=_func,
+                    validate=_validate,
+                    aggregator=_aggregator,
+                    timeout=lambda: timeout(_retry_count),
+                    error_validate=lambda _: _retry_count >= 50,
+                    error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${50})",
+                )
+        return responses
 
     async def create_authentication_with_http_info(
         self,
@@ -5203,6 +5280,75 @@ class IngestionClientSync:
     def add_user_agent(self, segment: str, version: Optional[str] = None) -> None:
         """adds a segment to the default user agent, and update the headers sent with each requests as well"""
         self._transporter.config.add_user_agent(segment, version)
+
+    def chunked_push(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        action: Action = Action.ADDOBJECT,
+        wait_for_tasks: bool = False,
+        batch_size: int = 1000,
+        reference_index_name: Optional[str] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> List[WatchResponse]:
+        """
+        Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `push` requests by leveraging the Transformation pipeline setup in the Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/).
+        """
+        records: List[PushTaskRecords] = []
+        responses: List[WatchResponse] = []
+        for i, obj in enumerate(objects):
+            records.append(obj)  # pyright: ignore
+            if len(records) == batch_size or i == len(objects) - 1:
+                responses.append(
+                    self.push(
+                        index_name=index_name,
+                        push_task_payload={
+                            "action": action,
+                            "records": records,
+                        },
+                        reference_index_name=reference_index_name,
+                        request_options=request_options,
+                    )
+                )
+        if wait_for_tasks:
+            for response in responses:
+
+                def _func(_: Optional[Event]) -> Event:
+                    if response.event_id is None:
+                        raise ValueError(
+                            "received unexpected response from the push endpoint, eventID must not be undefined"
+                        )
+                    try:
+                        return self.get_event(
+                            run_id=response.run_id,
+                            event_id=response.event_id,
+                            request_options=request_options,
+                        )
+                    except RequestException as e:
+                        if e.status_code == 404:
+                            return None  # pyright: ignore
+                        raise e
+
+                _retry_count = 0
+
+                def _aggregator(_: Event | None) -> None:
+                    nonlocal _retry_count
+                    _retry_count += 1
+
+                def _validate(_resp: Event | None) -> bool:
+                    return _resp is not None
+
+                timeout = RetryTimeout()
+
+                create_iterable_sync(
+                    func=_func,
+                    validate=_validate,
+                    aggregator=_aggregator,
+                    timeout=lambda: timeout(_retry_count),
+                    error_validate=lambda _: _retry_count >= 50,
+                    error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${50})",
+                )
+        return responses
 
     def create_authentication_with_http_info(
         self,
