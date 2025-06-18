@@ -132,9 +132,7 @@ class PersonalizationClient:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -146,7 +144,7 @@ class PersonalizationClient:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -179,9 +177,7 @@ class PersonalizationClient:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -193,7 +189,7 @@ class PersonalizationClient:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -209,9 +205,7 @@ class PersonalizationClient:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -223,7 +217,7 @@ class PersonalizationClient:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -254,9 +248,7 @@ class PersonalizationClient:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -268,7 +260,7 @@ class PersonalizationClient:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -282,9 +274,7 @@ class PersonalizationClient:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -300,7 +290,7 @@ class PersonalizationClient:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -338,9 +328,7 @@ class PersonalizationClient:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -356,7 +344,7 @@ class PersonalizationClient:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -374,9 +362,7 @@ class PersonalizationClient:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -392,7 +378,7 @@ class PersonalizationClient:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -430,9 +416,7 @@ class PersonalizationClient:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -448,7 +432,7 @@ class PersonalizationClient:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -787,9 +771,7 @@ class PersonalizationClientSync:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -801,7 +783,7 @@ class PersonalizationClientSync:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -834,9 +816,7 @@ class PersonalizationClientSync:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -848,7 +828,7 @@ class PersonalizationClientSync:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -862,9 +842,7 @@ class PersonalizationClientSync:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -876,7 +854,7 @@ class PersonalizationClientSync:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -907,9 +885,7 @@ class PersonalizationClientSync:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -921,7 +897,7 @@ class PersonalizationClientSync:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -935,9 +911,7 @@ class PersonalizationClientSync:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -953,7 +927,7 @@ class PersonalizationClientSync:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -991,9 +965,7 @@ class PersonalizationClientSync:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -1009,7 +981,7 @@ class PersonalizationClientSync:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -1025,9 +997,7 @@ class PersonalizationClientSync:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -1043,7 +1013,7 @@ class PersonalizationClientSync:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
@@ -1081,9 +1051,7 @@ class PersonalizationClientSync:
         self,
         path: Annotated[
             StrictStr,
-            Field(
-                description='Path of the endpoint, anything after "/1" must be specified.'
-            ),
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
         ],
         parameters: Annotated[
             Optional[Dict[str, Any]],
@@ -1099,7 +1067,7 @@ class PersonalizationClientSync:
         This method lets you send requests to the Algolia REST API.
 
 
-        :param path: Path of the endpoint, anything after \"/1\" must be specified. (required)
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
         :type path: str
         :param parameters: Query parameters to apply to the current query.
         :type parameters: Dict[str, object]
