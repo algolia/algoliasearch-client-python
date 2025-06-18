@@ -174,6 +174,7 @@ from .user_highlight_result import UserHighlightResult
 from .user_hit import UserHit
 from .user_id import UserId
 from .value import Value
+from .watch_response import WatchResponse
 from .widgets import Widgets
 
 __all__ = (
@@ -343,5 +344,6 @@ __all__ = (
     "UserHit",
     "UserId",
     "Value",
+    "WatchResponse",
     "Widgets",
 )
