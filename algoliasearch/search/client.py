@@ -42,7 +42,7 @@ from algoliasearch.http.verb import Verb
 from algoliasearch.ingestion.client import IngestionClient, IngestionClientSync
 from algoliasearch.ingestion.config import IngestionConfig
 from algoliasearch.ingestion.models import Action as IngestionAction
-from algoliasearch.ingestion.models import WatchResponse
+from algoliasearch.ingestion.models import WatchResponse as IngestionWatchResponse
 from algoliasearch.search.config import SearchConfig
 from algoliasearch.search.models import (
     Action,
@@ -85,6 +85,7 @@ from algoliasearch.search.models import (
     OperationType,
     RemoveUserIdResponse,
     ReplaceAllObjectsResponse,
+    ReplaceAllObjectsWithTransformationResponse,
     ReplaceSourceResponse,
     Rule,
     SaveObjectResponse,
@@ -111,6 +112,7 @@ from algoliasearch.search.models import (
     UpdatedAtResponse,
     UpdatedAtWithObjectIdResponse,
     UserId,
+    WatchResponse,
 )
 
 
@@ -149,6 +151,8 @@ class SearchClient:
         elif config is None:
             config = SearchConfig(app_id, api_key)
 
+        config.set_default_hosts()
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -176,12 +180,7 @@ class SearchClient:
         if transporter is None:
             transporter = Transporter(config)
 
-        client = SearchClient(
-            app_id=config.app_id,
-            api_key=config.api_key,
-            transporter=transporter,
-            config=config,
-        )
+        _ingestion_transporter: Optional[IngestionClient] = None
 
         if config.region is not None:
             ingestion_config = IngestionConfig(
@@ -191,9 +190,19 @@ class SearchClient:
             if config.hosts is not None:
                 ingestion_config.hosts = config.hosts
 
-            client._ingestion_transporter = IngestionClient.create_with_config(
+            _ingestion_transporter = IngestionClient.create_with_config(
                 ingestion_config
             )
+
+        client = SearchClient(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            transporter=transporter,
+            config=config,
+        )
+
+        if _ingestion_transporter is not None:
+            client._ingestion_transporter = _ingestion_transporter
 
         return client
 
@@ -533,7 +542,7 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> List[WatchResponse]:
+    ) -> List[IngestionWatchResponse]:
         """
         Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client's config at instantiation.
         """
@@ -601,7 +610,7 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> List[WatchResponse]:
+    ) -> List[IngestionWatchResponse]:
         """
         Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client instantiation method.
         """
@@ -651,6 +660,84 @@ class SearchClient:
                     index_name=index_name, task_id=response.task_id
                 )
         return responses
+
+    async def replace_all_objects_with_transformation(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        batch_size: int = 1000,
+        scopes=["settings", "rules", "synonyms"],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ReplaceAllObjectsWithTransformationResponse:
+        """
+        Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must have been passed to the client instantiation method.
+
+        See https://api-clients-automation.netlify.app/docs/add-new-api-client#5-helpers for implementation details.
+        """
+        if self._ingestion_transporter is None:
+            raise ValueError(
+                "`region` must be provided at client instantiation before calling this method."
+            )
+        tmp_index_name = self.create_temporary_name(index_name)
+
+        try:
+
+            async def _copy() -> UpdatedAtResponse:
+                return await self.operation_index(
+                    index_name=index_name,
+                    operation_index_params=OperationIndexParams(
+                        operation=OperationType.COPY,
+                        destination=tmp_index_name,
+                        scope=scopes,
+                    ),
+                    request_options=request_options,
+                )
+
+            copy_operation_response = await _copy()
+
+            watch_responses = await self._ingestion_transporter.chunked_push(
+                index_name=tmp_index_name,
+                objects=objects,
+                wait_for_tasks=True,
+                batch_size=batch_size,
+                reference_index_name=index_name,
+                request_options=request_options,
+            )
+
+            await self.wait_for_task(
+                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+            )
+
+            copy_operation_response = await _copy()
+            await self.wait_for_task(
+                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+            )
+
+            move_operation_response = await self.operation_index(
+                index_name=tmp_index_name,
+                operation_index_params=OperationIndexParams(
+                    operation=OperationType.MOVE,
+                    destination=index_name,
+                ),
+                request_options=request_options,
+            )
+            await self.wait_for_task(
+                index_name=tmp_index_name, task_id=move_operation_response.task_id
+            )
+
+            search_watch_responses: List[WatchResponse] = [
+                WatchResponse.model_validate(wr.model_dump()) for wr in watch_responses
+            ]
+
+            return ReplaceAllObjectsWithTransformationResponse(
+                copy_operation_response=copy_operation_response,
+                watch_responses=search_watch_responses,
+                move_operation_response=move_operation_response,
+            )
+        except Exception as e:
+            await self.delete_index(tmp_index_name)
+
+            raise e
 
     async def replace_all_objects(
         self,
@@ -5279,6 +5366,8 @@ class SearchClientSync:
         elif config is None:
             config = SearchConfig(app_id, api_key)
 
+        config.set_default_hosts()
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -5306,12 +5395,7 @@ class SearchClientSync:
         if transporter is None:
             transporter = TransporterSync(config)
 
-        client = SearchClientSync(
-            app_id=config.app_id,
-            api_key=config.api_key,
-            transporter=transporter,
-            config=config,
-        )
+        _ingestion_transporter: Optional[IngestionClientSync] = None
 
         if config.region is not None:
             ingestion_config = IngestionConfig(
@@ -5321,9 +5405,19 @@ class SearchClientSync:
             if config.hosts is not None:
                 ingestion_config.hosts = config.hosts
 
-            client._ingestion_transporter = IngestionClientSync.create_with_config(
+            _ingestion_transporter = IngestionClientSync.create_with_config(
                 ingestion_config
             )
+
+        client = SearchClientSync(
+            app_id=config.app_id,
+            api_key=config.api_key,
+            transporter=transporter,
+            config=config,
+        )
+
+        if _ingestion_transporter is not None:
+            client._ingestion_transporter = _ingestion_transporter
 
         return client
 
@@ -5662,7 +5756,7 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> List[WatchResponse]:
+    ) -> List[IngestionWatchResponse]:
         """
         Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client's config at instantiation.
         """
@@ -5730,7 +5824,7 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> List[WatchResponse]:
+    ) -> List[IngestionWatchResponse]:
         """
         Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client instantiation method.
         """
@@ -5778,6 +5872,84 @@ class SearchClientSync:
             for response in responses:
                 self.wait_for_task(index_name=index_name, task_id=response.task_id)
         return responses
+
+    def replace_all_objects_with_transformation(
+        self,
+        index_name: str,
+        objects: List[Dict[str, Any]],
+        batch_size: int = 1000,
+        scopes=["settings", "rules", "synonyms"],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ReplaceAllObjectsWithTransformationResponse:
+        """
+        Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must have been passed to the client instantiation method.
+
+        See https://api-clients-automation.netlify.app/docs/add-new-api-client#5-helpers for implementation details.
+        """
+        if self._ingestion_transporter is None:
+            raise ValueError(
+                "`region` must be provided at client instantiation before calling this method."
+            )
+        tmp_index_name = self.create_temporary_name(index_name)
+
+        try:
+
+            def _copy() -> UpdatedAtResponse:
+                return self.operation_index(
+                    index_name=index_name,
+                    operation_index_params=OperationIndexParams(
+                        operation=OperationType.COPY,
+                        destination=tmp_index_name,
+                        scope=scopes,
+                    ),
+                    request_options=request_options,
+                )
+
+            copy_operation_response = _copy()
+
+            watch_responses = self._ingestion_transporter.chunked_push(
+                index_name=tmp_index_name,
+                objects=objects,
+                wait_for_tasks=True,
+                batch_size=batch_size,
+                reference_index_name=index_name,
+                request_options=request_options,
+            )
+
+            self.wait_for_task(
+                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+            )
+
+            copy_operation_response = _copy()
+            self.wait_for_task(
+                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+            )
+
+            move_operation_response = self.operation_index(
+                index_name=tmp_index_name,
+                operation_index_params=OperationIndexParams(
+                    operation=OperationType.MOVE,
+                    destination=index_name,
+                ),
+                request_options=request_options,
+            )
+            self.wait_for_task(
+                index_name=tmp_index_name, task_id=move_operation_response.task_id
+            )
+
+            search_watch_responses: List[WatchResponse] = [
+                WatchResponse.model_validate(wr.model_dump()) for wr in watch_responses
+            ]
+
+            return ReplaceAllObjectsWithTransformationResponse(
+                copy_operation_response=copy_operation_response,
+                watch_responses=search_watch_responses,
+                move_operation_response=move_operation_response,
+            )
+        except Exception as e:
+            self.delete_index(tmp_index_name)
+
+            raise e
 
     def replace_all_objects(
         self,

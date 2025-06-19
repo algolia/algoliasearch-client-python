@@ -67,6 +67,8 @@ class InsightsClient:
         elif config is None:
             config = InsightsConfig(app_id, api_key, region)
 
+        config.set_default_hosts()
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -600,6 +602,8 @@ class InsightsClientSync:
             )
         elif config is None:
             config = InsightsConfig(app_id, api_key, region)
+
+        config.set_default_hosts()
 
         self._config = config
         self._request_options = RequestOptions(config)

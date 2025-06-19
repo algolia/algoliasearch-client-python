@@ -123,6 +123,9 @@ from .remove_user_id_response import RemoveUserIdResponse
 from .remove_words_if_no_results import RemoveWordsIfNoResults
 from .rendering_content import RenderingContent
 from .replace_all_objects_response import ReplaceAllObjectsResponse
+from .replace_all_objects_with_transformation_response import (
+    ReplaceAllObjectsWithTransformationResponse,
+)
 from .replace_source_response import ReplaceSourceResponse
 from .rule import Rule
 from .save_object_response import SaveObjectResponse
@@ -179,6 +182,7 @@ from .widgets import Widgets
 
 __all__ = (
     "ReplaceAllObjectsResponse",
+    "ReplaceAllObjectsWithTransformationResponse",
     "SecuredApiKeyRestrictions",
     "Acl",
     "Action",

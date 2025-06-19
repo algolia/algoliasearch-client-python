@@ -45,13 +45,18 @@ class IngestionConfig(BaseConfig):
             self.proxies["https"] = https_proxy
 
         self.region = region
+
+    def set_default_hosts(self):
+        if self.hosts is not None:
+            return
+
         _regions = ["eu", "us"]
 
-        if not region or (region is not None and region not in _regions):
+        if not self.region or (self.region is not None and self.region not in _regions):
             raise ValueError(
                 f"`region` is required and must be one of the following: {', '.join(_regions)}"
             )
 
         self.hosts = HostsCollection(
-            [Host("data.{region}.algolia.com".replace("{region}", region or ""))]
+            [Host("data.{region}.algolia.com".replace("{region}", self.region or ""))]
         )

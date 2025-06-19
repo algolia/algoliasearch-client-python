@@ -42,6 +42,16 @@ class SearchConfig(BaseConfig):
         if https_proxy is not None:
             self.proxies["https"] = https_proxy
 
+        self.region = None
+
+    def set_transformation_region(self, region: str = ""):
+        "This method is required to be called with the appropriate region of your Algolia application if you wish to leverage the *_with_transformation methods."
+        self.region = region
+
+    def set_default_hosts(self):
+        if self.hosts is not None:
+            return
+
         self.hosts = HostsCollection(
             [
                 Host(
@@ -60,9 +70,3 @@ class SearchConfig(BaseConfig):
             ],
             reorder_hosts=True,
         )
-
-        self.region = None
-
-    def set_transformation_region(self, region: str = ""):
-        "This method is required to be called with the appropriate region of your Algolia application if you wish to leverage the *_with_transformation methods."
-        self.region = region

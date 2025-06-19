@@ -42,6 +42,10 @@ class CompositionConfig(BaseConfig):
         if https_proxy is not None:
             self.proxies["https"] = https_proxy
 
+    def set_default_hosts(self):
+        if self.hosts is not None:
+            return
+
         self.hosts = HostsCollection(
             [
                 Host(

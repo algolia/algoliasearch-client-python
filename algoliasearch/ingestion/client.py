@@ -145,6 +145,8 @@ class IngestionClient:
         elif config is None:
             config = IngestionConfig(app_id, api_key, region)
 
+        config.set_default_hosts()
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -230,6 +232,7 @@ class IngestionClient:
                         request_options=request_options,
                     )
                 )
+                records = []
         if wait_for_tasks:
             for response in responses:
 
@@ -5226,6 +5229,8 @@ class IngestionClientSync:
         elif config is None:
             config = IngestionConfig(app_id, api_key, region)
 
+        config.set_default_hosts()
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -5310,6 +5315,7 @@ class IngestionClientSync:
                         request_options=request_options,
                     )
                 )
+                records = []
         if wait_for_tasks:
             for response in responses:
 

@@ -75,6 +75,8 @@ class MonitoringClient:
         elif config is None:
             config = MonitoringConfig(app_id, api_key)
 
+        config.set_default_hosts()
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -936,6 +938,8 @@ class MonitoringClientSync:
             )
         elif config is None:
             config = MonitoringConfig(app_id, api_key)
+
+        config.set_default_hosts()
 
         self._config = config
         self._request_options = RequestOptions(config)

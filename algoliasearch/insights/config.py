@@ -48,9 +48,14 @@ class InsightsConfig(BaseConfig):
             self.proxies["https"] = https_proxy
 
         self.region = region
+
+    def set_default_hosts(self):
+        if self.hosts is not None:
+            return
+
         _regions = ["de", "us"]
 
-        if region is not None and region not in _regions:
+        if self.region is not None and self.region not in _regions:
             raise ValueError(
                 f"`region` must be one of the following: {', '.join(_regions)}"
             )
@@ -59,9 +64,9 @@ class InsightsConfig(BaseConfig):
             [
                 Host(
                     "insights.algolia.io"
-                    if region is None
+                    if self.region is None
                     else "insights.{region}.algolia.io".replace(
-                        "{region}", region or ""
+                        "{region}", self.region or ""
                     )
                 )
             ]

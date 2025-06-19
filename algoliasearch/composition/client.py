@@ -71,6 +71,8 @@ class CompositionClient:
         elif config is None:
             config = CompositionConfig(app_id, api_key)
 
+        config.set_default_hosts()
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -330,6 +332,8 @@ class CompositionClientSync:
             )
         elif config is None:
             config = CompositionConfig(app_id, api_key)
+
+        config.set_default_hosts()
 
         self._config = config
         self._request_options = RequestOptions(config)

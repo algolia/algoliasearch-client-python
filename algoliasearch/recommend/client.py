@@ -76,6 +76,8 @@ class RecommendClient:
         elif config is None:
             config = RecommendConfig(app_id, api_key)
 
+        config.set_default_hosts()
+
         self._config = config
         self._request_options = RequestOptions(config)
 
@@ -1046,6 +1048,8 @@ class RecommendClientSync:
             )
         elif config is None:
             config = RecommendConfig(app_id, api_key)
+
+        config.set_default_hosts()
 
         self._config = config
         self._request_options = RequestOptions(config)
