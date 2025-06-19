@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "algoliasearch"
-version = "4.20.0"
+version = "4.21.0"
 description = "A fully-featured and blazing-fast Python API client to interact with Algolia."
 authors = ["Algolia Team"]
 license = "MIT"
