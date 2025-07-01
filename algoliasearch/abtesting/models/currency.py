@@ -23,6 +23,7 @@ _ALIASES = {
     "revenue": "revenue",
     "mean": "mean",
     "standard_deviation": "standardDeviation",
+    "winsorized_amount": "winsorizedAmount",
 }
 
 
@@ -43,6 +44,8 @@ class Currency(BaseModel):
     """ Mean for this currency. """
     standard_deviation: Optional[float] = None
     """ Standard deviation for this currency. """
+    winsorized_amount: Optional[float] = None
+    """ The amount of revenue for this currency that was removed after capping purchase amounts to the 95th percentile. """
 
     model_config = ConfigDict(
         strict=False,
