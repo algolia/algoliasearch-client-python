@@ -38,11 +38,11 @@ class RunSourcePayload(BaseModel):
     """
 
     index_to_include: Optional[List[str]] = None
-    """ List of index names to include in reidexing/update. """
+    """ List of index names to include in reindex/update. """
     index_to_exclude: Optional[List[str]] = None
-    """ List of index names to exclude in reidexing/update. """
+    """ List of index names to exclude in reindex/update. """
     entity_ids: Optional[List[str]] = None
-    """ List of entityID to update. """
+    """ List of entityIDs to update. """
     entity_type: Optional[EntityType] = None
 
     model_config = ConfigDict(
