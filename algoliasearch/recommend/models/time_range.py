@@ -33,9 +33,9 @@ class TimeRange(BaseModel):
     TimeRange
     """
 
-    var_from: int
+    var_from: Optional[int] = None
     """ When the rule should start to be active, in Unix epoch time. """
-    until: int
+    until: Optional[int] = None
     """ When the rule should stop to be active, in Unix epoch time. """
 
     model_config = ConfigDict(
