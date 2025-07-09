@@ -92,6 +92,7 @@ from .run_sort_keys import RunSortKeys
 from .run_source_payload import RunSourcePayload
 from .run_source_response import RunSourceResponse
 from .run_status import RunStatus
+from .run_task_payload import RunTaskPayload
 from .run_type import RunType
 from .schedule_trigger import ScheduleTrigger
 from .schedule_trigger_input import ScheduleTriggerInput
@@ -241,6 +242,7 @@ __all__ = (
     "RunSourcePayload",
     "RunSourceResponse",
     "RunStatus",
+    "RunTaskPayload",
     "RunType",
     "ScheduleTrigger",
     "ScheduleTriggerInput",

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,13 +18,7 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.ingestion.models.entity_type import EntityType
-
 _ALIASES = {
-    "index_to_include": "indexToInclude",
-    "index_to_exclude": "indexToExclude",
-    "entity_ids": "entityIDs",
-    "entity_type": "entityType",
     "run_metadata": "runMetadata",
 }
 
@@ -33,20 +27,13 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class RunSourcePayload(BaseModel):
+class RunTaskPayload(BaseModel):
     """
-    RunSourcePayload
+    RunTaskPayload
     """
 
-    index_to_include: Optional[List[str]] = None
-    """ List of index names to include in reindex/update. """
-    index_to_exclude: Optional[List[str]] = None
-    """ List of index names to exclude in reindex/update. """
-    entity_ids: Optional[List[str]] = None
-    """ List of entityIDs to update. """
-    entity_type: Optional[EntityType] = None
     run_metadata: Optional[Dict[str, object]] = None
-    """ Additional information that will be passed to the created runs. """
+    """ Additional information that will be passed to the created run. """
 
     model_config = ConfigDict(
         strict=False,
@@ -63,7 +50,7 @@ class RunSourcePayload(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of RunSourcePayload from a JSON string"""
+        """Create an instance of RunTaskPayload from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -76,13 +63,11 @@ class RunSourcePayload(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of RunSourcePayload from a dict"""
+        """Create an instance of RunTaskPayload from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
-
-        obj["entityType"] = obj.get("entityType")
 
         return cls.model_validate(obj)

@@ -76,6 +76,7 @@ from algoliasearch.ingestion.models import (
     RunSourcePayload,
     RunSourceResponse,
     RunStatus,
+    RunTaskPayload,
     RunType,
     Source,
     SourceCreate,
@@ -3916,6 +3917,7 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
+        run_task_payload: Union[Optional[RunTaskPayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3928,6 +3930,8 @@ class IngestionClient:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
+        :param run_task_payload:
+        :type run_task_payload: RunTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -3935,12 +3939,17 @@ class IngestionClient:
         if task_id is None:
             raise ValueError("Parameter `task_id` is required when calling `run_task`.")
 
+        _data = {}
+        if run_task_payload is not None:
+            _data = run_task_payload
+
         return await self._transporter.request(
             verb=Verb.POST,
             path="/2/tasks/{taskID}/run".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
             request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3951,6 +3960,7 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
+        run_task_payload: Union[Optional[RunTaskPayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
@@ -3963,10 +3973,14 @@ class IngestionClient:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
+        :param run_task_payload:
+        :type run_task_payload: RunTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunResponse' result object.
         """
-        resp = await self.run_task_with_http_info(task_id, request_options)
+        resp = await self.run_task_with_http_info(
+            task_id, run_task_payload, request_options
+        )
         return resp.deserialize(RunResponse, resp.raw_data)
 
     async def run_task_v1_with_http_info(
@@ -3974,6 +3988,7 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
+        run_task_payload: Union[Optional[RunTaskPayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3987,6 +4002,8 @@ class IngestionClient:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
+        :param run_task_payload:
+        :type run_task_payload: RunTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -3998,12 +4015,17 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `run_task_v1`."
             )
 
+        _data = {}
+        if run_task_payload is not None:
+            _data = run_task_payload
+
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/tasks/{taskID}/run".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
             request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -4014,6 +4036,7 @@ class IngestionClient:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
+        run_task_payload: Union[Optional[RunTaskPayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
@@ -4027,10 +4050,14 @@ class IngestionClient:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
+        :param run_task_payload:
+        :type run_task_payload: RunTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunResponse' result object.
         """
-        resp = await self.run_task_v1_with_http_info(task_id, request_options)
+        resp = await self.run_task_v1_with_http_info(
+            task_id, run_task_payload, request_options
+        )
         return resp.deserialize(RunResponse, resp.raw_data)
 
     async def search_authentications_with_http_info(
@@ -8989,6 +9016,7 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
+        run_task_payload: Union[Optional[RunTaskPayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9001,6 +9029,8 @@ class IngestionClientSync:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
+        :param run_task_payload:
+        :type run_task_payload: RunTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -9008,12 +9038,17 @@ class IngestionClientSync:
         if task_id is None:
             raise ValueError("Parameter `task_id` is required when calling `run_task`.")
 
+        _data = {}
+        if run_task_payload is not None:
+            _data = run_task_payload
+
         return self._transporter.request(
             verb=Verb.POST,
             path="/2/tasks/{taskID}/run".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
             request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9024,6 +9059,7 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
+        run_task_payload: Union[Optional[RunTaskPayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
@@ -9036,10 +9072,12 @@ class IngestionClientSync:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
+        :param run_task_payload:
+        :type run_task_payload: RunTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunResponse' result object.
         """
-        resp = self.run_task_with_http_info(task_id, request_options)
+        resp = self.run_task_with_http_info(task_id, run_task_payload, request_options)
         return resp.deserialize(RunResponse, resp.raw_data)
 
     def run_task_v1_with_http_info(
@@ -9047,6 +9085,7 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
+        run_task_payload: Union[Optional[RunTaskPayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -9060,6 +9099,8 @@ class IngestionClientSync:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
+        :param run_task_payload:
+        :type run_task_payload: RunTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -9071,12 +9112,17 @@ class IngestionClientSync:
                 "Parameter `task_id` is required when calling `run_task_v1`."
             )
 
+        _data = {}
+        if run_task_payload is not None:
+            _data = run_task_payload
+
         return self._transporter.request(
             verb=Verb.POST,
             path="/1/tasks/{taskID}/run".replace(
                 "{taskID}", quote(str(task_id), safe="")
             ),
             request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -9087,6 +9133,7 @@ class IngestionClientSync:
         task_id: Annotated[
             StrictStr, Field(description="Unique identifier of a task.")
         ],
+        run_task_payload: Union[Optional[RunTaskPayload], dict[str, Any]] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> RunResponse:
         """
@@ -9100,10 +9147,14 @@ class IngestionClientSync:
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
+        :param run_task_payload:
+        :type run_task_payload: RunTaskPayload
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunResponse' result object.
         """
-        resp = self.run_task_v1_with_http_info(task_id, request_options)
+        resp = self.run_task_v1_with_http_info(
+            task_id, run_task_payload, request_options
+        )
         return resp.deserialize(RunResponse, resp.raw_data)
 
     def search_authentications_with_http_info(
