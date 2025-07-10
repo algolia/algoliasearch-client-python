@@ -58,7 +58,7 @@ class Variant(BaseModel):
     """ Number of add-to-cart events for this variant. """
     add_to_cart_rate: Optional[float] = None
     """ [Add-to-cart rate](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#add-to-cart-rate) for this variant.  """
-    average_click_position: Optional[int] = None
+    average_click_position: Optional[float] = None
     """ [Average click position](https://www.algolia.com/doc/guides/search-analytics/concepts/metrics/#click-position) for this variant.  """
     click_count: int
     """ Number of click events for this variant. """
