@@ -20,7 +20,7 @@ else:
 
 class Value(BaseModel):
     """
-    Total monetary value of this event in units of `currency`.
+    Total monetary value of this event in units of `currency`. This should be equal to the sum of `price` times `quantity`.
     """
 
     oneof_schema_1_validator: Optional[float] = Field(default=None)

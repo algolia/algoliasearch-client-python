@@ -20,7 +20,7 @@ else:
 
 class Price(BaseModel):
     """
-    Total price of a product, including any discounts, in units of `currency`.
+    Final price of a single product, including any discounts, in units of `currency`.
     """
 
     oneof_schema_1_validator: Optional[float] = Field(default=None)
