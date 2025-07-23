@@ -217,8 +217,12 @@ class IngestionClient:
         """
         Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `push` requests by leveraging the Transformation pipeline setup in the Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/).
         """
+        offset = 0
         records: List[PushTaskRecords] = []
         responses: List[WatchResponse] = []
+        wait_batch_size = batch_size // 10
+        if wait_batch_size < 1:
+            wait_batch_size = batch_size
         for i, obj in enumerate(objects):
             records.append(obj)  # pyright: ignore
             if len(records) == batch_size or i == len(objects) - 1:
@@ -234,44 +238,49 @@ class IngestionClient:
                     )
                 )
                 records = []
-        if wait_for_tasks:
-            for response in responses:
+            if (
+                wait_for_tasks
+                and len(responses) > 0
+                and (len(responses) % wait_batch_size == 0 or i == len(objects) - 1)
+            ):
+                for response in responses[offset : offset + wait_batch_size]:
 
-                async def _func(_: Optional[Event]) -> Event:
-                    if response.event_id is None:
-                        raise ValueError(
-                            "received unexpected response from the push endpoint, eventID must not be undefined"
-                        )
-                    try:
-                        return await self.get_event(
-                            run_id=response.run_id,
-                            event_id=response.event_id,
-                            request_options=request_options,
-                        )
-                    except RequestException as e:
-                        if e.status_code == 404:
-                            return None  # pyright: ignore
-                        raise e
+                    async def _func(_: Optional[Event]) -> Event:
+                        if response.event_id is None:
+                            raise ValueError(
+                                "received unexpected response from the push endpoint, eventID must not be undefined"
+                            )
+                        try:
+                            return await self.get_event(
+                                run_id=response.run_id,
+                                event_id=response.event_id,
+                                request_options=request_options,
+                            )
+                        except RequestException as e:
+                            if e.status_code == 404:
+                                return None  # pyright: ignore
+                            raise e
 
-                _retry_count = 0
+                    _retry_count = 0
 
-                def _aggregator(_: Event | None) -> None:
-                    nonlocal _retry_count
-                    _retry_count += 1
+                    def _aggregator(_: Event | None) -> None:
+                        nonlocal _retry_count
+                        _retry_count += 1
 
-                def _validate(_resp: Event | None) -> bool:
-                    return _resp is not None
+                    def _validate(_resp: Event | None) -> bool:
+                        return _resp is not None
 
-                timeout = RetryTimeout()
+                    timeout = RetryTimeout()
 
-                await create_iterable(
-                    func=_func,
-                    validate=_validate,
-                    aggregator=_aggregator,
-                    timeout=lambda: timeout(_retry_count),
-                    error_validate=lambda _: _retry_count >= 50,
-                    error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${50})",
-                )
+                    await create_iterable(
+                        func=_func,
+                        validate=_validate,
+                        aggregator=_aggregator,
+                        timeout=lambda: timeout(_retry_count),
+                        error_validate=lambda _: _retry_count >= 50,
+                        error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${50})",
+                    )
+                offset += wait_batch_size
         return responses
 
     async def create_authentication_with_http_info(
@@ -5326,8 +5335,12 @@ class IngestionClientSync:
         """
         Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `push` requests by leveraging the Transformation pipeline setup in the Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/).
         """
+        offset = 0
         records: List[PushTaskRecords] = []
         responses: List[WatchResponse] = []
+        wait_batch_size = batch_size // 10
+        if wait_batch_size < 1:
+            wait_batch_size = batch_size
         for i, obj in enumerate(objects):
             records.append(obj)  # pyright: ignore
             if len(records) == batch_size or i == len(objects) - 1:
@@ -5343,44 +5356,49 @@ class IngestionClientSync:
                     )
                 )
                 records = []
-        if wait_for_tasks:
-            for response in responses:
+            if (
+                wait_for_tasks
+                and len(responses) > 0
+                and (len(responses) % wait_batch_size == 0 or i == len(objects) - 1)
+            ):
+                for response in responses[offset : offset + wait_batch_size]:
 
-                def _func(_: Optional[Event]) -> Event:
-                    if response.event_id is None:
-                        raise ValueError(
-                            "received unexpected response from the push endpoint, eventID must not be undefined"
-                        )
-                    try:
-                        return self.get_event(
-                            run_id=response.run_id,
-                            event_id=response.event_id,
-                            request_options=request_options,
-                        )
-                    except RequestException as e:
-                        if e.status_code == 404:
-                            return None  # pyright: ignore
-                        raise e
+                    def _func(_: Optional[Event]) -> Event:
+                        if response.event_id is None:
+                            raise ValueError(
+                                "received unexpected response from the push endpoint, eventID must not be undefined"
+                            )
+                        try:
+                            return self.get_event(
+                                run_id=response.run_id,
+                                event_id=response.event_id,
+                                request_options=request_options,
+                            )
+                        except RequestException as e:
+                            if e.status_code == 404:
+                                return None  # pyright: ignore
+                            raise e
 
-                _retry_count = 0
+                    _retry_count = 0
 
-                def _aggregator(_: Event | None) -> None:
-                    nonlocal _retry_count
-                    _retry_count += 1
+                    def _aggregator(_: Event | None) -> None:
+                        nonlocal _retry_count
+                        _retry_count += 1
 
-                def _validate(_resp: Event | None) -> bool:
-                    return _resp is not None
+                    def _validate(_resp: Event | None) -> bool:
+                        return _resp is not None
 
-                timeout = RetryTimeout()
+                    timeout = RetryTimeout()
 
-                create_iterable_sync(
-                    func=_func,
-                    validate=_validate,
-                    aggregator=_aggregator,
-                    timeout=lambda: timeout(_retry_count),
-                    error_validate=lambda _: _retry_count >= 50,
-                    error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${50})",
-                )
+                    create_iterable_sync(
+                        func=_func,
+                        validate=_validate,
+                        aggregator=_aggregator,
+                        timeout=lambda: timeout(_retry_count),
+                        error_validate=lambda _: _retry_count >= 50,
+                        error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${50})",
+                    )
+                offset += wait_batch_size
         return responses
 
     def create_authentication_with_http_info(
