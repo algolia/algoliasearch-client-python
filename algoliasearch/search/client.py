@@ -672,7 +672,7 @@ class SearchClient:
         """
         Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must have been passed to the client instantiation method.
 
-        See https://api-clients-automation.netlify.app/docs/add-new-api-client#5-helpers for implementation details.
+        See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
@@ -750,7 +750,7 @@ class SearchClient:
         """
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
 
-        See https://api-clients-automation.netlify.app/docs/add-new-api-client#5-helpers for implementation details.
+        See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
         tmp_index_name = self.create_temporary_name(index_name)
 
@@ -5884,7 +5884,7 @@ class SearchClientSync:
         """
         Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must have been passed to the client instantiation method.
 
-        See https://api-clients-automation.netlify.app/docs/add-new-api-client#5-helpers for implementation details.
+        See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
@@ -5962,7 +5962,7 @@ class SearchClientSync:
         """
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
 
-        See https://api-clients-automation.netlify.app/docs/add-new-api-client#5-helpers for implementation details.
+        See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
         tmp_index_name = self.create_temporary_name(index_name)
 
