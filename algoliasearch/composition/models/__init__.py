@@ -29,6 +29,7 @@ from .facets import Facets
 from .highlight_result import HighlightResult
 from .highlight_result_option import HighlightResultOption
 from .hit import Hit
+from .hit_metadata import HitMetadata
 from .hit_ranking_info import HitRankingInfo
 from .inside_bounding_box import InsideBoundingBox
 from .match_level import MatchLevel
@@ -84,6 +85,7 @@ __all__ = (
     "HighlightResult",
     "HighlightResultOption",
     "Hit",
+    "HitMetadata",
     "HitRankingInfo",
     "InsideBoundingBox",
     "MatchLevel",

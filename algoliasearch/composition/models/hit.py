@@ -19,6 +19,7 @@ else:
 
 
 from algoliasearch.composition.models.highlight_result import HighlightResult
+from algoliasearch.composition.models.hit_metadata import HitMetadata
 from algoliasearch.composition.models.hit_ranking_info import HitRankingInfo
 from algoliasearch.composition.models.snippet_result import SnippetResult
 
@@ -28,6 +29,7 @@ _ALIASES = {
     "snippet_result": "_snippetResult",
     "ranking_info": "_rankingInfo",
     "distinct_seq_id": "_distinctSeqID",
+    "extra": "_extra",
 }
 
 
@@ -48,6 +50,7 @@ class Hit(BaseModel):
     """ Snippets that show the context around a matching search query. """
     ranking_info: Optional[HitRankingInfo] = None
     distinct_seq_id: Optional[int] = None
+    extra: Optional[HitMetadata] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -103,6 +106,11 @@ class Hit(BaseModel):
         obj["_rankingInfo"] = (
             HitRankingInfo.from_dict(obj["_rankingInfo"])
             if obj.get("_rankingInfo") is not None
+            else None
+        )
+        obj["_extra"] = (
+            HitMetadata.from_dict(obj["_extra"])
+            if obj.get("_extra") is not None
             else None
         )
 
