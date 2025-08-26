@@ -7,7 +7,7 @@
 
   <p align="center">
     <a href="https://pypi.org/project/algoliasearch"><img src="https://img.shields.io/pypi/v/algoliasearch.svg" alt="PyPI"></img></a>
-    <a href="https://pypi.org/project/algoliasearch"><img src="https://img.shields.io/pypi/pyversions/ansicolortags.svg" alt="Python versions"></img></a>
+    <a href="https://pypi.org/project/algoliasearch"><img src="https://img.shields.io/badge/python-3.8|3.9|3.10|3.11|3.12-blue" alt="Python versions"></img></a>
     <a href="https://pypi.org/project/algoliasearch"><img src="https://img.shields.io/pypi/l/ansicolortags.svg" alt="License"></a>
   </p>
 </p>
