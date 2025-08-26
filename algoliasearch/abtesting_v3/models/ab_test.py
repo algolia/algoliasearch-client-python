@@ -27,6 +27,7 @@ _ALIASES = {
     "updated_at": "updatedAt",
     "created_at": "createdAt",
     "end_at": "endAt",
+    "stopped_at": "stoppedAt",
     "name": "name",
     "status": "status",
     "variants": "variants",
@@ -52,6 +53,8 @@ class ABTest(BaseModel):
     """ Date and time when the A/B test was created, in RFC 3339 format. """
     end_at: str
     """ End date and time of the A/B test, in RFC 3339 format. """
+    stopped_at: Optional[str] = None
+    """ Date and time when the A/B test was stopped, in RFC 3339 format. """
     name: str
     """ A/B test name. """
     status: Status
