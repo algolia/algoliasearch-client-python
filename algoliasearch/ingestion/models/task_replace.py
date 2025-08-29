@@ -25,11 +25,13 @@ from algoliasearch.ingestion.models.task_input import TaskInput
 
 _ALIASES = {
     "destination_id": "destinationID",
-    "cron": "cron",
-    "input": "input",
-    "enabled": "enabled",
+    "action": "action",
     "subscription_action": "subscriptionAction",
+    "cron": "cron",
+    "enabled": "enabled",
     "failure_threshold": "failureThreshold",
+    "input": "input",
+    "cursor": "cursor",
     "notifications": "notifications",
     "policies": "policies",
 }
@@ -39,21 +41,24 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class TaskUpdate(BaseModel):
+class TaskReplace(BaseModel):
     """
-    API request body for partially updating a task.
+    API request body for updating a task.
     """
 
-    destination_id: Optional[str] = None
+    destination_id: str
     """ Universally unique identifier (UUID) of a destination resource. """
+    action: ActionType
+    subscription_action: Optional[ActionType] = None
     cron: Optional[str] = None
     """ Cron expression for the task's schedule. """
-    input: Optional[TaskInput] = None
     enabled: Optional[bool] = None
     """ Whether the task is enabled. """
-    subscription_action: Optional[ActionType] = None
     failure_threshold: Optional[int] = None
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
+    input: Optional[TaskInput] = None
+    cursor: Optional[str] = None
+    """ Date of the last cursor in RFC 3339 format. """
     notifications: Optional[Notifications] = None
     policies: Optional[Policies] = None
 
@@ -72,7 +77,7 @@ class TaskUpdate(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TaskUpdate from a JSON string"""
+        """Create an instance of TaskReplace from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -85,17 +90,18 @@ class TaskUpdate(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TaskUpdate from a dict"""
+        """Create an instance of TaskReplace from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
+        obj["action"] = obj.get("action")
+        obj["subscriptionAction"] = obj.get("subscriptionAction")
         obj["input"] = (
             TaskInput.from_dict(obj["input"]) if obj.get("input") is not None else None
         )
-        obj["subscriptionAction"] = obj.get("subscriptionAction")
         obj["notifications"] = (
             Notifications.from_dict(obj["notifications"])
             if obj.get("notifications") is not None

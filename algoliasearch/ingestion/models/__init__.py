@@ -132,6 +132,7 @@ from .task_create_response import TaskCreateResponse
 from .task_create_trigger import TaskCreateTrigger
 from .task_create_v1 import TaskCreateV1
 from .task_input import TaskInput
+from .task_replace import TaskReplace
 from .task_search import TaskSearch
 from .task_sort_keys import TaskSortKeys
 from .task_update import TaskUpdate
@@ -282,6 +283,7 @@ __all__ = (
     "TaskCreateTrigger",
     "TaskCreateV1",
     "TaskInput",
+    "TaskReplace",
     "TaskSearch",
     "TaskSortKeys",
     "TaskUpdate",

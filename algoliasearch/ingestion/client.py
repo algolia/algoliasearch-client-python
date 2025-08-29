@@ -90,6 +90,7 @@ from algoliasearch.ingestion.models import (
     TaskCreate,
     TaskCreateResponse,
     TaskCreateV1,
+    TaskReplace,
     TaskSearch,
     TaskSortKeys,
     TaskUpdate,
@@ -3848,6 +3849,74 @@ class IngestionClient:
         )
         return resp.deserialize(WatchResponse, resp.raw_data)
 
+    async def replace_task_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        task_replace: Union[TaskReplace, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Fully updates a task by its ID, use partialUpdateTask if you only want to update a subset of fields.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param task_replace: (required)
+        :type task_replace: TaskReplace
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `replace_task`."
+            )
+
+        if task_replace is None:
+            raise ValueError(
+                "Parameter `task_replace` is required when calling `replace_task`."
+            )
+
+        _data = {}
+        if task_replace is not None:
+            _data = task_replace
+
+        return await self._transporter.request(
+            verb=Verb.PUT,
+            path="/2/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def replace_task(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        task_replace: Union[TaskReplace, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskUpdateResponse:
+        """
+        Fully updates a task by its ID, use partialUpdateTask if you only want to update a subset of fields.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param task_replace: (required)
+        :type task_replace: TaskReplace
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
+        """
+        resp = await self.replace_task_with_http_info(
+            task_id, task_replace, request_options
+        )
+        return resp.deserialize(TaskUpdateResponse, resp.raw_data)
+
     async def run_source_with_http_info(
         self,
         source_id: Annotated[
@@ -4884,7 +4953,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Updates a task by its ID.
+        Partially updates a task by its ID.
 
 
         :param task_id: Unique identifier of a task. (required)
@@ -4928,7 +4997,7 @@ class IngestionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
-        Updates a task by its ID.
+        Partially updates a task by its ID.
 
 
         :param task_id: Unique identifier of a task. (required)
@@ -8956,6 +9025,72 @@ class IngestionClientSync:
         )
         return resp.deserialize(WatchResponse, resp.raw_data)
 
+    def replace_task_with_http_info(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        task_replace: Union[TaskReplace, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Fully updates a task by its ID, use partialUpdateTask if you only want to update a subset of fields.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param task_replace: (required)
+        :type task_replace: TaskReplace
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `replace_task`."
+            )
+
+        if task_replace is None:
+            raise ValueError(
+                "Parameter `task_replace` is required when calling `replace_task`."
+            )
+
+        _data = {}
+        if task_replace is not None:
+            _data = task_replace
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/2/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def replace_task(
+        self,
+        task_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a task.")
+        ],
+        task_replace: Union[TaskReplace, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskUpdateResponse:
+        """
+        Fully updates a task by its ID, use partialUpdateTask if you only want to update a subset of fields.
+
+
+        :param task_id: Unique identifier of a task. (required)
+        :type task_id: str
+        :param task_replace: (required)
+        :type task_replace: TaskReplace
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskUpdateResponse' result object.
+        """
+        resp = self.replace_task_with_http_info(task_id, task_replace, request_options)
+        return resp.deserialize(TaskUpdateResponse, resp.raw_data)
+
     def run_source_with_http_info(
         self,
         source_id: Annotated[
@@ -9990,7 +10125,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Updates a task by its ID.
+        Partially updates a task by its ID.
 
 
         :param task_id: Unique identifier of a task. (required)
@@ -10034,7 +10169,7 @@ class IngestionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskUpdateResponse:
         """
-        Updates a task by its ID.
+        Partially updates a task by its ID.
 
 
         :param task_id: Unique identifier of a task. (required)
