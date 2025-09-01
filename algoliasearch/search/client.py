@@ -2990,6 +2990,12 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
+        get_version: Annotated[
+            Optional[StrictInt],
+            Field(
+                description="When set to 2, the endpoint will not include `synonyms` in the response. This parameter is here for backward compatibility."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3000,6 +3006,8 @@ class SearchClient:
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
+        :param get_version: When set to 2, the endpoint will not include `synonyms` in the response. This parameter is here for backward compatibility.
+        :type get_version: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -3009,12 +3017,18 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `get_settings`."
             )
 
+        _query_parameters: Dict[str, Any] = {}
+
+        if get_version is not None:
+            _query_parameters["getVersion"] = get_version
+
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/settings".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -3026,6 +3040,12 @@ class SearchClient:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
+        get_version: Annotated[
+            Optional[StrictInt],
+            Field(
+                description="When set to 2, the endpoint will not include `synonyms` in the response. This parameter is here for backward compatibility."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SettingsResponse:
         """
@@ -3036,10 +3056,14 @@ class SearchClient:
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
+        :param get_version: When set to 2, the endpoint will not include `synonyms` in the response. This parameter is here for backward compatibility.
+        :type get_version: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SettingsResponse' result object.
         """
-        resp = await self.get_settings_with_http_info(index_name, request_options)
+        resp = await self.get_settings_with_http_info(
+            index_name, get_version, request_options
+        )
         return resp.deserialize(SettingsResponse, resp.raw_data)
 
     async def get_sources_with_http_info(
@@ -8188,6 +8212,12 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
+        get_version: Annotated[
+            Optional[StrictInt],
+            Field(
+                description="When set to 2, the endpoint will not include `synonyms` in the response. This parameter is here for backward compatibility."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8198,6 +8228,8 @@ class SearchClientSync:
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
+        :param get_version: When set to 2, the endpoint will not include `synonyms` in the response. This parameter is here for backward compatibility.
+        :type get_version: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -8207,12 +8239,18 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `get_settings`."
             )
 
+        _query_parameters: Dict[str, Any] = {}
+
+        if get_version is not None:
+            _query_parameters["getVersion"] = get_version
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/1/indexes/{indexName}/settings".replace(
                 "{indexName}", quote(str(index_name), safe="")
             ),
             request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -8224,6 +8262,12 @@ class SearchClientSync:
             StrictStr,
             Field(description="Name of the index on which to perform the operation."),
         ],
+        get_version: Annotated[
+            Optional[StrictInt],
+            Field(
+                description="When set to 2, the endpoint will not include `synonyms` in the response. This parameter is here for backward compatibility."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SettingsResponse:
         """
@@ -8234,10 +8278,14 @@ class SearchClientSync:
 
         :param index_name: Name of the index on which to perform the operation. (required)
         :type index_name: str
+        :param get_version: When set to 2, the endpoint will not include `synonyms` in the response. This parameter is here for backward compatibility.
+        :type get_version: int
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SettingsResponse' result object.
         """
-        resp = self.get_settings_with_http_info(index_name, request_options)
+        resp = self.get_settings_with_http_info(
+            index_name, get_version, request_options
+        )
         return resp.deserialize(SettingsResponse, resp.raw_data)
 
     def get_sources_with_http_info(
