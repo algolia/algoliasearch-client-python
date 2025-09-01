@@ -10,7 +10,7 @@ from json import loads
 from sys import version_info
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_serializer
 
 if version_info >= (3, 11):
     from typing import Self
@@ -58,6 +58,43 @@ class Hit(BaseModel):
         alias_generator=_alias_generator,
         extra="allow",
     )
+
+    @staticmethod
+    def __dump_item(item):
+        return (
+            item.model_dump(
+                by_alias=True,
+                exclude_none=True,
+                exclude_unset=True,
+                warnings="none",
+            )
+            if isinstance(item, BaseModel)
+            else item
+        )
+
+    @field_serializer("highlight_result")
+    def serialize_highlight_result(self, v: HighlightResult | None):
+        if v is None:
+            return None
+
+        if isinstance(v, dict):
+            return {k: self.__dump_item(val) for k, val in v.items()}
+        elif isinstance(v, list):
+            return [self.__dump_item(val) for val in v]
+        else:
+            return self.__dump_item(v)
+
+    @field_serializer("snippet_result")
+    def serialize_snippet_result(self, v: SnippetResult | None):
+        if v is None:
+            return None
+
+        if isinstance(v, dict):
+            return {k: self.__dump_item(val) for k, val in v.items()}
+        elif isinstance(v, list):
+            return [self.__dump_item(val) for val in v]
+        else:
+            return self.__dump_item(v)
 
     def to_json(self) -> str:
         return self.model_dump_json(by_alias=True, exclude_unset=True)
