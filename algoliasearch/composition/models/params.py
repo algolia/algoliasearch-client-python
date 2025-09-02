@@ -20,6 +20,7 @@ else:
 
 from algoliasearch.composition.models.around_precision import AroundPrecision
 from algoliasearch.composition.models.around_radius import AroundRadius
+from algoliasearch.composition.models.external_injected_item import ExternalInjectedItem
 from algoliasearch.composition.models.facet_filters import FacetFilters
 from algoliasearch.composition.models.inside_bounding_box import InsideBoundingBox
 from algoliasearch.composition.models.numeric_filters import NumericFilters
@@ -53,6 +54,7 @@ _ALIASES = {
     "analytics_tags": "analyticsTags",
     "enable_ab_test": "enableABTest",
     "enable_re_ranking": "enableReRanking",
+    "injected_items": "injectedItems",
 }
 
 
@@ -111,6 +113,8 @@ class Params(BaseModel):
     """ Whether to enable index level A/B testing for this run request. If the composition mixes multiple indices, the A/B test is ignored.  """
     enable_re_ranking: Optional[bool] = None
     """ Whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking/) This setting only has an effect if you activated Dynamic Re-Ranking for this index in the Algolia dashboard.  """
+    injected_items: Optional[Dict[str, ExternalInjectedItem]] = None
+    """ A list of extenrally injected objectID groups into from an external source.  """
 
     model_config = ConfigDict(
         strict=False,
@@ -179,5 +183,13 @@ class Params(BaseModel):
         )
         obj["queryLanguages"] = obj.get("queryLanguages")
         obj["naturalLanguages"] = obj.get("naturalLanguages")
+        obj["injectedItems"] = (
+            dict(
+                (_k, ExternalInjectedItem.from_dict(_v))
+                for _k, _v in obj["injectedItems"].items()
+            )
+            if obj.get("injectedItems") is not None
+            else None
+        )
 
         return cls.model_validate(obj)

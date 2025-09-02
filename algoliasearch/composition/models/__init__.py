@@ -21,6 +21,8 @@ from .composition_run_search_response import CompositionRunSearchResponse
 from .compositions_search_response import CompositionsSearchResponse
 from .error_base import ErrorBase
 from .exhaustive import Exhaustive
+from .external_injected_item import ExternalInjectedItem
+from .external_injection import ExternalInjection
 from .facet_filters import FacetFilters
 from .facet_hits import FacetHits
 from .facet_ordering import FacetOrdering
@@ -77,6 +79,8 @@ __all__ = (
     "CompositionsSearchResponse",
     "ErrorBase",
     "Exhaustive",
+    "ExternalInjectedItem",
+    "ExternalInjection",
     "FacetFilters",
     "FacetHits",
     "FacetOrdering",
