@@ -112,7 +112,9 @@ class TransporterSync(BaseTransporter):
 
                 raise RequestException(content, response.status_code)
 
-        raise AlgoliaUnreachableHostException("Unreachable hosts")
+        raise AlgoliaUnreachableHostException(
+            "Unreachable hosts. If the error persists, please visit our help center https://alg.li/support-unreachable-hosts or reach out to the Algolia Support team: https://alg.li/support"
+        )
 
 
 class EchoTransporterSync(TransporterSync):
