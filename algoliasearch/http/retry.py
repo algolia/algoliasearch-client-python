@@ -33,7 +33,7 @@ class RetryStrategy:
             host.up = False
 
             return RetryOutcome.RETRY
-        elif response.status_code is not None and self._is_success(response):
+        elif self._is_success(response):
             return RetryOutcome.SUCCESS
 
         return RetryOutcome.FAIL
