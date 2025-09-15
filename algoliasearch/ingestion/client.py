@@ -104,6 +104,7 @@ from algoliasearch.ingestion.models import (
     TransformationSortKeys,
     TransformationTry,
     TransformationTryResponse,
+    TransformationType,
     TransformationUpdateResponse,
     TriggerType,
     WatchResponse,
@@ -3524,6 +3525,15 @@ class IngestionClient:
             ],
             str,
         ] = None,
+        type: Union[
+            Annotated[
+                Optional[TransformationType],
+                Field(
+                    description="Whether to filter the list of transformations by the type of transformation."
+                ),
+            ],
+            str,
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -3542,6 +3552,8 @@ class IngestionClient:
         :type sort: TransformationSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
+        :param type: Whether to filter the list of transformations by the type of transformation.
+        :type type: TransformationType
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -3556,6 +3568,8 @@ class IngestionClient:
             _query_parameters["sort"] = sort
         if order is not None:
             _query_parameters["order"] = order
+        if type is not None:
+            _query_parameters["type"] = type
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -3595,6 +3609,15 @@ class IngestionClient:
             ],
             str,
         ] = None,
+        type: Union[
+            Annotated[
+                Optional[TransformationType],
+                Field(
+                    description="Whether to filter the list of transformations by the type of transformation."
+                ),
+            ],
+            str,
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTransformationsResponse:
         """
@@ -3613,11 +3636,13 @@ class IngestionClient:
         :type sort: TransformationSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
+        :param type: Whether to filter the list of transformations by the type of transformation.
+        :type type: TransformationType
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListTransformationsResponse' result object.
         """
         resp = await self.list_transformations_with_http_info(
-            items_per_page, page, sort, order, request_options
+            items_per_page, page, sort, order, type, request_options
         )
         return resp.deserialize(ListTransformationsResponse, resp.raw_data)
 
@@ -8700,6 +8725,15 @@ class IngestionClientSync:
             ],
             str,
         ] = None,
+        type: Union[
+            Annotated[
+                Optional[TransformationType],
+                Field(
+                    description="Whether to filter the list of transformations by the type of transformation."
+                ),
+            ],
+            str,
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -8718,6 +8752,8 @@ class IngestionClientSync:
         :type sort: TransformationSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
+        :param type: Whether to filter the list of transformations by the type of transformation.
+        :type type: TransformationType
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -8732,6 +8768,8 @@ class IngestionClientSync:
             _query_parameters["sort"] = sort
         if order is not None:
             _query_parameters["order"] = order
+        if type is not None:
+            _query_parameters["type"] = type
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -8771,6 +8809,15 @@ class IngestionClientSync:
             ],
             str,
         ] = None,
+        type: Union[
+            Annotated[
+                Optional[TransformationType],
+                Field(
+                    description="Whether to filter the list of transformations by the type of transformation."
+                ),
+            ],
+            str,
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListTransformationsResponse:
         """
@@ -8789,11 +8836,13 @@ class IngestionClientSync:
         :type sort: TransformationSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
+        :param type: Whether to filter the list of transformations by the type of transformation.
+        :type type: TransformationType
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListTransformationsResponse' result object.
         """
         resp = self.list_transformations_with_http_info(
-            items_per_page, page, sort, order, request_options
+            items_per_page, page, sort, order, type, request_options
         )
         return resp.deserialize(ListTransformationsResponse, resp.raw_data)
 
