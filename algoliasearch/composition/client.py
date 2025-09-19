@@ -8,10 +8,10 @@ from __future__ import annotations
 
 from json import dumps
 from sys import version_info
-from typing import Any, Optional, Union
+from typing import Any, Dict, Optional, Union
 from urllib.parse import quote
 
-from pydantic import Field, StrictStr
+from pydantic import Field, StrictInt, StrictStr
 from typing_extensions import Annotated
 
 if version_info >= (3, 11):
@@ -21,10 +21,21 @@ else:
 
 from algoliasearch.composition.config import CompositionConfig
 from algoliasearch.composition.models import (
+    BatchParams,
+    Composition,
+    CompositionRule,
+    CompositionRulesBatchParams,
+    GetTaskResponse,
+    ListCompositionsResponse,
+    MultipleBatchResponse,
     RequestBody,
+    RulesMultipleBatchResponse,
+    SearchCompositionRulesParams,
+    SearchCompositionRulesResponse,
     SearchForFacetValuesRequest,
     SearchForFacetValuesResponse,
     SearchResponse,
+    TaskIDResponse,
 )
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.base_config import BaseConfig
@@ -128,6 +139,1032 @@ class CompositionClient:
         """adds a segment to the default user agent, and update the headers sent with each requests as well"""
         self._transporter.config.add_user_agent(segment, version)
 
+    async def custom_delete_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters[_qpkey] = _qpvalue
+
+        return await self._transporter.request(
+            verb=Verb.DELETE,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def custom_delete(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        resp = await self.custom_delete_with_http_info(
+            path, parameters, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
+
+    async def custom_get_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters[_qpkey] = _qpvalue
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def custom_get(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        resp = await self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
+
+    async def custom_post_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters[_qpkey] = _qpvalue
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def custom_post(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        resp = await self.custom_post_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
+
+    async def custom_put_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters[_qpkey] = _qpvalue
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return await self._transporter.request(
+            verb=Verb.PUT,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def custom_put(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        resp = await self.custom_put_with_http_info(
+            path, parameters, body, request_options
+        )
+        return resp.deserialize(object, resp.raw_data)
+
+    async def delete_composition_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Delete a composition from the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `delete_composition`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/compositions/{compositionID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def delete_composition(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Delete a composition from the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = await self.delete_composition_with_http_info(
+            composition_id, request_options
+        )
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
+
+    async def delete_composition_rule_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Delete a Composition Rule from the specified Composition ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `delete_composition_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_composition_rule`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/compositions/{compositionID}/rules/{objectID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def delete_composition_rule(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Delete a Composition Rule from the specified Composition ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = await self.delete_composition_rule_with_http_info(
+            composition_id, object_id, request_options
+        )
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
+
+    async def get_composition_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieve a single composition in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_composition`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/1/compositions/{compositionID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_composition(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Composition:
+        """
+        Retrieve a single composition in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Composition' result object.
+        """
+        resp = await self.get_composition_with_http_info(
+            composition_id, request_options
+        )
+        return resp.deserialize(Composition, resp.raw_data)
+
+    async def get_rule_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_rule`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/1/compositions/{compositionID}/rules/{objectID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_rule(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> CompositionRule:
+        """
+        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'CompositionRule' result object.
+        """
+        resp = await self.get_rule_with_http_info(
+            composition_id, object_id, request_options
+        )
+        return resp.deserialize(CompositionRule, resp.raw_data)
+
+    async def get_task_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Checks the status of a given task.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+                  - addObject
+                  - deleteObject
+                  - deleteIndex
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_task`."
+            )
+
+        if task_id is None:
+            raise ValueError("Parameter `task_id` is required when calling `get_task`.")
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/1/compositions/{compositionID}/task/{taskID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ).replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_task(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetTaskResponse:
+        """
+        Checks the status of a given task.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+                  - addObject
+                  - deleteObject
+                  - deleteIndex
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetTaskResponse' result object.
+        """
+        resp = await self.get_task_with_http_info(
+            composition_id, task_id, request_options
+        )
+        return resp.deserialize(GetTaskResponse, resp.raw_data)
+
+    async def list_compositions_with_http_info(
+        self,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
+            ),
+        ] = None,
+        hits_per_page: Annotated[
+            Optional[StrictInt], Field(description="Number of hits per page.")
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Lists all compositions in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
+        :type page: int
+        :param hits_per_page: Number of hits per page.
+        :type hits_per_page: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if page is not None:
+            _query_parameters["page"] = page
+        if hits_per_page is not None:
+            _query_parameters["hitsPerPage"] = hits_per_page
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/1/compositions",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def list_compositions(
+        self,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
+            ),
+        ] = None,
+        hits_per_page: Annotated[
+            Optional[StrictInt], Field(description="Number of hits per page.")
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListCompositionsResponse:
+        """
+        Lists all compositions in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
+        :type page: int
+        :param hits_per_page: Number of hits per page.
+        :type hits_per_page: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListCompositionsResponse' result object.
+        """
+        resp = await self.list_compositions_with_http_info(
+            page, hits_per_page, request_options
+        )
+        return resp.deserialize(ListCompositionsResponse, resp.raw_data)
+
+    async def multiple_batch_with_http_info(
+        self,
+        batch_params: Union[BatchParams, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Adds, updates, or deletes compositions with a single API request.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param batch_params: (required)
+        :type batch_params: BatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if batch_params is None:
+            raise ValueError(
+                "Parameter `batch_params` is required when calling `multiple_batch`."
+            )
+
+        _data = {}
+        if batch_params is not None:
+            _data = batch_params
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/compositions/*/batch",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def multiple_batch(
+        self,
+        batch_params: Union[BatchParams, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> MultipleBatchResponse:
+        """
+        Adds, updates, or deletes compositions with a single API request.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param batch_params: (required)
+        :type batch_params: BatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'MultipleBatchResponse' result object.
+        """
+        resp = await self.multiple_batch_with_http_info(batch_params, request_options)
+        return resp.deserialize(MultipleBatchResponse, resp.raw_data)
+
+    async def put_composition_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        composition: Union[Composition, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Upsert a composition in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param composition: (required)
+        :type composition: Composition
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `put_composition`."
+            )
+
+        if composition is None:
+            raise ValueError(
+                "Parameter `composition` is required when calling `put_composition`."
+            )
+
+        _data = {}
+        if composition is not None:
+            _data = composition
+
+        return await self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/compositions/{compositionID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def put_composition(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        composition: Union[Composition, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Upsert a composition in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param composition: (required)
+        :type composition: Composition
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = await self.put_composition_with_http_info(
+            composition_id, composition, request_options
+        )
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
+
+    async def put_composition_rule_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        composition_rule: Union[CompositionRule, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Upsert a Composition Rule for the specified composition ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param composition_rule: (required)
+        :type composition_rule: CompositionRule
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `put_composition_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `put_composition_rule`."
+            )
+
+        if composition_rule is None:
+            raise ValueError(
+                "Parameter `composition_rule` is required when calling `put_composition_rule`."
+            )
+
+        _data = {}
+        if composition_rule is not None:
+            _data = composition_rule
+
+        return await self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/compositions/{compositionID}/rules/{objectID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def put_composition_rule(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        composition_rule: Union[CompositionRule, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Upsert a Composition Rule for the specified composition ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param composition_rule: (required)
+        :type composition_rule: CompositionRule
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = await self.put_composition_rule_with_http_info(
+            composition_id, object_id, composition_rule, request_options
+        )
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
+
+    async def save_rules_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        rules: Union[CompositionRulesBatchParams, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Create or update or delete multiple composition rules.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param rules: (required)
+        :type rules: CompositionRulesBatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `save_rules`."
+            )
+
+        if rules is None:
+            raise ValueError("Parameter `rules` is required when calling `save_rules`.")
+
+        _data = {}
+        if rules is not None:
+            _data = rules
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/compositions/{compositionID}/rules/batch".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def save_rules(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        rules: Union[CompositionRulesBatchParams, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RulesMultipleBatchResponse:
+        """
+        Create or update or delete multiple composition rules.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param rules: (required)
+        :type rules: CompositionRulesBatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RulesMultipleBatchResponse' result object.
+        """
+        resp = await self.save_rules_with_http_info(
+            composition_id, rules, request_options
+        )
+        return resp.deserialize(RulesMultipleBatchResponse, resp.raw_data)
+
     async def search_with_http_info(
         self,
         composition_id: Annotated[
@@ -201,6 +1238,79 @@ class CompositionClient:
             composition_id, request_body, request_options
         )
         return resp.deserialize(SearchResponse, resp.raw_data)
+
+    async def search_composition_rules_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        search_composition_rules_params: Union[
+            Optional[SearchCompositionRulesParams], dict[str, Any]
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for composition rules in your index.
+
+        Required API Key ACLs:
+          - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param search_composition_rules_params:
+        :type search_composition_rules_params: SearchCompositionRulesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `search_composition_rules`."
+            )
+
+        _data = {}
+        if search_composition_rules_params is not None:
+            _data = search_composition_rules_params
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/compositions/{compositionID}/rules/search".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def search_composition_rules(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        search_composition_rules_params: Union[
+            Optional[SearchCompositionRulesParams], dict[str, Any]
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchCompositionRulesResponse:
+        """
+        Searches for composition rules in your index.
+
+        Required API Key ACLs:
+          - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param search_composition_rules_params:
+        :type search_composition_rules_params: SearchCompositionRulesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchCompositionRulesResponse' result object.
+        """
+        resp = await self.search_composition_rules_with_http_info(
+            composition_id, search_composition_rules_params, request_options
+        )
+        return resp.deserialize(SearchCompositionRulesResponse, resp.raw_data)
 
     async def search_for_facet_values_with_http_info(
         self,
@@ -389,6 +1499,1016 @@ class CompositionClientSync:
         """adds a segment to the default user agent, and update the headers sent with each requests as well"""
         self._transporter.config.add_user_agent(segment, version)
 
+    def custom_delete_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters[_qpkey] = _qpvalue
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_delete(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        resp = self.custom_delete_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
+
+    def custom_get_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters[_qpkey] = _qpvalue
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_get(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        resp = self.custom_get_with_http_info(path, parameters, request_options)
+        return resp.deserialize(object, resp.raw_data)
+
+    def custom_post_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters[_qpkey] = _qpvalue
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_post(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        resp = self.custom_post_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
+
+    def custom_put_with_http_info(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if parameters is not None:
+            for _qpkey, _qpvalue in parameters.items():
+                _query_parameters[_qpkey] = _qpvalue
+
+        _data = {}
+        if body is not None:
+            _data = body
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/{path}".replace("{path}", path),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def custom_put(
+        self,
+        path: Annotated[
+            StrictStr,
+            Field(description="Path of the endpoint, for example `1/newFeature`."),
+        ],
+        parameters: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Query parameters to apply to the current query."),
+        ] = None,
+        body: Annotated[
+            Optional[Dict[str, Any]],
+            Field(description="Parameters to send with the custom request."),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> object:
+        """
+        This method lets you send requests to the Algolia REST API.
+
+
+        :param path: Path of the endpoint, for example `1/newFeature`. (required)
+        :type path: str
+        :param parameters: Query parameters to apply to the current query.
+        :type parameters: Dict[str, object]
+        :param body: Parameters to send with the custom request.
+        :type body: object
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'object' result object.
+        """
+        resp = self.custom_put_with_http_info(path, parameters, body, request_options)
+        return resp.deserialize(object, resp.raw_data)
+
+    def delete_composition_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Delete a composition from the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `delete_composition`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/compositions/{compositionID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_composition(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Delete a composition from the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = self.delete_composition_with_http_info(composition_id, request_options)
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
+
+    def delete_composition_rule_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Delete a Composition Rule from the specified Composition ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `delete_composition_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_composition_rule`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.DELETE,
+            path="/1/compositions/{compositionID}/rules/{objectID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def delete_composition_rule(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Delete a Composition Rule from the specified Composition ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = self.delete_composition_rule_with_http_info(
+            composition_id, object_id, request_options
+        )
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
+
+    def get_composition_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieve a single composition in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_composition`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/compositions/{compositionID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_composition(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Composition:
+        """
+        Retrieve a single composition in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Composition' result object.
+        """
+        resp = self.get_composition_with_http_info(composition_id, request_options)
+        return resp.deserialize(Composition, resp.raw_data)
+
+    def get_rule_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_rule`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/compositions/{compositionID}/rules/{objectID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_rule(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> CompositionRule:
+        """
+        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'CompositionRule' result object.
+        """
+        resp = self.get_rule_with_http_info(composition_id, object_id, request_options)
+        return resp.deserialize(CompositionRule, resp.raw_data)
+
+    def get_task_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Checks the status of a given task.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+                  - addObject
+                  - deleteObject
+                  - deleteIndex
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_task`."
+            )
+
+        if task_id is None:
+            raise ValueError("Parameter `task_id` is required when calling `get_task`.")
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/compositions/{compositionID}/task/{taskID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ).replace("{taskID}", quote(str(task_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_task(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        task_id: Annotated[StrictInt, Field(description="Unique task identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> GetTaskResponse:
+        """
+        Checks the status of a given task.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+                  - addObject
+                  - deleteObject
+                  - deleteIndex
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param task_id: Unique task identifier. (required)
+        :type task_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'GetTaskResponse' result object.
+        """
+        resp = self.get_task_with_http_info(composition_id, task_id, request_options)
+        return resp.deserialize(GetTaskResponse, resp.raw_data)
+
+    def list_compositions_with_http_info(
+        self,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
+            ),
+        ] = None,
+        hits_per_page: Annotated[
+            Optional[StrictInt], Field(description="Number of hits per page.")
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Lists all compositions in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
+        :type page: int
+        :param hits_per_page: Number of hits per page.
+        :type hits_per_page: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if page is not None:
+            _query_parameters["page"] = page
+        if hits_per_page is not None:
+            _query_parameters["hitsPerPage"] = hits_per_page
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/1/compositions",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_compositions(
+        self,
+        page: Annotated[
+            Optional[Annotated[int, Field(strict=True, ge=0)]],
+            Field(
+                description="Requested page of the API response. If `null`, the API response is not paginated. "
+            ),
+        ] = None,
+        hits_per_page: Annotated[
+            Optional[StrictInt], Field(description="Number of hits per page.")
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ListCompositionsResponse:
+        """
+        Lists all compositions in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+                  - settings
+
+        :param page: Requested page of the API response. If `null`, the API response is not paginated.
+        :type page: int
+        :param hits_per_page: Number of hits per page.
+        :type hits_per_page: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ListCompositionsResponse' result object.
+        """
+        resp = self.list_compositions_with_http_info(
+            page, hits_per_page, request_options
+        )
+        return resp.deserialize(ListCompositionsResponse, resp.raw_data)
+
+    def multiple_batch_with_http_info(
+        self,
+        batch_params: Union[BatchParams, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Adds, updates, or deletes compositions with a single API request.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param batch_params: (required)
+        :type batch_params: BatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if batch_params is None:
+            raise ValueError(
+                "Parameter `batch_params` is required when calling `multiple_batch`."
+            )
+
+        _data = {}
+        if batch_params is not None:
+            _data = batch_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/compositions/*/batch",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def multiple_batch(
+        self,
+        batch_params: Union[BatchParams, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> MultipleBatchResponse:
+        """
+        Adds, updates, or deletes compositions with a single API request.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param batch_params: (required)
+        :type batch_params: BatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'MultipleBatchResponse' result object.
+        """
+        resp = self.multiple_batch_with_http_info(batch_params, request_options)
+        return resp.deserialize(MultipleBatchResponse, resp.raw_data)
+
+    def put_composition_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        composition: Union[Composition, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Upsert a composition in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param composition: (required)
+        :type composition: Composition
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `put_composition`."
+            )
+
+        if composition is None:
+            raise ValueError(
+                "Parameter `composition` is required when calling `put_composition`."
+            )
+
+        _data = {}
+        if composition is not None:
+            _data = composition
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/compositions/{compositionID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def put_composition(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        composition: Union[Composition, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Upsert a composition in the current Algolia application.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param composition: (required)
+        :type composition: Composition
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = self.put_composition_with_http_info(
+            composition_id, composition, request_options
+        )
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
+
+    def put_composition_rule_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        composition_rule: Union[CompositionRule, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Upsert a Composition Rule for the specified composition ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param composition_rule: (required)
+        :type composition_rule: CompositionRule
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `put_composition_rule`."
+            )
+
+        if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `put_composition_rule`."
+            )
+
+        if composition_rule is None:
+            raise ValueError(
+                "Parameter `composition_rule` is required when calling `put_composition_rule`."
+            )
+
+        _data = {}
+        if composition_rule is not None:
+            _data = composition_rule
+
+        return self._transporter.request(
+            verb=Verb.PUT,
+            path="/1/compositions/{compositionID}/rules/{objectID}".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ).replace("{objectID}", quote(str(object_id), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def put_composition_rule(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        object_id: Annotated[
+            StrictStr, Field(description="Unique identifier of a rule object.")
+        ],
+        composition_rule: Union[CompositionRule, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Upsert a Composition Rule for the specified composition ID.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param object_id: Unique identifier of a rule object. (required)
+        :type object_id: str
+        :param composition_rule: (required)
+        :type composition_rule: CompositionRule
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = self.put_composition_rule_with_http_info(
+            composition_id, object_id, composition_rule, request_options
+        )
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
+
+    def save_rules_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        rules: Union[CompositionRulesBatchParams, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Create or update or delete multiple composition rules.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param rules: (required)
+        :type rules: CompositionRulesBatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `save_rules`."
+            )
+
+        if rules is None:
+            raise ValueError("Parameter `rules` is required when calling `save_rules`.")
+
+        _data = {}
+        if rules is not None:
+            _data = rules
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/compositions/{compositionID}/rules/batch".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def save_rules(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        rules: Union[CompositionRulesBatchParams, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> RulesMultipleBatchResponse:
+        """
+        Create or update or delete multiple composition rules.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param rules: (required)
+        :type rules: CompositionRulesBatchParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'RulesMultipleBatchResponse' result object.
+        """
+        resp = self.save_rules_with_http_info(composition_id, rules, request_options)
+        return resp.deserialize(RulesMultipleBatchResponse, resp.raw_data)
+
     def search_with_http_info(
         self,
         composition_id: Annotated[
@@ -460,6 +2580,79 @@ class CompositionClientSync:
         """
         resp = self.search_with_http_info(composition_id, request_body, request_options)
         return resp.deserialize(SearchResponse, resp.raw_data)
+
+    def search_composition_rules_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        search_composition_rules_params: Union[
+            Optional[SearchCompositionRulesParams], dict[str, Any]
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Searches for composition rules in your index.
+
+        Required API Key ACLs:
+          - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param search_composition_rules_params:
+        :type search_composition_rules_params: SearchCompositionRulesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `search_composition_rules`."
+            )
+
+        _data = {}
+        if search_composition_rules_params is not None:
+            _data = search_composition_rules_params
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/compositions/{compositionID}/rules/search".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def search_composition_rules(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        search_composition_rules_params: Union[
+            Optional[SearchCompositionRulesParams], dict[str, Any]
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> SearchCompositionRulesResponse:
+        """
+        Searches for composition rules in your index.
+
+        Required API Key ACLs:
+          - settings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param search_composition_rules_params:
+        :type search_composition_rules_params: SearchCompositionRulesParams
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'SearchCompositionRulesResponse' result object.
+        """
+        resp = self.search_composition_rules_with_http_info(
+            composition_id, search_composition_rules_params, request_options
+        )
+        return resp.deserialize(SearchCompositionRulesResponse, resp.raw_data)
 
     def search_for_facet_values_with_http_info(
         self,
