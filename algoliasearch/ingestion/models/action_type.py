@@ -30,6 +30,8 @@ class ActionType(str, Enum):
 
     PARTIAL = "partial"
 
+    PARTIALNOCREATE = "partialNoCreate"
+
     APPEND = "append"
 
     @classmethod
