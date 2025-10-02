@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,14 +18,10 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.deduplication import Deduplication
-from algoliasearch.composition.models.injected_item import InjectedItem
-from algoliasearch.composition.models.main import Main
+from algoliasearch.composition.models.dedup_positioning import DedupPositioning
 
 _ALIASES = {
-    "main": "main",
-    "injected_items": "injectedItems",
-    "deduplication": "deduplication",
+    "positioning": "positioning",
 }
 
 
@@ -33,15 +29,12 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class Injection(BaseModel):
+class Deduplication(BaseModel):
     """
-    Injection
+    Deduplication configures the methods used to resolve duplicate items between main search results and injected group results.
     """
 
-    main: Main
-    injected_items: Optional[List[InjectedItem]] = None
-    """ list of injected items of the current Composition. """
-    deduplication: Optional[Deduplication] = None
+    positioning: DedupPositioning
 
     model_config = ConfigDict(
         strict=False,
@@ -58,7 +51,7 @@ class Injection(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Injection from a JSON string"""
+        """Create an instance of Deduplication from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,25 +64,13 @@ class Injection(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Injection from a dict"""
+        """Create an instance of Deduplication from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["main"] = (
-            Main.from_dict(obj["main"]) if obj.get("main") is not None else None
-        )
-        obj["injectedItems"] = (
-            [InjectedItem.from_dict(_item) for _item in obj["injectedItems"]]
-            if obj.get("injectedItems") is not None
-            else None
-        )
-        obj["deduplication"] = (
-            Deduplication.from_dict(obj["deduplication"])
-            if obj.get("deduplication") is not None
-            else None
-        )
+        obj["positioning"] = obj.get("positioning")
 
         return cls.model_validate(obj)

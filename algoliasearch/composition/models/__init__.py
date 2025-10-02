@@ -35,6 +35,8 @@ from .composition_source import CompositionSource
 from .composition_source_search import CompositionSourceSearch
 from .compositions_search_response import CompositionsSearchResponse
 from .condition import Condition
+from .dedup_positioning import DedupPositioning
+from .deduplication import Deduplication
 from .delete_composition_action import DeleteCompositionAction
 from .delete_composition_rule_action import DeleteCompositionRuleAction
 from .distinct import Distinct
@@ -144,6 +146,8 @@ __all__ = (
     "CompositionSourceSearch",
     "CompositionsSearchResponse",
     "Condition",
+    "DedupPositioning",
+    "Deduplication",
     "DeleteCompositionAction",
     "DeleteCompositionRuleAction",
     "Distinct",
