@@ -56,7 +56,7 @@ class GetApiKeyResponse(BaseModel):
     max_hits_per_query: Optional[int] = None
     """ Maximum number of results this API key can retrieve in one query. By default, there's no limit.  """
     max_queries_per_ip_per_hour: Optional[int] = None
-    """ Maximum number of API requests allowed per IP address or [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/) per hour.  If this limit is reached, the API returns an error with status code `429`. By default, there's no limit.  """
+    """ Maximum number of API requests allowed per IP address or [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken) per hour.  If this limit is reached, the API returns an error with status code `429`. By default, there's no limit.  """
     query_parameters: Optional[str] = None
     """ Query parameters to add when making API requests with this API key.  To restrict this API key to specific IP addresses, add the `restrictSources` parameter. You can only add a single source, but you can provide a range of IP addresses.  Creating an API key fails if the request is made from an IP address outside the restricted range.  """
     referers: Optional[List[str]] = None

@@ -35,7 +35,7 @@ class GetUserTokenResponse(BaseModel):
     """
 
     user_token: str
-    """ Unique pseudonymous or anonymous user identifier.  This helps with analytics and click and conversion events. For more information, see [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/).  """
+    """ Unique pseudonymous or anonymous user identifier.  This helps with analytics and click and conversion events. For more information, see [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken).  """
     last_event_at: str
     """ Date and time of the last event from this user, in RFC 3339 format. """
     scores: object

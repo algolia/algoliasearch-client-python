@@ -121,7 +121,7 @@ class SearchResultsItem(BaseModel):
     user_data: Optional[object] = None
     """ An object with custom data.  You can store up to 32kB as custom data.  """
     query_id: Optional[str] = None
-    """ Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics/). """
+    """ Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics). """
     automatic_insights: Optional[bool] = None
     """ Whether automatic events collection is enabled for the application. """
     page: int

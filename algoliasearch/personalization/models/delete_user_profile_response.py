@@ -34,7 +34,7 @@ class DeleteUserProfileResponse(BaseModel):
     """
 
     user_token: str
-    """ Unique pseudonymous or anonymous user identifier.  This helps with analytics and click and conversion events. For more information, see [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken/).  """
+    """ Unique pseudonymous or anonymous user identifier.  This helps with analytics and click and conversion events. For more information, see [user token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken).  """
     deleted_until: str
     """ Date and time when the user profile can be safely considered to be deleted. Any events received after the `deletedUntil` date start a new user profile.  """
 

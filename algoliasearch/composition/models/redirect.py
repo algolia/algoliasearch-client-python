@@ -33,7 +33,7 @@ def _alias_generator(name: str) -> str:
 
 class Redirect(BaseModel):
     """
-    [Redirect results to a URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects/), this this parameter is for internal use only.
+    [Redirect results to a URL](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/redirects), this this parameter is for internal use only.
     """
 
     index: Optional[List[RedirectRuleIndexMetadata]] = None

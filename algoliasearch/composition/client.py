@@ -659,7 +659,7 @@ class CompositionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+        Retrieves a rule by its ID.  To find the object ID of a rule, use the [`search` operation](https://www.algolia.com/doc/rest-api/composition/search-composition-rules).
 
         Required API Key ACLs:
           - editSettings
@@ -705,7 +705,7 @@ class CompositionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CompositionRule:
         """
-        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+        Retrieves a rule by its ID.  To find the object ID of a rule, use the [`search` operation](https://www.algolia.com/doc/rest-api/composition/search-composition-rules).
 
         Required API Key ACLs:
           - editSettings
@@ -1016,7 +1016,7 @@ class CompositionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Upsert a Composition Rule for the specified composition ID.
+        If a composition rule with the provided ID already exists, it's replaced. Otherwise, a new one is added.
 
         Required API Key ACLs:
           - editSettings
@@ -1074,7 +1074,7 @@ class CompositionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskIDResponse:
         """
-        Upsert a Composition Rule for the specified composition ID.
+        If a composition rule with the provided ID already exists, it's replaced. Otherwise, a new one is added.
 
         Required API Key ACLs:
           - editSettings
@@ -2009,7 +2009,7 @@ class CompositionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+        Retrieves a rule by its ID.  To find the object ID of a rule, use the [`search` operation](https://www.algolia.com/doc/rest-api/composition/search-composition-rules).
 
         Required API Key ACLs:
           - editSettings
@@ -2055,7 +2055,7 @@ class CompositionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> CompositionRule:
         """
-        Retrieves a rule by its ID. To find the object ID of rules, use the [`search` operation](#tag/Rules/operation/searchRules).
+        Retrieves a rule by its ID.  To find the object ID of a rule, use the [`search` operation](https://www.algolia.com/doc/rest-api/composition/search-composition-rules).
 
         Required API Key ACLs:
           - editSettings
@@ -2362,7 +2362,7 @@ class CompositionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Upsert a Composition Rule for the specified composition ID.
+        If a composition rule with the provided ID already exists, it's replaced. Otherwise, a new one is added.
 
         Required API Key ACLs:
           - editSettings
@@ -2420,7 +2420,7 @@ class CompositionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskIDResponse:
         """
-        Upsert a Composition Rule for the specified composition ID.
+        If a composition rule with the provided ID already exists, it's replaced. Otherwise, a new one is added.
 
         Required API Key ACLs:
           - editSettings
