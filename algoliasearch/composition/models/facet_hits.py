@@ -39,7 +39,7 @@ class FacetHits(BaseModel):
     highlighted: str
     """ Highlighted attribute value, including HTML tags. """
     count: int
-    """ Number of records with this facet value. [The count may be approximated](https://support.algolia.com/hc/en-us/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate-). """
+    """ Number of records with this facet value. [The count may be approximated](https://support.algolia.com/hc/articles/4406975248145-Why-are-my-facet-and-hit-counts-not-accurate). """
 
     model_config = ConfigDict(
         strict=False,

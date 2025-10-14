@@ -188,7 +188,7 @@ class SearchForFacets(BaseModel):
     synonyms: Optional[bool] = None
     """ Whether to take into account an index's synonyms for this search. """
     click_analytics: Optional[bool] = None
-    """ Whether to include a `queryID` attribute in the response The query ID is a unique identifier for a search query and is required for tracking [click and conversion events](https://www.algolia.com/guides/sending-events/getting-started).  """
+    """ Whether to include a `queryID` attribute in the response The query ID is a unique identifier for a search query and is required for tracking [click and conversion events](https://www.algolia.com/doc/guides/sending-events/getting-started).  """
     analytics: Optional[bool] = None
     """ Whether this search will be included in Analytics. """
     analytics_tags: Optional[List[str]] = None
