@@ -39,7 +39,7 @@ class AutomaticFacetFilter(BaseModel):
     score: Optional[int] = None
     """ Filter scores to give different weights to individual filters. """
     disjunctive: Optional[bool] = None
-    """ Whether the filter is disjunctive or conjunctive.  If true the filter has multiple matches, multiple occurences are combined with the logical `OR` operation. If false, multiple occurences are combined with the logical `AND` operation.  """
+    """ Whether the filter is disjunctive or conjunctive.  If true the filter has multiple matches, multiple occurrences are combined with the logical `OR` operation. If false, multiple occurrences are combined with the logical `AND` operation.  """
 
     model_config = ConfigDict(
         strict=False,

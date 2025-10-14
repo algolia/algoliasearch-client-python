@@ -38,7 +38,7 @@ def _alias_generator(name: str) -> str:
 
 class Event(BaseModel):
     """
-    An event describe a step of the task execution flow..
+    An event describe a step of the task execution flow.
     """
 
     event_id: str
