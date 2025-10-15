@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://www.algolia.com/doc/libraries/python/" target="_blank">Documentation</a>  •
+  <a href="https://www.algolia.com/doc/libraries/sdk/install#python" target="_blank">Documentation</a>  •
   <a href="https://github.com/algolia/algoliasearch-django" target="_blank">Django</a>  •
   <a href="https://discourse.algolia.com" target="_blank">Community Forum</a>  •
   <a href="http://stackoverflow.com/questions/tagged/algolia" target="_blank">Stack Overflow</a>  •
@@ -79,7 +79,7 @@ print(response)
 print(response.to_json())
 ```
 
-For full documentation, visit the **[Algolia Python API Client](https://www.algolia.com/doc/libraries/python/)**.
+For full documentation, visit the **[Algolia Python API Client](https://www.algolia.com/doc/libraries/sdk/install#python)**.
 
 ## ❓ Troubleshooting
 
