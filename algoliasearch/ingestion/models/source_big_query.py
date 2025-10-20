@@ -37,7 +37,7 @@ def _alias_generator(name: str) -> str:
 
 class SourceBigQuery(BaseModel):
     """
-    SourceBigQuery
+    Specific configuration attributes of a `bigquery` source.
     """
 
     project_id: str

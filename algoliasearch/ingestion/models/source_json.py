@@ -33,7 +33,7 @@ def _alias_generator(name: str) -> str:
 
 class SourceJSON(BaseModel):
     """
-    SourceJSON
+    Specific configuration attributes of a `json` source.
     """
 
     url: str

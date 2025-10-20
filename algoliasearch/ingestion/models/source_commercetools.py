@@ -39,7 +39,7 @@ def _alias_generator(name: str) -> str:
 
 class SourceCommercetools(BaseModel):
     """
-    SourceCommercetools
+    Specific configuration attributes of a `commercetools` source.
     """
 
     store_keys: Optional[List[str]] = None

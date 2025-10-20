@@ -31,7 +31,7 @@ def _alias_generator(name: str) -> str:
 
 class SourceGA4BigQueryExport(BaseModel):
     """
-    SourceGA4BigQueryExport
+    Specific configuration attributes of a `ga4BigqueryExport` source.
     """
 
     project_id: str

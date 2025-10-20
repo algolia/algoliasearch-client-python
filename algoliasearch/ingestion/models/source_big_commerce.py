@@ -36,7 +36,7 @@ def _alias_generator(name: str) -> str:
 
 class SourceBigCommerce(BaseModel):
     """
-    SourceBigCommerce
+    Specific configuration attributes of a `bigcommerce` source.
     """
 
     store_hash: str

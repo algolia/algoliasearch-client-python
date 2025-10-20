@@ -29,7 +29,7 @@ def _alias_generator(name: str) -> str:
 
 class SourceUpdateDocker(BaseModel):
     """
-    SourceUpdateDocker
+    Specific configuration attributes of a `docker` source.
     """
 
     configuration: object

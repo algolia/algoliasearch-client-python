@@ -36,7 +36,7 @@ def _alias_generator(name: str) -> str:
 
 class SourceCSV(BaseModel):
     """
-    SourceCSV
+    Specific configuration attributes of a `csv` source.
     """
 
     url: str

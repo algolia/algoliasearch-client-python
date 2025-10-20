@@ -29,7 +29,7 @@ def _alias_generator(name: str) -> str:
 
 class SourceUpdateShopify(BaseModel):
     """
-    SourceUpdateShopify
+    Specific configuration attributes of a `shopify` source.
     """
 
     feature_flags: Optional[Dict[str, object]] = None

@@ -30,7 +30,7 @@ def _alias_generator(name: str) -> str:
 
 class SourceDocker(BaseModel):
     """
-    SourceDocker
+    Specific configuration attributes of a `docker` source.
     """
 
     image: str
