@@ -52,7 +52,6 @@ from .facet_filters import FacetFilters
 from .facet_hits import FacetHits
 from .facet_ordering import FacetOrdering
 from .facet_stats import FacetStats
-from .facets import Facets
 from .get_task_response import GetTaskResponse
 from .highlight_result import HighlightResult
 from .highlight_result_option import HighlightResultOption
@@ -60,6 +59,7 @@ from .hit import Hit
 from .hit_metadata import HitMetadata
 from .hit_ranking_info import HitRankingInfo
 from .ignore_plurals import IgnorePlurals
+from .index_settings_facets import IndexSettingsFacets
 from .injected_item import InjectedItem
 from .injected_item_hits_metadata import InjectedItemHitsMetadata
 from .injected_item_metadata import InjectedItemMetadata
@@ -163,7 +163,6 @@ __all__ = (
     "FacetHits",
     "FacetOrdering",
     "FacetStats",
-    "Facets",
     "GetTaskResponse",
     "HighlightResult",
     "HighlightResultOption",
@@ -171,6 +170,7 @@ __all__ = (
     "HitMetadata",
     "HitRankingInfo",
     "IgnorePlurals",
+    "IndexSettingsFacets",
     "InjectedItem",
     "InjectedItemHitsMetadata",
     "InjectedItemMetadata",

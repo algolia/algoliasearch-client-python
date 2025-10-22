@@ -33,6 +33,7 @@ _ALIASES = {
     "page": "page",
     "get_ranking_info": "getRankingInfo",
     "relevancy_strictness": "relevancyStrictness",
+    "facets": "facets",
     "facet_filters": "facetFilters",
     "optional_filters": "optionalFilters",
     "numeric_filters": "numericFilters",
@@ -77,6 +78,8 @@ class Params(BaseModel):
     """ Whether the run response should include detailed ranking information. """
     relevancy_strictness: Optional[int] = None
     """ Relevancy threshold below which less relevant results aren't included in the results You can only set `relevancyStrictness` on [virtual replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/#what-are-virtual-replicas). Use this setting to strike a balance between the relevance and number of returned results.  """
+    facets: Optional[List[str]] = None
+    """ Facets for which to retrieve facet values that match the search criteria and the number of matching facet values To retrieve all facets, use the wildcard character `*`. For more information, see [facets](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#contextual-facet-values-and-counts).  """
     facet_filters: Optional[FacetFilters] = None
     optional_filters: Optional[OptionalFilters] = None
     numeric_filters: Optional[NumericFilters] = None
