@@ -36,6 +36,7 @@ from algoliasearch.composition.models.remove_stop_words import RemoveStopWords
 from algoliasearch.composition.models.remove_words_if_no_results import (
     RemoveWordsIfNoResults,
 )
+from algoliasearch.composition.models.rendering_content import RenderingContent
 from algoliasearch.composition.models.supported_language import SupportedLanguage
 from algoliasearch.composition.models.typo_tolerance import TypoTolerance
 
@@ -91,6 +92,7 @@ _ALIASES = {
     "facets": "facets",
     "hits_per_page": "hitsPerPage",
     "max_values_per_facet": "maxValuesPerFacet",
+    "rendering_content": "renderingContent",
     "sort_facet_values_by": "sortFacetValuesBy",
     "sum_or_filters_scores": "sumOrFiltersScores",
 }
@@ -196,6 +198,7 @@ class MainInjectionQueryParameters(BaseModel):
     """ Number of hits per page. """
     max_values_per_facet: Optional[int] = None
     """ Maximum number of facet values to return for each facet. """
+    rendering_content: Optional[RenderingContent] = None
     sort_facet_values_by: Optional[str] = None
     """ Order in which to retrieve facet values - `count`.   Facet values are retrieved by decreasing count.   The count is the number of matching records containing this facet value - `alpha`.   Retrieve facet values alphabetically This setting doesn't influence how facet values are displayed in your UI (see `renderingContent`). For more information, see [facet value display](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/facet-display/js).  """
     sum_or_filters_scores: Optional[bool] = None
@@ -281,6 +284,11 @@ class MainInjectionQueryParameters(BaseModel):
         obj["typoTolerance"] = (
             TypoTolerance.from_dict(obj["typoTolerance"])
             if obj.get("typoTolerance") is not None
+            else None
+        )
+        obj["renderingContent"] = (
+            RenderingContent.from_dict(obj["renderingContent"])
+            if obj.get("renderingContent") is not None
             else None
         )
 
