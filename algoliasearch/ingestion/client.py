@@ -479,6 +479,10 @@ class IngestionClient:
         """
         Creates a new task.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreate
@@ -518,6 +522,10 @@ class IngestionClient:
         """
         Creates a new task.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreate
@@ -541,6 +549,10 @@ class IngestionClient:
         (Deprecated) create_task_v1
         Creates a new task using the v1 endpoint, please use `createTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreateV1
@@ -583,6 +595,10 @@ class IngestionClient:
         (Deprecated) create_task_v1
         Creates a new task using the v1 endpoint, please use `createTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreateV1
@@ -606,6 +622,10 @@ class IngestionClient:
         """
         Creates a new transformation.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_create: Request body for creating a transformation. (required)
         :type transformation_create: TransformationCreate
@@ -646,6 +666,10 @@ class IngestionClient:
         """
         Creates a new transformation.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_create: Request body for creating a transformation. (required)
         :type transformation_create: TransformationCreate
@@ -1171,6 +1195,10 @@ class IngestionClient:
         """
         Deletes a task by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -1202,6 +1230,10 @@ class IngestionClient:
         """
         Deletes a task by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -1222,6 +1254,10 @@ class IngestionClient:
         (Deprecated) delete_task_v1
         Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -1256,6 +1292,10 @@ class IngestionClient:
         (Deprecated) delete_task_v1
         Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -1275,6 +1315,10 @@ class IngestionClient:
         """
         Deletes a transformation by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_id: Unique identifier of a transformation. (required)
         :type transformation_id: str
@@ -1308,6 +1352,10 @@ class IngestionClient:
         """
         Deletes a transformation by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_id: Unique identifier of a transformation. (required)
         :type transformation_id: str
@@ -3885,6 +3933,10 @@ class IngestionClient:
         """
         Fully updates a task by its ID, use partialUpdateTask if you only want to update a subset of fields.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -3929,6 +3981,10 @@ class IngestionClient:
         """
         Fully updates a task by its ID, use partialUpdateTask if you only want to update a subset of fields.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -4980,6 +5036,10 @@ class IngestionClient:
         """
         Partially updates a task by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -5024,6 +5084,10 @@ class IngestionClient:
         """
         Partially updates a task by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -5049,6 +5113,10 @@ class IngestionClient:
         (Deprecated) update_task_v1
         Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -5096,6 +5164,10 @@ class IngestionClient:
         (Deprecated) update_task_v1
         Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -5120,6 +5192,10 @@ class IngestionClient:
         """
         Updates a transformation by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_id: Unique identifier of a transformation. (required)
         :type transformation_id: str
@@ -5166,6 +5242,10 @@ class IngestionClient:
         """
         Updates a transformation by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_id: Unique identifier of a transformation. (required)
         :type transformation_id: str
@@ -5689,6 +5769,10 @@ class IngestionClientSync:
         """
         Creates a new task.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreate
@@ -5728,6 +5812,10 @@ class IngestionClientSync:
         """
         Creates a new task.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreate
@@ -5751,6 +5839,10 @@ class IngestionClientSync:
         (Deprecated) create_task_v1
         Creates a new task using the v1 endpoint, please use `createTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreateV1
@@ -5793,6 +5885,10 @@ class IngestionClientSync:
         (Deprecated) create_task_v1
         Creates a new task using the v1 endpoint, please use `createTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_create: Request body for creating a task. (required)
         :type task_create: TaskCreateV1
@@ -5816,6 +5912,10 @@ class IngestionClientSync:
         """
         Creates a new transformation.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_create: Request body for creating a transformation. (required)
         :type transformation_create: TransformationCreate
@@ -5856,6 +5956,10 @@ class IngestionClientSync:
         """
         Creates a new transformation.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_create: Request body for creating a transformation. (required)
         :type transformation_create: TransformationCreate
@@ -6373,6 +6477,10 @@ class IngestionClientSync:
         """
         Deletes a task by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -6404,6 +6512,10 @@ class IngestionClientSync:
         """
         Deletes a task by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -6424,6 +6536,10 @@ class IngestionClientSync:
         (Deprecated) delete_task_v1
         Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -6458,6 +6574,10 @@ class IngestionClientSync:
         (Deprecated) delete_task_v1
         Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -6477,6 +6597,10 @@ class IngestionClientSync:
         """
         Deletes a transformation by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_id: Unique identifier of a transformation. (required)
         :type transformation_id: str
@@ -6510,6 +6634,10 @@ class IngestionClientSync:
         """
         Deletes a transformation by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_id: Unique identifier of a transformation. (required)
         :type transformation_id: str
@@ -9085,6 +9213,10 @@ class IngestionClientSync:
         """
         Fully updates a task by its ID, use partialUpdateTask if you only want to update a subset of fields.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -9129,6 +9261,10 @@ class IngestionClientSync:
         """
         Fully updates a task by its ID, use partialUpdateTask if you only want to update a subset of fields.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -10176,6 +10312,10 @@ class IngestionClientSync:
         """
         Partially updates a task by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -10220,6 +10360,10 @@ class IngestionClientSync:
         """
         Partially updates a task by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -10243,6 +10387,10 @@ class IngestionClientSync:
         (Deprecated) update_task_v1
         Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -10290,6 +10438,10 @@ class IngestionClientSync:
         (Deprecated) update_task_v1
         Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param task_id: Unique identifier of a task. (required)
         :type task_id: str
@@ -10312,6 +10464,10 @@ class IngestionClientSync:
         """
         Updates a transformation by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_id: Unique identifier of a transformation. (required)
         :type transformation_id: str
@@ -10358,6 +10514,10 @@ class IngestionClientSync:
         """
         Updates a transformation by its ID.
 
+        Required API Key ACLs:
+          - addObject
+                  - deleteIndex
+                  - editSettings
 
         :param transformation_id: Unique identifier of a transformation. (required)
         :type transformation_id: str
