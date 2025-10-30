@@ -33,8 +33,6 @@ from .metric_result import MetricResult
 from .metrics_filter import MetricsFilter
 from .minimum_detectable_effect import MinimumDetectableEffect
 from .outliers_filter import OutliersFilter
-from .schedule_ab_test_response import ScheduleABTestResponse
-from .schedule_ab_tests_request import ScheduleABTestsRequest
 from .status import Status
 from .timeseries import Timeseries
 from .timeseries_variant import TimeseriesVariant
@@ -67,8 +65,6 @@ __all__ = (
     "MetricsFilter",
     "MinimumDetectableEffect",
     "OutliersFilter",
-    "ScheduleABTestResponse",
-    "ScheduleABTestsRequest",
     "Status",
     "Timeseries",
     "TimeseriesVariant",

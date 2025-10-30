@@ -27,8 +27,6 @@ from algoliasearch.abtesting.models import (
     EstimateABTestRequest,
     EstimateABTestResponse,
     ListABTestsResponse,
-    ScheduleABTestResponse,
-    ScheduleABTestsRequest,
 )
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.base_config import BaseConfig
@@ -770,63 +768,6 @@ class AbtestingClient:
             offset, limit, index_prefix, index_suffix, request_options
         )
         return resp.deserialize(ListABTestsResponse, resp.raw_data)
-
-    async def schedule_ab_test_with_http_info(
-        self,
-        schedule_ab_tests_request: Union[ScheduleABTestsRequest, dict[str, Any]],
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> ApiResponse[str]:
-        """
-        Schedule an A/B test to be started at a later time.
-
-        Required API Key ACLs:
-          - editSettings
-
-        :param schedule_ab_tests_request: (required)
-        :type schedule_ab_tests_request: ScheduleABTestsRequest
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the raw algoliasearch 'APIResponse' object.
-        """
-
-        if schedule_ab_tests_request is None:
-            raise ValueError(
-                "Parameter `schedule_ab_tests_request` is required when calling `schedule_ab_test`."
-            )
-
-        _data = {}
-        if schedule_ab_tests_request is not None:
-            _data = schedule_ab_tests_request
-
-        return await self._transporter.request(
-            verb=Verb.POST,
-            path="/2/abtests/schedule",
-            request_options=self._request_options.merge(
-                data=dumps(body_serializer(_data)),
-                user_request_options=request_options,
-            ),
-            use_read_transporter=False,
-        )
-
-    async def schedule_ab_test(
-        self,
-        schedule_ab_tests_request: Union[ScheduleABTestsRequest, dict[str, Any]],
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> ScheduleABTestResponse:
-        """
-        Schedule an A/B test to be started at a later time.
-
-        Required API Key ACLs:
-          - editSettings
-
-        :param schedule_ab_tests_request: (required)
-        :type schedule_ab_tests_request: ScheduleABTestsRequest
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'ScheduleABTestResponse' result object.
-        """
-        resp = await self.schedule_ab_test_with_http_info(
-            schedule_ab_tests_request, request_options
-        )
-        return resp.deserialize(ScheduleABTestResponse, resp.raw_data)
 
     async def stop_ab_test_with_http_info(
         self,
@@ -1599,63 +1540,6 @@ class AbtestingClientSync:
             offset, limit, index_prefix, index_suffix, request_options
         )
         return resp.deserialize(ListABTestsResponse, resp.raw_data)
-
-    def schedule_ab_test_with_http_info(
-        self,
-        schedule_ab_tests_request: Union[ScheduleABTestsRequest, dict[str, Any]],
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> ApiResponse[str]:
-        """
-        Schedule an A/B test to be started at a later time.
-
-        Required API Key ACLs:
-          - editSettings
-
-        :param schedule_ab_tests_request: (required)
-        :type schedule_ab_tests_request: ScheduleABTestsRequest
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the raw algoliasearch 'APIResponse' object.
-        """
-
-        if schedule_ab_tests_request is None:
-            raise ValueError(
-                "Parameter `schedule_ab_tests_request` is required when calling `schedule_ab_test`."
-            )
-
-        _data = {}
-        if schedule_ab_tests_request is not None:
-            _data = schedule_ab_tests_request
-
-        return self._transporter.request(
-            verb=Verb.POST,
-            path="/2/abtests/schedule",
-            request_options=self._request_options.merge(
-                data=dumps(body_serializer(_data)),
-                user_request_options=request_options,
-            ),
-            use_read_transporter=False,
-        )
-
-    def schedule_ab_test(
-        self,
-        schedule_ab_tests_request: Union[ScheduleABTestsRequest, dict[str, Any]],
-        request_options: Optional[Union[dict, RequestOptions]] = None,
-    ) -> ScheduleABTestResponse:
-        """
-        Schedule an A/B test to be started at a later time.
-
-        Required API Key ACLs:
-          - editSettings
-
-        :param schedule_ab_tests_request: (required)
-        :type schedule_ab_tests_request: ScheduleABTestsRequest
-        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
-        :return: Returns the deserialized response in a 'ScheduleABTestResponse' result object.
-        """
-        resp = self.schedule_ab_test_with_http_info(
-            schedule_ab_tests_request, request_options
-        )
-        return resp.deserialize(ScheduleABTestResponse, resp.raw_data)
 
     def stop_ab_test_with_http_info(
         self,

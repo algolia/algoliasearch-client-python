@@ -28,8 +28,6 @@ from .list_ab_tests_response import ListABTestsResponse
 from .minimum_detectable_effect import MinimumDetectableEffect
 from .outliers import Outliers
 from .outliers_filter import OutliersFilter
-from .schedule_ab_test_response import ScheduleABTestResponse
-from .schedule_ab_tests_request import ScheduleABTestsRequest
 from .status import Status
 from .variant import Variant
 
@@ -54,8 +52,6 @@ __all__ = (
     "MinimumDetectableEffect",
     "Outliers",
     "OutliersFilter",
-    "ScheduleABTestResponse",
-    "ScheduleABTestsRequest",
     "Status",
     "Variant",
 )
