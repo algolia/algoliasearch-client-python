@@ -18,6 +18,7 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.recommend.models.fallback_params import FallbackParams
 from algoliasearch.recommend.models.fbt_model import FbtModel
 from algoliasearch.recommend.models.recommend_search_params import RecommendSearchParams
 
@@ -28,6 +29,7 @@ _ALIASES = {
     "query_parameters": "queryParameters",
     "model": "model",
     "object_id": "objectID",
+    "fallback_parameters": "fallbackParameters",
 }
 
 
@@ -50,6 +52,7 @@ class BoughtTogetherQuery(BaseModel):
     model: FbtModel
     object_id: str
     """ Unique record identifier. """
+    fallback_parameters: Optional[FallbackParams] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -92,5 +95,10 @@ class BoughtTogetherQuery(BaseModel):
             else None
         )
         obj["model"] = obj.get("model")
+        obj["fallbackParameters"] = (
+            FallbackParams.from_dict(obj["fallbackParameters"])
+            if obj.get("fallbackParameters") is not None
+            else None
+        )
 
         return cls.model_validate(obj)
