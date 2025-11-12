@@ -939,7 +939,7 @@ class CompositionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Upsert a composition in the current Algolia application.
+        Update and insert a composition in the current Algolia application.
 
         Required API Key ACLs:
           - editSettings
@@ -987,7 +987,7 @@ class CompositionClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskIDResponse:
         """
-        Upsert a composition in the current Algolia application.
+        Update and insert a composition in the current Algolia application.
 
         Required API Key ACLs:
           - editSettings
@@ -2285,7 +2285,7 @@ class CompositionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Upsert a composition in the current Algolia application.
+        Update and insert a composition in the current Algolia application.
 
         Required API Key ACLs:
           - editSettings
@@ -2333,7 +2333,7 @@ class CompositionClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> TaskIDResponse:
         """
-        Upsert a composition in the current Algolia application.
+        Update and insert a composition in the current Algolia application.
 
         Required API Key ACLs:
           - editSettings
