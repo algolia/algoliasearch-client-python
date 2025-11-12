@@ -28,6 +28,7 @@ _ALIASES = {
     "url": "url",
     "fallback_is_in_stock_value": "fallbackIsInStockValue",
     "product_query_predicate": "productQueryPredicate",
+    "use_images_objects": "useImagesObjects",
     "custom_fields": "customFields",
 }
 
@@ -49,6 +50,8 @@ class SourceUpdateCommercetools(BaseModel):
     """ Whether a fallback value is stored in the Algolia record if there's no inventory information about the product.  """
     product_query_predicate: Optional[str] = None
     """ Predicate to filter out specific products when indexing. For more information, see [Query Predicate](https://docs.commercetools.com/api/predicates/query).  """
+    use_images_objects: Optional[bool] = None
+    """ When set to true, the connector indexes objects with all images attributes instead of only the URLs.  """
     custom_fields: Optional[CommercetoolsCustomFields] = None
 
     model_config = ConfigDict(
