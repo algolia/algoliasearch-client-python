@@ -28,8 +28,6 @@ class RunStatus(str, Enum):
 
     STARTED = "started"
 
-    IDLED = "idled"
-
     FINISHED = "finished"
 
     SKIPPED = "skipped"
