@@ -29,6 +29,8 @@ _ALIASES = {
     "description": "description",
     "enabled": "enabled",
     "validity": "validity",
+    "tags": "tags",
+    "scope": "scope",
 }
 
 
@@ -52,6 +54,8 @@ class Rule(BaseModel):
     """ Whether the rule is active. """
     validity: Optional[List[TimeRange]] = None
     """ Time periods when the rule is active. """
+    tags: Optional[List[str]] = None
+    scope: Optional[str] = None
 
     model_config = ConfigDict(
         strict=False,
