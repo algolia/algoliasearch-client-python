@@ -1,3 +1,7 @@
+## [4.34.0](https://github.com/algolia/algoliasearch-client-python/compare/4.33.0...4.34.0)
+
+- [6a48ef151a](https://github.com/algolia/api-clients-automation/commit/6a48ef151a) feat(specs): allow `enablePersonalization` query parameter at run time for Composition API ([#5651](https://github.com/algolia/api-clients-automation/pull/5651)) by [@ClaraMuller](https://github.com/ClaraMuller/)
+
 ## [4.33.0](https://github.com/algolia/algoliasearch-client-python/compare/4.32.0...4.33.0)
 
 - [7d189e024](https://github.com/algolia/api-clients-automation/commit/7d189e024) feat(specs): add useImagesObjects property in commercetools source input ([#5586](https://github.com/algolia/api-clients-automation/pull/5586)) by [@sbellone](https://github.com/sbellone/)
