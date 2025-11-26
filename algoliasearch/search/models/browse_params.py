@@ -27,9 +27,9 @@ class BrowseParams(BaseModel):
     BrowseParams
     """
 
-    oneof_schema_1_validator: Optional[SearchParamsString] = Field(default=None)
+    oneof_schema_1_validator: Optional[BrowseParamsObject] = Field(default=None)
 
-    oneof_schema_2_validator: Optional[BrowseParamsObject] = Field(default=None)
+    oneof_schema_2_validator: Optional[SearchParamsString] = Field(default=None)
 
     actual_instance: Union[BrowseParamsObject, SearchParamsString, None] = None
     one_of_schemas: Set[str] = {"BrowseParamsObject", "SearchParamsString"}
@@ -69,13 +69,13 @@ class BrowseParams(BaseModel):
         error_messages = []
 
         try:
-            instance.actual_instance = SearchParamsString.from_json(json_str)
+            instance.actual_instance = BrowseParamsObject.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.actual_instance = BrowseParamsObject.from_json(json_str)
+            instance.actual_instance = SearchParamsString.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
