@@ -1406,6 +1406,80 @@ class CompositionClient:
         )
         return resp.deserialize(SearchForFacetValuesResponse, resp.raw_data)
 
+    async def update_sorting_strategy_composition_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_body: Dict[str, StrictStr],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Updates the \"sortingStrategy\" field of an existing composition. This endpoint allows you to create a new sorting strategy mapping or replace the currently configured one. The provided sorting indices MUST be associated indices or replicas of the main targeted index.  WARNING: This endpoint cannot validate if the sort index is related to the composition's main index.   Validation will fail at runtime if the index you updated is not related!  The update is applied to the specified composition within the current Algolia application and returns a taskID that can be used to track the operation’s completion.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_body: (required)
+        :type request_body: Dict[str, str]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `update_sorting_strategy_composition`."
+            )
+
+        if request_body is None:
+            raise ValueError(
+                "Parameter `request_body` is required when calling `update_sorting_strategy_composition`."
+            )
+
+        _data = {}
+        if request_body is not None:
+            _data = request_body
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/1/compositions/{compositionID}/sortingStrategy".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def update_sorting_strategy_composition(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_body: Dict[str, StrictStr],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Updates the \"sortingStrategy\" field of an existing composition. This endpoint allows you to create a new sorting strategy mapping or replace the currently configured one. The provided sorting indices MUST be associated indices or replicas of the main targeted index.  WARNING: This endpoint cannot validate if the sort index is related to the composition's main index.   Validation will fail at runtime if the index you updated is not related!  The update is applied to the specified composition within the current Algolia application and returns a taskID that can be used to track the operation’s completion.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_body: (required)
+        :type request_body: Dict[str, str]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = await self.update_sorting_strategy_composition_with_http_info(
+            composition_id, request_body, request_options
+        )
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
+
 
 class CompositionClientSync:
     """The Algolia 'CompositionClientSync' class.
@@ -2747,3 +2821,77 @@ class CompositionClientSync:
             composition_id, facet_name, search_for_facet_values_request, request_options
         )
         return resp.deserialize(SearchForFacetValuesResponse, resp.raw_data)
+
+    def update_sorting_strategy_composition_with_http_info(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_body: Dict[str, StrictStr],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Updates the \"sortingStrategy\" field of an existing composition. This endpoint allows you to create a new sorting strategy mapping or replace the currently configured one. The provided sorting indices MUST be associated indices or replicas of the main targeted index.  WARNING: This endpoint cannot validate if the sort index is related to the composition's main index.   Validation will fail at runtime if the index you updated is not related!  The update is applied to the specified composition within the current Algolia application and returns a taskID that can be used to track the operation’s completion.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_body: (required)
+        :type request_body: Dict[str, str]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `update_sorting_strategy_composition`."
+            )
+
+        if request_body is None:
+            raise ValueError(
+                "Parameter `request_body` is required when calling `update_sorting_strategy_composition`."
+            )
+
+        _data = {}
+        if request_body is not None:
+            _data = request_body
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/1/compositions/{compositionID}/sortingStrategy".replace(
+                "{compositionID}", quote(str(composition_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def update_sorting_strategy_composition(
+        self,
+        composition_id: Annotated[
+            StrictStr, Field(description="Unique Composition ObjectID.")
+        ],
+        request_body: Dict[str, StrictStr],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskIDResponse:
+        """
+        Updates the \"sortingStrategy\" field of an existing composition. This endpoint allows you to create a new sorting strategy mapping or replace the currently configured one. The provided sorting indices MUST be associated indices or replicas of the main targeted index.  WARNING: This endpoint cannot validate if the sort index is related to the composition's main index.   Validation will fail at runtime if the index you updated is not related!  The update is applied to the specified composition within the current Algolia application and returns a taskID that can be used to track the operation’s completion.
+
+        Required API Key ACLs:
+          - editSettings
+
+        :param composition_id: Unique Composition ObjectID. (required)
+        :type composition_id: str
+        :param request_body: (required)
+        :type request_body: Dict[str, str]
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskIDResponse' result object.
+        """
+        resp = self.update_sorting_strategy_composition_with_http_info(
+            composition_id, request_body, request_options
+        )
+        return resp.deserialize(TaskIDResponse, resp.raw_data)
