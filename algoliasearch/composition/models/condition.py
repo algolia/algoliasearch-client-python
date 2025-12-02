@@ -26,6 +26,7 @@ _ALIASES = {
     "anchoring": "anchoring",
     "context": "context",
     "filters": "filters",
+    "sort_by": "sortBy",
 }
 
 
@@ -45,6 +46,8 @@ class Condition(BaseModel):
     """ An additional restriction that only triggers the rule, when the search has the same value as `ruleContexts` parameter. For example, if `context: mobile`, the rule is only triggered when the search request has a matching `ruleContexts: mobile`. A rule context must only contain alphanumeric characters.  """
     filters: Optional[str] = None
     """ Filters that trigger the rule.  You can add add filters using the syntax `facet:value` so that the rule is triggered, when the specific filter is selected. You can use `filters` on its own or combine it with the `pattern` parameter.  """
+    sort_by: Optional[str] = None
+    """ Sort criteria that trigger the rule.  You can trigger composition rules based on the selected sorting strategy set by the parameter `sortBy`. The rule will trigger if the value passed to `sortBy` matches the one defined in the condition.  """
 
     @field_validator("context")
     def context_validate_regular_expression(cls, value):
