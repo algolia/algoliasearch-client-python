@@ -19,12 +19,14 @@ else:
 
 
 from algoliasearch.abtesting.models.empty_search import EmptySearch
+from algoliasearch.abtesting.models.feature_filters import FeatureFilters
 from algoliasearch.abtesting.models.minimum_detectable_effect import (
     MinimumDetectableEffect,
 )
 from algoliasearch.abtesting.models.outliers import Outliers
 
 _ALIASES = {
+    "feature_filters": "featureFilters",
     "outliers": "outliers",
     "empty_search": "emptySearch",
     "minimum_detectable_effect": "minimumDetectableEffect",
@@ -40,6 +42,7 @@ class EstimateConfiguration(BaseModel):
     A/B test configuration for estimating the sample size and duration using minimum detectable effect.
     """
 
+    feature_filters: Optional[FeatureFilters] = None
     outliers: Optional[Outliers] = None
     empty_search: Optional[EmptySearch] = None
     minimum_detectable_effect: MinimumDetectableEffect
@@ -79,6 +82,11 @@ class EstimateConfiguration(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
+        obj["featureFilters"] = (
+            FeatureFilters.from_dict(obj["featureFilters"])
+            if obj.get("featureFilters") is not None
+            else None
+        )
         obj["outliers"] = (
             Outliers.from_dict(obj["outliers"])
             if obj.get("outliers") is not None

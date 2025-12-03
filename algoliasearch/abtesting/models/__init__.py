@@ -23,6 +23,7 @@ from .error_base import ErrorBase
 from .estimate_ab_test_request import EstimateABTestRequest
 from .estimate_ab_test_response import EstimateABTestResponse
 from .estimate_configuration import EstimateConfiguration
+from .feature_filters import FeatureFilters
 from .filter_effects import FilterEffects
 from .list_ab_tests_response import ListABTestsResponse
 from .minimum_detectable_effect import MinimumDetectableEffect
@@ -47,6 +48,7 @@ __all__ = (
     "EstimateABTestRequest",
     "EstimateABTestResponse",
     "EstimateConfiguration",
+    "FeatureFilters",
     "FilterEffects",
     "ListABTestsResponse",
     "MinimumDetectableEffect",
