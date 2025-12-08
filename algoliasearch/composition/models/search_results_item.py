@@ -125,17 +125,17 @@ class SearchResultsItem(BaseModel):
     automatic_insights: Optional[bool] = None
     """ Whether automatic events collection is enabled for the application. """
     page: int
-    """ Page of search results to retrieve. """
+    """ The current page of the results. """
     nb_hits: int
     """ Number of results (hits). """
     nb_pages: int
     """ Number of pages of results. """
     hits_per_page: int
-    """ Number of hits per page. """
+    """ Number of hits returned per page. """
     hits: List[Hit]
     """ Search results (hits).  Hits are records from your index that match the search criteria, augmented with additional attributes, such as, for highlighting.  """
     query: str
-    """ Search query. """
+    """ The search query string. """
     params: str
     """ URL-encoded string of all search parameters. """
     compositions: Dict[str, ResultsCompositionInfoResponse]
