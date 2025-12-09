@@ -16,11 +16,11 @@ jobs:
     permissions:
       id-token: write
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - uses: actions/setup-python@v6
       with:
-        python-version: 3.13.7
+        python-version: 3.14.1
 
     - name: install poetry
       shell: bash
