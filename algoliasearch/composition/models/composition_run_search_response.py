@@ -38,7 +38,7 @@ class CompositionRunSearchResponse(BaseModel):
     """
 
     object_id: str
-    """ Unique record identifier. """
+    """ The objectID of the composition which generated this result set. """
     applied_rules: Optional[List[CompositionRunAppliedRules]] = None
 
     model_config = ConfigDict(

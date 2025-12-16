@@ -33,7 +33,7 @@ class CompositionRunAppliedRules(BaseModel):
     """
 
     object_id: str
-    """ Unique record identifier. """
+    """ The objectID of the applied composition rule on this query. """
 
     model_config = ConfigDict(
         strict=False,

@@ -33,7 +33,7 @@ class ResultsInjectedItemAppliedRulesInfoResponse(BaseModel):
     """
 
     object_id: str
-    """ Unique record identifier. """
+    """ The objectID of the applied index level rule on this injected group. """
 
     model_config = ConfigDict(
         strict=False,

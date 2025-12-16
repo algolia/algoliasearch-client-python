@@ -38,6 +38,7 @@ class ResultsInjectedItemInfoResponse(BaseModel):
     """
 
     key: str
+    """ The key of the injected group. """
     applied_rules: Optional[List[ResultsInjectedItemAppliedRulesInfoResponse]] = None
 
     model_config = ConfigDict(
