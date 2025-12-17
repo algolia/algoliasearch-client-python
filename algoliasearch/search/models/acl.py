@@ -54,6 +54,22 @@ class Acl(str, Enum):
 
     USAGE = "usage"
 
+    NLUWRITEPROJECT = "nluWriteProject"
+
+    NLUREADPROJECT = "nluReadProject"
+
+    NLUWRITEENTITY = "nluWriteEntity"
+
+    NLUREADENTITY = "nluReadEntity"
+
+    NLUWRITEINTENT = "nluWriteIntent"
+
+    NLUREADINTENT = "nluReadIntent"
+
+    NLUPREDICTION = "nluPrediction"
+
+    NLUREADANSWERS = "nluReadAnswers"
+
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of Acl from a JSON string"""
