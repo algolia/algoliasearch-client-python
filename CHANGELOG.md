@@ -1,3 +1,7 @@
+## [4.35.2](https://github.com/algolia/algoliasearch-client-python/compare/4.35.1...4.35.2)
+
+- [762964fa3](https://github.com/algolia/api-clients-automation/commit/762964fa3) chore: update Python version in release workflow to 3.13.7 ([#5771](https://github.com/algolia/api-clients-automation/pull/5771)) by [@Fluf22](https://github.com/Fluf22/)
+
 ## [4.35.1](https://github.com/algolia/algoliasearch-client-python/compare/4.35.0...4.35.1)
 
 - [54606b3b2](https://github.com/algolia/api-clients-automation/commit/54606b3b2) refactor(specs): extract `results` field in a dedicated directory ([#5739](https://github.com/algolia/api-clients-automation/pull/5739)) by [@ClaraMuller](https://github.com/ClaraMuller/)
