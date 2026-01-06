@@ -124,19 +124,19 @@ class SearchResultsItem(BaseModel):
     """ Unique identifier for the query. This is used for [click analytics](https://www.algolia.com/doc/guides/analytics/click-analytics). """
     automatic_insights: Optional[bool] = None
     """ Whether automatic events collection is enabled for the application. """
-    hits: List[Hit]
+    hits: Optional[List[Hit]] = None
     """ Search results (hits).  Hits are records from your index that match the search criteria, augmented with additional attributes, such as, for highlighting.  """
-    hits_per_page: int
+    hits_per_page: Optional[int] = None
     """ Number of hits returned per page. """
-    nb_hits: int
+    nb_hits: Optional[int] = None
     """ Number of results (hits). """
-    nb_pages: int
+    nb_pages: Optional[int] = None
     """ Number of pages of results. """
-    page: int
+    page: Optional[int] = None
     """ The current page of the results. """
-    params: str
+    params: Optional[str] = None
     """ URL-encoded string of all search parameters. """
-    query: str
+    query: Optional[str] = None
     """ The search query string. """
     compositions: Dict[str, ResultsCompositionInfoResponse]
 
