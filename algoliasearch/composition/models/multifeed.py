@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -19,11 +19,10 @@ else:
 
 
 from algoliasearch.composition.models.injection import Injection
-from algoliasearch.composition.models.multifeed import Multifeed
 
 _ALIASES = {
-    "injection": "injection",
-    "multifeed": "multifeed",
+    "feeds": "feeds",
+    "feeds_order": "feedsOrder",
 }
 
 
@@ -31,13 +30,15 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class CompositionBehavior(BaseModel):
+class Multifeed(BaseModel):
     """
-    An object containing either an `injection` or `multifeed` behavior schema, but not both.
+    Multifeed
     """
 
-    injection: Optional[Injection] = None
-    multifeed: Optional[Multifeed] = None
+    feeds: Dict[str, Injection]
+    """ A key-value store of Feed ID to Feed. Currently, the only supported Feed type is an Injection. """
+    feeds_order: Optional[List[str]] = None
+    """ A list of Feed IDs that specifies the order in which to order the results in the response. The IDs should be a subset of those in the Feeds object, and only those specified will be processed. When this field is not set, all Feeds are processed and returned with a default ordering. """
 
     model_config = ConfigDict(
         strict=False,
@@ -54,7 +55,7 @@ class CompositionBehavior(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CompositionBehavior from a JSON string"""
+        """Create an instance of Multifeed from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -67,21 +68,16 @@ class CompositionBehavior(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CompositionBehavior from a dict"""
+        """Create an instance of Multifeed from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["injection"] = (
-            Injection.from_dict(obj["injection"])
-            if obj.get("injection") is not None
-            else None
-        )
-        obj["multifeed"] = (
-            Multifeed.from_dict(obj["multifeed"])
-            if obj.get("multifeed") is not None
+        obj["feeds"] = (
+            dict((_k, Injection.from_dict(_v)) for _k, _v in obj["feeds"].items())
+            if obj.get("feeds") is not None
             else None
         )
 

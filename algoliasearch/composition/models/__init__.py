@@ -71,6 +71,7 @@ from .main import Main
 from .main_injection_query_parameters import MainInjectionQueryParameters
 from .match_level import MatchLevel
 from .matched_geo_location import MatchedGeoLocation
+from .multifeed import Multifeed
 from .multiple_batch_request import MultipleBatchRequest
 from .multiple_batch_response import MultipleBatchResponse
 from .numeric_filters import NumericFilters
@@ -182,6 +183,7 @@ __all__ = (
     "MainInjectionQueryParameters",
     "MatchLevel",
     "MatchedGeoLocation",
+    "Multifeed",
     "MultipleBatchRequest",
     "MultipleBatchResponse",
     "NumericFilters",
