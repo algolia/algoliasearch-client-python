@@ -46,7 +46,7 @@ class CompositionRule(BaseModel):
 
     object_id: str
     """ Composition rule unique identifier. """
-    conditions: List[Condition]
+    conditions: Optional[List[Condition]] = None
     """ Conditions that trigger a composition rule. """
     consequence: CompositionRuleConsequence
     description: Optional[str] = None
