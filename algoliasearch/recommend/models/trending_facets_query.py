@@ -18,18 +18,14 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.recommend.models.fallback_params import FallbackParams
-from algoliasearch.recommend.models.recommend_search_params import RecommendSearchParams
 from algoliasearch.recommend.models.trending_facets_model import TrendingFacetsModel
 
 _ALIASES = {
     "index_name": "indexName",
     "threshold": "threshold",
     "max_recommendations": "maxRecommendations",
-    "query_parameters": "queryParameters",
     "facet_name": "facetName",
     "model": "model",
-    "fallback_parameters": "fallbackParameters",
 }
 
 
@@ -48,11 +44,9 @@ class TrendingFacetsQuery(BaseModel):
     """ Minimum score a recommendation must have to be included in the response. """
     max_recommendations: Optional[int] = None
     """ Maximum number of recommendations to retrieve. By default, all recommendations are returned and no fallback request is made. Depending on the available recommendations and the other request parameters, the actual number of recommendations may be lower than this value.  """
-    query_parameters: Optional[RecommendSearchParams] = None
     facet_name: str
     """ Facet attribute for which to retrieve trending facet values. """
     model: TrendingFacetsModel
-    fallback_parameters: Optional[FallbackParams] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -89,16 +83,6 @@ class TrendingFacetsQuery(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["queryParameters"] = (
-            RecommendSearchParams.from_dict(obj["queryParameters"])
-            if obj.get("queryParameters") is not None
-            else None
-        )
         obj["model"] = obj.get("model")
-        obj["fallbackParameters"] = (
-            FallbackParams.from_dict(obj["fallbackParameters"])
-            if obj.get("fallbackParameters") is not None
-            else None
-        )
 
         return cls.model_validate(obj)
