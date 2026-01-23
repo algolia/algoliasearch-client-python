@@ -19,10 +19,8 @@ else:
 
 
 from algoliasearch.ingestion.models.auth_input_partial import AuthInputPartial
-from algoliasearch.ingestion.models.authentication_type import AuthenticationType
 
 _ALIASES = {
-    "type": "type",
     "name": "name",
     "input": "input",
 }
@@ -37,7 +35,6 @@ class AuthenticationUpdate(BaseModel):
     Request body for updating an authentication resource.
     """
 
-    type: Optional[AuthenticationType] = None
     name: Optional[str] = None
     """ Descriptive name for the resource. """
     input: Optional[AuthInputPartial] = None
@@ -77,7 +74,6 @@ class AuthenticationUpdate(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["type"] = obj.get("type")
         obj["input"] = (
             AuthInputPartial.from_dict(obj["input"])
             if obj.get("input") is not None
