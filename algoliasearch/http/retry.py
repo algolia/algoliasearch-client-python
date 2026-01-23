@@ -34,6 +34,7 @@ class RetryStrategy:
 
             return RetryOutcome.RETRY
         elif self._is_success(response):
+            host.retry_count = 0
             return RetryOutcome.SUCCESS
 
         return RetryOutcome.FAIL

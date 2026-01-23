@@ -74,9 +74,14 @@ class TransporterSync(BaseTransporter):
             ).prepare()
 
             try:
+                connect_timeout = (
+                    request_options.timeouts["connect"] * (host.retry_count + 1)
+                ) / 1000
+                read_timeout = self._timeout / 1000
+
                 resp = self._session.send(
                     req,
-                    timeout=self._timeout / 1000,
+                    timeout=(connect_timeout, read_timeout),
                     proxies=proxies,
                 )
 

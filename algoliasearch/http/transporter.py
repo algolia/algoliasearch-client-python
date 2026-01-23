@@ -2,7 +2,7 @@ from asyncio import TimeoutError
 from json import loads
 from typing import List, Optional
 
-from aiohttp import ClientSession, TCPConnector
+from aiohttp import ClientSession, ClientTimeout, TCPConnector
 from async_timeout import timeout
 
 from algoliasearch.http.api_response import ApiResponse
@@ -56,27 +56,37 @@ class Transporter(BaseTransporter):
             proxy = self.get_proxy(url)
 
             try:
-                async with timeout(self._timeout / 1000):
+                connect_timeout = (
+                    request_options.timeouts["connect"] * (host.retry_count + 1)
+                ) / 1000
+                request_timeout = self._timeout / 1000
+                total_timeout = connect_timeout + request_timeout
+
+                async with timeout(total_timeout):
+                    timeout_config = ClientTimeout(connect=connect_timeout)
+
                     resp = await self._session.request(
                         method=verb,
                         url=url,
                         headers=request_options.headers,
                         data=request_options.data,
                         proxy=proxy,
+                        timeout=timeout_config,
                     )
 
                     _raw_data = await resp.text()
-                    response = ApiResponse(
-                        verb=verb,
-                        path=path,
-                        url=url,
-                        host=host.url,
-                        status_code=resp.status,
-                        headers=resp.headers,  # pyright: ignore # insensitive dict is still a dict
-                        data=_raw_data,
-                        raw_data=_raw_data,
-                        error_message=str(resp.reason),
-                    )
+
+                response = ApiResponse(
+                    verb=verb,
+                    path=path,
+                    url=url,
+                    host=host.url,
+                    status_code=resp.status,
+                    headers=resp.headers,  # pyright: ignore # insensitive dict is still a dict
+                    data=_raw_data,
+                    raw_data=_raw_data,
+                    error_message=str(resp.reason),
+                )
 
             except TimeoutError as e:
                 response = ApiResponse(
