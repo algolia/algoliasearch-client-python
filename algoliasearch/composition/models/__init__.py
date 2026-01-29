@@ -26,6 +26,8 @@ from .boolean_string import BooleanString
 from .composition import Composition
 from .composition_behavior import CompositionBehavior
 from .composition_id_ranking_info import CompositionIdRankingInfo
+from .composition_injection_behavior import CompositionInjectionBehavior
+from .composition_multifeed_behavior import CompositionMultifeedBehavior
 from .composition_rule import CompositionRule
 from .composition_rule_consequence import CompositionRuleConsequence
 from .composition_rules_batch_params import CompositionRulesBatchParams
@@ -138,6 +140,8 @@ __all__ = (
     "Composition",
     "CompositionBehavior",
     "CompositionIdRankingInfo",
+    "CompositionInjectionBehavior",
+    "CompositionMultifeedBehavior",
     "CompositionRule",
     "CompositionRuleConsequence",
     "CompositionRulesBatchParams",
