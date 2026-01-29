@@ -98,6 +98,16 @@ class PurchasedObjectIDsAfterSearch(BaseModel):
             )
         return value
 
+    @field_validator("currency")
+    def currency_validate_regular_expression(cls, value):
+        """Validates the regular expression"""
+        if value is None:
+            return value
+
+        if not match(r"^[A-Za-z]{3}$", value):
+            raise ValueError(r"must validate the regular expression /^[A-Za-z]{3}$/")
+        return value
+
     model_config = ConfigDict(
         strict=False,
         use_enum_values=True,
