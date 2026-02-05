@@ -22,6 +22,7 @@ _ALIASES = {
     "url": "url",
     "client_id": "client_id",
     "client_secret": "client_secret",
+    "code": "code",
     "scope": "scope",
 }
 
@@ -41,6 +42,8 @@ class AuthOAuthPartial(BaseModel):
     """ Client ID. """
     client_secret: Optional[str] = None
     """ Client secret. This field is `null` in the API response. """
+    code: Optional[str] = None
+    """ Authorization code. Used during an `authorization_code` grant type flow, to request an access_token when creating/updating the authentication. This field is not returned in the API response.  """
     scope: Optional[str] = None
     """ OAuth scope. """
 
