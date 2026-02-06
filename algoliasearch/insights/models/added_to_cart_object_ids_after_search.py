@@ -68,7 +68,7 @@ class AddedToCartObjectIDsAfterSearch(BaseModel):
     object_data: Optional[List[ObjectDataAfterSearch]] = None
     """ Extra information about the records involved in a purchase or add-to-cart events.  If provided, it must be the same length as `objectIDs`.  """
     timestamp: Optional[int] = None
-    """ Timestamp of the event, measured in milliseconds since the Unix epoch. By default, the Insights API uses the time it receives an event as its timestamp.  """
+    """ Timestamp of the event, measured in milliseconds since the Unix epoch. Must be no older than 30 days. If not provided, we use the time at which the request was received.  """
     value: Optional[Value] = None
 
     @field_validator("event_name")
