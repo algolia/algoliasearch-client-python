@@ -34,9 +34,9 @@ class Window(BaseModel):
     """
 
     start_date: str
-    """ Date in RFC 3339 format representing the oldest data in the time window. """
+    """ Date and time representing the oldest data in the time window, in RFC 3339 format. """
     end_date: str
-    """ Date in RFC 3339 format representing the newest data in the time window. """
+    """ Date and time representing the newest data in the time window, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

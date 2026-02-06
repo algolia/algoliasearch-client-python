@@ -547,7 +547,7 @@ class IngestionClient:
     ) -> ApiResponse[str]:
         """
         (Deprecated) create_task_v1
-        Creates a new task using the v1 endpoint, please use `createTask` instead.
+        Creates a new task using the v1 endpoint. Use `createTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -593,7 +593,7 @@ class IngestionClient:
     ) -> TaskCreateResponse:
         """
         (Deprecated) create_task_v1
-        Creates a new task using the v1 endpoint, please use `createTask` instead.
+        Creates a new task using the v1 endpoint. Use `createTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -1252,7 +1252,7 @@ class IngestionClient:
     ) -> ApiResponse[str]:
         """
         (Deprecated) delete_task_v1
-        Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
+        Deletes a task by its ID using the v1 endpoint. Use `deleteTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -1290,7 +1290,7 @@ class IngestionClient:
     ) -> DeleteResponse:
         """
         (Deprecated) delete_task_v1
-        Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
+        Deletes a task by its ID using the v1 endpoint. Use `deleteTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -1436,7 +1436,7 @@ class IngestionClient:
     ) -> ApiResponse[str]:
         """
         (Deprecated) disable_task_v1
-        Disables a task using the v1 endpoint, please use `disableTask` instead.
+        Disables a task using the v1 endpoint. Use `disableTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -1476,7 +1476,7 @@ class IngestionClient:
     ) -> TaskUpdateResponse:
         """
         (Deprecated) disable_task_v1
-        Disables a task using the v1 endpoint, please use `disableTask` instead.
+        Disables a task using the v1 endpoint. Use `disableTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -1560,7 +1560,7 @@ class IngestionClient:
     ) -> ApiResponse[str]:
         """
         (Deprecated) enable_task_v1
-        Enables a task using the v1 endpoint, please use `enableTask` instead.
+        Enables a task using the v1 endpoint. Use `enableTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -1600,7 +1600,7 @@ class IngestionClient:
     ) -> TaskUpdateResponse:
         """
         (Deprecated) enable_task_v1
-        Enables a task using the v1 endpoint, please use `enableTask` instead.
+        Enables a task using the v1 endpoint. Use `enableTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -1995,7 +1995,7 @@ class IngestionClient:
     ) -> ApiResponse[str]:
         """
         (Deprecated) get_task_v1
-        Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
+        Retrieves a task by its ID using the v1 endpoint. Use `getTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -2033,7 +2033,7 @@ class IngestionClient:
     ) -> TaskV1:
         """
         (Deprecated) get_task_v1
-        Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
+        Retrieves a task by its ID using the v1 endpoint. Use `getTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -2729,13 +2729,13 @@ class IngestionClient:
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
+                description="Date and time for the earliest run to retrieve, in RFC 3339 format. By default, the current day minus seven days is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used."
+                description="Date and time for the latest run to retrieve, in RFC 3339 format. By default, the current day is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -2762,9 +2762,9 @@ class IngestionClient:
         :type sort: RunSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
+        :param start_date: Date and time for the earliest run to retrieve, in RFC 3339 format. By default, the current day minus seven days is used.
         :type start_date: str
-        :param end_date: Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used.
+        :param end_date: Date and time for the latest run to retrieve, in RFC 3339 format. By default, the current day is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -2848,13 +2848,13 @@ class IngestionClient:
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
+                description="Date and time for the earliest run to retrieve, in RFC 3339 format. By default, the current day minus seven days is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used."
+                description="Date and time for the latest run to retrieve, in RFC 3339 format. By default, the current day is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -2881,9 +2881,9 @@ class IngestionClient:
         :type sort: RunSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
+        :param start_date: Date and time for the earliest run to retrieve, in RFC 3339 format. By default, the current day minus seven days is used.
         :type start_date: str
-        :param end_date: Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used.
+        :param end_date: Date and time for the latest run to retrieve, in RFC 3339 format. By default, the current day is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunListResponse' result object.
@@ -3381,7 +3381,7 @@ class IngestionClient:
     ) -> ApiResponse[str]:
         """
         (Deprecated) list_tasks_v1
-        Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
+        Retrieves a list of tasks using the v1 endpoint. Use `getTasks` instead.
 
         Required API Key ACLs:
           - addObject
@@ -3503,7 +3503,7 @@ class IngestionClient:
     ) -> ListTasksResponseV1:
         """
         (Deprecated) list_tasks_v1
-        Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
+        Retrieves a list of tasks using the v1 endpoint. Use `getTasks` instead.
 
         Required API Key ACLs:
           - addObject
@@ -4152,7 +4152,7 @@ class IngestionClient:
     ) -> ApiResponse[str]:
         """
         (Deprecated) run_task_v1
-        Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
+        Runs a task using the v1 endpoint. Use `runTask` instead. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
           - addObject
@@ -4200,7 +4200,7 @@ class IngestionClient:
     ) -> RunResponse:
         """
         (Deprecated) run_task_v1
-        Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
+        Runs a task using the v1 endpoint. Use `runTask` instead. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
           - addObject
@@ -4466,7 +4466,7 @@ class IngestionClient:
     ) -> ApiResponse[str]:
         """
         (Deprecated) search_tasks_v1
-        Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
+        Searches for tasks using the v1 endpoint. Use `searchTasks` instead.
 
         Required API Key ACLs:
           - addObject
@@ -4507,7 +4507,7 @@ class IngestionClient:
     ) -> List[TaskV1]:
         """
         (Deprecated) search_tasks_v1
-        Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
+        Searches for tasks using the v1 endpoint. Use `searchTasks` instead.
 
         Required API Key ACLs:
           - addObject
@@ -5111,7 +5111,7 @@ class IngestionClient:
     ) -> ApiResponse[str]:
         """
         (Deprecated) update_task_v1
-        Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
+        Updates a task by its ID using the v1 endpoint. Use `updateTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -5162,7 +5162,7 @@ class IngestionClient:
     ) -> TaskUpdateResponse:
         """
         (Deprecated) update_task_v1
-        Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
+        Updates a task by its ID using the v1 endpoint. Use `updateTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -5837,7 +5837,7 @@ class IngestionClientSync:
     ) -> ApiResponse[str]:
         """
         (Deprecated) create_task_v1
-        Creates a new task using the v1 endpoint, please use `createTask` instead.
+        Creates a new task using the v1 endpoint. Use `createTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -5883,7 +5883,7 @@ class IngestionClientSync:
     ) -> TaskCreateResponse:
         """
         (Deprecated) create_task_v1
-        Creates a new task using the v1 endpoint, please use `createTask` instead.
+        Creates a new task using the v1 endpoint. Use `createTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -6534,7 +6534,7 @@ class IngestionClientSync:
     ) -> ApiResponse[str]:
         """
         (Deprecated) delete_task_v1
-        Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
+        Deletes a task by its ID using the v1 endpoint. Use `deleteTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -6572,7 +6572,7 @@ class IngestionClientSync:
     ) -> DeleteResponse:
         """
         (Deprecated) delete_task_v1
-        Deletes a task by its ID using the v1 endpoint, please use `deleteTask` instead.
+        Deletes a task by its ID using the v1 endpoint. Use `deleteTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -6718,7 +6718,7 @@ class IngestionClientSync:
     ) -> ApiResponse[str]:
         """
         (Deprecated) disable_task_v1
-        Disables a task using the v1 endpoint, please use `disableTask` instead.
+        Disables a task using the v1 endpoint. Use `disableTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -6758,7 +6758,7 @@ class IngestionClientSync:
     ) -> TaskUpdateResponse:
         """
         (Deprecated) disable_task_v1
-        Disables a task using the v1 endpoint, please use `disableTask` instead.
+        Disables a task using the v1 endpoint. Use `disableTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -6842,7 +6842,7 @@ class IngestionClientSync:
     ) -> ApiResponse[str]:
         """
         (Deprecated) enable_task_v1
-        Enables a task using the v1 endpoint, please use `enableTask` instead.
+        Enables a task using the v1 endpoint. Use `enableTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -6882,7 +6882,7 @@ class IngestionClientSync:
     ) -> TaskUpdateResponse:
         """
         (Deprecated) enable_task_v1
-        Enables a task using the v1 endpoint, please use `enableTask` instead.
+        Enables a task using the v1 endpoint. Use `enableTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -7275,7 +7275,7 @@ class IngestionClientSync:
     ) -> ApiResponse[str]:
         """
         (Deprecated) get_task_v1
-        Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
+        Retrieves a task by its ID using the v1 endpoint. Use `getTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -7313,7 +7313,7 @@ class IngestionClientSync:
     ) -> TaskV1:
         """
         (Deprecated) get_task_v1
-        Retrieves a task by its ID using the v1 endpoint, please use `getTask` instead.
+        Retrieves a task by its ID using the v1 endpoint. Use `getTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -8009,13 +8009,13 @@ class IngestionClientSync:
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
+                description="Date and time for the earliest run to retrieve, in RFC 3339 format. By default, the current day minus seven days is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used."
+                description="Date and time for the latest run to retrieve, in RFC 3339 format. By default, the current day is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -8042,9 +8042,9 @@ class IngestionClientSync:
         :type sort: RunSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
+        :param start_date: Date and time for the earliest run to retrieve, in RFC 3339 format. By default, the current day minus seven days is used.
         :type start_date: str
-        :param end_date: Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used.
+        :param end_date: Date and time for the latest run to retrieve, in RFC 3339 format. By default, the current day is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -8128,13 +8128,13 @@ class IngestionClientSync:
         start_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used."
+                description="Date and time for the earliest run to retrieve, in RFC 3339 format. By default, the current day minus seven days is used."
             ),
         ] = None,
         end_date: Annotated[
             Optional[StrictStr],
             Field(
-                description="Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used."
+                description="Date and time for the latest run to retrieve, in RFC 3339 format. By default, the current day is used."
             ),
         ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -8161,9 +8161,9 @@ class IngestionClientSync:
         :type sort: RunSortKeys
         :param order: Sort order of the response, ascending or descending.
         :type order: OrderKeys
-        :param start_date: Date in RFC 3339 format for the earliest run to retrieve. By default, the current day minus seven days is used.
+        :param start_date: Date and time for the earliest run to retrieve, in RFC 3339 format. By default, the current day minus seven days is used.
         :type start_date: str
-        :param end_date: Date in RFC 3339 format for the latest run to retrieve. By default, the current day is used.
+        :param end_date: Date and time for the latest run to retrieve, in RFC 3339 format. By default, the current day is used.
         :type end_date: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'RunListResponse' result object.
@@ -8661,7 +8661,7 @@ class IngestionClientSync:
     ) -> ApiResponse[str]:
         """
         (Deprecated) list_tasks_v1
-        Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
+        Retrieves a list of tasks using the v1 endpoint. Use `getTasks` instead.
 
         Required API Key ACLs:
           - addObject
@@ -8783,7 +8783,7 @@ class IngestionClientSync:
     ) -> ListTasksResponseV1:
         """
         (Deprecated) list_tasks_v1
-        Retrieves a list of tasks using the v1 endpoint, please use `getTasks` instead.
+        Retrieves a list of tasks using the v1 endpoint. Use `getTasks` instead.
 
         Required API Key ACLs:
           - addObject
@@ -9428,7 +9428,7 @@ class IngestionClientSync:
     ) -> ApiResponse[str]:
         """
         (Deprecated) run_task_v1
-        Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
+        Runs a task using the v1 endpoint. Use `runTask` instead. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
           - addObject
@@ -9476,7 +9476,7 @@ class IngestionClientSync:
     ) -> RunResponse:
         """
         (Deprecated) run_task_v1
-        Runs a task using the v1 endpoint, please use `runTask` instead. You can check the status of task runs with the observability endpoints.
+        Runs a task using the v1 endpoint. Use `runTask` instead. You can check the status of task runs with the observability endpoints.
 
         Required API Key ACLs:
           - addObject
@@ -9742,7 +9742,7 @@ class IngestionClientSync:
     ) -> ApiResponse[str]:
         """
         (Deprecated) search_tasks_v1
-        Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
+        Searches for tasks using the v1 endpoint. Use `searchTasks` instead.
 
         Required API Key ACLs:
           - addObject
@@ -9783,7 +9783,7 @@ class IngestionClientSync:
     ) -> List[TaskV1]:
         """
         (Deprecated) search_tasks_v1
-        Searches for tasks using the v1 endpoint, please use `searchTasks` instead.
+        Searches for tasks using the v1 endpoint. Use `searchTasks` instead.
 
         Required API Key ACLs:
           - addObject
@@ -10385,7 +10385,7 @@ class IngestionClientSync:
     ) -> ApiResponse[str]:
         """
         (Deprecated) update_task_v1
-        Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
+        Updates a task by its ID using the v1 endpoint. Use `updateTask` instead.
 
         Required API Key ACLs:
           - addObject
@@ -10436,7 +10436,7 @@ class IngestionClientSync:
     ) -> TaskUpdateResponse:
         """
         (Deprecated) update_task_v1
-        Updates a task by its ID using the v1 endpoint, please use `updateTask` instead.
+        Updates a task by its ID using the v1 endpoint. Use `updateTask` instead.
 
         Required API Key ACLs:
           - addObject

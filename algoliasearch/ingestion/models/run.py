@@ -65,11 +65,11 @@ class Run(BaseModel):
     reason_code: Optional[RunReasonCode] = None
     type: RunType
     created_at: str
-    """ Date of creation in RFC 3339 format. """
+    """ Date and time when the resource was created, in RFC 3339 format. """
     started_at: Optional[str] = None
-    """ Date of start in RFC 3339 format. """
+    """ Date and time when the task started, in RFC 3339 format. """
     finished_at: Optional[str] = None
-    """ Date of finish in RFC 3339 format. """
+    """ Date and time when the task finished, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

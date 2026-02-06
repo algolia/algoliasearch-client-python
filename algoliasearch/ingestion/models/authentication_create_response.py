@@ -39,7 +39,7 @@ class AuthenticationCreateResponse(BaseModel):
     name: str
     """ Descriptive name for the resource. """
     created_at: str
-    """ Date of creation in RFC 3339 format. """
+    """ Date and time when the resource was created, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

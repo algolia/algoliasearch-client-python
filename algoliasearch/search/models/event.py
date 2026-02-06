@@ -51,7 +51,7 @@ class Event(BaseModel):
     """ The extracted record batch size. """
     data: Optional[Dict[str, object]] = None
     published_at: str
-    """ Date of publish RFC 3339 format. """
+    """ Date and time when the resource was published, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

@@ -39,7 +39,7 @@ class DestinationUpdateResponse(BaseModel):
     name: str
     """ Descriptive name for the resource. """
     updated_at: str
-    """ Date of last update in RFC 3339 format. """
+    """ Date and time when the resource was last updated, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

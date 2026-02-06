@@ -36,7 +36,7 @@ class RunSourceResponse(BaseModel):
     task_with_run_id: Dict[str, str]
     """ Map of taskID sent for reindex with the corresponding runID. """
     created_at: str
-    """ Date of creation in RFC 3339 format. """
+    """ Date and time when the resource was created, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

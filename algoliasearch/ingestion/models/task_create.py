@@ -61,7 +61,7 @@ class TaskCreate(BaseModel):
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
     input: Optional[TaskInput] = None
     cursor: Optional[str] = None
-    """ Date of the last cursor in RFC 3339 format. """
+    """ Date and time when the last cursor was created, in RFC 3339 format. """
     notifications: Optional[Notifications] = None
     policies: Optional[Policies] = None
 

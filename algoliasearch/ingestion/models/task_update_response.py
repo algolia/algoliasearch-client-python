@@ -36,7 +36,7 @@ class TaskUpdateResponse(BaseModel):
     task_id: str
     """ Universally unique identifier (UUID) of a task. """
     updated_at: str
-    """ Date of last update in RFC 3339 format. """
+    """ Date and time when the resource was last updated, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

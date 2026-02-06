@@ -47,7 +47,7 @@ def _alias_generator(name: str) -> str:
 
 class TaskV1(BaseModel):
     """
-    The V1 task object, please use methods and types that don't contain the V1 suffix.
+    The V1 task object. Use methods and types that don't contain the V1 suffix.
     """
 
     task_id: str
@@ -64,13 +64,13 @@ class TaskV1(BaseModel):
     """ Maximum accepted percentage of failures for a task run to finish successfully. """
     action: Optional[ActionType] = None
     cursor: Optional[str] = None
-    """ Date of the last cursor in RFC 3339 format. """
+    """ Date and time when the last cursor was created, in RFC 3339 format. """
     notifications: Optional[Notifications] = None
     policies: Optional[Policies] = None
     created_at: str
-    """ Date of creation in RFC 3339 format. """
+    """ Date and time when the resource was created, in RFC 3339 format. """
     updated_at: str
-    """ Date of last update in RFC 3339 format. """
+    """ Date and time when the resource was last updated, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

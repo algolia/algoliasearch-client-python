@@ -23,7 +23,7 @@ from algoliasearch.composition.models.supported_language import SupportedLanguag
 
 class RemoveStopWords(BaseModel):
     """
-    Removes stop words from the search query.  Stop words are common words like articles, conjunctions, prepositions, or pronouns that have little or no meaning on their own. In English, \"the\", \"a\", or \"and\" are stop words.  You should only use this feature for the languages used in your index.
+    Removes stop words from the search query.  Stop words are common words like articles, conjunctions, prepositions, or pronouns that have little or no meaning on their own. In English, \"the\", \"a\", or \"and\" are stop words.  Only use this feature for the languages used in your index.
     """
 
     oneof_schema_1_validator: Optional[List[SupportedLanguage]] = Field(default=None)

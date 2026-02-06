@@ -59,9 +59,9 @@ class Transformation(BaseModel):
     owner: Optional[str] = None
     """ Owner of the resource. """
     created_at: str
-    """ Date of creation in RFC 3339 format. """
+    """ Date and time when the resource was created, in RFC 3339 format. """
     updated_at: str
-    """ Date of last update in RFC 3339 format. """
+    """ Date and time when the resource was last updated, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

@@ -33,7 +33,7 @@ class DeleteResponse(BaseModel):
     """
 
     deleted_at: str
-    """ Date of deletion in RFC 3339 format. """
+    """ Date and time when the resource was deleted, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

@@ -50,7 +50,7 @@ class WatchResponse(BaseModel):
     message: Optional[str] = None
     """ a message describing the outcome of the operation that has been ran (push, discover or validate) run. """
     created_at: Optional[str] = None
-    """ Date of creation in RFC 3339 format. """
+    """ Date and time when the resource was created, in RFC 3339 format. """
 
     model_config = ConfigDict(
         strict=False,

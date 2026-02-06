@@ -52,7 +52,7 @@ class GetApiKeyResponse(BaseModel):
     description: Optional[str] = None
     """ Description of an API key to help you identify this API key. """
     indexes: Optional[List[str]] = None
-    """ Index names or patterns that this API key can access. By default, an API key can access all indices in the same application.  You can use leading and trailing wildcard characters (`*`):  - `dev_*` matches all indices starting with \"dev_\". - `*_dev` matches all indices ending with \"_dev\". - `*_products_*` matches all indices containing \"_products_\".  """
+    """ Index names or patterns that this API key can access. By default, an API key can access all indices in the same application.  You can use leading and trailing wildcard characters (`*`):  - `dev_*` matches all indices starting with \"dev_\" - `*_dev` matches all indices ending with \"_dev\" - `*_products_*` matches all indices containing \"_products_\".  """
     max_hits_per_query: Optional[int] = None
     """ Maximum number of results this API key can retrieve in one query. By default, there's no limit.  """
     max_queries_per_ip_per_hour: Optional[int] = None

@@ -24,7 +24,7 @@ from algoliasearch.recommend.models.supported_language import SupportedLanguage
 
 class IgnorePlurals(BaseModel):
     """
-    Treat singular, plurals, and other forms of declensions as equivalent. You should only use this feature for the languages used in your index.
+    Treat singular, plurals, and other forms of declensions as equivalent. Only use this feature for the languages used in your index.
     """
 
     oneof_schema_1_validator: Optional[List[SupportedLanguage]] = Field(default=None)
