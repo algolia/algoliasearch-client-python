@@ -131,9 +131,9 @@ class BrowseResponse(BaseModel):
     """ Number of hits per page. """
     hits: List[Hit]
     """ Search results (hits).  Hits are records from your index that match the search criteria, augmented with additional attributes, such as, for highlighting.  """
-    query: str
+    query: Optional[str] = None
     """ Search query. """
-    params: str
+    params: Optional[str] = None
     """ URL-encoded string of all search parameters. """
     cursor: Optional[str] = None
     """ Cursor to get the next page of the response.  The parameter must match the value returned in the response of a previous request. The last page of the response does not return a `cursor` attribute.  """

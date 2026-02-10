@@ -130,9 +130,9 @@ class SearchResponse(BaseModel):
     """ Number of hits per page. """
     hits: List[Hit]
     """ Search results (hits).  Hits are records from your index that match the search criteria, augmented with additional attributes, such as, for highlighting.  """
-    query: str
+    query: Optional[str] = None
     """ Search query. """
-    params: str
+    params: Optional[str] = None
     """ URL-encoded string of all search parameters. """
 
     @field_validator("around_lat_lng")
