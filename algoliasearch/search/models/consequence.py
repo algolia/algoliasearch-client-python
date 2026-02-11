@@ -20,6 +20,7 @@ else:
 
 from algoliasearch.search.models.consequence_hide import ConsequenceHide
 from algoliasearch.search.models.consequence_params import ConsequenceParams
+from algoliasearch.search.models.consequence_redirect import ConsequenceRedirect
 from algoliasearch.search.models.promote import Promote
 
 _ALIASES = {
@@ -27,6 +28,7 @@ _ALIASES = {
     "promote": "promote",
     "filter_promotes": "filterPromotes",
     "hide": "hide",
+    "redirect": "redirect",
     "user_data": "userData",
 }
 
@@ -47,6 +49,7 @@ class Consequence(BaseModel):
     """ Determines whether promoted records must also match active filters for the consequence to apply.  This ensures user-applied filters take priority and irrelevant matches aren't shown. For example, if you promote a record with `color: red` but the user filters for `color: blue`, the \"red\" record won't be shown.  > In the Algolia dashboard, when you use the **Pin an item** consequence, `filterPromotes` appears as the checkbox: **Pinned items must match active filters to be displayed.** For examples, see [Promote results with rules](https://www.algolia.com/doc/guides/managing-results/rules/merchandising-and-promoting/how-to/promote-hits/#promote-results-matching-active-filters).  """
     hide: Optional[List[ConsequenceHide]] = None
     """ Records you want to hide from the search results. """
+    redirect: Optional[ConsequenceRedirect] = None
     user_data: Optional[object] = None
     """ A JSON object with custom data that will be appended to the `userData` array in the response. This object isn't interpreted by the API and is limited to 1&nbsp;kB of minified JSON.  """
 
@@ -98,6 +101,11 @@ class Consequence(BaseModel):
         obj["hide"] = (
             [ConsequenceHide.from_dict(_item) for _item in obj["hide"]]
             if obj.get("hide") is not None
+            else None
+        )
+        obj["redirect"] = (
+            ConsequenceRedirect.from_dict(obj["redirect"])
+            if obj.get("redirect") is not None
             else None
         )
 

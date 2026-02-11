@@ -46,6 +46,7 @@ from .consequence_hide import ConsequenceHide
 from .consequence_params import ConsequenceParams
 from .consequence_query import ConsequenceQuery
 from .consequence_query_object import ConsequenceQueryObject
+from .consequence_redirect import ConsequenceRedirect
 from .created_at_response import CreatedAtResponse
 from .delete_api_key_response import DeleteApiKeyResponse
 from .delete_by_params import DeleteByParams
@@ -222,6 +223,7 @@ __all__ = (
     "ConsequenceParams",
     "ConsequenceQuery",
     "ConsequenceQueryObject",
+    "ConsequenceRedirect",
     "CreatedAtResponse",
     "DeleteApiKeyResponse",
     "DeleteByParams",
