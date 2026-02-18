@@ -62,6 +62,7 @@ _ALIASES = {
     "page": "page",
     "params": "params",
     "query": "query",
+    "feed_id": "feedID",
     "compositions": "compositions",
 }
 
@@ -138,6 +139,8 @@ class SearchResultsItem(BaseModel):
     """ URL-encoded string of all search parameters. """
     query: Optional[str] = None
     """ The search query string. """
+    feed_id: Optional[str] = None
+    """ The ID of the feed. """
     compositions: Dict[str, ResultsCompositionInfoResponse]
 
     @field_validator("around_lat_lng")
