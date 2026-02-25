@@ -66,12 +66,14 @@ class TransporterSync(BaseTransporter):
             url = self.build_url(host, path)
             proxies = self.get_proxies(url)
 
-            req = Request(
-                method=verb,
-                url=url,
-                headers=request_options.headers,
-                data=request_options.data,
-            ).prepare()
+            req = self._session.prepare_request(
+                Request(
+                    method=verb,
+                    url=url,
+                    headers=request_options.headers,
+                    data=request_options.data,
+                )
+            )
 
             try:
                 connect_timeout = (
