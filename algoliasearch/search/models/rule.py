@@ -31,6 +31,7 @@ _ALIASES = {
     "validity": "validity",
     "tags": "tags",
     "scope": "scope",
+    "condition": "condition",
 }
 
 
@@ -56,6 +57,7 @@ class Rule(BaseModel):
     """ Time periods when the rule is active. """
     tags: Optional[List[str]] = None
     scope: Optional[str] = None
+    condition: Optional[Condition] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -105,6 +107,11 @@ class Rule(BaseModel):
         obj["validity"] = (
             [TimeRange.from_dict(_item) for _item in obj["validity"]]
             if obj.get("validity") is not None
+            else None
+        )
+        obj["condition"] = (
+            Condition.from_dict(obj["condition"])
+            if obj.get("condition") is not None
             else None
         )
 
