@@ -19,7 +19,7 @@ class RequestOptions:
         headers: Optional[Dict[str, str]] = None,
         query_parameters: Optional[Dict[str, Any]] = None,
         timeouts: Optional[Dict[str, int]] = None,
-        data: Optional[Dict[str, Any]] = None,
+        data: Optional[Union[Dict[str, Any], str, bytes]] = None,
     ) -> None:
         if headers is None:
             headers = {}
