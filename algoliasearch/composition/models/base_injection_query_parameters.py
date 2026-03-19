@@ -44,13 +44,11 @@ _ALIASES = {
     "advanced_syntax_features": "advancedSyntaxFeatures",
     "allow_typos_on_numeric_tokens": "allowTyposOnNumericTokens",
     "alternatives_as_exact": "alternativesAsExact",
-    "analytics": "analytics",
     "attribute_criteria_computed_by_min_proximity": "attributeCriteriaComputedByMinProximity",
     "attributes_to_highlight": "attributesToHighlight",
     "attributes_to_retrieve": "attributesToRetrieve",
     "attributes_to_snippet": "attributesToSnippet",
     "click_analytics": "clickAnalytics",
-    "decompound_query": "decompoundQuery",
     "disable_exact_on_attributes": "disableExactOnAttributes",
     "disable_typo_tolerance_on_attributes": "disableTypoToleranceOnAttributes",
     "distinct": "distinct",
@@ -65,7 +63,6 @@ _ALIASES = {
     "highlight_post_tag": "highlightPostTag",
     "highlight_pre_tag": "highlightPreTag",
     "ignore_plurals": "ignorePlurals",
-    "max_facet_hits": "maxFacetHits",
     "min_proximity": "minProximity",
     "min_word_sizefor1_typo": "minWordSizefor1Typo",
     "min_word_sizefor2_typos": "minWordSizefor2Typos",
@@ -107,8 +104,6 @@ class BaseInjectionQueryParameters(BaseModel):
     """ Whether to allow typos on numbers in the search query Turn off this setting to reduce the number of irrelevant matches when searching in large sets of similar numbers.  """
     alternatives_as_exact: Optional[List[AlternativesAsExact]] = None
     """ Determine which plurals and synonyms should be considered an exact matches By default, Algolia treats singular and plural forms of a word, and single-word synonyms, as [exact](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#exact) matches when searching. For example - \"swimsuit\" and \"swimsuits\" are treated the same - \"swimsuit\" and \"swimwear\" are treated the same (if they are [synonyms](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/adding-synonyms/#regular-synonyms)) - `ignorePlurals`.   Plurals and similar declensions added by the `ignorePlurals` setting are considered exact matches - `singleWordSynonym`.   Single-word synonyms, such as \"NY\" = \"NYC\", are considered exact matches - `multiWordsSynonym`.   Multi-word synonyms, such as \"NY\" = \"New York\", are considered exact matches.  """
-    analytics: Optional[bool] = None
-    """ Whether this search will be included in Analytics. """
     attribute_criteria_computed_by_min_proximity: Optional[bool] = None
     """ Whether the best matching attribute should be determined by minimum proximity This setting only affects ranking if the Attribute ranking criterion comes before Proximity in the `ranking` setting. If true, the best matching attribute is selected based on the minimum proximity of multiple matches. Otherwise, the best matching attribute is determined by the order in the `searchableAttributes` setting.  """
     attributes_to_highlight: Optional[List[str]] = None
@@ -119,8 +114,6 @@ class BaseInjectionQueryParameters(BaseModel):
     """ Attributes for which to enable snippets. Attribute names are case-sensitive Snippets provide additional context to matched words. If you enable snippets, they include 10 words, including the matched word. The matched word will also be wrapped by HTML tags for highlighting. You can adjust the number of words with the following notation: `ATTRIBUTE:NUMBER`, where `NUMBER` is the number of words to be extracted.  """
     click_analytics: Optional[bool] = None
     """ Whether to include a `queryID` attribute in the response The query ID is a unique identifier for a search query and is required for tracking [click and conversion events](https://www.algolia.com/doc/guides/sending-events/getting-started).  """
-    decompound_query: Optional[bool] = None
-    """ Whether to split compound words in the query into their building blocks For more information, see [Word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words). Word segmentation is supported for these languages: German, Dutch, Finnish, Swedish, and Norwegian. Decompounding doesn't work for words with [non-spacing mark Unicode characters](https://www.charactercodes.net/category/non-spacing_mark). For example, `Gartenstühle` won't be decompounded if the `ü` consists of `u` (U+0075) and `◌̈` (U+0308).  """
     disable_exact_on_attributes: Optional[List[str]] = None
     """ Searchable attributes for which you want to [turn off the Exact ranking criterion](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/override-search-engine-defaults/in-depth/adjust-exact-settings/#turn-off-exact-for-some-attributes). Attribute names are case-sensitive This can be useful for attributes with long values, where the likelihood of an exact match is high, such as product descriptions. Turning off the Exact ranking criterion for these attributes favors exact matching on other attributes. This reduces the impact of individual attributes with a lot of content on ranking.  """
     disable_typo_tolerance_on_attributes: Optional[List[str]] = None
@@ -145,8 +138,6 @@ class BaseInjectionQueryParameters(BaseModel):
     highlight_pre_tag: Optional[str] = None
     """ HTML tag to insert before the highlighted parts in all highlighted results and snippets. """
     ignore_plurals: Optional[IgnorePlurals] = None
-    max_facet_hits: Optional[int] = None
-    """ Maximum number of facet values to return when [searching for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values). """
     min_proximity: Optional[int] = None
     """ Minimum proximity score for two matching words This adjusts the [Proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity) by equally scoring matches that are farther apart For example, if `minProximity` is 2, neighboring matches and matches with one word between them would have the same score.  """
     min_word_sizefor1_typo: Optional[int] = None
