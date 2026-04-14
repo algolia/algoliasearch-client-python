@@ -1,3 +1,7 @@
+## [4.38.1](https://github.com/algolia/algoliasearch-client-python/compare/4.38.0...4.38.1)
+
+- [d86a5438e2](https://github.com/algolia/api-clients-automation/commit/d86a5438e2) chore(deps): dependencies 2026-04-06 ([#6200](https://github.com/algolia/api-clients-automation/pull/6200)) by [@algolia-bot](https://github.com/algolia-bot/)
+
 ## [4.38.0](https://github.com/algolia/algoliasearch-client-python/compare/4.37.1...4.38.0)
 
 - [b2387066c9](https://github.com/algolia/api-clients-automation/commit/b2387066c9) feat(python): added gzip compression ([#6050](https://github.com/algolia/api-clients-automation/pull/6050)) by [@eric-zaharia](https://github.com/eric-zaharia/)
