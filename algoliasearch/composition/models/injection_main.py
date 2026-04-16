@@ -18,15 +18,10 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.injected_item_metadata import InjectedItemMetadata
-from algoliasearch.composition.models.injected_item_source import InjectedItemSource
+from algoliasearch.composition.models.injection_main_source import InjectionMainSource
 
 _ALIASES = {
-    "key": "key",
     "source": "source",
-    "position": "position",
-    "length": "length",
-    "metadata": "metadata",
 }
 
 
@@ -34,17 +29,12 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class InjectedItem(BaseModel):
+class InjectionMain(BaseModel):
     """
-    InjectedItem
+    Main defines the organic result set of the injection.
     """
 
-    key: str
-    """ injected Item unique identifier. """
-    source: InjectedItemSource
-    position: int
-    length: int
-    metadata: Optional[InjectedItemMetadata] = None
+    source: Optional[InjectionMainSource] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -61,7 +51,7 @@ class InjectedItem(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of InjectedItem from a JSON string"""
+        """Create an instance of InjectionMain from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,7 +64,7 @@ class InjectedItem(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of InjectedItem from a dict"""
+        """Create an instance of InjectionMain from a dict"""
         if obj is None:
             return None
 
@@ -82,13 +72,8 @@ class InjectedItem(BaseModel):
             return cls.model_validate(obj)
 
         obj["source"] = (
-            InjectedItemSource.from_dict(obj["source"])
+            InjectionMainSource.from_dict(obj["source"])
             if obj.get("source") is not None
-            else None
-        )
-        obj["metadata"] = (
-            InjectedItemMetadata.from_dict(obj["metadata"])
-            if obj.get("metadata") is not None
             else None
         )
 

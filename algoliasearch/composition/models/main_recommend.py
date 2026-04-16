@@ -18,12 +18,8 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.composition_source_search import (
-    CompositionSourceSearch,
-)
-
 _ALIASES = {
-    "search": "search",
+    "index": "index",
 }
 
 
@@ -31,12 +27,13 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class CompositionSource(BaseModel):
+class MainRecommend(BaseModel):
     """
-    CompositionSource
+    MainRecommend
     """
 
-    search: CompositionSourceSearch
+    index: str
+    """ Targeted index name. """
 
     model_config = ConfigDict(
         strict=False,
@@ -53,7 +50,7 @@ class CompositionSource(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CompositionSource from a JSON string"""
+        """Create an instance of MainRecommend from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -66,17 +63,11 @@ class CompositionSource(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CompositionSource from a dict"""
+        """Create an instance of MainRecommend from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
-
-        obj["search"] = (
-            CompositionSourceSearch.from_dict(obj["search"])
-            if obj.get("search") is not None
-            else None
-        )
 
         return cls.model_validate(obj)

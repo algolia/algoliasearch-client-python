@@ -18,10 +18,15 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.external import External
+from algoliasearch.composition.models.base_injection_query_parameters import (
+    BaseInjectionQueryParameters,
+)
+from algoliasearch.composition.models.external_ordering import ExternalOrdering
 
 _ALIASES = {
-    "external": "external",
+    "index": "index",
+    "params": "params",
+    "ordering": "ordering",
 }
 
 
@@ -29,12 +34,15 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class ExternalSource(BaseModel):
+class InjectedItemExternal(BaseModel):
     """
-    Injected items will originate from externally provided objectIDs (that must exist in the index) given at runtime in the run request payload.
+    InjectedItemExternal
     """
 
-    external: External
+    index: str
+    """ Composition Index name. """
+    params: Optional[BaseInjectionQueryParameters] = None
+    ordering: Optional[ExternalOrdering] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -51,7 +59,7 @@ class ExternalSource(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ExternalSource from a JSON string"""
+        """Create an instance of InjectedItemExternal from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -64,17 +72,18 @@ class ExternalSource(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ExternalSource from a dict"""
+        """Create an instance of InjectedItemExternal from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["external"] = (
-            External.from_dict(obj["external"])
-            if obj.get("external") is not None
+        obj["params"] = (
+            BaseInjectionQueryParameters.from_dict(obj["params"])
+            if obj.get("params") is not None
             else None
         )
+        obj["ordering"] = obj.get("ordering")
 
         return cls.model_validate(obj)

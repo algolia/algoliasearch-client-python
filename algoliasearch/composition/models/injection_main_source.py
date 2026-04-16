@@ -18,29 +18,31 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.injected_item_external_source import (
-    InjectedItemExternalSource,
+from algoliasearch.composition.models.injection_main_recommend_source import (
+    InjectionMainRecommendSource,
 )
-from algoliasearch.composition.models.injected_item_search_source import (
-    InjectedItemSearchSource,
+from algoliasearch.composition.models.injection_main_search_source import (
+    InjectionMainSearchSource,
 )
 
 
-class InjectedItemSource(BaseModel):
+class InjectionMainSource(BaseModel):
     """
-    InjectedItemSource
+    Source to be used to retrieve organic result set.
     """
 
-    oneof_schema_1_validator: Optional[InjectedItemSearchSource] = Field(default=None)
+    oneof_schema_1_validator: Optional[InjectionMainSearchSource] = Field(default=None)
 
-    oneof_schema_2_validator: Optional[InjectedItemExternalSource] = Field(default=None)
+    oneof_schema_2_validator: Optional[InjectionMainRecommendSource] = Field(
+        default=None
+    )
 
     actual_instance: Union[
-        InjectedItemExternalSource, InjectedItemSearchSource, None
+        InjectionMainRecommendSource, InjectionMainSearchSource, None
     ] = None
     one_of_schemas: Set[str] = {
-        "InjectedItemExternalSource",
-        "InjectedItemSearchSource",
+        "InjectionMainRecommendSource",
+        "InjectionMainSearchSource",
     }
 
     def __init__(self, *args, **kwargs) -> None:
@@ -60,7 +62,7 @@ class InjectedItemSource(BaseModel):
     @model_serializer
     def unwrap_actual_instance(
         self,
-    ) -> Union[InjectedItemExternalSource, InjectedItemSearchSource, Self, None]:
+    ) -> Union[InjectionMainRecommendSource, InjectionMainSearchSource, Self, None]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -68,7 +70,7 @@ class InjectedItemSource(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
-        """Create an instance of InjectedItemSource from a JSON string"""
+        """Create an instance of InjectionMainSource from a JSON string"""
         return cls.from_json(dumps(obj))
 
     @classmethod
@@ -78,20 +80,20 @@ class InjectedItemSource(BaseModel):
         error_messages = []
 
         try:
-            instance.actual_instance = InjectedItemSearchSource.from_json(json_str)
+            instance.actual_instance = InjectionMainSearchSource.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.actual_instance = InjectedItemExternalSource.from_json(json_str)
+            instance.actual_instance = InjectionMainRecommendSource.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into InjectedItemSource with oneOf schemas: InjectedItemExternalSource, InjectedItemSearchSource. Details: "
+            "No match found when deserializing the JSON string into InjectionMainSource with oneOf schemas: InjectionMainRecommendSource, InjectionMainSearchSource. Details: "
             + ", ".join(error_messages)
         )
 
@@ -110,7 +112,7 @@ class InjectedItemSource(BaseModel):
     def to_dict(
         self,
     ) -> Optional[
-        Union[Dict[str, Any], InjectedItemExternalSource, InjectedItemSearchSource]
+        Union[Dict[str, Any], InjectionMainRecommendSource, InjectionMainSearchSource]
     ]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:

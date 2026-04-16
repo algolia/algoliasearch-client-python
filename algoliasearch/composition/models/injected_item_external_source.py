@@ -18,15 +18,10 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.base_injection_query_parameters import (
-    BaseInjectionQueryParameters,
-)
-from algoliasearch.composition.models.external_ordering import ExternalOrdering
+from algoliasearch.composition.models.injected_item_external import InjectedItemExternal
 
 _ALIASES = {
-    "index": "index",
-    "params": "params",
-    "ordering": "ordering",
+    "external": "external",
 }
 
 
@@ -34,15 +29,12 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class External(BaseModel):
+class InjectedItemExternalSource(BaseModel):
     """
-    External
+    Injected items will originate from externally provided objectIDs (that must exist in the index) given at runtime in the run request payload.
     """
 
-    index: str
-    """ Composition Index name. """
-    params: Optional[BaseInjectionQueryParameters] = None
-    ordering: Optional[ExternalOrdering] = None
+    external: InjectedItemExternal
 
     model_config = ConfigDict(
         strict=False,
@@ -59,7 +51,7 @@ class External(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of External from a JSON string"""
+        """Create an instance of InjectedItemExternalSource from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -72,18 +64,17 @@ class External(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of External from a dict"""
+        """Create an instance of InjectedItemExternalSource from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["params"] = (
-            BaseInjectionQueryParameters.from_dict(obj["params"])
-            if obj.get("params") is not None
+        obj["external"] = (
+            InjectedItemExternal.from_dict(obj["external"])
+            if obj.get("external") is not None
             else None
         )
-        obj["ordering"] = obj.get("ordering")
 
         return cls.model_validate(obj)

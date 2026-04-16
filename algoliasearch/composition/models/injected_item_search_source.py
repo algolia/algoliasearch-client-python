@@ -18,13 +18,10 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.main_injection_query_parameters import (
-    MainInjectionQueryParameters,
-)
+from algoliasearch.composition.models.injected_item_search import InjectedItemSearch
 
 _ALIASES = {
-    "index": "index",
-    "params": "params",
+    "search": "search",
 }
 
 
@@ -32,14 +29,12 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class CompositionSourceSearch(BaseModel):
+class InjectedItemSearchSource(BaseModel):
     """
-    CompositionSourceSearch
+    Injected items will originate from a search request performed on the specified index.
     """
 
-    index: str
-    """ Composition Main Index name. """
-    params: Optional[MainInjectionQueryParameters] = None
+    search: InjectedItemSearch
 
     model_config = ConfigDict(
         strict=False,
@@ -56,7 +51,7 @@ class CompositionSourceSearch(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CompositionSourceSearch from a JSON string"""
+        """Create an instance of InjectedItemSearchSource from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,16 +64,16 @@ class CompositionSourceSearch(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CompositionSourceSearch from a dict"""
+        """Create an instance of InjectedItemSearchSource from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["params"] = (
-            MainInjectionQueryParameters.from_dict(obj["params"])
-            if obj.get("params") is not None
+        obj["search"] = (
+            InjectedItemSearch.from_dict(obj["search"])
+            if obj.get("search") is not None
             else None
         )
 

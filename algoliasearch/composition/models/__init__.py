@@ -33,8 +33,6 @@ from .composition_rule_consequence import CompositionRuleConsequence
 from .composition_rules_batch_params import CompositionRulesBatchParams
 from .composition_run_applied_rules import CompositionRunAppliedRules
 from .composition_run_search_response import CompositionRunSearchResponse
-from .composition_source import CompositionSource
-from .composition_source_search import CompositionSourceSearch
 from .compositions_search_response import CompositionsSearchResponse
 from .condition import Condition
 from .dedup_positioning import DedupPositioning
@@ -45,11 +43,9 @@ from .distinct import Distinct
 from .error_base import ErrorBase
 from .exact_on_single_word_query import ExactOnSingleWordQuery
 from .exhaustive import Exhaustive
-from .external import External
 from .external_injected_item import ExternalInjectedItem
 from .external_injection import ExternalInjection
 from .external_ordering import ExternalOrdering
-from .external_source import ExternalSource
 from .facet_filters import FacetFilters
 from .facet_hits import FacetHits
 from .facet_ordering import FacetOrdering
@@ -63,15 +59,24 @@ from .hit_metadata import HitMetadata
 from .hit_ranking_info import HitRankingInfo
 from .ignore_plurals import IgnorePlurals
 from .index_settings_facets import IndexSettingsFacets
-from .injected_item import InjectedItem
+from .injected_item_external import InjectedItemExternal
+from .injected_item_external_source import InjectedItemExternalSource
 from .injected_item_hits_metadata import InjectedItemHitsMetadata
 from .injected_item_metadata import InjectedItemMetadata
+from .injected_item_search import InjectedItemSearch
+from .injected_item_search_source import InjectedItemSearchSource
 from .injected_item_source import InjectedItemSource
 from .injection import Injection
+from .injection_injected_item import InjectionInjectedItem
+from .injection_main import InjectionMain
+from .injection_main_recommend_source import InjectionMainRecommendSource
+from .injection_main_search_source import InjectionMainSearchSource
+from .injection_main_source import InjectionMainSource
 from .inside_bounding_box import InsideBoundingBox
 from .list_compositions_response import ListCompositionsResponse
-from .main import Main
 from .main_injection_query_parameters import MainInjectionQueryParameters
+from .main_recommend import MainRecommend
+from .main_search import MainSearch
 from .match_level import MatchLevel
 from .matched_geo_location import MatchedGeoLocation
 from .multifeed import Multifeed
@@ -100,7 +105,6 @@ from .results_injected_item_info_response import ResultsInjectedItemInfoResponse
 from .rules_batch_composition_action import RulesBatchCompositionAction
 from .rules_multiple_batch_request import RulesMultipleBatchRequest
 from .rules_multiple_batch_response import RulesMultipleBatchResponse
-from .search import Search
 from .search_composition_rules_params import SearchCompositionRulesParams
 from .search_composition_rules_response import SearchCompositionRulesResponse
 from .search_for_facet_values_params import SearchForFacetValuesParams
@@ -109,7 +113,6 @@ from .search_for_facet_values_response import SearchForFacetValuesResponse
 from .search_for_facet_values_results import SearchForFacetValuesResults
 from .search_response import SearchResponse
 from .search_results_item import SearchResultsItem
-from .search_source import SearchSource
 from .snippet_result import SnippetResult
 from .snippet_result_option import SnippetResultOption
 from .sort_remaining_by import SortRemainingBy
@@ -148,8 +151,6 @@ __all__ = (
     "CompositionRulesBatchParams",
     "CompositionRunAppliedRules",
     "CompositionRunSearchResponse",
-    "CompositionSource",
-    "CompositionSourceSearch",
     "CompositionsSearchResponse",
     "Condition",
     "DedupPositioning",
@@ -160,11 +161,9 @@ __all__ = (
     "ErrorBase",
     "ExactOnSingleWordQuery",
     "Exhaustive",
-    "External",
     "ExternalInjectedItem",
     "ExternalInjection",
     "ExternalOrdering",
-    "ExternalSource",
     "FacetFilters",
     "FacetHits",
     "FacetOrdering",
@@ -178,15 +177,24 @@ __all__ = (
     "HitRankingInfo",
     "IgnorePlurals",
     "IndexSettingsFacets",
-    "InjectedItem",
+    "InjectedItemExternal",
+    "InjectedItemExternalSource",
     "InjectedItemHitsMetadata",
     "InjectedItemMetadata",
+    "InjectedItemSearch",
+    "InjectedItemSearchSource",
     "InjectedItemSource",
     "Injection",
+    "InjectionInjectedItem",
+    "InjectionMain",
+    "InjectionMainRecommendSource",
+    "InjectionMainSearchSource",
+    "InjectionMainSource",
     "InsideBoundingBox",
     "ListCompositionsResponse",
-    "Main",
     "MainInjectionQueryParameters",
+    "MainRecommend",
+    "MainSearch",
     "MatchLevel",
     "MatchedGeoLocation",
     "Multifeed",
@@ -213,7 +221,6 @@ __all__ = (
     "RulesBatchCompositionAction",
     "RulesMultipleBatchRequest",
     "RulesMultipleBatchResponse",
-    "Search",
     "SearchCompositionRulesParams",
     "SearchCompositionRulesResponse",
     "SearchForFacetValuesParams",
@@ -222,7 +229,6 @@ __all__ = (
     "SearchForFacetValuesResults",
     "SearchResponse",
     "SearchResultsItem",
-    "SearchSource",
     "SnippetResult",
     "SnippetResultOption",
     "SortRemainingBy",

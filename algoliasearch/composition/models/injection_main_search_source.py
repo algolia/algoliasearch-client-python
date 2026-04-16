@@ -18,10 +18,10 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.composition_source import CompositionSource
+from algoliasearch.composition.models.main_search import MainSearch
 
 _ALIASES = {
-    "source": "source",
+    "search": "search",
 }
 
 
@@ -29,12 +29,12 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class Main(BaseModel):
+class InjectionMainSearchSource(BaseModel):
     """
-    Main
+    Organic result set will originate from a search request performed on the specified index.
     """
 
-    source: CompositionSource
+    search: MainSearch
 
     model_config = ConfigDict(
         strict=False,
@@ -51,7 +51,7 @@ class Main(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Main from a JSON string"""
+        """Create an instance of InjectionMainSearchSource from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -64,16 +64,16 @@ class Main(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Main from a dict"""
+        """Create an instance of InjectionMainSearchSource from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["source"] = (
-            CompositionSource.from_dict(obj["source"])
-            if obj.get("source") is not None
+        obj["search"] = (
+            MainSearch.from_dict(obj["search"])
+            if obj.get("search") is not None
             else None
         )
 

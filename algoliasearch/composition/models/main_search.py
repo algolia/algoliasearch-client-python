@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,16 +18,13 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.deduplication import Deduplication
-from algoliasearch.composition.models.injection_injected_item import (
-    InjectionInjectedItem,
+from algoliasearch.composition.models.main_injection_query_parameters import (
+    MainInjectionQueryParameters,
 )
-from algoliasearch.composition.models.injection_main import InjectionMain
 
 _ALIASES = {
-    "main": "main",
-    "injected_items": "injectedItems",
-    "deduplication": "deduplication",
+    "index": "index",
+    "params": "params",
 }
 
 
@@ -35,15 +32,14 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class Injection(BaseModel):
+class MainSearch(BaseModel):
     """
-    Injection
+    MainSearch
     """
 
-    main: InjectionMain
-    injected_items: Optional[List[InjectionInjectedItem]] = None
-    """ list of injected items of the current Composition. """
-    deduplication: Optional[Deduplication] = None
+    index: str
+    """ Targeted index name. """
+    params: Optional[MainInjectionQueryParameters] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -60,7 +56,7 @@ class Injection(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Injection from a JSON string"""
+        """Create an instance of MainSearch from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,26 +69,16 @@ class Injection(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Injection from a dict"""
+        """Create an instance of MainSearch from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["main"] = (
-            InjectionMain.from_dict(obj["main"])
-            if obj.get("main") is not None
-            else None
-        )
-        obj["injectedItems"] = (
-            [InjectionInjectedItem.from_dict(_item) for _item in obj["injectedItems"]]
-            if obj.get("injectedItems") is not None
-            else None
-        )
-        obj["deduplication"] = (
-            Deduplication.from_dict(obj["deduplication"])
-            if obj.get("deduplication") is not None
+        obj["params"] = (
+            MainInjectionQueryParameters.from_dict(obj["params"])
+            if obj.get("params") is not None
             else None
         )
 
