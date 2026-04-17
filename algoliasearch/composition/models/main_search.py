@@ -38,7 +38,7 @@ class MainSearch(BaseModel):
     """
 
     index: str
-    """ Targeted index name. """
+    """ Index to retrieve search results from. """
     params: Optional[MainInjectionQueryParameters] = None
 
     model_config = ConfigDict(

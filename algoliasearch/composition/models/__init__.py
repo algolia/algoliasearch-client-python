@@ -63,6 +63,7 @@ from .injected_item_external import InjectedItemExternal
 from .injected_item_external_source import InjectedItemExternalSource
 from .injected_item_hits_metadata import InjectedItemHitsMetadata
 from .injected_item_metadata import InjectedItemMetadata
+from .injected_item_recommend_source import InjectedItemRecommendSource
 from .injected_item_search import InjectedItemSearch
 from .injected_item_search_source import InjectedItemSearchSource
 from .injected_item_source import InjectedItemSource
@@ -79,6 +80,7 @@ from .main_recommend import MainRecommend
 from .main_search import MainSearch
 from .match_level import MatchLevel
 from .matched_geo_location import MatchedGeoLocation
+from .model import Model
 from .multifeed import Multifeed
 from .multiple_batch_request import MultipleBatchRequest
 from .multiple_batch_response import MultipleBatchResponse
@@ -89,6 +91,7 @@ from .params import Params
 from .personalization import Personalization
 from .query_type import QueryType
 from .range import Range
+from .recommend import Recommend
 from .redirect import Redirect
 from .redirect_rule_index_data import RedirectRuleIndexData
 from .redirect_rule_index_metadata import RedirectRuleIndexMetadata
@@ -181,6 +184,7 @@ __all__ = (
     "InjectedItemExternalSource",
     "InjectedItemHitsMetadata",
     "InjectedItemMetadata",
+    "InjectedItemRecommendSource",
     "InjectedItemSearch",
     "InjectedItemSearchSource",
     "InjectedItemSource",
@@ -197,6 +201,7 @@ __all__ = (
     "MainSearch",
     "MatchLevel",
     "MatchedGeoLocation",
+    "Model",
     "Multifeed",
     "MultipleBatchRequest",
     "MultipleBatchResponse",
@@ -207,6 +212,7 @@ __all__ = (
     "Personalization",
     "QueryType",
     "Range",
+    "Recommend",
     "Redirect",
     "RedirectRuleIndexData",
     "RedirectRuleIndexMetadata",

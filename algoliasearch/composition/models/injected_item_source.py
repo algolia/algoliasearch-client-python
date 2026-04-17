@@ -21,6 +21,9 @@ else:
 from algoliasearch.composition.models.injected_item_external_source import (
     InjectedItemExternalSource,
 )
+from algoliasearch.composition.models.injected_item_recommend_source import (
+    InjectedItemRecommendSource,
+)
 from algoliasearch.composition.models.injected_item_search_source import (
     InjectedItemSearchSource,
 )
@@ -35,11 +38,19 @@ class InjectedItemSource(BaseModel):
 
     oneof_schema_2_validator: Optional[InjectedItemExternalSource] = Field(default=None)
 
+    oneof_schema_3_validator: Optional[InjectedItemRecommendSource] = Field(
+        default=None
+    )
+
     actual_instance: Union[
-        InjectedItemExternalSource, InjectedItemSearchSource, None
+        InjectedItemExternalSource,
+        InjectedItemRecommendSource,
+        InjectedItemSearchSource,
+        None,
     ] = None
     one_of_schemas: Set[str] = {
         "InjectedItemExternalSource",
+        "InjectedItemRecommendSource",
         "InjectedItemSearchSource",
     }
 
@@ -60,7 +71,13 @@ class InjectedItemSource(BaseModel):
     @model_serializer
     def unwrap_actual_instance(
         self,
-    ) -> Union[InjectedItemExternalSource, InjectedItemSearchSource, Self, None]:
+    ) -> Union[
+        InjectedItemExternalSource,
+        InjectedItemRecommendSource,
+        InjectedItemSearchSource,
+        Self,
+        None,
+    ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -89,9 +106,15 @@ class InjectedItemSource(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = InjectedItemRecommendSource.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into InjectedItemSource with oneOf schemas: InjectedItemExternalSource, InjectedItemSearchSource. Details: "
+            "No match found when deserializing the JSON string into InjectedItemSource with oneOf schemas: InjectedItemExternalSource, InjectedItemRecommendSource, InjectedItemSearchSource. Details: "
             + ", ".join(error_messages)
         )
 
@@ -110,7 +133,12 @@ class InjectedItemSource(BaseModel):
     def to_dict(
         self,
     ) -> Optional[
-        Union[Dict[str, Any], InjectedItemExternalSource, InjectedItemSearchSource]
+        Union[
+            Dict[str, Any],
+            InjectedItemExternalSource,
+            InjectedItemRecommendSource,
+            InjectedItemSearchSource,
+        ]
     ]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
