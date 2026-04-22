@@ -40,6 +40,7 @@ from algoliasearch.search.models.remove_words_if_no_results import (
     RemoveWordsIfNoResults,
 )
 from algoliasearch.search.models.rendering_content import RenderingContent
+from algoliasearch.search.models.search_extensions import SearchExtensions
 from algoliasearch.search.models.search_type_default import SearchTypeDefault
 from algoliasearch.search.models.semantic_search import SemanticSearch
 from algoliasearch.search.models.supported_language import SupportedLanguage
@@ -123,6 +124,7 @@ _ALIASES = {
     "re_ranking_apply_filter": "reRankingApplyFilter",
     "index_name": "indexName",
     "type": "type",
+    "extensions": "extensions",
 }
 
 
@@ -267,6 +269,7 @@ class SearchForHits(BaseModel):
     index_name: str
     """ Index name (case-sensitive). """
     type: Optional[SearchTypeDefault] = None
+    extensions: Optional[SearchExtensions] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -387,5 +390,10 @@ class SearchForHits(BaseModel):
             else None
         )
         obj["type"] = obj.get("type")
+        obj["extensions"] = (
+            SearchExtensions.from_dict(obj["extensions"])
+            if obj.get("extensions") is not None
+            else None
+        )
 
         return cls.model_validate(obj)

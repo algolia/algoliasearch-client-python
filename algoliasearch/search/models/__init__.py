@@ -20,6 +20,8 @@ from .around_radius import AroundRadius
 from .around_radius_all import AroundRadiusAll
 from .assign_user_id_params import AssignUserIdParams
 from .attribute_to_update import AttributeToUpdate
+from .auto_filtering_filter_entry import AutoFilteringFilterEntry
+from .auto_filtering_result import AutoFilteringResult
 from .automatic_facet_filter import AutomaticFacetFilter
 from .automatic_facet_filters import AutomaticFacetFilters
 from .banner import Banner
@@ -40,6 +42,8 @@ from .browse_response import BrowseResponse
 from .built_in_operation import BuiltInOperation
 from .built_in_operation_type import BuiltInOperationType
 from .built_in_operation_value import BuiltInOperationValue
+from .category_prediction import CategoryPrediction
+from .category_prediction_bin import CategoryPredictionBin
 from .condition import Condition
 from .consequence import Consequence
 from .consequence_hide import ConsequenceHide
@@ -83,6 +87,7 @@ from .get_objects_response import GetObjectsResponse
 from .get_task_response import GetTaskResponse
 from .get_top_user_ids_response import GetTopUserIdsResponse
 from .has_pending_mappings_response import HasPendingMappingsResponse
+from .hierarchy_path_entry import HierarchyPathEntry
 from .highlight_result import HighlightResult
 from .highlight_result_option import HighlightResultOption
 from .hit import Hit
@@ -111,6 +116,8 @@ from .personalization import Personalization
 from .promote import Promote
 from .promote_object_id import PromoteObjectID
 from .promote_object_ids import PromoteObjectIDs
+from .query_categorization import QueryCategorization
+from .query_categorization_type import QueryCategorizationType
 from .query_type import QueryType
 from .range import Range
 from .ranking_info import RankingInfo
@@ -128,12 +135,15 @@ from .replace_all_objects_with_transformation_response import (
     ReplaceAllObjectsWithTransformationResponse,
 )
 from .replace_source_response import ReplaceSourceResponse
+from .response_extensions import ResponseExtensions
 from .rule import Rule
 from .save_object_response import SaveObjectResponse
 from .save_synonym_response import SaveSynonymResponse
 from .scope_type import ScopeType
 from .search_dictionary_entries_params import SearchDictionaryEntriesParams
 from .search_dictionary_entries_response import SearchDictionaryEntriesResponse
+from .search_extensions import SearchExtensions
+from .search_extensions_query_categorization import SearchExtensionsQueryCategorization
 from .search_for_facet_values_request import SearchForFacetValuesRequest
 from .search_for_facet_values_response import SearchForFacetValuesResponse
 from .search_for_facets import SearchForFacets
@@ -197,6 +207,8 @@ __all__ = (
     "AroundRadiusAll",
     "AssignUserIdParams",
     "AttributeToUpdate",
+    "AutoFilteringFilterEntry",
+    "AutoFilteringResult",
     "AutomaticFacetFilter",
     "AutomaticFacetFilters",
     "Banner",
@@ -217,6 +229,8 @@ __all__ = (
     "BuiltInOperation",
     "BuiltInOperationType",
     "BuiltInOperationValue",
+    "CategoryPrediction",
+    "CategoryPredictionBin",
     "Condition",
     "Consequence",
     "ConsequenceHide",
@@ -260,6 +274,7 @@ __all__ = (
     "GetTaskResponse",
     "GetTopUserIdsResponse",
     "HasPendingMappingsResponse",
+    "HierarchyPathEntry",
     "HighlightResult",
     "HighlightResultOption",
     "Hit",
@@ -288,6 +303,8 @@ __all__ = (
     "Promote",
     "PromoteObjectID",
     "PromoteObjectIDs",
+    "QueryCategorization",
+    "QueryCategorizationType",
     "QueryType",
     "Range",
     "RankingInfo",
@@ -301,12 +318,15 @@ __all__ = (
     "RemoveWordsIfNoResults",
     "RenderingContent",
     "ReplaceSourceResponse",
+    "ResponseExtensions",
     "Rule",
     "SaveObjectResponse",
     "SaveSynonymResponse",
     "ScopeType",
     "SearchDictionaryEntriesParams",
     "SearchDictionaryEntriesResponse",
+    "SearchExtensions",
+    "SearchExtensionsQueryCategorization",
     "SearchForFacetValuesRequest",
     "SearchForFacetValuesResponse",
     "SearchForFacets",
