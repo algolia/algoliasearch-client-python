@@ -1,3 +1,12 @@
+## [4.39.0](https://github.com/algolia/algoliasearch-client-python/compare/4.38.1...4.39.0)
+
+BREAKING CHANGES: this minor version includes breaking changes in the Composition API. See below for more details.
+
+- [39ea2c5cb3](https://github.com/algolia/api-clients-automation/commit/39ea2c5cb3) refactor(specs): split injection schema ([#6224](https://github.com/algolia/api-clients-automation/pull/6224)) by [@ClaraMuller](https://github.com/ClaraMuller/)
+- [544091a5f2](https://github.com/algolia/api-clients-automation/commit/544091a5f2) feat(specs): introduce recommend source in Comp API client ([#6227](https://github.com/algolia/api-clients-automation/pull/6227)) by [@ClaraMuller](https://github.com/ClaraMuller/)
+- [f73d69aae4](https://github.com/algolia/api-clients-automation/commit/f73d69aae4) fix(specs): clarify getIndexingTime ([#6276](https://github.com/algolia/api-clients-automation/pull/6276)) by [@kai687](https://github.com/kai687/)
+- [e48d5c4bbf](https://github.com/algolia/api-clients-automation/commit/e48d5c4bbf) feat(specs): query categorization ([#6258](https://github.com/algolia/api-clients-automation/pull/6258)) by [@eric-zaharia](https://github.com/eric-zaharia/)
+
 ## [4.38.1](https://github.com/algolia/algoliasearch-client-python/compare/4.38.0...4.38.1)
 
 - [d86a5438e2](https://github.com/algolia/api-clients-automation/commit/d86a5438e2) chore(deps): dependencies 2026-04-06 ([#6200](https://github.com/algolia/api-clients-automation/pull/6200)) by [@algolia-bot](https://github.com/algolia-bot/)
