@@ -18,6 +18,7 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.ingestion.models.source_algolia_index import SourceAlgoliaIndex
 from algoliasearch.ingestion.models.source_big_commerce import SourceBigCommerce
 from algoliasearch.ingestion.models.source_big_query import SourceBigQuery
 from algoliasearch.ingestion.models.source_commercetools import SourceCommercetools
@@ -51,7 +52,10 @@ class SourceInput(BaseModel):
 
     oneof_schema_8_validator: Optional[SourceShopify] = Field(default=None)
 
+    oneof_schema_9_validator: Optional[SourceAlgoliaIndex] = Field(default=None)
+
     actual_instance: Union[
+        SourceAlgoliaIndex,
         SourceBigCommerce,
         SourceBigQuery,
         SourceCSV,
@@ -63,6 +67,7 @@ class SourceInput(BaseModel):
         None,
     ] = None
     one_of_schemas: Set[str] = {
+        "SourceAlgoliaIndex",
         "SourceBigCommerce",
         "SourceBigQuery",
         "SourceCSV",
@@ -91,6 +96,7 @@ class SourceInput(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Union[
+        SourceAlgoliaIndex,
         SourceBigCommerce,
         SourceBigQuery,
         SourceCSV,
@@ -166,9 +172,15 @@ class SourceInput(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = SourceAlgoliaIndex.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into SourceInput with oneOf schemas: SourceBigCommerce, SourceBigQuery, SourceCSV, SourceCommercetools, SourceDocker, SourceGA4BigQueryExport, SourceJSON, SourceShopify. Details: "
+            "No match found when deserializing the JSON string into SourceInput with oneOf schemas: SourceAlgoliaIndex, SourceBigCommerce, SourceBigQuery, SourceCSV, SourceCommercetools, SourceDocker, SourceGA4BigQueryExport, SourceJSON, SourceShopify. Details: "
             + ", ".join(error_messages)
         )
 
@@ -189,6 +201,7 @@ class SourceInput(BaseModel):
     ) -> Optional[
         Union[
             Dict[str, Any],
+            SourceAlgoliaIndex,
             SourceBigCommerce,
             SourceBigQuery,
             SourceCSV,

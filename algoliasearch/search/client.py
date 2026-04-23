@@ -4618,7 +4618,7 @@ class SearchClient:
             Annotated[
                 SearchMethodParams,
                 Field(
-                    description="Muli-search request body. Results are returned in the same order as the requests."
+                    description="Multi-query search request body. Results are returned in the same order as the requests."
                 ),
             ],
             dict[str, Any],
@@ -4626,12 +4626,12 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Sends multiple search requests to one or more indices.  This can be useful in these cases:  - Different indices for different purposes, such as, one index for products, another one for marketing content. - Multiple searches to the same index—for example, with different filters.  Use the helper `searchForHits` or `searchForFacets` to get the results in a more convenient format, if you already know the return type you want.
+        Runs multiple search queries against one or more indices in a single API request.  Use cases include:  - Searching different indices, such as products and marketing content. - Run multiple queries on the same index with different parameters or filters.  If you know the expected result type, use the `searchForHits` or `searchForFacets` helper to simplify the response format.
 
         Required API Key ACLs:
           - search
 
-        :param search_method_params: Muli-search request body. Results are returned in the same order as the requests. (required)
+        :param search_method_params: Multi-query search request body. Results are returned in the same order as the requests. (required)
         :type search_method_params: SearchMethodParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -4662,7 +4662,7 @@ class SearchClient:
             Annotated[
                 SearchMethodParams,
                 Field(
-                    description="Muli-search request body. Results are returned in the same order as the requests."
+                    description="Multi-query search request body. Results are returned in the same order as the requests."
                 ),
             ],
             dict[str, Any],
@@ -4670,12 +4670,12 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchResponses:
         """
-        Sends multiple search requests to one or more indices.  This can be useful in these cases:  - Different indices for different purposes, such as, one index for products, another one for marketing content. - Multiple searches to the same index—for example, with different filters.  Use the helper `searchForHits` or `searchForFacets` to get the results in a more convenient format, if you already know the return type you want.
+        Runs multiple search queries against one or more indices in a single API request.  Use cases include:  - Searching different indices, such as products and marketing content. - Run multiple queries on the same index with different parameters or filters.  If you know the expected result type, use the `searchForHits` or `searchForFacets` helper to simplify the response format.
 
         Required API Key ACLs:
           - search
 
-        :param search_method_params: Muli-search request body. Results are returned in the same order as the requests. (required)
+        :param search_method_params: Multi-query search request body. Results are returned in the same order as the requests. (required)
         :type search_method_params: SearchMethodParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchResponses' result object.
@@ -9844,7 +9844,7 @@ class SearchClientSync:
             Annotated[
                 SearchMethodParams,
                 Field(
-                    description="Muli-search request body. Results are returned in the same order as the requests."
+                    description="Multi-query search request body. Results are returned in the same order as the requests."
                 ),
             ],
             dict[str, Any],
@@ -9852,12 +9852,12 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Sends multiple search requests to one or more indices.  This can be useful in these cases:  - Different indices for different purposes, such as, one index for products, another one for marketing content. - Multiple searches to the same index—for example, with different filters.  Use the helper `searchForHits` or `searchForFacets` to get the results in a more convenient format, if you already know the return type you want.
+        Runs multiple search queries against one or more indices in a single API request.  Use cases include:  - Searching different indices, such as products and marketing content. - Run multiple queries on the same index with different parameters or filters.  If you know the expected result type, use the `searchForHits` or `searchForFacets` helper to simplify the response format.
 
         Required API Key ACLs:
           - search
 
-        :param search_method_params: Muli-search request body. Results are returned in the same order as the requests. (required)
+        :param search_method_params: Multi-query search request body. Results are returned in the same order as the requests. (required)
         :type search_method_params: SearchMethodParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
@@ -9888,7 +9888,7 @@ class SearchClientSync:
             Annotated[
                 SearchMethodParams,
                 Field(
-                    description="Muli-search request body. Results are returned in the same order as the requests."
+                    description="Multi-query search request body. Results are returned in the same order as the requests."
                 ),
             ],
             dict[str, Any],
@@ -9896,12 +9896,12 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> SearchResponses:
         """
-        Sends multiple search requests to one or more indices.  This can be useful in these cases:  - Different indices for different purposes, such as, one index for products, another one for marketing content. - Multiple searches to the same index—for example, with different filters.  Use the helper `searchForHits` or `searchForFacets` to get the results in a more convenient format, if you already know the return type you want.
+        Runs multiple search queries against one or more indices in a single API request.  Use cases include:  - Searching different indices, such as products and marketing content. - Run multiple queries on the same index with different parameters or filters.  If you know the expected result type, use the `searchForHits` or `searchForFacets` helper to simplify the response format.
 
         Required API Key ACLs:
           - search
 
-        :param search_method_params: Muli-search request body. Results are returned in the same order as the requests. (required)
+        :param search_method_params: Multi-query search request body. Results are returned in the same order as the requests. (required)
         :type search_method_params: SearchMethodParams
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'SearchResponses' result object.

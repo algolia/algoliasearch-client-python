@@ -101,6 +101,7 @@ from .shopify_input import ShopifyInput
 from .shopify_market import ShopifyMarket
 from .shopify_metafield import ShopifyMetafield
 from .source import Source
+from .source_algolia_index import SourceAlgoliaIndex
 from .source_big_commerce import SourceBigCommerce
 from .source_big_query import SourceBigQuery
 from .source_commercetools import SourceCommercetools
@@ -116,6 +117,7 @@ from .source_shopify import SourceShopify
 from .source_sort_keys import SourceSortKeys
 from .source_type import SourceType
 from .source_update import SourceUpdate
+from .source_update_algolia_index import SourceUpdateAlgoliaIndex
 from .source_update_commercetools import SourceUpdateCommercetools
 from .source_update_docker import SourceUpdateDocker
 from .source_update_input import SourceUpdateInput
@@ -252,6 +254,7 @@ __all__ = (
     "ShopifyMarket",
     "ShopifyMetafield",
     "Source",
+    "SourceAlgoliaIndex",
     "SourceBigCommerce",
     "SourceBigQuery",
     "SourceCSV",
@@ -267,6 +270,7 @@ __all__ = (
     "SourceSortKeys",
     "SourceType",
     "SourceUpdate",
+    "SourceUpdateAlgoliaIndex",
     "SourceUpdateCommercetools",
     "SourceUpdateDocker",
     "SourceUpdateInput",

@@ -24,6 +24,8 @@ class SourceType(str, Enum):
     """
     allowed enum values
     """
+    ALGOLIAINDEX = "algoliaIndex"
+
     BIGCOMMERCE = "bigcommerce"
 
     BIGQUERY = "bigquery"
