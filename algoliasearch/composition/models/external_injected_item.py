@@ -31,7 +31,7 @@ def _alias_generator(name: str) -> str:
 
 class ExternalInjectedItem(BaseModel):
     """
-    ExternalInjectedItem
+    Contains a list of objects to inject from an external source.
     """
 
     items: List[ExternalInjection]

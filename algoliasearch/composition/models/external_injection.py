@@ -34,7 +34,7 @@ class ExternalInjection(BaseModel):
     """
 
     object_id: str
-    """ An objectID injected into an external source. """
+    """ An objectID injected from an external source and also present in the targeted index. """
     metadata: Optional[Dict[str, object]] = None
     """ User-defined key-values that will be added to the injected item in the response. This is identical to Hits metadata defined in Composition or Composition Rule, with the benefit of being set at runtime.  """
 
