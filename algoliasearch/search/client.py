@@ -43,7 +43,7 @@ from algoliasearch.ingestion.client import IngestionClient, IngestionClientSync
 from algoliasearch.ingestion.config import IngestionConfig
 from algoliasearch.ingestion.models import Action as IngestionAction
 from algoliasearch.ingestion.models import WatchResponse as IngestionWatchResponse
-from algoliasearch.search.config import SearchConfig
+from algoliasearch.search.config import SearchConfig, TransformationOptions
 from algoliasearch.search.models import (
     Action,
     AddApiKeyResponse,
@@ -160,6 +160,12 @@ class SearchClient:
             transporter = Transporter(config)
         self._transporter = transporter
 
+        self._ingestion_transporter = None
+        if config.transformation_options is not None:
+            self._ingestion_transporter = self._build_ingestion_transporter(
+                config.transformation_options
+            )
+
     @classmethod
     def create_with_config(
         cls, config: SearchConfig, transporter: Optional[Transporter] = None
@@ -180,19 +186,8 @@ class SearchClient:
         if transporter is None:
             transporter = Transporter(config)
 
-        _ingestion_transporter: Optional[IngestionClient] = None
-
-        if config.region is not None:
-            ingestion_config = IngestionConfig(
-                config.app_id, config.api_key, config.region
-            )
-
-            if config.hosts is not None:
-                ingestion_config.hosts = config.hosts
-
-            _ingestion_transporter = IngestionClient.create_with_config(
-                ingestion_config
-            )
+        if config.transformation_options is None and config.region:
+            config.transformation_options = TransformationOptions(region=config.region)
 
         client = SearchClient(
             app_id=config.app_id,
@@ -200,9 +195,6 @@ class SearchClient:
             transporter=transporter,
             config=config,
         )
-
-        if _ingestion_transporter is not None:
-            client._ingestion_transporter = _ingestion_transporter
 
         return client
 
@@ -215,7 +207,11 @@ class SearchClient:
 
     async def close(self) -> None:
         """Closes the underlying `transporter` of the API client."""
-        return await self._transporter.close()
+        try:
+            if self._ingestion_transporter is not None:
+                await self._ingestion_transporter.close()
+        finally:
+            await self._transporter.close()
 
     async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
@@ -515,6 +511,51 @@ class SearchClient:
         """
         return "{}_tmp_{}".format(index_name, randint(1000000, 9999999))
 
+    def _build_ingestion_transporter(
+        self, transformation_options: "TransformationOptions"
+    ) -> IngestionClient:
+        config = self._config
+        ingestion_config = IngestionConfig(
+            config.app_id, config.api_key, transformation_options.region
+        )
+        if transformation_options.connect_timeout is not None:
+            ingestion_config.connect_timeout = transformation_options.connect_timeout
+        if transformation_options.read_timeout is not None:
+            ingestion_config.read_timeout = transformation_options.read_timeout
+        if transformation_options.write_timeout is not None:
+            ingestion_config.write_timeout = transformation_options.write_timeout
+        if transformation_options.hosts is not None:
+            ingestion_config.hosts = transformation_options.hosts
+        if transformation_options.proxies is not None:
+            ingestion_config.proxies = transformation_options.proxies
+        if transformation_options.headers is not None:
+            ingestion_config.headers = {
+                **ingestion_config.headers,
+                **transformation_options.headers,
+            }
+        if transformation_options.compression_type is not None:
+            ingestion_config.compression_type = transformation_options.compression_type
+        if transformation_options.compression_threshold is not None:
+            ingestion_config.compression_threshold = (
+                transformation_options.compression_threshold
+            )
+        if transformation_options.wait_task_time_before_retry is not None:
+            ingestion_config.wait_task_time_before_retry = (
+                transformation_options.wait_task_time_before_retry
+            )
+        return IngestionClient.create_with_config(ingestion_config)
+
+    async def set_transformation_options(
+        self, transformation_options: "TransformationOptions"
+    ):
+        """Set transformation options and create the ingestion transporter. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"""
+        old_ingestion_transporter = self._ingestion_transporter
+        self._ingestion_transporter = self._build_ingestion_transporter(
+            transformation_options
+        )
+        if old_ingestion_transporter is not None:
+            await old_ingestion_transporter.close()
+
     async def save_objects(
         self,
         index_name: str,
@@ -544,11 +585,11 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[IngestionWatchResponse]:
         """
-        Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client's config at instantiation.
+        Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
-                "`region` must be provided at client instantiation before calling this method."
+                "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
         return await self._ingestion_transporter.chunked_push(
             index_name=index_name,
@@ -612,11 +653,11 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[IngestionWatchResponse]:
         """
-        Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client instantiation method.
+        Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
-                "`region` must be provided at client instantiation before calling this method."
+                "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
         return await self._ingestion_transporter.chunked_push(
             index_name=index_name,
@@ -670,13 +711,13 @@ class SearchClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ReplaceAllObjectsWithTransformationResponse:
         """
-        Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must have been passed to the client instantiation method.
+        Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
-                "`region` must be provided at client instantiation before calling this method."
+                "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
         tmp_index_name = self.create_temporary_name(index_name)
 
@@ -5411,6 +5452,12 @@ class SearchClientSync:
             transporter = TransporterSync(config)
         self._transporter = transporter
 
+        self._ingestion_transporter = None
+        if config.transformation_options is not None:
+            self._ingestion_transporter = self._build_ingestion_transporter(
+                config.transformation_options
+            )
+
     @classmethod
     def create_with_config(
         cls, config: SearchConfig, transporter: Optional[TransporterSync] = None
@@ -5431,19 +5478,8 @@ class SearchClientSync:
         if transporter is None:
             transporter = TransporterSync(config)
 
-        _ingestion_transporter: Optional[IngestionClientSync] = None
-
-        if config.region is not None:
-            ingestion_config = IngestionConfig(
-                config.app_id, config.api_key, config.region
-            )
-
-            if config.hosts is not None:
-                ingestion_config.hosts = config.hosts
-
-            _ingestion_transporter = IngestionClientSync.create_with_config(
-                ingestion_config
-            )
+        if config.transformation_options is None and config.region:
+            config.transformation_options = TransformationOptions(region=config.region)
 
         client = SearchClientSync(
             app_id=config.app_id,
@@ -5451,9 +5487,6 @@ class SearchClientSync:
             transporter=transporter,
             config=config,
         )
-
-        if _ingestion_transporter is not None:
-            client._ingestion_transporter = _ingestion_transporter
 
         return client
 
@@ -5465,7 +5498,11 @@ class SearchClientSync:
         self.close()
 
     def close(self) -> None:
-        return self._transporter.close()
+        try:
+            if self._ingestion_transporter is not None:
+                self._ingestion_transporter.close()
+        finally:
+            self._transporter.close()
 
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
@@ -5765,6 +5802,51 @@ class SearchClientSync:
         """
         return "{}_tmp_{}".format(index_name, randint(1000000, 9999999))
 
+    def _build_ingestion_transporter(
+        self, transformation_options: "TransformationOptions"
+    ) -> IngestionClientSync:
+        config = self._config
+        ingestion_config = IngestionConfig(
+            config.app_id, config.api_key, transformation_options.region
+        )
+        if transformation_options.connect_timeout is not None:
+            ingestion_config.connect_timeout = transformation_options.connect_timeout
+        if transformation_options.read_timeout is not None:
+            ingestion_config.read_timeout = transformation_options.read_timeout
+        if transformation_options.write_timeout is not None:
+            ingestion_config.write_timeout = transformation_options.write_timeout
+        if transformation_options.hosts is not None:
+            ingestion_config.hosts = transformation_options.hosts
+        if transformation_options.proxies is not None:
+            ingestion_config.proxies = transformation_options.proxies
+        if transformation_options.headers is not None:
+            ingestion_config.headers = {
+                **ingestion_config.headers,
+                **transformation_options.headers,
+            }
+        if transformation_options.compression_type is not None:
+            ingestion_config.compression_type = transformation_options.compression_type
+        if transformation_options.compression_threshold is not None:
+            ingestion_config.compression_threshold = (
+                transformation_options.compression_threshold
+            )
+        if transformation_options.wait_task_time_before_retry is not None:
+            ingestion_config.wait_task_time_before_retry = (
+                transformation_options.wait_task_time_before_retry
+            )
+        return IngestionClientSync.create_with_config(ingestion_config)
+
+    def set_transformation_options(
+        self, transformation_options: "TransformationOptions"
+    ):
+        """Set transformation options and create the ingestion transporter. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"""
+        old_ingestion_transporter = self._ingestion_transporter
+        self._ingestion_transporter = self._build_ingestion_transporter(
+            transformation_options
+        )
+        if old_ingestion_transporter is not None:
+            old_ingestion_transporter.close()
+
     def save_objects(
         self,
         index_name: str,
@@ -5794,11 +5876,11 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[IngestionWatchResponse]:
         """
-        Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client's config at instantiation.
+        Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
-                "`region` must be provided at client instantiation before calling this method."
+                "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
         return self._ingestion_transporter.chunked_push(
             index_name=index_name,
@@ -5862,11 +5944,11 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[IngestionWatchResponse]:
         """
-        Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must've been passed to the client instantiation method.
+        Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
-                "`region` must be provided at client instantiation before calling this method."
+                "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
         return self._ingestion_transporter.chunked_push(
             index_name=index_name,
@@ -5918,13 +6000,13 @@ class SearchClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ReplaceAllObjectsWithTransformationResponse:
         """
-        Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. The `region` must have been passed to the client instantiation method.
+        Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
-                "`region` must be provided at client instantiation before calling this method."
+                "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
         tmp_index_name = self.create_temporary_name(index_name)
 

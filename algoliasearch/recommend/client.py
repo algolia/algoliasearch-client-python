@@ -123,7 +123,7 @@ class RecommendClient:
 
     async def close(self) -> None:
         """Closes the underlying `transporter` of the API client."""
-        return await self._transporter.close()
+        await self._transporter.close()
 
     async def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
@@ -1095,7 +1095,7 @@ class RecommendClientSync:
         self.close()
 
     def close(self) -> None:
-        return self._transporter.close()
+        self._transporter.close()
 
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
