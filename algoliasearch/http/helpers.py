@@ -24,7 +24,7 @@ async def create_iterable(
     func: Callable[[Optional[T]], Awaitable[T]],
     validate: Callable[[T], bool],
     aggregator: Optional[Callable[[T], None]],
-    timeout: Callable[[], int] = Timeout(),
+    timeout: Callable[[], float] = Timeout(),
     error_validate: Optional[Callable[[T], bool]] = None,
     error_message: Optional[Callable[[T], str]] = None,
 ) -> T:
@@ -56,7 +56,7 @@ def create_iterable_sync(
     func: Callable[[Optional[T]], T],
     validate: Callable[[T], bool],
     aggregator: Optional[Callable[[T], None]],
-    timeout: Callable[[], int] = Timeout(),
+    timeout: Callable[[], float] = Timeout(),
     error_validate: Optional[Callable[[T], bool]] = None,
     error_message: Optional[Callable[[T], str]] = None,
 ) -> T:
