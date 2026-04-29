@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -22,6 +22,7 @@ from algoliasearch.composition.models.params import Params
 
 _ALIASES = {
     "params": "params",
+    "feeds_order": "feedsOrder",
 }
 
 
@@ -35,6 +36,8 @@ class RequestBody(BaseModel):
     """
 
     params: Optional[Params] = None
+    feeds_order: Optional[List[str]] = None
+    """ A list of Feed IDs that specifies the order in which to order the results in the response.  The IDs should be a subset of those in the `feeds` object of the targeted `multifeed` Composition / Composition Rule, and only those specified will be processed.   The value overrides the value in the defined behavior, and when unspecified, the value defined in the behavior is used. When neither value is present, all feeds are processed.  """
 
     model_config = ConfigDict(
         strict=False,
