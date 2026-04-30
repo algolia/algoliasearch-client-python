@@ -45,6 +45,7 @@ from .destination_search import DestinationSearch
 from .destination_sort_keys import DestinationSortKeys
 from .destination_type import DestinationType
 from .destination_update import DestinationUpdate
+from .destination_update_input import DestinationUpdateInput
 from .destination_update_response import DestinationUpdateResponse
 from .docker_streams import DockerStreams
 from .docker_streams_input import DockerStreamsInput
@@ -198,6 +199,7 @@ __all__ = (
     "DestinationSortKeys",
     "DestinationType",
     "DestinationUpdate",
+    "DestinationUpdateInput",
     "DestinationUpdateResponse",
     "DockerStreams",
     "DockerStreamsInput",

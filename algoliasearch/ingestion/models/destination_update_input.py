@@ -18,15 +18,12 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.ingestion.models.destination_update_input import (
-    DestinationUpdateInput,
-)
+from algoliasearch.ingestion.models.record_type import RecordType
 
 _ALIASES = {
-    "name": "name",
-    "input": "input",
-    "authentication_id": "authenticationID",
-    "transformation_ids": "transformationIDs",
+    "index_name": "indexName",
+    "record_type": "recordType",
+    "attributes_to_exclude": "attributesToExclude",
 }
 
 
@@ -34,17 +31,16 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class DestinationUpdate(BaseModel):
+class DestinationUpdateInput(BaseModel):
     """
-    API request body for updating a destination.
+    DestinationUpdateInput
     """
 
-    name: Optional[str] = None
-    """ Descriptive name for the resource. """
-    input: Optional[DestinationUpdateInput] = None
-    authentication_id: Optional[str] = None
-    """ Universally unique identifier (UUID) of an authentication resource. """
-    transformation_ids: Optional[List[str]] = None
+    index_name: Optional[str] = None
+    """ Algolia index name (case-sensitive). """
+    record_type: Optional[RecordType] = None
+    attributes_to_exclude: Optional[List[str]] = None
+    """ Attributes from your source to exclude from Algolia records.  Not all your data attributes will be useful for searching. Keeping your Algolia records small increases indexing and search performance.  - Exclude nested attributes with `.` notation. For example, `foo.bar` indexes the `foo` attribute and all its children **except** the `bar` attribute. - Exclude attributes from arrays with `[i]`, where `i` is the index of the array element.   For example, `foo.[0].bar` only excludes the `bar` attribute from the first element of the `foo` array, but indexes the complete `foo` attribute for all other elements.   Use `*` as wildcard: `foo.[*].bar` excludes `bar` from all elements of the `foo` array.  """
 
     model_config = ConfigDict(
         strict=False,
@@ -61,7 +57,7 @@ class DestinationUpdate(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of DestinationUpdate from a JSON string"""
+        """Create an instance of DestinationUpdateInput from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,17 +70,13 @@ class DestinationUpdate(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of DestinationUpdate from a dict"""
+        """Create an instance of DestinationUpdateInput from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["input"] = (
-            DestinationUpdateInput.from_dict(obj["input"])
-            if obj.get("input") is not None
-            else None
-        )
+        obj["recordType"] = obj.get("recordType")
 
         return cls.model_validate(obj)
