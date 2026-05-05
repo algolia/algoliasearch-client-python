@@ -218,6 +218,11 @@ class QuerySuggestionsClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -287,6 +292,9 @@ class QuerySuggestionsClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -362,6 +370,9 @@ class QuerySuggestionsClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -452,6 +463,9 @@ class QuerySuggestionsClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -527,6 +541,11 @@ class QuerySuggestionsClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_config`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `delete_config`."
             )
@@ -624,6 +643,11 @@ class QuerySuggestionsClient:
                 "Parameter `index_name` is required when calling `get_config`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_config`."
+            )
+
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/configs/{indexName}".replace(
@@ -676,6 +700,11 @@ class QuerySuggestionsClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_config_status`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `get_config_status`."
             )
@@ -736,6 +765,11 @@ class QuerySuggestionsClient:
                 "Parameter `index_name` is required when calling `get_log_file`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_log_file`."
+            )
+
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/logs/{indexName}".replace(
@@ -791,6 +825,11 @@ class QuerySuggestionsClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `update_config`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `update_config`."
             )
@@ -1025,6 +1064,11 @@ class QuerySuggestionsClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -1092,6 +1136,9 @@ class QuerySuggestionsClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1167,6 +1214,9 @@ class QuerySuggestionsClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1255,6 +1305,9 @@ class QuerySuggestionsClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -1328,6 +1381,11 @@ class QuerySuggestionsClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_config`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `delete_config`."
             )
@@ -1425,6 +1483,11 @@ class QuerySuggestionsClientSync:
                 "Parameter `index_name` is required when calling `get_config`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_config`."
+            )
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/1/configs/{indexName}".replace(
@@ -1477,6 +1540,11 @@ class QuerySuggestionsClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_config_status`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `get_config_status`."
             )
@@ -1537,6 +1605,11 @@ class QuerySuggestionsClientSync:
                 "Parameter `index_name` is required when calling `get_log_file`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_log_file`."
+            )
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/1/logs/{indexName}".replace(
@@ -1592,6 +1665,11 @@ class QuerySuggestionsClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `update_config`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `update_config`."
             )

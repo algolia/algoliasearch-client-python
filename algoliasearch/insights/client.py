@@ -154,6 +154,11 @@ class InsightsClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -223,6 +228,9 @@ class InsightsClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -298,6 +306,9 @@ class InsightsClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -388,6 +399,9 @@ class InsightsClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -469,6 +483,11 @@ class InsightsClient:
         """
 
         if user_token is None:
+            raise ValueError(
+                "Parameter `user_token` is required when calling `delete_user_token`."
+            )
+
+        if not user_token:
             raise ValueError(
                 "Parameter `user_token` is required when calling `delete_user_token`."
             )
@@ -689,6 +708,11 @@ class InsightsClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -756,6 +780,9 @@ class InsightsClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -831,6 +858,9 @@ class InsightsClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -919,6 +949,9 @@ class InsightsClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -998,6 +1031,11 @@ class InsightsClientSync:
         """
 
         if user_token is None:
+            raise ValueError(
+                "Parameter `user_token` is required when calling `delete_user_token`."
+            )
+
+        if not user_token:
             raise ValueError(
                 "Parameter `user_token` is required when calling `delete_user_token`."
             )

@@ -704,6 +704,11 @@ class IngestionClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -773,6 +778,9 @@ class IngestionClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -848,6 +856,9 @@ class IngestionClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -938,6 +949,9 @@ class IngestionClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -1020,6 +1034,11 @@ class IngestionClient:
                 "Parameter `authentication_id` is required when calling `delete_authentication`."
             )
 
+        if not authentication_id:
+            raise ValueError(
+                "Parameter `authentication_id` is required when calling `delete_authentication`."
+            )
+
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/authentications/{authenticationID}".replace(
@@ -1079,6 +1098,11 @@ class IngestionClient:
         """
 
         if destination_id is None:
+            raise ValueError(
+                "Parameter `destination_id` is required when calling `delete_destination`."
+            )
+
+        if not destination_id:
             raise ValueError(
                 "Parameter `destination_id` is required when calling `delete_destination`."
             )
@@ -1145,6 +1169,11 @@ class IngestionClient:
                 "Parameter `source_id` is required when calling `delete_source`."
             )
 
+        if not source_id:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `delete_source`."
+            )
+
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/sources/{sourceID}".replace(
@@ -1201,6 +1230,11 @@ class IngestionClient:
         """
 
         if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `delete_task`."
+            )
+
+        if not task_id:
             raise ValueError(
                 "Parameter `task_id` is required when calling `delete_task`."
             )
@@ -1266,6 +1300,11 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `delete_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `delete_task_v1`."
+            )
+
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
@@ -1321,6 +1360,11 @@ class IngestionClient:
         """
 
         if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `delete_transformation`."
+            )
+
+        if not transformation_id:
             raise ValueError(
                 "Parameter `transformation_id` is required when calling `delete_transformation`."
             )
@@ -1383,6 +1427,11 @@ class IngestionClient:
         """
 
         if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `disable_task`."
+            )
+
+        if not task_id:
             raise ValueError(
                 "Parameter `task_id` is required when calling `disable_task`."
             )
@@ -1450,6 +1499,11 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `disable_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `disable_task_v1`."
+            )
+
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/tasks/{taskID}/disable".replace(
@@ -1507,6 +1561,11 @@ class IngestionClient:
         """
 
         if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `enable_task`."
+            )
+
+        if not task_id:
             raise ValueError(
                 "Parameter `task_id` is required when calling `enable_task`."
             )
@@ -1574,6 +1633,11 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `enable_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `enable_task_v1`."
+            )
+
         return await self._transporter.request(
             verb=Verb.PUT,
             path="/1/tasks/{taskID}/enable".replace(
@@ -1632,6 +1696,11 @@ class IngestionClient:
         """
 
         if authentication_id is None:
+            raise ValueError(
+                "Parameter `authentication_id` is required when calling `get_authentication`."
+            )
+
+        if not authentication_id:
             raise ValueError(
                 "Parameter `authentication_id` is required when calling `get_authentication`."
             )
@@ -1695,6 +1764,11 @@ class IngestionClient:
         """
 
         if destination_id is None:
+            raise ValueError(
+                "Parameter `destination_id` is required when calling `get_destination`."
+            )
+
+        if not destination_id:
             raise ValueError(
                 "Parameter `destination_id` is required when calling `get_destination`."
             )
@@ -1764,7 +1838,15 @@ class IngestionClient:
         if run_id is None:
             raise ValueError("Parameter `run_id` is required when calling `get_event`.")
 
+        if not run_id:
+            raise ValueError("Parameter `run_id` is required when calling `get_event`.")
+
         if event_id is None:
+            raise ValueError(
+                "Parameter `event_id` is required when calling `get_event`."
+            )
+
+        if not event_id:
             raise ValueError(
                 "Parameter `event_id` is required when calling `get_event`."
             )
@@ -1832,6 +1914,9 @@ class IngestionClient:
         if run_id is None:
             raise ValueError("Parameter `run_id` is required when calling `get_run`.")
 
+        if not run_id:
+            raise ValueError("Parameter `run_id` is required when calling `get_run`.")
+
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/runs/{runID}".replace("{runID}", quote(str(run_id), safe="")),
@@ -1886,6 +1971,11 @@ class IngestionClient:
         """
 
         if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `get_source`."
+            )
+
+        if not source_id:
             raise ValueError(
                 "Parameter `source_id` is required when calling `get_source`."
             )
@@ -1946,6 +2036,9 @@ class IngestionClient:
         """
 
         if task_id is None:
+            raise ValueError("Parameter `task_id` is required when calling `get_task`.")
+
+        if not task_id:
             raise ValueError("Parameter `task_id` is required when calling `get_task`.")
 
         return await self._transporter.request(
@@ -2009,6 +2102,11 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `get_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `get_task_v1`."
+            )
+
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
@@ -2064,6 +2162,11 @@ class IngestionClient:
         """
 
         if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `get_transformation`."
+            )
+
+        if not transformation_id:
             raise ValueError(
                 "Parameter `transformation_id` is required when calling `get_transformation`."
             )
@@ -2539,6 +2642,11 @@ class IngestionClient:
         """
 
         if run_id is None:
+            raise ValueError(
+                "Parameter `run_id` is required when calling `list_events`."
+            )
+
+        if not run_id:
             raise ValueError(
                 "Parameter `run_id` is required when calling `list_events`."
             )
@@ -3732,6 +3840,9 @@ class IngestionClient:
         if index_name is None:
             raise ValueError("Parameter `index_name` is required when calling `push`.")
 
+        if not index_name:
+            raise ValueError("Parameter `index_name` is required when calling `push`.")
+
         if push_task_payload is None:
             raise ValueError(
                 "Parameter `push_task_payload` is required when calling `push`."
@@ -3848,6 +3959,11 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `push_task`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `push_task`."
+            )
+
         if push_task_payload is None:
             raise ValueError(
                 "Parameter `push_task_payload` is required when calling `push_task`."
@@ -3945,6 +4061,11 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `replace_task`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `replace_task`."
+            )
+
         if task_replace is None:
             raise ValueError(
                 "Parameter `task_replace` is required when calling `replace_task`."
@@ -4021,6 +4142,11 @@ class IngestionClient:
                 "Parameter `source_id` is required when calling `run_source`."
             )
 
+        if not source_id:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `run_source`."
+            )
+
         _data = {}
         if run_source_payload is not None:
             _data = run_source_payload
@@ -4090,6 +4216,9 @@ class IngestionClient:
         """
 
         if task_id is None:
+            raise ValueError("Parameter `task_id` is required when calling `run_task`.")
+
+        if not task_id:
             raise ValueError("Parameter `task_id` is required when calling `run_task`.")
 
         _data = {}
@@ -4164,6 +4293,11 @@ class IngestionClient:
         warn("POST /1/tasks/{taskID}/run is deprecated.", DeprecationWarning)
 
         if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `run_task_v1`."
+            )
+
+        if not task_id:
             raise ValueError(
                 "Parameter `task_id` is required when calling `run_task_v1`."
             )
@@ -4603,6 +4737,11 @@ class IngestionClient:
                 "Parameter `source_id` is required when calling `trigger_docker_source_discover`."
             )
 
+        if not source_id:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `trigger_docker_source_discover`."
+            )
+
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/sources/{sourceID}/discover".replace(
@@ -4734,6 +4873,11 @@ class IngestionClient:
                 "Parameter `transformation_id` is required when calling `try_transformation_before_update`."
             )
 
+        if not transformation_id:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `try_transformation_before_update`."
+            )
+
         if transformation_try is None:
             raise ValueError(
                 "Parameter `transformation_try` is required when calling `try_transformation_before_update`."
@@ -4809,6 +4953,11 @@ class IngestionClient:
         """
 
         if authentication_id is None:
+            raise ValueError(
+                "Parameter `authentication_id` is required when calling `update_authentication`."
+            )
+
+        if not authentication_id:
             raise ValueError(
                 "Parameter `authentication_id` is required when calling `update_authentication`."
             )
@@ -4892,6 +5041,11 @@ class IngestionClient:
                 "Parameter `destination_id` is required when calling `update_destination`."
             )
 
+        if not destination_id:
+            raise ValueError(
+                "Parameter `destination_id` is required when calling `update_destination`."
+            )
+
         if destination_update is None:
             raise ValueError(
                 "Parameter `destination_update` is required when calling `update_destination`."
@@ -4970,6 +5124,11 @@ class IngestionClient:
                 "Parameter `source_id` is required when calling `update_source`."
             )
 
+        if not source_id:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `update_source`."
+            )
+
         if source_update is None:
             raise ValueError(
                 "Parameter `source_update` is required when calling `update_source`."
@@ -5044,6 +5203,11 @@ class IngestionClient:
         """
 
         if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `update_task`."
+            )
+
+        if not task_id:
             raise ValueError(
                 "Parameter `task_id` is required when calling `update_task`."
             )
@@ -5127,6 +5291,11 @@ class IngestionClient:
                 "Parameter `task_id` is required when calling `update_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `update_task_v1`."
+            )
+
         if task_update is None:
             raise ValueError(
                 "Parameter `task_update` is required when calling `update_task_v1`."
@@ -5200,6 +5369,11 @@ class IngestionClient:
         """
 
         if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `update_transformation`."
+            )
+
+        if not transformation_id:
             raise ValueError(
                 "Parameter `transformation_id` is required when calling `update_transformation`."
             )
@@ -5337,6 +5511,11 @@ class IngestionClient:
         """
 
         if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `validate_source_before_update`."
+            )
+
+        if not source_id:
             raise ValueError(
                 "Parameter `source_id` is required when calling `validate_source_before_update`."
             )
@@ -5992,6 +6171,11 @@ class IngestionClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -6059,6 +6243,9 @@ class IngestionClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -6134,6 +6321,9 @@ class IngestionClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -6222,6 +6412,9 @@ class IngestionClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -6302,6 +6495,11 @@ class IngestionClientSync:
                 "Parameter `authentication_id` is required when calling `delete_authentication`."
             )
 
+        if not authentication_id:
+            raise ValueError(
+                "Parameter `authentication_id` is required when calling `delete_authentication`."
+            )
+
         return self._transporter.request(
             verb=Verb.DELETE,
             path="/1/authentications/{authenticationID}".replace(
@@ -6361,6 +6559,11 @@ class IngestionClientSync:
         """
 
         if destination_id is None:
+            raise ValueError(
+                "Parameter `destination_id` is required when calling `delete_destination`."
+            )
+
+        if not destination_id:
             raise ValueError(
                 "Parameter `destination_id` is required when calling `delete_destination`."
             )
@@ -6425,6 +6628,11 @@ class IngestionClientSync:
                 "Parameter `source_id` is required when calling `delete_source`."
             )
 
+        if not source_id:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `delete_source`."
+            )
+
         return self._transporter.request(
             verb=Verb.DELETE,
             path="/1/sources/{sourceID}".replace(
@@ -6481,6 +6689,11 @@ class IngestionClientSync:
         """
 
         if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `delete_task`."
+            )
+
+        if not task_id:
             raise ValueError(
                 "Parameter `task_id` is required when calling `delete_task`."
             )
@@ -6546,6 +6759,11 @@ class IngestionClientSync:
                 "Parameter `task_id` is required when calling `delete_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `delete_task_v1`."
+            )
+
         return self._transporter.request(
             verb=Verb.DELETE,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
@@ -6601,6 +6819,11 @@ class IngestionClientSync:
         """
 
         if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `delete_transformation`."
+            )
+
+        if not transformation_id:
             raise ValueError(
                 "Parameter `transformation_id` is required when calling `delete_transformation`."
             )
@@ -6663,6 +6886,11 @@ class IngestionClientSync:
         """
 
         if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `disable_task`."
+            )
+
+        if not task_id:
             raise ValueError(
                 "Parameter `task_id` is required when calling `disable_task`."
             )
@@ -6730,6 +6958,11 @@ class IngestionClientSync:
                 "Parameter `task_id` is required when calling `disable_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `disable_task_v1`."
+            )
+
         return self._transporter.request(
             verb=Verb.PUT,
             path="/1/tasks/{taskID}/disable".replace(
@@ -6787,6 +7020,11 @@ class IngestionClientSync:
         """
 
         if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `enable_task`."
+            )
+
+        if not task_id:
             raise ValueError(
                 "Parameter `task_id` is required when calling `enable_task`."
             )
@@ -6854,6 +7092,11 @@ class IngestionClientSync:
                 "Parameter `task_id` is required when calling `enable_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `enable_task_v1`."
+            )
+
         return self._transporter.request(
             verb=Verb.PUT,
             path="/1/tasks/{taskID}/enable".replace(
@@ -6912,6 +7155,11 @@ class IngestionClientSync:
         """
 
         if authentication_id is None:
+            raise ValueError(
+                "Parameter `authentication_id` is required when calling `get_authentication`."
+            )
+
+        if not authentication_id:
             raise ValueError(
                 "Parameter `authentication_id` is required when calling `get_authentication`."
             )
@@ -6979,6 +7227,11 @@ class IngestionClientSync:
                 "Parameter `destination_id` is required when calling `get_destination`."
             )
 
+        if not destination_id:
+            raise ValueError(
+                "Parameter `destination_id` is required when calling `get_destination`."
+            )
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/1/destinations/{destinationID}".replace(
@@ -7042,7 +7295,15 @@ class IngestionClientSync:
         if run_id is None:
             raise ValueError("Parameter `run_id` is required when calling `get_event`.")
 
+        if not run_id:
+            raise ValueError("Parameter `run_id` is required when calling `get_event`.")
+
         if event_id is None:
+            raise ValueError(
+                "Parameter `event_id` is required when calling `get_event`."
+            )
+
+        if not event_id:
             raise ValueError(
                 "Parameter `event_id` is required when calling `get_event`."
             )
@@ -7110,6 +7371,9 @@ class IngestionClientSync:
         if run_id is None:
             raise ValueError("Parameter `run_id` is required when calling `get_run`.")
 
+        if not run_id:
+            raise ValueError("Parameter `run_id` is required when calling `get_run`.")
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/1/runs/{runID}".replace("{runID}", quote(str(run_id), safe="")),
@@ -7164,6 +7428,11 @@ class IngestionClientSync:
         """
 
         if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `get_source`."
+            )
+
+        if not source_id:
             raise ValueError(
                 "Parameter `source_id` is required when calling `get_source`."
             )
@@ -7224,6 +7493,9 @@ class IngestionClientSync:
         """
 
         if task_id is None:
+            raise ValueError("Parameter `task_id` is required when calling `get_task`.")
+
+        if not task_id:
             raise ValueError("Parameter `task_id` is required when calling `get_task`.")
 
         return self._transporter.request(
@@ -7287,6 +7559,11 @@ class IngestionClientSync:
                 "Parameter `task_id` is required when calling `get_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `get_task_v1`."
+            )
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/1/tasks/{taskID}".replace("{taskID}", quote(str(task_id), safe="")),
@@ -7342,6 +7619,11 @@ class IngestionClientSync:
         """
 
         if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `get_transformation`."
+            )
+
+        if not transformation_id:
             raise ValueError(
                 "Parameter `transformation_id` is required when calling `get_transformation`."
             )
@@ -7817,6 +8099,11 @@ class IngestionClientSync:
         """
 
         if run_id is None:
+            raise ValueError(
+                "Parameter `run_id` is required when calling `list_events`."
+            )
+
+        if not run_id:
             raise ValueError(
                 "Parameter `run_id` is required when calling `list_events`."
             )
@@ -9010,6 +9297,9 @@ class IngestionClientSync:
         if index_name is None:
             raise ValueError("Parameter `index_name` is required when calling `push`.")
 
+        if not index_name:
+            raise ValueError("Parameter `index_name` is required when calling `push`.")
+
         if push_task_payload is None:
             raise ValueError(
                 "Parameter `push_task_payload` is required when calling `push`."
@@ -9126,6 +9416,11 @@ class IngestionClientSync:
                 "Parameter `task_id` is required when calling `push_task`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `push_task`."
+            )
+
         if push_task_payload is None:
             raise ValueError(
                 "Parameter `push_task_payload` is required when calling `push_task`."
@@ -9223,6 +9518,11 @@ class IngestionClientSync:
                 "Parameter `task_id` is required when calling `replace_task`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `replace_task`."
+            )
+
         if task_replace is None:
             raise ValueError(
                 "Parameter `task_replace` is required when calling `replace_task`."
@@ -9293,6 +9593,11 @@ class IngestionClientSync:
         """
 
         if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `run_source`."
+            )
+
+        if not source_id:
             raise ValueError(
                 "Parameter `source_id` is required when calling `run_source`."
             )
@@ -9368,6 +9673,9 @@ class IngestionClientSync:
         if task_id is None:
             raise ValueError("Parameter `task_id` is required when calling `run_task`.")
 
+        if not task_id:
+            raise ValueError("Parameter `task_id` is required when calling `run_task`.")
+
         _data = {}
         if run_task_payload is not None:
             _data = run_task_payload
@@ -9438,6 +9746,11 @@ class IngestionClientSync:
         warn("POST /1/tasks/{taskID}/run is deprecated.", DeprecationWarning)
 
         if task_id is None:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `run_task_v1`."
+            )
+
+        if not task_id:
             raise ValueError(
                 "Parameter `task_id` is required when calling `run_task_v1`."
             )
@@ -9877,6 +10190,11 @@ class IngestionClientSync:
                 "Parameter `source_id` is required when calling `trigger_docker_source_discover`."
             )
 
+        if not source_id:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `trigger_docker_source_discover`."
+            )
+
         return self._transporter.request(
             verb=Verb.POST,
             path="/1/sources/{sourceID}/discover".replace(
@@ -10008,6 +10326,11 @@ class IngestionClientSync:
                 "Parameter `transformation_id` is required when calling `try_transformation_before_update`."
             )
 
+        if not transformation_id:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `try_transformation_before_update`."
+            )
+
         if transformation_try is None:
             raise ValueError(
                 "Parameter `transformation_try` is required when calling `try_transformation_before_update`."
@@ -10083,6 +10406,11 @@ class IngestionClientSync:
         """
 
         if authentication_id is None:
+            raise ValueError(
+                "Parameter `authentication_id` is required when calling `update_authentication`."
+            )
+
+        if not authentication_id:
             raise ValueError(
                 "Parameter `authentication_id` is required when calling `update_authentication`."
             )
@@ -10166,6 +10494,11 @@ class IngestionClientSync:
                 "Parameter `destination_id` is required when calling `update_destination`."
             )
 
+        if not destination_id:
+            raise ValueError(
+                "Parameter `destination_id` is required when calling `update_destination`."
+            )
+
         if destination_update is None:
             raise ValueError(
                 "Parameter `destination_update` is required when calling `update_destination`."
@@ -10240,6 +10573,11 @@ class IngestionClientSync:
         """
 
         if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `update_source`."
+            )
+
+        if not source_id:
             raise ValueError(
                 "Parameter `source_id` is required when calling `update_source`."
             )
@@ -10322,6 +10660,11 @@ class IngestionClientSync:
                 "Parameter `task_id` is required when calling `update_task`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `update_task`."
+            )
+
         if task_update is None:
             raise ValueError(
                 "Parameter `task_update` is required when calling `update_task`."
@@ -10399,6 +10742,11 @@ class IngestionClientSync:
                 "Parameter `task_id` is required when calling `update_task_v1`."
             )
 
+        if not task_id:
+            raise ValueError(
+                "Parameter `task_id` is required when calling `update_task_v1`."
+            )
+
         if task_update is None:
             raise ValueError(
                 "Parameter `task_update` is required when calling `update_task_v1`."
@@ -10470,6 +10818,11 @@ class IngestionClientSync:
         """
 
         if transformation_id is None:
+            raise ValueError(
+                "Parameter `transformation_id` is required when calling `update_transformation`."
+            )
+
+        if not transformation_id:
             raise ValueError(
                 "Parameter `transformation_id` is required when calling `update_transformation`."
             )
@@ -10607,6 +10960,11 @@ class IngestionClientSync:
         """
 
         if source_id is None:
+            raise ValueError(
+                "Parameter `source_id` is required when calling `validate_source_before_update`."
+            )
+
+        if not source_id:
             raise ValueError(
                 "Parameter `source_id` is required when calling `validate_source_before_update`."
             )

@@ -174,6 +174,11 @@ class RecommendClient:
                 "Parameter `index_name` is required when calling `batch_recommend_rules`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `batch_recommend_rules`."
+            )
+
         if model is None:
             raise ValueError(
                 "Parameter `model` is required when calling `batch_recommend_rules`."
@@ -264,6 +269,11 @@ class RecommendClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -333,6 +343,9 @@ class RecommendClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -408,6 +421,9 @@ class RecommendClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -496,6 +512,9 @@ class RecommendClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -592,12 +611,22 @@ class RecommendClient:
                 "Parameter `index_name` is required when calling `delete_recommend_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_recommend_rule`."
+            )
+
         if model is None:
             raise ValueError(
                 "Parameter `model` is required when calling `delete_recommend_rule`."
             )
 
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_recommend_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_recommend_rule`."
             )
@@ -692,12 +721,22 @@ class RecommendClient:
                 "Parameter `index_name` is required when calling `get_recommend_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_recommend_rule`."
+            )
+
         if model is None:
             raise ValueError(
                 "Parameter `model` is required when calling `get_recommend_rule`."
             )
 
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_recommend_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_recommend_rule`."
             )
@@ -788,6 +827,11 @@ class RecommendClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_recommend_status`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `get_recommend_status`."
             )
@@ -947,6 +991,11 @@ class RecommendClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_recommend_rules`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `search_recommend_rules`."
             )
@@ -1146,6 +1195,11 @@ class RecommendClientSync:
                 "Parameter `index_name` is required when calling `batch_recommend_rules`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `batch_recommend_rules`."
+            )
+
         if model is None:
             raise ValueError(
                 "Parameter `model` is required when calling `batch_recommend_rules`."
@@ -1236,6 +1290,11 @@ class RecommendClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -1303,6 +1362,9 @@ class RecommendClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1378,6 +1440,9 @@ class RecommendClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1464,6 +1529,9 @@ class RecommendClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1558,12 +1626,22 @@ class RecommendClientSync:
                 "Parameter `index_name` is required when calling `delete_recommend_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_recommend_rule`."
+            )
+
         if model is None:
             raise ValueError(
                 "Parameter `model` is required when calling `delete_recommend_rule`."
             )
 
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_recommend_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_recommend_rule`."
             )
@@ -1658,12 +1736,22 @@ class RecommendClientSync:
                 "Parameter `index_name` is required when calling `get_recommend_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_recommend_rule`."
+            )
+
         if model is None:
             raise ValueError(
                 "Parameter `model` is required when calling `get_recommend_rule`."
             )
 
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_recommend_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_recommend_rule`."
             )
@@ -1754,6 +1842,11 @@ class RecommendClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_recommend_status`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `get_recommend_status`."
             )
@@ -1913,6 +2006,11 @@ class RecommendClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_recommend_rules`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `search_recommend_rules`."
             )

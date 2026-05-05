@@ -953,7 +953,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `add_or_update_object`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `add_or_update_object`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `add_or_update_object`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `add_or_update_object`."
             )
@@ -1107,6 +1117,11 @@ class SearchClient:
                 "Parameter `x_algolia_user_id` is required when calling `assign_user_id`."
             )
 
+        if not x_algolia_user_id:
+            raise ValueError(
+                "Parameter `x_algolia_user_id` is required when calling `assign_user_id`."
+            )
+
         if assign_user_id_params is None:
             raise ValueError(
                 "Parameter `assign_user_id_params` is required when calling `assign_user_id`."
@@ -1189,6 +1204,9 @@ class SearchClient:
         if index_name is None:
             raise ValueError("Parameter `index_name` is required when calling `batch`.")
 
+        if not index_name:
+            raise ValueError("Parameter `index_name` is required when calling `batch`.")
+
         if batch_write_params is None:
             raise ValueError(
                 "Parameter `batch_write_params` is required when calling `batch`."
@@ -1267,6 +1285,11 @@ class SearchClient:
         warn("POST /1/clusters/mapping/batch is deprecated.", DeprecationWarning)
 
         if x_algolia_user_id is None:
+            raise ValueError(
+                "Parameter `x_algolia_user_id` is required when calling `batch_assign_user_ids`."
+            )
+
+        if not x_algolia_user_id:
             raise ValueError(
                 "Parameter `x_algolia_user_id` is required when calling `batch_assign_user_ids`."
             )
@@ -1439,6 +1462,11 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `browse`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `browse`."
+            )
+
         _data = {}
         if browse_params is not None:
             _data = browse_params
@@ -1507,6 +1535,11 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `clear_objects`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_objects`."
+            )
+
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/clear".replace(
@@ -1567,6 +1600,11 @@ class SearchClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_rules`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `clear_rules`."
             )
@@ -1649,6 +1687,11 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `clear_synonyms`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_synonyms`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
@@ -1725,6 +1768,11 @@ class SearchClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -1794,6 +1842,9 @@ class SearchClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1869,6 +1920,9 @@ class SearchClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1959,6 +2013,9 @@ class SearchClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -2036,6 +2093,11 @@ class SearchClient:
                 "Parameter `key` is required when calling `delete_api_key`."
             )
 
+        if not key:
+            raise ValueError(
+                "Parameter `key` is required when calling `delete_api_key`."
+            )
+
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
@@ -2088,6 +2150,11 @@ class SearchClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_by`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `delete_by`."
             )
@@ -2165,6 +2232,11 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `delete_index`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_index`."
+            )
+
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}".replace(
@@ -2226,7 +2298,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `delete_object`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_object`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_object`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_object`."
             )
@@ -2305,7 +2387,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `delete_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_rule`."
             )
@@ -2386,6 +2478,11 @@ class SearchClient:
                 "Parameter `source` is required when calling `delete_source`."
             )
 
+        if not source:
+            raise ValueError(
+                "Parameter `source` is required when calling `delete_source`."
+            )
+
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/security/sources/{source}".replace(
@@ -2454,7 +2551,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `delete_synonym`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_synonym`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_synonym`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_synonym`."
             )
@@ -2529,6 +2636,9 @@ class SearchClient:
         """
 
         if key is None:
+            raise ValueError("Parameter `key` is required when calling `get_api_key`.")
+
+        if not key:
             raise ValueError("Parameter `key` is required when calling `get_api_key`.")
 
         return await self._transporter.request(
@@ -2838,7 +2948,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `get_object`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_object`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_object`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_object`."
             )
@@ -2988,7 +3108,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `get_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_rule`."
             )
@@ -3062,6 +3192,11 @@ class SearchClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_settings`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `get_settings`."
             )
@@ -3182,7 +3317,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `get_synonym`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_synonym`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_synonym`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_synonym`."
             )
@@ -3251,6 +3396,11 @@ class SearchClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_task`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `get_task`."
             )
@@ -3362,6 +3512,11 @@ class SearchClient:
         warn("GET /1/clusters/mapping/{userID} is deprecated.", DeprecationWarning)
 
         if user_id is None:
+            raise ValueError(
+                "Parameter `user_id` is required when calling `get_user_id`."
+            )
+
+        if not user_id:
             raise ValueError(
                 "Parameter `user_id` is required when calling `get_user_id`."
             )
@@ -3785,6 +3940,11 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `operation_index`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `operation_index`."
+            )
+
         if operation_index_params is None:
             raise ValueError(
                 "Parameter `operation_index_params` is required when calling `operation_index`."
@@ -3872,7 +4032,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `partial_update_object`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `partial_update_object`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `partial_update_object`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `partial_update_object`."
             )
@@ -3973,6 +4143,11 @@ class SearchClient:
         warn("DELETE /1/clusters/mapping/{userID} is deprecated.", DeprecationWarning)
 
         if user_id is None:
+            raise ValueError(
+                "Parameter `user_id` is required when calling `remove_user_id`."
+            )
+
+        if not user_id:
             raise ValueError(
                 "Parameter `user_id` is required when calling `remove_user_id`."
             )
@@ -4097,6 +4272,11 @@ class SearchClient:
                 "Parameter `key` is required when calling `restore_api_key`."
             )
 
+        if not key:
+            raise ValueError(
+                "Parameter `key` is required when calling `restore_api_key`."
+            )
+
         return await self._transporter.request(
             verb=Verb.POST,
             path="/1/keys/{key}/restore".replace("{key}", quote(str(key), safe="")),
@@ -4154,6 +4334,11 @@ class SearchClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_object`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `save_object`."
             )
@@ -4246,7 +4431,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `save_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `save_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `save_rule`."
             )
@@ -4352,6 +4547,11 @@ class SearchClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_rules`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `save_rules`."
             )
@@ -4467,7 +4667,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `save_synonym`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_synonym`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `save_synonym`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `save_synonym`."
             )
@@ -4575,6 +4785,11 @@ class SearchClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_synonyms`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `save_synonyms`."
             )
@@ -4846,7 +5061,17 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `search_for_facet_values`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_for_facet_values`."
+            )
+
         if facet_name is None:
+            raise ValueError(
+                "Parameter `facet_name` is required when calling `search_for_facet_values`."
+            )
+
+        if not facet_name:
             raise ValueError(
                 "Parameter `facet_name` is required when calling `search_for_facet_values`."
             )
@@ -4932,6 +5157,11 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `search_rules`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_rules`."
+            )
+
         _data = {}
         if search_rules_params is not None:
             _data = search_rules_params
@@ -4999,6 +5229,11 @@ class SearchClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_single_index`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `search_single_index`."
             )
@@ -5076,6 +5311,11 @@ class SearchClient:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_synonyms`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `search_synonyms`."
             )
@@ -5281,6 +5521,11 @@ class SearchClient:
                 "Parameter `index_name` is required when calling `set_settings`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `set_settings`."
+            )
+
         if index_settings is None:
             raise ValueError(
                 "Parameter `index_settings` is required when calling `set_settings`."
@@ -5362,6 +5607,11 @@ class SearchClient:
         """
 
         if key is None:
+            raise ValueError(
+                "Parameter `key` is required when calling `update_api_key`."
+            )
+
+        if not key:
             raise ValueError(
                 "Parameter `key` is required when calling `update_api_key`."
             )
@@ -6242,7 +6492,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `add_or_update_object`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `add_or_update_object`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `add_or_update_object`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `add_or_update_object`."
             )
@@ -6396,6 +6656,11 @@ class SearchClientSync:
                 "Parameter `x_algolia_user_id` is required when calling `assign_user_id`."
             )
 
+        if not x_algolia_user_id:
+            raise ValueError(
+                "Parameter `x_algolia_user_id` is required when calling `assign_user_id`."
+            )
+
         if assign_user_id_params is None:
             raise ValueError(
                 "Parameter `assign_user_id_params` is required when calling `assign_user_id`."
@@ -6478,6 +6743,9 @@ class SearchClientSync:
         if index_name is None:
             raise ValueError("Parameter `index_name` is required when calling `batch`.")
 
+        if not index_name:
+            raise ValueError("Parameter `index_name` is required when calling `batch`.")
+
         if batch_write_params is None:
             raise ValueError(
                 "Parameter `batch_write_params` is required when calling `batch`."
@@ -6556,6 +6824,11 @@ class SearchClientSync:
         warn("POST /1/clusters/mapping/batch is deprecated.", DeprecationWarning)
 
         if x_algolia_user_id is None:
+            raise ValueError(
+                "Parameter `x_algolia_user_id` is required when calling `batch_assign_user_ids`."
+            )
+
+        if not x_algolia_user_id:
             raise ValueError(
                 "Parameter `x_algolia_user_id` is required when calling `batch_assign_user_ids`."
             )
@@ -6728,6 +7001,11 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `browse`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `browse`."
+            )
+
         _data = {}
         if browse_params is not None:
             _data = browse_params
@@ -6794,6 +7072,11 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `clear_objects`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_objects`."
+            )
+
         return self._transporter.request(
             verb=Verb.POST,
             path="/1/indexes/{indexName}/clear".replace(
@@ -6854,6 +7137,11 @@ class SearchClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_rules`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `clear_rules`."
             )
@@ -6936,6 +7224,11 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `clear_synonyms`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `clear_synonyms`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if forward_to_replicas is not None:
@@ -7012,6 +7305,11 @@ class SearchClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -7079,6 +7377,9 @@ class SearchClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -7154,6 +7455,9 @@ class SearchClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -7242,6 +7546,9 @@ class SearchClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -7317,6 +7624,11 @@ class SearchClientSync:
                 "Parameter `key` is required when calling `delete_api_key`."
             )
 
+        if not key:
+            raise ValueError(
+                "Parameter `key` is required when calling `delete_api_key`."
+            )
+
         return self._transporter.request(
             verb=Verb.DELETE,
             path="/1/keys/{key}".replace("{key}", quote(str(key), safe="")),
@@ -7369,6 +7681,11 @@ class SearchClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_by`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `delete_by`."
             )
@@ -7446,6 +7763,11 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `delete_index`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_index`."
+            )
+
         return self._transporter.request(
             verb=Verb.DELETE,
             path="/1/indexes/{indexName}".replace(
@@ -7507,7 +7829,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `delete_object`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_object`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_object`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_object`."
             )
@@ -7584,7 +7916,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `delete_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_rule`."
             )
@@ -7665,6 +8007,11 @@ class SearchClientSync:
                 "Parameter `source` is required when calling `delete_source`."
             )
 
+        if not source:
+            raise ValueError(
+                "Parameter `source` is required when calling `delete_source`."
+            )
+
         return self._transporter.request(
             verb=Verb.DELETE,
             path="/1/security/sources/{source}".replace(
@@ -7733,7 +8080,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `delete_synonym`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `delete_synonym`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_synonym`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_synonym`."
             )
@@ -7808,6 +8165,9 @@ class SearchClientSync:
         """
 
         if key is None:
+            raise ValueError("Parameter `key` is required when calling `get_api_key`.")
+
+        if not key:
             raise ValueError("Parameter `key` is required when calling `get_api_key`.")
 
         return self._transporter.request(
@@ -8117,7 +8477,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `get_object`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_object`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_object`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_object`."
             )
@@ -8265,7 +8635,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `get_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_rule`."
             )
@@ -8337,6 +8717,11 @@ class SearchClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_settings`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `get_settings`."
             )
@@ -8457,7 +8842,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `get_synonym`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_synonym`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_synonym`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_synonym`."
             )
@@ -8524,6 +8919,11 @@ class SearchClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `get_task`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `get_task`."
             )
@@ -8635,6 +9035,11 @@ class SearchClientSync:
         warn("GET /1/clusters/mapping/{userID} is deprecated.", DeprecationWarning)
 
         if user_id is None:
+            raise ValueError(
+                "Parameter `user_id` is required when calling `get_user_id`."
+            )
+
+        if not user_id:
             raise ValueError(
                 "Parameter `user_id` is required when calling `get_user_id`."
             )
@@ -9052,6 +9457,11 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `operation_index`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `operation_index`."
+            )
+
         if operation_index_params is None:
             raise ValueError(
                 "Parameter `operation_index_params` is required when calling `operation_index`."
@@ -9139,7 +9549,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `partial_update_object`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `partial_update_object`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `partial_update_object`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `partial_update_object`."
             )
@@ -9240,6 +9660,11 @@ class SearchClientSync:
         warn("DELETE /1/clusters/mapping/{userID} is deprecated.", DeprecationWarning)
 
         if user_id is None:
+            raise ValueError(
+                "Parameter `user_id` is required when calling `remove_user_id`."
+            )
+
+        if not user_id:
             raise ValueError(
                 "Parameter `user_id` is required when calling `remove_user_id`."
             )
@@ -9364,6 +9789,11 @@ class SearchClientSync:
                 "Parameter `key` is required when calling `restore_api_key`."
             )
 
+        if not key:
+            raise ValueError(
+                "Parameter `key` is required when calling `restore_api_key`."
+            )
+
         return self._transporter.request(
             verb=Verb.POST,
             path="/1/keys/{key}/restore".replace("{key}", quote(str(key), safe="")),
@@ -9421,6 +9851,11 @@ class SearchClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_object`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `save_object`."
             )
@@ -9513,7 +9948,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `save_rule`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `save_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `save_rule`."
             )
@@ -9619,6 +10064,11 @@ class SearchClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_rules`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `save_rules`."
             )
@@ -9734,7 +10184,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `save_synonym`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_synonym`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `save_synonym`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `save_synonym`."
             )
@@ -9842,6 +10302,11 @@ class SearchClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `save_synonyms`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `save_synonyms`."
             )
@@ -10113,7 +10578,17 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `search_for_facet_values`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_for_facet_values`."
+            )
+
         if facet_name is None:
+            raise ValueError(
+                "Parameter `facet_name` is required when calling `search_for_facet_values`."
+            )
+
+        if not facet_name:
             raise ValueError(
                 "Parameter `facet_name` is required when calling `search_for_facet_values`."
             )
@@ -10199,6 +10674,11 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `search_rules`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_rules`."
+            )
+
         _data = {}
         if search_rules_params is not None:
             _data = search_rules_params
@@ -10266,6 +10746,11 @@ class SearchClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_single_index`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `search_single_index`."
             )
@@ -10343,6 +10828,11 @@ class SearchClientSync:
         """
 
         if index_name is None:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `search_synonyms`."
+            )
+
+        if not index_name:
             raise ValueError(
                 "Parameter `index_name` is required when calling `search_synonyms`."
             )
@@ -10548,6 +11038,11 @@ class SearchClientSync:
                 "Parameter `index_name` is required when calling `set_settings`."
             )
 
+        if not index_name:
+            raise ValueError(
+                "Parameter `index_name` is required when calling `set_settings`."
+            )
+
         if index_settings is None:
             raise ValueError(
                 "Parameter `index_settings` is required when calling `set_settings`."
@@ -10629,6 +11124,11 @@ class SearchClientSync:
         """
 
         if key is None:
+            raise ValueError(
+                "Parameter `key` is required when calling `update_api_key`."
+            )
+
+        if not key:
             raise ValueError(
                 "Parameter `key` is required when calling `update_api_key`."
             )

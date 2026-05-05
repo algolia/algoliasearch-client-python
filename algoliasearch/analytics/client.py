@@ -177,6 +177,11 @@ class AnalyticsClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -246,6 +251,9 @@ class AnalyticsClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -321,6 +329,9 @@ class AnalyticsClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -409,6 +420,9 @@ class AnalyticsClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -508,6 +522,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_add_to_cart_rate`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_add_to_cart_rate`."
             )
@@ -624,6 +643,11 @@ class AnalyticsClient:
                 "Parameter `index` is required when calling `get_average_click_position`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_average_click_position`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -732,6 +756,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_click_positions`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_click_positions`."
             )
@@ -848,6 +877,11 @@ class AnalyticsClient:
                 "Parameter `index` is required when calling `get_click_through_rate`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_click_through_rate`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -956,6 +990,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_conversion_rate`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_conversion_rate`."
             )
@@ -1072,6 +1111,11 @@ class AnalyticsClient:
                 "Parameter `index` is required when calling `get_no_click_rate`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_no_click_rate`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -1180,6 +1224,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_no_results_rate`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_no_results_rate`."
             )
@@ -1296,6 +1345,11 @@ class AnalyticsClient:
                 "Parameter `index` is required when calling `get_purchase_rate`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_purchase_rate`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -1408,6 +1462,11 @@ class AnalyticsClient:
                 "Parameter `index` is required when calling `get_revenue`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_revenue`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -1516,6 +1575,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_searches_count`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_searches_count`."
             )
@@ -1640,6 +1704,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_searches_no_clicks`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_searches_no_clicks`."
             )
@@ -1784,6 +1853,11 @@ class AnalyticsClient:
                 "Parameter `index` is required when calling `get_searches_no_results`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_searches_no_results`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -1886,6 +1960,9 @@ class AnalyticsClient:
         if index is None:
             raise ValueError("Parameter `index` is required when calling `get_status`.")
 
+        if not index:
+            raise ValueError("Parameter `index` is required when calling `get_status`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -1974,6 +2051,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_countries`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_top_countries`."
             )
@@ -2119,6 +2201,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_filter_attributes`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_top_filter_attributes`."
             )
@@ -2278,7 +2365,17 @@ class AnalyticsClient:
                 "Parameter `attribute` is required when calling `get_top_filter_for_attribute`."
             )
 
+        if not attribute:
+            raise ValueError(
+                "Parameter `attribute` is required when calling `get_top_filter_for_attribute`."
+            )
+
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_filter_for_attribute`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_top_filter_for_attribute`."
             )
@@ -2448,6 +2545,11 @@ class AnalyticsClient:
                 "Parameter `index` is required when calling `get_top_filters_no_results`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_filters_no_results`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -2612,6 +2714,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_hits`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_top_hits`."
             )
@@ -2830,6 +2937,11 @@ class AnalyticsClient:
                 "Parameter `index` is required when calling `get_top_searches`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_searches`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -3010,6 +3122,11 @@ class AnalyticsClient:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_users_count`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_users_count`."
             )
@@ -3204,6 +3321,11 @@ class AnalyticsClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -3271,6 +3393,9 @@ class AnalyticsClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -3346,6 +3471,9 @@ class AnalyticsClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -3432,6 +3560,9 @@ class AnalyticsClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -3529,6 +3660,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_add_to_cart_rate`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_add_to_cart_rate`."
             )
@@ -3645,6 +3781,11 @@ class AnalyticsClientSync:
                 "Parameter `index` is required when calling `get_average_click_position`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_average_click_position`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -3753,6 +3894,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_click_positions`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_click_positions`."
             )
@@ -3869,6 +4015,11 @@ class AnalyticsClientSync:
                 "Parameter `index` is required when calling `get_click_through_rate`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_click_through_rate`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -3977,6 +4128,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_conversion_rate`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_conversion_rate`."
             )
@@ -4093,6 +4249,11 @@ class AnalyticsClientSync:
                 "Parameter `index` is required when calling `get_no_click_rate`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_no_click_rate`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -4201,6 +4362,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_no_results_rate`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_no_results_rate`."
             )
@@ -4317,6 +4483,11 @@ class AnalyticsClientSync:
                 "Parameter `index` is required when calling `get_purchase_rate`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_purchase_rate`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -4429,6 +4600,11 @@ class AnalyticsClientSync:
                 "Parameter `index` is required when calling `get_revenue`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_revenue`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -4537,6 +4713,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_searches_count`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_searches_count`."
             )
@@ -4661,6 +4842,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_searches_no_clicks`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_searches_no_clicks`."
             )
@@ -4805,6 +4991,11 @@ class AnalyticsClientSync:
                 "Parameter `index` is required when calling `get_searches_no_results`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_searches_no_results`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -4907,6 +5098,9 @@ class AnalyticsClientSync:
         if index is None:
             raise ValueError("Parameter `index` is required when calling `get_status`.")
 
+        if not index:
+            raise ValueError("Parameter `index` is required when calling `get_status`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -4995,6 +5189,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_countries`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_top_countries`."
             )
@@ -5140,6 +5339,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_filter_attributes`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_top_filter_attributes`."
             )
@@ -5299,7 +5503,17 @@ class AnalyticsClientSync:
                 "Parameter `attribute` is required when calling `get_top_filter_for_attribute`."
             )
 
+        if not attribute:
+            raise ValueError(
+                "Parameter `attribute` is required when calling `get_top_filter_for_attribute`."
+            )
+
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_filter_for_attribute`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_top_filter_for_attribute`."
             )
@@ -5469,6 +5683,11 @@ class AnalyticsClientSync:
                 "Parameter `index` is required when calling `get_top_filters_no_results`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_filters_no_results`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -5633,6 +5852,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_hits`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_top_hits`."
             )
@@ -5851,6 +6075,11 @@ class AnalyticsClientSync:
                 "Parameter `index` is required when calling `get_top_searches`."
             )
 
+        if not index:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_top_searches`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if index is not None:
@@ -6031,6 +6260,11 @@ class AnalyticsClientSync:
         """
 
         if index is None:
+            raise ValueError(
+                "Parameter `index` is required when calling `get_users_count`."
+            )
+
+        if not index:
             raise ValueError(
                 "Parameter `index` is required when calling `get_users_count`."
             )

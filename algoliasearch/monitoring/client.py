@@ -161,6 +161,11 @@ class MonitoringClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -230,6 +235,9 @@ class MonitoringClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -305,6 +313,9 @@ class MonitoringClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -395,6 +406,9 @@ class MonitoringClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -472,6 +486,11 @@ class MonitoringClient:
                 "Parameter `clusters` is required when calling `get_cluster_incidents`."
             )
 
+        if not clusters:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_cluster_incidents`."
+            )
+
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/incidents/{clusters}".replace(
@@ -522,6 +541,11 @@ class MonitoringClient:
         """
 
         if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_cluster_status`."
+            )
+
+        if not clusters:
             raise ValueError(
                 "Parameter `clusters` is required when calling `get_cluster_status`."
             )
@@ -611,6 +635,11 @@ class MonitoringClient:
                 "Parameter `clusters` is required when calling `get_indexing_time`."
             )
 
+        if not clusters:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_indexing_time`."
+            )
+
         return await self._transporter.request(
             verb=Verb.GET,
             path="/1/indexing/{clusters}".replace(
@@ -659,6 +688,11 @@ class MonitoringClient:
         """
 
         if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_latency`."
+            )
+
+        if not clusters:
             raise ValueError(
                 "Parameter `clusters` is required when calling `get_latency`."
             )
@@ -802,6 +836,11 @@ class MonitoringClient:
         """
 
         if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_reachability`."
+            )
+
+        if not clusters:
             raise ValueError(
                 "Parameter `clusters` is required when calling `get_reachability`."
             )
@@ -1024,6 +1063,11 @@ class MonitoringClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -1091,6 +1135,9 @@ class MonitoringClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1166,6 +1213,9 @@ class MonitoringClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1254,6 +1304,9 @@ class MonitoringClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -1329,6 +1382,11 @@ class MonitoringClientSync:
                 "Parameter `clusters` is required when calling `get_cluster_incidents`."
             )
 
+        if not clusters:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_cluster_incidents`."
+            )
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/1/incidents/{clusters}".replace(
@@ -1377,6 +1435,11 @@ class MonitoringClientSync:
         """
 
         if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_cluster_status`."
+            )
+
+        if not clusters:
             raise ValueError(
                 "Parameter `clusters` is required when calling `get_cluster_status`."
             )
@@ -1466,6 +1529,11 @@ class MonitoringClientSync:
                 "Parameter `clusters` is required when calling `get_indexing_time`."
             )
 
+        if not clusters:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_indexing_time`."
+            )
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/1/indexing/{clusters}".replace(
@@ -1514,6 +1582,11 @@ class MonitoringClientSync:
         """
 
         if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_latency`."
+            )
+
+        if not clusters:
             raise ValueError(
                 "Parameter `clusters` is required when calling `get_latency`."
             )
@@ -1657,6 +1730,11 @@ class MonitoringClientSync:
         """
 
         if clusters is None:
+            raise ValueError(
+                "Parameter `clusters` is required when calling `get_reachability`."
+            )
+
+        if not clusters:
             raise ValueError(
                 "Parameter `clusters` is required when calling `get_reachability`."
             )

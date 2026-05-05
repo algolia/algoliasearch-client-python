@@ -168,6 +168,11 @@ class CompositionClient:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -237,6 +242,9 @@ class CompositionClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -312,6 +320,9 @@ class CompositionClient:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -402,6 +413,9 @@ class CompositionClient:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -481,6 +495,11 @@ class CompositionClient:
                 "Parameter `composition_id` is required when calling `delete_composition`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `delete_composition`."
+            )
+
         return await self._transporter.request(
             verb=Verb.DELETE,
             path="/1/compositions/{compositionID}".replace(
@@ -544,7 +563,17 @@ class CompositionClient:
                 "Parameter `composition_id` is required when calling `delete_composition_rule`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `delete_composition_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_composition_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_composition_rule`."
             )
@@ -609,6 +638,11 @@ class CompositionClient:
         """
 
         if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_composition`."
+            )
+
+        if not composition_id:
             raise ValueError(
                 "Parameter `composition_id` is required when calling `get_composition`."
             )
@@ -678,7 +712,17 @@ class CompositionClient:
                 "Parameter `composition_id` is required when calling `get_rule`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_rule`."
             )
@@ -750,6 +794,11 @@ class CompositionClient:
         """
 
         if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_task`."
+            )
+
+        if not composition_id:
             raise ValueError(
                 "Parameter `composition_id` is required when calling `get_task`."
             )
@@ -957,6 +1006,11 @@ class CompositionClient:
                 "Parameter `composition_id` is required when calling `put_composition`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `put_composition`."
+            )
+
         if composition is None:
             raise ValueError(
                 "Parameter `composition` is required when calling `put_composition`."
@@ -1036,7 +1090,17 @@ class CompositionClient:
                 "Parameter `composition_id` is required when calling `put_composition_rule`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `put_composition_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `put_composition_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `put_composition_rule`."
             )
@@ -1120,6 +1184,11 @@ class CompositionClient:
                 "Parameter `composition_id` is required when calling `save_rules`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `save_rules`."
+            )
+
         if rules is None:
             raise ValueError("Parameter `rules` is required when calling `save_rules`.")
 
@@ -1188,6 +1257,11 @@ class CompositionClient:
         """
 
         if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `search`."
+            )
+
+        if not composition_id:
             raise ValueError(
                 "Parameter `composition_id` is required when calling `search`."
             )
@@ -1264,6 +1338,11 @@ class CompositionClient:
         """
 
         if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `search_composition_rules`."
+            )
+
+        if not composition_id:
             raise ValueError(
                 "Parameter `composition_id` is required when calling `search_composition_rules`."
             )
@@ -1349,7 +1428,17 @@ class CompositionClient:
                 "Parameter `composition_id` is required when calling `search_for_facet_values`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `search_for_facet_values`."
+            )
+
         if facet_name is None:
+            raise ValueError(
+                "Parameter `facet_name` is required when calling `search_for_facet_values`."
+            )
+
+        if not facet_name:
             raise ValueError(
                 "Parameter `facet_name` is required when calling `search_for_facet_values`."
             )
@@ -1429,6 +1518,11 @@ class CompositionClient:
         """
 
         if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `update_sorting_strategy_composition`."
+            )
+
+        if not composition_id:
             raise ValueError(
                 "Parameter `composition_id` is required when calling `update_sorting_strategy_composition`."
             )
@@ -1602,6 +1696,11 @@ class CompositionClientSync:
                 "Parameter `path` is required when calling `custom_delete`."
             )
 
+        if not path:
+            raise ValueError(
+                "Parameter `path` is required when calling `custom_delete`."
+            )
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -1669,6 +1768,9 @@ class CompositionClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_get`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_get`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1744,6 +1846,9 @@ class CompositionClientSync:
         """
 
         if path is None:
+            raise ValueError("Parameter `path` is required when calling `custom_post`.")
+
+        if not path:
             raise ValueError("Parameter `path` is required when calling `custom_post`.")
 
         _query_parameters: Dict[str, Any] = {}
@@ -1832,6 +1937,9 @@ class CompositionClientSync:
         if path is None:
             raise ValueError("Parameter `path` is required when calling `custom_put`.")
 
+        if not path:
+            raise ValueError("Parameter `path` is required when calling `custom_put`.")
+
         _query_parameters: Dict[str, Any] = {}
 
         if parameters is not None:
@@ -1909,6 +2017,11 @@ class CompositionClientSync:
                 "Parameter `composition_id` is required when calling `delete_composition`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `delete_composition`."
+            )
+
         return self._transporter.request(
             verb=Verb.DELETE,
             path="/1/compositions/{compositionID}".replace(
@@ -1970,7 +2083,17 @@ class CompositionClientSync:
                 "Parameter `composition_id` is required when calling `delete_composition_rule`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `delete_composition_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `delete_composition_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `delete_composition_rule`."
             )
@@ -2039,6 +2162,11 @@ class CompositionClientSync:
                 "Parameter `composition_id` is required when calling `get_composition`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_composition`."
+            )
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/1/compositions/{compositionID}".replace(
@@ -2102,7 +2230,17 @@ class CompositionClientSync:
                 "Parameter `composition_id` is required when calling `get_rule`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `get_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `get_rule`."
             )
@@ -2172,6 +2310,11 @@ class CompositionClientSync:
         """
 
         if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `get_task`."
+            )
+
+        if not composition_id:
             raise ValueError(
                 "Parameter `composition_id` is required when calling `get_task`."
             )
@@ -2377,6 +2520,11 @@ class CompositionClientSync:
                 "Parameter `composition_id` is required when calling `put_composition`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `put_composition`."
+            )
+
         if composition is None:
             raise ValueError(
                 "Parameter `composition` is required when calling `put_composition`."
@@ -2456,7 +2604,17 @@ class CompositionClientSync:
                 "Parameter `composition_id` is required when calling `put_composition_rule`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `put_composition_rule`."
+            )
+
         if object_id is None:
+            raise ValueError(
+                "Parameter `object_id` is required when calling `put_composition_rule`."
+            )
+
+        if not object_id:
             raise ValueError(
                 "Parameter `object_id` is required when calling `put_composition_rule`."
             )
@@ -2540,6 +2698,11 @@ class CompositionClientSync:
                 "Parameter `composition_id` is required when calling `save_rules`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `save_rules`."
+            )
+
         if rules is None:
             raise ValueError("Parameter `rules` is required when calling `save_rules`.")
 
@@ -2606,6 +2769,11 @@ class CompositionClientSync:
         """
 
         if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `search`."
+            )
+
+        if not composition_id:
             raise ValueError(
                 "Parameter `composition_id` is required when calling `search`."
             )
@@ -2680,6 +2848,11 @@ class CompositionClientSync:
         """
 
         if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `search_composition_rules`."
+            )
+
+        if not composition_id:
             raise ValueError(
                 "Parameter `composition_id` is required when calling `search_composition_rules`."
             )
@@ -2765,7 +2938,17 @@ class CompositionClientSync:
                 "Parameter `composition_id` is required when calling `search_for_facet_values`."
             )
 
+        if not composition_id:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `search_for_facet_values`."
+            )
+
         if facet_name is None:
+            raise ValueError(
+                "Parameter `facet_name` is required when calling `search_for_facet_values`."
+            )
+
+        if not facet_name:
             raise ValueError(
                 "Parameter `facet_name` is required when calling `search_for_facet_values`."
             )
@@ -2845,6 +3028,11 @@ class CompositionClientSync:
         """
 
         if composition_id is None:
+            raise ValueError(
+                "Parameter `composition_id` is required when calling `update_sorting_strategy_composition`."
+            )
+
+        if not composition_id:
             raise ValueError(
                 "Parameter `composition_id` is required when calling `update_sorting_strategy_composition`."
             )
