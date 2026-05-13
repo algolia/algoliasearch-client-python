@@ -28,6 +28,7 @@ else:
 
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.base_config import BaseConfig
+from algoliasearch.http.chunked_helper_options import ChunkedHelperOptions
 from algoliasearch.http.exceptions import RequestException, ValidUntilNotFoundException
 from algoliasearch.http.helpers import (
     RetryTimeout,
@@ -226,7 +227,7 @@ class SearchClient:
         index_name: str,
         task_id: int,
         timeout: RetryTimeout = RetryTimeout(),
-        max_retries: int = 50,
+        max_retries: int = 100,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTaskResponse:
         """
@@ -247,14 +248,14 @@ class SearchClient:
             validate=lambda _resp: _resp.status == "published",
             timeout=lambda: timeout(_retry_count),
             error_validate=lambda _: _retry_count >= max_retries,
-            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
+            error_message=lambda _: f"Stopped waiting for the task after {max_retries} retries. This does not mean the operation failed; it may still complete. If you need to keep polling, retry with a higher max_retries.",
         )
 
     async def wait_for_app_task(
         self,
         task_id: int,
         timeout: RetryTimeout = RetryTimeout(),
-        max_retries: int = 50,
+        max_retries: int = 100,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTaskResponse:
         """
@@ -275,7 +276,7 @@ class SearchClient:
             validate=lambda _resp: _resp.status == "published",
             timeout=lambda: timeout(_retry_count),
             error_validate=lambda _: _retry_count >= max_retries,
-            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
+            error_message=lambda _: f"Stopped waiting for the task after {max_retries} retries. This does not mean the operation failed; it may still complete. If you need to keep polling, retry with a higher max_retries.",
         )
 
     async def wait_for_api_key(
@@ -283,7 +284,7 @@ class SearchClient:
         key: str,
         operation: str,
         api_key: Optional[Union[ApiKey, dict[str, Any]]] = None,
-        max_retries: int = 50,
+        max_retries: int = 100,
         timeout: RetryTimeout = RetryTimeout(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetApiKeyResponse | None:
@@ -343,7 +344,7 @@ class SearchClient:
             aggregator=_aggregator,
             timeout=lambda: timeout(_retry_count),
             error_validate=lambda _: _retry_count >= max_retries,
-            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
+            error_message=lambda _: f"Stopped waiting for the API key operation after {max_retries} retries. This does not mean the operation failed; it may still complete. If you need to keep polling, retry with a higher max_retries.",
         )
 
     async def browse_objects(
@@ -563,6 +564,7 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Saves the given array of objects in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
@@ -574,6 +576,7 @@ class SearchClient:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     async def save_objects_with_transformation(
@@ -583,6 +586,7 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[IngestionWatchResponse]:
         """
         Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
@@ -598,6 +602,7 @@ class SearchClient:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     async def delete_objects(
@@ -607,6 +612,7 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Deletes every records for the given objectIDs. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objectIDs in it.
@@ -618,6 +624,7 @@ class SearchClient:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     async def partial_update_objects(
@@ -628,6 +635,7 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Replaces object content of all the given objects according to their respective `objectID` field. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
@@ -641,6 +649,7 @@ class SearchClient:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     async def partial_update_objects_with_transformation(
@@ -651,6 +660,7 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[IngestionWatchResponse]:
         """
         Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
@@ -668,6 +678,7 @@ class SearchClient:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     async def chunked_batch(
@@ -678,10 +689,12 @@ class SearchClient:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `batch` requests.
         """
+        chunked_options = chunked_options or ChunkedHelperOptions()
         requests: List[BatchRequest] = []
         responses: List[BatchResponse] = []
         for i, obj in enumerate(objects):
@@ -698,7 +711,9 @@ class SearchClient:
         if wait_for_tasks:
             for response in responses:
                 await self.wait_for_task(
-                    index_name=index_name, task_id=response.task_id
+                    index_name=index_name,
+                    task_id=response.task_id,
+                    max_retries=chunked_options.max_retries,
                 )
         return responses
 
@@ -709,6 +724,7 @@ class SearchClient:
         batch_size: int = 1000,
         scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> ReplaceAllObjectsWithTransformationResponse:
         """
         Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
@@ -719,6 +735,7 @@ class SearchClient:
             raise ValueError(
                 "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
+        chunked_options = chunked_options or ChunkedHelperOptions()
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -743,15 +760,20 @@ class SearchClient:
                 batch_size=batch_size,
                 reference_index_name=index_name,
                 request_options=request_options,
+                chunked_options=chunked_options,
             )
 
             await self.wait_for_task(
-                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=copy_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             copy_operation_response = await _copy()
             await self.wait_for_task(
-                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=copy_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             move_operation_response = await self.operation_index(
@@ -763,7 +785,9 @@ class SearchClient:
                 request_options=request_options,
             )
             await self.wait_for_task(
-                index_name=tmp_index_name, task_id=move_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=move_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             search_watch_responses: List[WatchResponse] = [
@@ -787,12 +811,14 @@ class SearchClient:
         batch_size: int = 1000,
         scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> ReplaceAllObjectsResponse:
         """
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
+        chunked_options = chunked_options or ChunkedHelperOptions()
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -816,15 +842,20 @@ class SearchClient:
                 wait_for_tasks=True,
                 batch_size=batch_size,
                 request_options=request_options,
+                chunked_options=chunked_options,
             )
 
             await self.wait_for_task(
-                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=copy_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             copy_operation_response = await _copy()
             await self.wait_for_task(
-                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=copy_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             move_operation_response = await self.operation_index(
@@ -836,7 +867,9 @@ class SearchClient:
                 request_options=request_options,
             )
             await self.wait_for_task(
-                index_name=tmp_index_name, task_id=move_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=move_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             return ReplaceAllObjectsResponse(
@@ -5767,7 +5800,7 @@ class SearchClientSync:
         index_name: str,
         task_id: int,
         timeout: RetryTimeout = RetryTimeout(),
-        max_retries: int = 50,
+        max_retries: int = 100,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTaskResponse:
         """
@@ -5788,14 +5821,14 @@ class SearchClientSync:
             validate=lambda _resp: _resp.status == "published",
             timeout=lambda: timeout(_retry_count),
             error_validate=lambda _: _retry_count >= max_retries,
-            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
+            error_message=lambda _: f"Stopped waiting for the task after {max_retries} retries. This does not mean the operation failed; it may still complete. If you need to keep polling, retry with a higher max_retries.",
         )
 
     def wait_for_app_task(
         self,
         task_id: int,
         timeout: RetryTimeout = RetryTimeout(),
-        max_retries: int = 50,
+        max_retries: int = 100,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetTaskResponse:
         """
@@ -5816,7 +5849,7 @@ class SearchClientSync:
             validate=lambda _resp: _resp.status == "published",
             timeout=lambda: timeout(_retry_count),
             error_validate=lambda _: _retry_count >= max_retries,
-            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
+            error_message=lambda _: f"Stopped waiting for the task after {max_retries} retries. This does not mean the operation failed; it may still complete. If you need to keep polling, retry with a higher max_retries.",
         )
 
     def wait_for_api_key(
@@ -5824,7 +5857,7 @@ class SearchClientSync:
         key: str,
         operation: str,
         api_key: Optional[Union[ApiKey, dict[str, Any]]] = None,
-        max_retries: int = 50,
+        max_retries: int = 100,
         timeout: RetryTimeout = RetryTimeout(),
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> GetApiKeyResponse | None:
@@ -5884,7 +5917,7 @@ class SearchClientSync:
             aggregator=_aggregator,
             timeout=lambda: timeout(_retry_count),
             error_validate=lambda _: _retry_count >= max_retries,
-            error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${max_retries})",
+            error_message=lambda _: f"Stopped waiting for the API key operation after {max_retries} retries. This does not mean the operation failed; it may still complete. If you need to keep polling, retry with a higher max_retries.",
         )
 
     def browse_objects(
@@ -6104,6 +6137,7 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Saves the given array of objects in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
@@ -6115,6 +6149,7 @@ class SearchClientSync:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     def save_objects_with_transformation(
@@ -6124,6 +6159,7 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[IngestionWatchResponse]:
         """
         Helper: Similar to the `save_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
@@ -6139,6 +6175,7 @@ class SearchClientSync:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     def delete_objects(
@@ -6148,6 +6185,7 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Deletes every records for the given objectIDs. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objectIDs in it.
@@ -6159,6 +6197,7 @@ class SearchClientSync:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     def partial_update_objects(
@@ -6169,6 +6208,7 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Replaces object content of all the given objects according to their respective `objectID` field. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
@@ -6182,6 +6222,7 @@ class SearchClientSync:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     def partial_update_objects_with_transformation(
@@ -6192,6 +6233,7 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[IngestionWatchResponse]:
         """
         Helper: Similar to the `partial_update_objects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
@@ -6209,6 +6251,7 @@ class SearchClientSync:
             wait_for_tasks=wait_for_tasks,
             batch_size=batch_size,
             request_options=request_options,
+            chunked_options=chunked_options,
         )
 
     def chunked_batch(
@@ -6219,10 +6262,12 @@ class SearchClientSync:
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
         Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `batch` requests.
         """
+        chunked_options = chunked_options or ChunkedHelperOptions()
         requests: List[BatchRequest] = []
         responses: List[BatchResponse] = []
         for i, obj in enumerate(objects):
@@ -6238,7 +6283,11 @@ class SearchClientSync:
                 requests = []
         if wait_for_tasks:
             for response in responses:
-                self.wait_for_task(index_name=index_name, task_id=response.task_id)
+                self.wait_for_task(
+                    index_name=index_name,
+                    task_id=response.task_id,
+                    max_retries=chunked_options.max_retries,
+                )
         return responses
 
     def replace_all_objects_with_transformation(
@@ -6248,6 +6297,7 @@ class SearchClientSync:
         batch_size: int = 1000,
         scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> ReplaceAllObjectsWithTransformationResponse:
         """
         Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
@@ -6258,6 +6308,7 @@ class SearchClientSync:
             raise ValueError(
                 "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
+        chunked_options = chunked_options or ChunkedHelperOptions()
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -6282,15 +6333,20 @@ class SearchClientSync:
                 batch_size=batch_size,
                 reference_index_name=index_name,
                 request_options=request_options,
+                chunked_options=chunked_options,
             )
 
             self.wait_for_task(
-                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=copy_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             copy_operation_response = _copy()
             self.wait_for_task(
-                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=copy_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             move_operation_response = self.operation_index(
@@ -6302,7 +6358,9 @@ class SearchClientSync:
                 request_options=request_options,
             )
             self.wait_for_task(
-                index_name=tmp_index_name, task_id=move_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=move_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             search_watch_responses: List[WatchResponse] = [
@@ -6326,12 +6384,14 @@ class SearchClientSync:
         batch_size: int = 1000,
         scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> ReplaceAllObjectsResponse:
         """
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
+        chunked_options = chunked_options or ChunkedHelperOptions()
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -6355,15 +6415,20 @@ class SearchClientSync:
                 wait_for_tasks=True,
                 batch_size=batch_size,
                 request_options=request_options,
+                chunked_options=chunked_options,
             )
 
             self.wait_for_task(
-                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=copy_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             copy_operation_response = _copy()
             self.wait_for_task(
-                index_name=tmp_index_name, task_id=copy_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=copy_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             move_operation_response = self.operation_index(
@@ -6375,7 +6440,9 @@ class SearchClientSync:
                 request_options=request_options,
             )
             self.wait_for_task(
-                index_name=tmp_index_name, task_id=move_operation_response.task_id
+                index_name=tmp_index_name,
+                task_id=move_operation_response.task_id,
+                max_retries=chunked_options.max_retries,
             )
 
             return ReplaceAllObjectsResponse(

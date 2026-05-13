@@ -22,6 +22,7 @@ else:
 
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.base_config import BaseConfig
+from algoliasearch.http.chunked_helper_options import ChunkedHelperOptions
 from algoliasearch.http.exceptions import RequestException
 from algoliasearch.http.helpers import create_iterable, create_iterable_sync
 from algoliasearch.http.request_options import RequestOptions
@@ -211,10 +212,12 @@ class IngestionClient:
         batch_size: int = 1000,
         reference_index_name: Optional[str] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[WatchResponse]:
         """
         Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `push` requests by leveraging the Transformation pipeline setup in the Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/).
         """
+        chunked_options = chunked_options or ChunkedHelperOptions()
         offset = 0
         records: List[PushTaskRecords] = []
         responses: List[WatchResponse] = []
@@ -273,8 +276,9 @@ class IngestionClient:
                         validate=_validate,
                         aggregator=_aggregator,
                         timeout=lambda: float(min(_retry_count * 1.5, 5)),
-                        error_validate=lambda _: _retry_count >= 50,
-                        error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${50})",
+                        error_validate=lambda _: _retry_count
+                        >= chunked_options.max_retries,
+                        error_message=lambda _: f"Stopped waiting for the task after {chunked_options.max_retries} retries. This does not mean the operation failed; it may still complete. If you need to keep polling, retry with a higher max_retries.",
                     )
                 offset += wait_batch_size
         return responses
@@ -5678,10 +5682,12 @@ class IngestionClientSync:
         batch_size: int = 1000,
         reference_index_name: Optional[str] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
+        chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[WatchResponse]:
         """
         Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `push` requests by leveraging the Transformation pipeline setup in the Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/).
         """
+        chunked_options = chunked_options or ChunkedHelperOptions()
         offset = 0
         records: List[PushTaskRecords] = []
         responses: List[WatchResponse] = []
@@ -5740,8 +5746,9 @@ class IngestionClientSync:
                         validate=_validate,
                         aggregator=_aggregator,
                         timeout=lambda: float(min(_retry_count * 1.5, 5)),
-                        error_validate=lambda _: _retry_count >= 50,
-                        error_message=lambda _: f"The maximum number of retries exceeded. (${_retry_count}/${50})",
+                        error_validate=lambda _: _retry_count
+                        >= chunked_options.max_retries,
+                        error_message=lambda _: f"Stopped waiting for the task after {chunked_options.max_retries} retries. This does not mean the operation failed; it may still complete. If you need to keep polling, retry with a higher max_retries.",
                     )
                 offset += wait_batch_size
         return responses
