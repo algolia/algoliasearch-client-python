@@ -44,6 +44,7 @@ class ConfigurationWithIndex(BaseModel):
     """ Algolia indices from which to get the popular searches for query suggestions. """
     languages: Optional[Languages] = None
     exclude: Optional[List[str]] = None
+    """ Words or regular expressions to exclude from the suggestions. """
     enable_personalization: Optional[bool] = None
     """ Whether to turn on personalized query suggestions. """
     allow_special_characters: Optional[bool] = None

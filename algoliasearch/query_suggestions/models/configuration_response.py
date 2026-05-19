@@ -49,6 +49,7 @@ class ConfigurationResponse(BaseModel):
     """ Algolia indices from which to get the popular searches for query suggestions. """
     languages: Languages
     exclude: Union[List[str], None]
+    """ Words or regular expressions to exclude from the suggestions. """
     enable_personalization: bool
     """ Whether to turn on personalized query suggestions. """
     allow_special_characters: bool
