@@ -18,6 +18,8 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.search.models.fetched_index_ab_test import FetchedIndexAbTest
+
 _ALIASES = {
     "name": "name",
     "created_at": "createdAt",
@@ -31,6 +33,8 @@ _ALIASES = {
     "primary": "primary",
     "replicas": "replicas",
     "virtual": "virtual",
+    "ab_test": "abTest",
+    "source_ab_test": "sourceABTest",
 }
 
 
@@ -67,6 +71,9 @@ class FetchedIndex(BaseModel):
     """ Only present if the index is a primary index with replicas. Contains the names of all linked replicas. """
     virtual: Optional[bool] = None
     """ Only present if the index is a [virtual replica](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/sort-an-index-alphabetically/#virtual-replicas). """
+    ab_test: Optional[FetchedIndexAbTest] = None
+    source_ab_test: Optional[str] = None
+    """ Name of the index that owns the A/B test configuration. Only present when this index participates in an A/B test configured on another index. """
 
     model_config = ConfigDict(
         strict=False,
@@ -102,5 +109,11 @@ class FetchedIndex(BaseModel):
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
+
+        obj["abTest"] = (
+            FetchedIndexAbTest.from_dict(obj["abTest"])
+            if obj.get("abTest") is not None
+            else None
+        )
 
         return cls.model_validate(obj)

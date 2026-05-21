@@ -78,6 +78,9 @@ from .facet_ordering import FacetOrdering
 from .facet_stats import FacetStats
 from .facets import Facets
 from .fetched_index import FetchedIndex
+from .fetched_index_ab_test import FetchedIndexAbTest
+from .fetched_index_ab_test_target import FetchedIndexAbTestTarget
+from .fetched_index_ab_test_variant import FetchedIndexAbTestVariant
 from .get_api_key_response import GetApiKeyResponse
 from .get_dictionary_settings_response import GetDictionarySettingsResponse
 from .get_logs_response import GetLogsResponse
@@ -265,6 +268,9 @@ __all__ = (
     "FacetStats",
     "Facets",
     "FetchedIndex",
+    "FetchedIndexAbTest",
+    "FetchedIndexAbTestTarget",
+    "FetchedIndexAbTestVariant",
     "GetApiKeyResponse",
     "GetDictionarySettingsResponse",
     "GetLogsResponse",
