@@ -27,7 +27,6 @@ from algoliasearch.search.models.fetched_index_ab_test_variant import (
 
 _ALIASES = {
     "id": "id",
-    "is_dark": "isDark",
     "version": "version",
     "type": "type",
     "target": "target",
@@ -46,8 +45,6 @@ class FetchedIndexAbTest(BaseModel):
 
     id: int
     """ A/B test ID. """
-    is_dark: Optional[bool] = None
-    """ Whether the A/B test is a dark test (server-side measured, not user-facing). Only present when true. """
     version: Optional[int] = None
     """ A/B test schema version. Only present for v2 and later tests. """
     type: Optional[str] = None
