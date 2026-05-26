@@ -22,6 +22,7 @@ from algoliasearch.search.models.search_for_facet_values_response import (
     SearchForFacetValuesResponse,
 )
 from algoliasearch.search.models.search_response import SearchResponse
+from algoliasearch.search.models.search_response_partial import SearchResponsePartial
 
 
 class SearchResult(BaseModel):
@@ -35,8 +36,16 @@ class SearchResult(BaseModel):
         default=None
     )
 
-    actual_instance: Union[SearchForFacetValuesResponse, SearchResponse, None] = None
-    one_of_schemas: Set[str] = {"SearchForFacetValuesResponse", "SearchResponse"}
+    oneof_schema_3_validator: Optional[SearchResponsePartial] = Field(default=None)
+
+    actual_instance: Union[
+        SearchForFacetValuesResponse, SearchResponse, SearchResponsePartial, None
+    ] = None
+    one_of_schemas: Set[str] = {
+        "SearchForFacetValuesResponse",
+        "SearchResponse",
+        "SearchResponsePartial",
+    }
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
@@ -55,7 +64,9 @@ class SearchResult(BaseModel):
     @model_serializer
     def unwrap_actual_instance(
         self,
-    ) -> Union[SearchForFacetValuesResponse, SearchResponse, Self, None]:
+    ) -> Union[
+        SearchForFacetValuesResponse, SearchResponse, SearchResponsePartial, Self, None
+    ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -84,9 +95,15 @@ class SearchResult(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = SearchResponsePartial.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into SearchResult with oneOf schemas: SearchForFacetValuesResponse, SearchResponse. Details: "
+            "No match found when deserializing the JSON string into SearchResult with oneOf schemas: SearchForFacetValuesResponse, SearchResponse, SearchResponsePartial. Details: "
             + ", ".join(error_messages)
         )
 
@@ -104,7 +121,14 @@ class SearchResult(BaseModel):
 
     def to_dict(
         self,
-    ) -> Optional[Union[Dict[str, Any], SearchForFacetValuesResponse, SearchResponse]]:
+    ) -> Optional[
+        Union[
+            Dict[str, Any],
+            SearchForFacetValuesResponse,
+            SearchResponse,
+            SearchResponsePartial,
+        ]
+    ]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None

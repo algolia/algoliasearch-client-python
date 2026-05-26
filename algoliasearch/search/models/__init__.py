@@ -157,6 +157,7 @@ from .search_params_object import SearchParamsObject
 from .search_params_string import SearchParamsString
 from .search_query import SearchQuery
 from .search_response import SearchResponse
+from .search_response_partial import SearchResponsePartial
 from .search_responses import SearchResponses
 from .search_result import SearchResult
 from .search_rules_params import SearchRulesParams
@@ -343,6 +344,7 @@ __all__ = (
     "SearchParamsString",
     "SearchQuery",
     "SearchResponse",
+    "SearchResponsePartial",
     "SearchResponses",
     "SearchResult",
     "SearchRulesParams",
