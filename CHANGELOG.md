@@ -1,3 +1,7 @@
+## [4.42.0](https://github.com/algolia/algoliasearch-client-python/compare/4.41.1...4.42.0)
+
+- [7f2ce8cd3a](https://github.com/algolia/api-clients-automation/commit/7f2ce8cd3a) feat(clients): Agent Studio v1 ([#6097](https://github.com/algolia/api-clients-automation/pull/6097)) by [@Fluf22](https://github.com/Fluf22/)
+
 ## [4.41.1](https://github.com/algolia/algoliasearch-client-python/compare/4.41.0...4.41.1)
 
 - [a1c6d1df7f](https://github.com/algolia/api-clients-automation/commit/a1c6d1df7f) fix(python): pin release workflow to Python 3.13.x ([#6473](https://github.com/algolia/api-clients-automation/pull/6473)) by [@Fluf22](https://github.com/Fluf22/)

@@ -1,11 +1,12 @@
 from gzip import compress as gzip_compress
-from json import loads
+from json import dumps, loads
 from sys import version_info
+from typing import Iterator, Optional
 
 from requests import Request, Session, Timeout
 
 if version_info >= (3, 11):
-    from typing import List, Optional, Self
+    from typing import List, Self
 else:
     from typing_extensions import List, Self
 
@@ -22,6 +23,7 @@ from algoliasearch.http.exceptions import (
 from algoliasearch.http.hosts import Host
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.retry import RetryOutcome, RetryStrategy
+from algoliasearch.http.sse import ServerSentEvent, iter_sse_events
 from algoliasearch.http.verb import Verb
 
 
@@ -131,6 +133,63 @@ class TransporterSync(BaseTransporter):
             "Unreachable hosts. If the error persists, please visit our help center https://alg.li/support-unreachable-hosts or reach out to the Algolia Support team: https://alg.li/support"
         )
 
+    def request_stream(
+        self,
+        verb: Verb,
+        path: str,
+        request_options: RequestOptions,
+        use_read_transporter: bool,
+    ) -> Iterator[ServerSentEvent]:
+        if self._session is None:
+            self._session = Session()
+            self._session.mount("https://", HTTPAdapter(max_retries=Retry(connect=0)))
+
+        request_options.headers["accept"] = "text/event-stream"
+
+        query_parameters = self.prepare(
+            request_options, verb == Verb.GET or use_read_transporter
+        )
+
+        path = self.build_path(path, query_parameters)
+
+        valid_hosts = self._retry_strategy.valid_hosts(self._hosts)
+        if not valid_hosts:
+            raise AlgoliaUnreachableHostException(
+                "No hosts available for streaming request"
+            )
+        host = valid_hosts[0]
+        url = self.build_url(host, path)
+        proxies = self.get_proxies(url)
+
+        req = self._session.prepare_request(
+            Request(
+                method=verb,
+                url=url,
+                headers=request_options.headers,
+                data=request_options.data,
+            )
+        )
+
+        connect_timeout = request_options.timeouts["connect"] / 1000
+        read_timeout = self._timeout / 1000
+
+        resp = self._session.send(
+            req,
+            timeout=(connect_timeout, read_timeout),
+            proxies=proxies,
+            stream=True,
+        )
+
+        try:
+            if resp.status_code >= 400:
+                error_text = resp.text
+                raise RequestException(error_text, resp.status_code)
+
+            for event in iter_sse_events(resp.iter_content(chunk_size=None)):
+                yield event
+        finally:
+            resp.close()
+
 
 class EchoTransporterSync(TransporterSync):
     def __init__(self, config: BaseConfig) -> None:
@@ -168,3 +227,30 @@ class EchoTransporterSync(TransporterSync):
             data=request_options.data,
             raw_data=request_options.data,  # type: ignore
         )
+
+    def request_stream(
+        self,
+        verb: Verb,
+        path: str,
+        request_options: RequestOptions,
+        use_read_transporter: bool,
+    ) -> Iterator[ServerSentEvent]:
+        self.prepare(request_options, verb == Verb.GET or use_read_transporter)
+
+        data = dumps(
+            {
+                "verb": verb,
+                "path": path,
+                "status_code": 200,
+                "host": self._retry_strategy.valid_hosts(self._hosts)[0].url,
+                "timeouts": {
+                    "connect": request_options.timeouts["connect"],
+                    "response": self._timeout,
+                },
+                "query_parameters": request_options.query_parameters,
+                "headers": dict(request_options.headers),
+                "data": request_options.data,
+            }
+        )
+
+        yield ServerSentEvent(data=data, event="", id=None, retry=None)
