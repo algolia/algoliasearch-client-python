@@ -9,12 +9,13 @@ from __future__ import annotations
 import base64
 import hashlib
 import hmac
+from itertools import islice
 from json import dumps
 from random import randint
 from re import search
 from sys import version_info
 from time import time
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Union
 from urllib.parse import quote
 from warnings import warn
 
@@ -560,14 +561,14 @@ class SearchClient:
     async def save_objects(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
         chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
-        Helper: Saves the given array of objects in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
+        Helper: Saves the given objects (any iterable, including generators) in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
         """
         return await self.chunked_batch(
             index_name=index_name,
@@ -582,7 +583,7 @@ class SearchClient:
     async def save_objects_with_transformation(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -630,7 +631,7 @@ class SearchClient:
     async def partial_update_objects(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         create_if_not_exists: bool = False,
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
@@ -655,7 +656,7 @@ class SearchClient:
     async def partial_update_objects_with_transformation(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         create_if_not_exists: bool = False,
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
@@ -684,7 +685,7 @@ class SearchClient:
     async def chunked_batch(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         action: Action = Action.ADDOBJECT,
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
@@ -692,22 +693,22 @@ class SearchClient:
         chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
-        Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `batch` requests.
+        Helper: Chunks the given `objects` iterable in subset of 1000 elements max in order to make it fit in `batch` requests. Accepts any iterable, including generators.
         """
+        if batch_size < 1:
+            raise ValueError("`batch_size` must be at least 1.")
         chunked_options = chunked_options or ChunkedHelperOptions()
-        requests: List[BatchRequest] = []
         responses: List[BatchResponse] = []
-        for i, obj in enumerate(objects):
-            requests.append(BatchRequest(action=action, body=obj))
-            if len(requests) == batch_size or i == len(objects) - 1:
-                responses.append(
-                    await self.batch(
-                        index_name=index_name,
-                        batch_write_params=BatchWriteParams(requests=requests),
-                        request_options=request_options,
-                    )
+        it = iter(objects)
+        while batch := list(islice(it, batch_size)):
+            requests = [BatchRequest(action=action, body=obj) for obj in batch]
+            responses.append(
+                await self.batch(
+                    index_name=index_name,
+                    batch_write_params=BatchWriteParams(requests=requests),
+                    request_options=request_options,
                 )
-                requests = []
+            )
         if wait_for_tasks:
             for response in responses:
                 await self.wait_for_task(
@@ -720,7 +721,7 @@ class SearchClient:
     async def replace_all_objects_with_transformation(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         batch_size: int = 1000,
         scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -807,7 +808,7 @@ class SearchClient:
     async def replace_all_objects(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         batch_size: int = 1000,
         scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -6133,14 +6134,14 @@ class SearchClientSync:
     def save_objects(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
         chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
-        Helper: Saves the given array of objects in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
+        Helper: Saves the given objects (any iterable, including generators) in the given index. The `chunked_batch` helper is used under the hood, which creates a `batch` requests with at most 1000 objects in it.
         """
         return self.chunked_batch(
             index_name=index_name,
@@ -6155,7 +6156,7 @@ class SearchClientSync:
     def save_objects_with_transformation(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -6203,7 +6204,7 @@ class SearchClientSync:
     def partial_update_objects(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         create_if_not_exists: bool = False,
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
@@ -6228,7 +6229,7 @@ class SearchClientSync:
     def partial_update_objects_with_transformation(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         create_if_not_exists: bool = False,
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
@@ -6257,7 +6258,7 @@ class SearchClientSync:
     def chunked_batch(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         action: Action = Action.ADDOBJECT,
         wait_for_tasks: bool = False,
         batch_size: int = 1000,
@@ -6265,22 +6266,22 @@ class SearchClientSync:
         chunked_options: Optional[ChunkedHelperOptions] = None,
     ) -> List[BatchResponse]:
         """
-        Helper: Chunks the given `objects` list in subset of 1000 elements max in order to make it fit in `batch` requests.
+        Helper: Chunks the given `objects` iterable in subset of 1000 elements max in order to make it fit in `batch` requests. Accepts any iterable, including generators.
         """
+        if batch_size < 1:
+            raise ValueError("`batch_size` must be at least 1.")
         chunked_options = chunked_options or ChunkedHelperOptions()
-        requests: List[BatchRequest] = []
         responses: List[BatchResponse] = []
-        for i, obj in enumerate(objects):
-            requests.append(BatchRequest(action=action, body=obj))
-            if len(requests) == batch_size or i == len(objects) - 1:
-                responses.append(
-                    self.batch(
-                        index_name=index_name,
-                        batch_write_params=BatchWriteParams(requests=requests),
-                        request_options=request_options,
-                    )
+        it = iter(objects)
+        while batch := list(islice(it, batch_size)):
+            requests = [BatchRequest(action=action, body=obj) for obj in batch]
+            responses.append(
+                self.batch(
+                    index_name=index_name,
+                    batch_write_params=BatchWriteParams(requests=requests),
+                    request_options=request_options,
                 )
-                requests = []
+            )
         if wait_for_tasks:
             for response in responses:
                 self.wait_for_task(
@@ -6293,7 +6294,7 @@ class SearchClientSync:
     def replace_all_objects_with_transformation(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         batch_size: int = 1000,
         scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
@@ -6380,7 +6381,7 @@ class SearchClientSync:
     def replace_all_objects(
         self,
         index_name: str,
-        objects: List[Dict[str, Any]],
+        objects: Iterable[Dict[str, Any]],
         batch_size: int = 1000,
         scopes=["settings", "rules", "synonyms"],
         request_options: Optional[Union[dict, RequestOptions]] = None,
