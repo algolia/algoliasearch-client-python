@@ -1,3 +1,7 @@
+## [4.43.0](https://github.com/algolia/algoliasearch-client-python/compare/4.42.0...4.43.0)
+
+- [6a786c100e](https://github.com/algolia/api-clients-automation/commit/6a786c100e) feat(clients): add IDisposable support and dispose the ingestion transporter on replacement ([#6492](https://github.com/algolia/api-clients-automation/pull/6492)) by [@MarioAlexandruDan](https://github.com/MarioAlexandruDan/)
+
 ## [4.42.0](https://github.com/algolia/algoliasearch-client-python/compare/4.41.1...4.42.0)
 
 - [7f2ce8cd3a](https://github.com/algolia/api-clients-automation/commit/7f2ce8cd3a) feat(clients): Agent Studio v1 ([#6097](https://github.com/algolia/api-clients-automation/pull/6097)) by [@Fluf22](https://github.com/Fluf22/)
