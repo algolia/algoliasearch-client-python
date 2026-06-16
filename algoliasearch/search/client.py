@@ -161,7 +161,6 @@ class SearchClient:
         if transporter is None:
             transporter = Transporter(config)
         self._transporter = transporter
-
         self._ingestion_transporter = None
         if config.transformation_options is not None:
             self._ingestion_transporter = self._build_ingestion_transporter(
@@ -5735,7 +5734,6 @@ class SearchClientSync:
         if transporter is None:
             transporter = TransporterSync(config)
         self._transporter = transporter
-
         self._ingestion_transporter = None
         if config.transformation_options is not None:
             self._ingestion_transporter = self._build_ingestion_transporter(

@@ -23,8 +23,6 @@ if version_info >= (3, 11):
 else:
     from typing_extensions import Self
 
-import warnings
-
 from algoliasearch.agent_studio.config import AgentStudioConfig
 from algoliasearch.agent_studio.models import (
     AgentCompletionRequest,
@@ -108,12 +106,6 @@ class AgentStudioClient:
         if transporter is None:
             transporter = Transporter(config)
         self._transporter = transporter
-
-        warnings.warn(
-            "The Agent Studio API is in beta and subject to breaking changes. See https://www.algolia.com/doc/rest-api/agent-studio",
-            FutureWarning,
-            stacklevel=2,
-        )
 
     @classmethod
     def create_with_config(
@@ -3477,12 +3469,6 @@ class AgentStudioClientSync:
         if transporter is None:
             transporter = TransporterSync(config)
         self._transporter = transporter
-
-        warnings.warn(
-            "The Agent Studio API is in beta and subject to breaking changes. See https://www.algolia.com/doc/rest-api/agent-studio",
-            FutureWarning,
-            stacklevel=2,
-        )
 
     @classmethod
     def create_with_config(
