@@ -35,7 +35,7 @@ class GetObjectsResponse(BaseModel):
 
     message: Optional[str] = None
     """ An optional status message. """
-    results: List[object]
+    results: List[Optional[object]]
     """ Retrieved records. """
 
     model_config = ConfigDict(

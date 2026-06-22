@@ -735,7 +735,9 @@ class SearchClient:
             raise ValueError(
                 "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
-        chunked_options = chunked_options or ChunkedHelperOptions()
+        chunked_options = chunked_options or ChunkedHelperOptions(
+            max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
+        )
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -818,7 +820,9 @@ class SearchClient:
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
-        chunked_options = chunked_options or ChunkedHelperOptions()
+        chunked_options = chunked_options or ChunkedHelperOptions(
+            max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
+        )
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -6307,7 +6311,9 @@ class SearchClientSync:
             raise ValueError(
                 "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
             )
-        chunked_options = chunked_options or ChunkedHelperOptions()
+        chunked_options = chunked_options or ChunkedHelperOptions(
+            max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
+        )
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -6390,7 +6396,9 @@ class SearchClientSync:
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
         """
-        chunked_options = chunked_options or ChunkedHelperOptions()
+        chunked_options = chunked_options or ChunkedHelperOptions(
+            max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
+        )
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
