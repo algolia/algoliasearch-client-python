@@ -27,7 +27,6 @@ from .distinct import Distinct
 from .error_base import ErrorBase
 from .exact_on_single_word_query import ExactOnSingleWordQuery
 from .exhaustive import Exhaustive
-from .facet_filters import FacetFilters
 from .facet_ordering import FacetOrdering
 from .facet_stats import FacetStats
 from .fallback_params import FallbackParams
@@ -112,7 +111,6 @@ __all__ = (
     "ErrorBase",
     "ExactOnSingleWordQuery",
     "Exhaustive",
-    "FacetFilters",
     "FacetOrdering",
     "FacetStats",
     "FallbackParams",
