@@ -730,10 +730,19 @@ class SearchClient:
         Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
+
+        Warning: calling this method with an empty `objects` list replaces the index with an empty one, deleting all existing records.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
                 "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
+            )
+        import logging
+        from collections.abc import Sized
+
+        if isinstance(objects, Sized) and len(objects) == 0:
+            logging.getLogger(__name__).warning(
+                f'replace_all_objects_with_transformation was called with an empty list of objects, which will delete all records currently in the "{index_name}" index.'
             )
         chunked_options = chunked_options or ChunkedHelperOptions(
             max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
@@ -819,7 +828,16 @@ class SearchClient:
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
+
+        Warning: calling this method with an empty `objects` list replaces the index with an empty one, deleting all existing records.
         """
+        import logging
+        from collections.abc import Sized
+
+        if isinstance(objects, Sized) and len(objects) == 0:
+            logging.getLogger(__name__).warning(
+                f'replace_all_objects was called with an empty list of objects, which will delete all records currently in the "{index_name}" index.'
+            )
         chunked_options = chunked_options or ChunkedHelperOptions(
             max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
         )
@@ -6306,10 +6324,19 @@ class SearchClientSync:
         Helper: Similar to the `replaceAllObjects` method but requires a Push connector (https://www.algolia.com/doc/guides/sending-and-managing-data/send-and-update-your-data/connectors/push/) to be created first, in order to transform records before indexing them to Algolia. `transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)`.
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
+
+        Warning: calling this method with an empty `objects` list replaces the index with an empty one, deleting all existing records.
         """
         if self._ingestion_transporter is None:
             raise ValueError(
                 "`transformation_options` must be set on `SearchConfig` before creating the client, or via `client.set_transformation_options(...)` before calling this method. It defaults to the Ingestion API defaults. See https://www.algolia.com/doc/libraries/sdk/methods/ingestion/"
+            )
+        import logging
+        from collections.abc import Sized
+
+        if isinstance(objects, Sized) and len(objects) == 0:
+            logging.getLogger(__name__).warning(
+                f'replace_all_objects_with_transformation was called with an empty list of objects, which will delete all records currently in the "{index_name}" index.'
             )
         chunked_options = chunked_options or ChunkedHelperOptions(
             max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
@@ -6395,7 +6422,16 @@ class SearchClientSync:
         Helper: Replaces all objects (records) in the given `index_name` with the given `objects`. A temporary index is created during this process in order to backup your data.
 
         See https://api-clients-automation.netlify.app/docs/custom-helpers/#replaceallobjects for implementation details.
+
+        Warning: calling this method with an empty `objects` list replaces the index with an empty one, deleting all existing records.
         """
+        import logging
+        from collections.abc import Sized
+
+        if isinstance(objects, Sized) and len(objects) == 0:
+            logging.getLogger(__name__).warning(
+                f'replace_all_objects was called with an empty list of objects, which will delete all records currently in the "{index_name}" index.'
+            )
         chunked_options = chunked_options or ChunkedHelperOptions(
             max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
         )
