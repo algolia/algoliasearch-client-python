@@ -16,23 +16,26 @@ jobs:
     permissions:
       id-token: write
     steps:
-    - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
 
-    - uses: actions/setup-python@v6
-      with:
-        python-version: 3.14.6
+      - uses: actions/setup-python@v6
+        with:
+          # DO NOT upgrade to Python 3.14+: the PyPI release toolchain (poetry/twine)
+          # is not compatible with it and publishing the package fails.
+          # Keep this on the latest 3.13.x patch. See .agents/skills/renovate/SKILL.md.
+          python-version: 3.13.14
 
-    - name: install poetry
-      shell: bash
-      run: pipx install poetry
+      - name: install poetry
+        shell: bash
+        run: pipx install poetry
 
-    - name: install dependencies
-      shell: bash
-      run: poetry install
+      - name: install dependencies
+        shell: bash
+        run: poetry install
 
-    - name: build client
-      run: poetry build
-      shell: bash
+      - name: build client
+        run: poetry build
+        shell: bash
 
-    - name: Publish algoliasearch package to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish algoliasearch package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
