@@ -1,3 +1,7 @@
+## [4.44.3](https://github.com/algolia/algoliasearch-client-python/compare/4.44.2...4.44.3)
+
+- [97ea5bbb82](https://github.com/algolia/api-clients-automation/commit/97ea5bbb82) fix(python): downgrade release workflow to Python 3.13.14 and guard against 3.14 bumps ([#6687](https://github.com/algolia/api-clients-automation/pull/6687)) by [@Fluf22](https://github.com/Fluf22/)
+
 ## [4.44.2](https://github.com/algolia/algoliasearch-client-python/compare/4.44.1...4.44.2)
 
 - [035c03ecad](https://github.com/algolia/api-clients-automation/commit/035c03ecad) fix(specs): BREAKING CHANGE – remove recommend query params overridden by the API ([#6604](https://github.com/algolia/api-clients-automation/pull/6604)) by [@raed667](https://github.com/raed667/)
