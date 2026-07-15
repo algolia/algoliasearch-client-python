@@ -28,6 +28,7 @@ from algoliasearch.recommend.models.distinct import Distinct
 from algoliasearch.recommend.models.exact_on_single_word_query import (
     ExactOnSingleWordQuery,
 )
+from algoliasearch.recommend.models.facet_filters import FacetFilters
 from algoliasearch.recommend.models.ignore_plurals import IgnorePlurals
 from algoliasearch.recommend.models.inside_bounding_box import InsideBoundingBox
 from algoliasearch.recommend.models.numeric_filters import NumericFilters
@@ -128,6 +129,7 @@ _ALIASES = {
     "rendering_content": "renderingContent",
     "enable_re_ranking": "enableReRanking",
     "re_ranking_apply_filter": "reRankingApplyFilter",
+    "facet_filters": "facetFilters",
 }
 
 
@@ -290,6 +292,7 @@ class FallbackParams(BaseModel):
     enable_re_ranking: Optional[bool] = None
     """ Whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking) This setting only has an effect if you activated Dynamic Re-Ranking for this index in the Algolia dashboard.  """
     re_ranking_apply_filter: Optional[ReRankingApplyFilter] = None
+    facet_filters: Optional[FacetFilters] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -397,6 +400,11 @@ class FallbackParams(BaseModel):
         obj["reRankingApplyFilter"] = (
             ReRankingApplyFilter.from_dict(obj["reRankingApplyFilter"])
             if obj.get("reRankingApplyFilter") is not None
+            else None
+        )
+        obj["facetFilters"] = (
+            FacetFilters.from_dict(obj["facetFilters"])
+            if obj.get("facetFilters") is not None
             else None
         )
 
