@@ -1,3 +1,7 @@
+## [4.44.4](https://github.com/algolia/algoliasearch-client-python/compare/4.44.3...4.44.4)
+
+- [ac68c1a79c](https://github.com/algolia/api-clients-automation/commit/ac68c1a79c) fix(specs): add facetFilters back to recommend fallbackParameters ([#6727](https://github.com/algolia/api-clients-automation/pull/6727)) by [@raed667](https://github.com/raed667/)
+
 ## [4.44.3](https://github.com/algolia/algoliasearch-client-python/compare/4.44.2...4.44.3)
 
 - [97ea5bbb82](https://github.com/algolia/api-clients-automation/commit/97ea5bbb82) fix(python): downgrade release workflow to Python 3.13.14 and guard against 3.14 bumps ([#6687](https://github.com/algolia/api-clients-automation/pull/6687)) by [@Fluf22](https://github.com/Fluf22/)
