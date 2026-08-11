@@ -53,7 +53,7 @@ class ClickedObjectIDsAfterSearch(BaseModel):
     positions: List[int]
     """ Position of the clicked item the search results.  You must provide 1 `position` for each `objectID`.  """
     query_id: str
-    """ Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response.  """
+    """ Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response. For agentic analytics events, the query ID may be prefixed with `message_` followed by any printable string.  """
     user_token: str
     """ Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken).  """
     authenticated_user_token: Optional[str] = None
@@ -73,8 +73,10 @@ class ClickedObjectIDsAfterSearch(BaseModel):
     @field_validator("query_id")
     def query_id_validate_regular_expression(cls, value):
         """Validates the regular expression"""
-        if not match(r"[0-9a-f]{32}", value):
-            raise ValueError(r"must validate the regular expression /[0-9a-f]{32}/")
+        if not match(r"^([0-9a-f]{32}|message_[!-~]+)$", value):
+            raise ValueError(
+                r"must validate the regular expression /^([0-9a-f]{32}|message_[!-~]+)$/"
+            )
         return value
 
     @field_validator("user_token")

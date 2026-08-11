@@ -32,6 +32,7 @@ from algoliasearch.insights.models.converted_object_ids import ConvertedObjectID
 from algoliasearch.insights.models.converted_object_ids_after_search import (
     ConvertedObjectIDsAfterSearch,
 )
+from algoliasearch.insights.models.instantsearch import Instantsearch
 from algoliasearch.insights.models.purchased_object_ids import PurchasedObjectIDs
 from algoliasearch.insights.models.purchased_object_ids_after_search import (
     PurchasedObjectIDsAfterSearch,
@@ -77,6 +78,8 @@ class EventsItems(BaseModel):
 
     oneof_schema_12_validator: Optional[ViewedFilters] = Field(default=None)
 
+    oneof_schema_13_validator: Optional[Instantsearch] = Field(default=None)
+
     actual_instance: Union[
         AddedToCartObjectIDs,
         AddedToCartObjectIDsAfterSearch,
@@ -86,6 +89,7 @@ class EventsItems(BaseModel):
         ConvertedFilters,
         ConvertedObjectIDs,
         ConvertedObjectIDsAfterSearch,
+        Instantsearch,
         PurchasedObjectIDs,
         PurchasedObjectIDsAfterSearch,
         ViewedFilters,
@@ -101,6 +105,7 @@ class EventsItems(BaseModel):
         "ConvertedFilters",
         "ConvertedObjectIDs",
         "ConvertedObjectIDsAfterSearch",
+        "Instantsearch",
         "PurchasedObjectIDs",
         "PurchasedObjectIDsAfterSearch",
         "ViewedFilters",
@@ -133,6 +138,7 @@ class EventsItems(BaseModel):
         ConvertedFilters,
         ConvertedObjectIDs,
         ConvertedObjectIDsAfterSearch,
+        Instantsearch,
         PurchasedObjectIDs,
         PurchasedObjectIDsAfterSearch,
         ViewedFilters,
@@ -230,9 +236,15 @@ class EventsItems(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = Instantsearch.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into EventsItems with oneOf schemas: AddedToCartObjectIDs, AddedToCartObjectIDsAfterSearch, ClickedFilters, ClickedObjectIDs, ClickedObjectIDsAfterSearch, ConvertedFilters, ConvertedObjectIDs, ConvertedObjectIDsAfterSearch, PurchasedObjectIDs, PurchasedObjectIDsAfterSearch, ViewedFilters, ViewedObjectIDs. Details: "
+            "No match found when deserializing the JSON string into EventsItems with oneOf schemas: AddedToCartObjectIDs, AddedToCartObjectIDsAfterSearch, ClickedFilters, ClickedObjectIDs, ClickedObjectIDsAfterSearch, ConvertedFilters, ConvertedObjectIDs, ConvertedObjectIDsAfterSearch, Instantsearch, PurchasedObjectIDs, PurchasedObjectIDsAfterSearch, ViewedFilters, ViewedObjectIDs. Details: "
             + ", ".join(error_messages)
         )
 
@@ -261,6 +273,7 @@ class EventsItems(BaseModel):
             ConvertedFilters,
             ConvertedObjectIDs,
             ConvertedObjectIDsAfterSearch,
+            Instantsearch,
             PurchasedObjectIDs,
             PurchasedObjectIDsAfterSearch,
             ViewedFilters,

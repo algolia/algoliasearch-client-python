@@ -24,6 +24,8 @@ from .error_base import ErrorBase
 from .events_items import EventsItems
 from .events_response import EventsResponse
 from .insights_events import InsightsEvents
+from .instantsearch import Instantsearch
+from .instantsearch_event import InstantsearchEvent
 from .object_data import ObjectData
 from .object_data_after_search import ObjectDataAfterSearch
 from .price import Price
@@ -52,6 +54,8 @@ __all__ = (
     "EventsItems",
     "EventsResponse",
     "InsightsEvents",
+    "Instantsearch",
+    "InstantsearchEvent",
     "ObjectData",
     "ObjectDataAfterSearch",
     "Price",

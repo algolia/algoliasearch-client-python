@@ -9,7 +9,7 @@ from __future__ import annotations
 from json import loads
 from re import match
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
@@ -19,24 +19,15 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.insights.models.add_to_cart_event import AddToCartEvent
-from algoliasearch.insights.models.conversion_event import ConversionEvent
-from algoliasearch.insights.models.object_data_after_search import ObjectDataAfterSearch
-from algoliasearch.insights.models.value import Value
+from algoliasearch.insights.models.instantsearch_event import InstantsearchEvent
 
 _ALIASES = {
     "event_name": "eventName",
     "event_type": "eventType",
-    "event_subtype": "eventSubtype",
-    "index": "index",
-    "query_id": "queryID",
-    "object_ids": "objectIDs",
     "user_token": "userToken",
     "authenticated_user_token": "authenticatedUserToken",
-    "currency": "currency",
-    "object_data": "objectData",
     "timestamp": "timestamp",
-    "value": "value",
+    "agent_id": "agentID",
 }
 
 
@@ -44,32 +35,22 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class AddedToCartObjectIDsAfterSearch(BaseModel):
+class Instantsearch(BaseModel):
     """
-    Use this event to track when users add items to their shopping cart after a previous Algolia request. If you're building your category pages with Algolia, you'll also use this event.
+    Instantsearch
     """
 
     event_name: str
     """ Event name, up to 64 ASCII characters.  Consider naming events consistently—for example, by adopting Segment's [object-action](https://segment.com/academy/collecting-data/naming-conventions-for-clean-data/#the-object-action-framework) framework.  """
-    event_type: ConversionEvent
-    event_subtype: AddToCartEvent
-    index: str
-    """ Index name (case-sensitive) to which the event's items belong. """
-    query_id: str
-    """ Unique identifier for a search query.  The query ID is required for events related to search or browse requests. If you add `clickAnalytics: true` as a search request parameter, the query ID is included in the API response. For agentic analytics events, the query ID may be prefixed with `message_` followed by any printable string.  """
-    object_ids: List[str]
-    """ Object IDs of the records that are part of the event. """
+    event_type: InstantsearchEvent
     user_token: str
     """ Anonymous or pseudonymous user identifier.  Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken).  """
     authenticated_user_token: Optional[str] = None
     """ Identifier for authenticated users.  When the user signs in, you can get an identifier from your system and send it as `authenticatedUserToken`. This lets you keep using the `userToken` from before the user signed in, while providing a reliable way to identify users across sessions. Don't use personally identifiable information in user tokens. For more information, see [User token](https://www.algolia.com/doc/guides/sending-events/concepts/usertoken).  """
-    currency: Optional[str] = None
-    """ Three-letter [currency code](https://www.iso.org/iso-4217-currency-codes.html). """
-    object_data: Optional[List[ObjectDataAfterSearch]] = None
-    """ Extra information about the records involved in a purchase or add-to-cart events.  If provided, it must be the same length as `objectIDs`.  """
     timestamp: Optional[int] = None
     """ Timestamp of the event, measured in milliseconds since the Unix epoch. Must be no older than 30 days. If not provided, we use the time at which the request was received.  """
-    value: Optional[Value] = None
+    agent_id: Optional[str] = None
+    """ Unique identifier for an agent session. Used to correlate instantsearch events with a specific agent interaction.  """
 
     @field_validator("event_name")
     def event_name_validate_regular_expression(cls, value):
@@ -77,15 +58,6 @@ class AddedToCartObjectIDsAfterSearch(BaseModel):
         if not match(r"[\x20-\x7E]{1,64}", value):
             raise ValueError(
                 r"must validate the regular expression /[\x20-\x7E]{1,64}/"
-            )
-        return value
-
-    @field_validator("query_id")
-    def query_id_validate_regular_expression(cls, value):
-        """Validates the regular expression"""
-        if not match(r"^([0-9a-f]{32}|message_[!-~]+)$", value):
-            raise ValueError(
-                r"must validate the regular expression /^([0-9a-f]{32}|message_[!-~]+)$/"
             )
         return value
 
@@ -110,16 +82,6 @@ class AddedToCartObjectIDsAfterSearch(BaseModel):
             )
         return value
 
-    @field_validator("currency")
-    def currency_validate_regular_expression(cls, value):
-        """Validates the regular expression"""
-        if value is None:
-            return value
-
-        if not match(r"^[A-Za-z]{3}$", value):
-            raise ValueError(r"must validate the regular expression /^[A-Za-z]{3}$/")
-        return value
-
     model_config = ConfigDict(
         strict=False,
         use_enum_values=True,
@@ -135,7 +97,7 @@ class AddedToCartObjectIDsAfterSearch(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of AddedToCartObjectIDsAfterSearch from a JSON string"""
+        """Create an instance of Instantsearch from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -148,7 +110,7 @@ class AddedToCartObjectIDsAfterSearch(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of AddedToCartObjectIDsAfterSearch from a dict"""
+        """Create an instance of Instantsearch from a dict"""
         if obj is None:
             return None
 
@@ -156,14 +118,5 @@ class AddedToCartObjectIDsAfterSearch(BaseModel):
             return cls.model_validate(obj)
 
         obj["eventType"] = obj.get("eventType")
-        obj["eventSubtype"] = obj.get("eventSubtype")
-        obj["objectData"] = (
-            [ObjectDataAfterSearch.from_dict(_item) for _item in obj["objectData"]]
-            if obj.get("objectData") is not None
-            else None
-        )
-        obj["value"] = (
-            Value.from_dict(obj["value"]) if obj.get("value") is not None else None
-        )
 
         return cls.model_validate(obj)
