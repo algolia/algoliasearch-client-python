@@ -16,6 +16,7 @@ from .ab_tests_variant_search_params import AbTestsVariantSearchParams
 from .add_ab_tests_request import AddABTestsRequest
 from .add_ab_tests_variant import AddABTestsVariant
 from .create_metric import CreateMetric
+from .decision import Decision
 from .direction import Direction
 from .effect_metric import EffectMetric
 from .empty_search_filter import EmptySearchFilter
@@ -48,6 +49,7 @@ __all__ = (
     "AddABTestsRequest",
     "AddABTestsVariant",
     "CreateMetric",
+    "Decision",
     "Direction",
     "EffectMetric",
     "EmptySearchFilter",
