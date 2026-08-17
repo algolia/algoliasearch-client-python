@@ -21,7 +21,9 @@ else:
 
 from algoliasearch.analytics.config import AnalyticsConfig
 from algoliasearch.analytics.models import (
+    Catalog,
     Direction,
+    DistributionPayload,
     GetAddToCartRateResponse,
     GetAverageClickPositionResponse,
     GetClickPositionsResponse,
@@ -43,6 +45,11 @@ from algoliasearch.analytics.models import (
     GetTopSearchesResponse,
     GetUsersCountResponse,
     OrderBy,
+    ScalarPayload,
+    TablePayload,
+    TableResponse,
+    TimeseriesPayload,
+    TimeseriesResponse,
 )
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.base_config import BaseConfig
@@ -1298,6 +1305,39 @@ class AnalyticsClient:
             index, start_date, end_date, tags, request_options
         )
         return resp.deserialize(GetNoResultsRateResponse, resp.raw_data)
+
+    async def get_patterns_fields_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns the static catalog of analytics fields, grouped by domain and usage (metrics, filters, groups, distributions). No authentication is required. Use it to discover valid `(domain, kind)` pairs before building the other `/3/patterns/*` queries; two fields are combinable in one query only when their `roots` intersect. Each entry's `requires` lists the ACLs needed when that field is actually used in a query.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/3/patterns/fields",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_patterns_fields(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> Catalog:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns the static catalog of analytics fields, grouped by domain and usage (metrics, filters, groups, distributions). No authentication is required. Use it to discover valid `(domain, kind)` pairs before building the other `/3/patterns/*` queries; two fields are combinable in one query only when their `roots` intersect. Each entry's `requires` lists the ACLs needed when that field is actually used in a query.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Catalog' result object.
+        """
+        resp = await self.get_patterns_fields_with_http_info(request_options)
+        return resp.deserialize(Catalog, resp.raw_data)
 
     async def get_purchase_rate_with_http_info(
         self,
@@ -3197,6 +3237,322 @@ class AnalyticsClient:
         )
         return resp.deserialize(GetUsersCountResponse, resp.raw_data)
 
+    async def query_patterns_distribution_with_http_info(
+        self,
+        distribution_payload: Union[DistributionPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Buckets one or more numeric fields into histograms and returns an object keyed by `histogram<Field>`, each mapping a bin label to a count. `distributions` and `parameters` are required; `filters` is optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param distribution_payload: (required)
+        :type distribution_payload: DistributionPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if distribution_payload is None:
+            raise ValueError(
+                "Parameter `distribution_payload` is required when calling `query_patterns_distribution`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if index is not None:
+            _query_parameters["index"] = index
+
+        _data = {}
+        if distribution_payload is not None:
+            _data = distribution_payload
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/3/patterns/distribution",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def query_patterns_distribution(
+        self,
+        distribution_payload: Union[DistributionPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Dict[str, object]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Buckets one or more numeric fields into histograms and returns an object keyed by `histogram<Field>`, each mapping a bin label to a count. `distributions` and `parameters` are required; `filters` is optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param distribution_payload: (required)
+        :type distribution_payload: DistributionPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Dict[str, object]' result object.
+        """
+        resp = await self.query_patterns_distribution_with_http_info(
+            distribution_payload, index, request_options
+        )
+        return resp.deserialize(Dict[str, object], resp.raw_data)
+
+    async def query_patterns_scalar_with_http_info(
+        self,
+        scalar_payload: Union[ScalarPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Aggregates the requested `metrics` over the whole period and returns a single object keyed by metric kind. `metrics` and `parameters` are required; `filters` is optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param scalar_payload: (required)
+        :type scalar_payload: ScalarPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if scalar_payload is None:
+            raise ValueError(
+                "Parameter `scalar_payload` is required when calling `query_patterns_scalar`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if index is not None:
+            _query_parameters["index"] = index
+
+        _data = {}
+        if scalar_payload is not None:
+            _data = scalar_payload
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/3/patterns/scalar",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def query_patterns_scalar(
+        self,
+        scalar_payload: Union[ScalarPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Dict[str, object]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Aggregates the requested `metrics` over the whole period and returns a single object keyed by metric kind. `metrics` and `parameters` are required; `filters` is optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param scalar_payload: (required)
+        :type scalar_payload: ScalarPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Dict[str, object]' result object.
+        """
+        resp = await self.query_patterns_scalar_with_http_info(
+            scalar_payload, index, request_options
+        )
+        return resp.deserialize(Dict[str, object], resp.raw_data)
+
+    async def query_patterns_table_with_http_info(
+        self,
+        table_payload: Union[TablePayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns `rows`, each a flat object of the requested fields. `metrics` and `parameters` are required; `groupBy`, `filters`, and `orderBy` are optional, though `orderBy` is required when `groupBy` is set. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param table_payload: (required)
+        :type table_payload: TablePayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if table_payload is None:
+            raise ValueError(
+                "Parameter `table_payload` is required when calling `query_patterns_table`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if index is not None:
+            _query_parameters["index"] = index
+
+        _data = {}
+        if table_payload is not None:
+            _data = table_payload
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/3/patterns/table",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def query_patterns_table(
+        self,
+        table_payload: Union[TablePayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TableResponse:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns `rows`, each a flat object of the requested fields. `metrics` and `parameters` are required; `groupBy`, `filters`, and `orderBy` are optional, though `orderBy` is required when `groupBy` is set. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param table_payload: (required)
+        :type table_payload: TablePayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TableResponse' result object.
+        """
+        resp = await self.query_patterns_table_with_http_info(
+            table_payload, index, request_options
+        )
+        return resp.deserialize(TableResponse, resp.raw_data)
+
+    async def query_patterns_timeseries_with_http_info(
+        self,
+        timeseries_payload: Union[TimeseriesPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns one time series per `groupBy` combination, each with period `totals` and a per-day metric breakdown. `metrics` and `parameters` are required; `groupBy` and `filters` are optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param timeseries_payload: (required)
+        :type timeseries_payload: TimeseriesPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if timeseries_payload is None:
+            raise ValueError(
+                "Parameter `timeseries_payload` is required when calling `query_patterns_timeseries`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if index is not None:
+            _query_parameters["index"] = index
+
+        _data = {}
+        if timeseries_payload is not None:
+            _data = timeseries_payload
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/3/patterns/timeseries",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def query_patterns_timeseries(
+        self,
+        timeseries_payload: Union[TimeseriesPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TimeseriesResponse:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns one time series per `groupBy` combination, each with period `totals` and a per-day metric breakdown. `metrics` and `parameters` are required; `groupBy` and `filters` are optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param timeseries_payload: (required)
+        :type timeseries_payload: TimeseriesPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TimeseriesResponse' result object.
+        """
+        resp = await self.query_patterns_timeseries_with_http_info(
+            timeseries_payload, index, request_options
+        )
+        return resp.deserialize(TimeseriesResponse, resp.raw_data)
+
 
 class AnalyticsClientSync:
     """The Algolia 'AnalyticsClientSync' class.
@@ -4436,6 +4792,39 @@ class AnalyticsClientSync:
             index, start_date, end_date, tags, request_options
         )
         return resp.deserialize(GetNoResultsRateResponse, resp.raw_data)
+
+    def get_patterns_fields_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns the static catalog of analytics fields, grouped by domain and usage (metrics, filters, groups, distributions). No authentication is required. Use it to discover valid `(domain, kind)` pairs before building the other `/3/patterns/*` queries; two fields are combinable in one query only when their `roots` intersect. Each entry's `requires` lists the ACLs needed when that field is actually used in a query.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/3/patterns/fields",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_patterns_fields(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> Catalog:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns the static catalog of analytics fields, grouped by domain and usage (metrics, filters, groups, distributions). No authentication is required. Use it to discover valid `(domain, kind)` pairs before building the other `/3/patterns/*` queries; two fields are combinable in one query only when their `roots` intersect. Each entry's `requires` lists the ACLs needed when that field is actually used in a query.
+
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Catalog' result object.
+        """
+        resp = self.get_patterns_fields_with_http_info(request_options)
+        return resp.deserialize(Catalog, resp.raw_data)
 
     def get_purchase_rate_with_http_info(
         self,
@@ -6334,3 +6723,319 @@ class AnalyticsClientSync:
             index, start_date, end_date, tags, request_options
         )
         return resp.deserialize(GetUsersCountResponse, resp.raw_data)
+
+    def query_patterns_distribution_with_http_info(
+        self,
+        distribution_payload: Union[DistributionPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Buckets one or more numeric fields into histograms and returns an object keyed by `histogram<Field>`, each mapping a bin label to a count. `distributions` and `parameters` are required; `filters` is optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param distribution_payload: (required)
+        :type distribution_payload: DistributionPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if distribution_payload is None:
+            raise ValueError(
+                "Parameter `distribution_payload` is required when calling `query_patterns_distribution`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if index is not None:
+            _query_parameters["index"] = index
+
+        _data = {}
+        if distribution_payload is not None:
+            _data = distribution_payload
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/3/patterns/distribution",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def query_patterns_distribution(
+        self,
+        distribution_payload: Union[DistributionPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Dict[str, object]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Buckets one or more numeric fields into histograms and returns an object keyed by `histogram<Field>`, each mapping a bin label to a count. `distributions` and `parameters` are required; `filters` is optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param distribution_payload: (required)
+        :type distribution_payload: DistributionPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Dict[str, object]' result object.
+        """
+        resp = self.query_patterns_distribution_with_http_info(
+            distribution_payload, index, request_options
+        )
+        return resp.deserialize(Dict[str, object], resp.raw_data)
+
+    def query_patterns_scalar_with_http_info(
+        self,
+        scalar_payload: Union[ScalarPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Aggregates the requested `metrics` over the whole period and returns a single object keyed by metric kind. `metrics` and `parameters` are required; `filters` is optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param scalar_payload: (required)
+        :type scalar_payload: ScalarPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if scalar_payload is None:
+            raise ValueError(
+                "Parameter `scalar_payload` is required when calling `query_patterns_scalar`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if index is not None:
+            _query_parameters["index"] = index
+
+        _data = {}
+        if scalar_payload is not None:
+            _data = scalar_payload
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/3/patterns/scalar",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def query_patterns_scalar(
+        self,
+        scalar_payload: Union[ScalarPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Dict[str, object]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Aggregates the requested `metrics` over the whole period and returns a single object keyed by metric kind. `metrics` and `parameters` are required; `filters` is optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param scalar_payload: (required)
+        :type scalar_payload: ScalarPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'Dict[str, object]' result object.
+        """
+        resp = self.query_patterns_scalar_with_http_info(
+            scalar_payload, index, request_options
+        )
+        return resp.deserialize(Dict[str, object], resp.raw_data)
+
+    def query_patterns_table_with_http_info(
+        self,
+        table_payload: Union[TablePayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns `rows`, each a flat object of the requested fields. `metrics` and `parameters` are required; `groupBy`, `filters`, and `orderBy` are optional, though `orderBy` is required when `groupBy` is set. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param table_payload: (required)
+        :type table_payload: TablePayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if table_payload is None:
+            raise ValueError(
+                "Parameter `table_payload` is required when calling `query_patterns_table`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if index is not None:
+            _query_parameters["index"] = index
+
+        _data = {}
+        if table_payload is not None:
+            _data = table_payload
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/3/patterns/table",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def query_patterns_table(
+        self,
+        table_payload: Union[TablePayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TableResponse:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns `rows`, each a flat object of the requested fields. `metrics` and `parameters` are required; `groupBy`, `filters`, and `orderBy` are optional, though `orderBy` is required when `groupBy` is set. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param table_payload: (required)
+        :type table_payload: TablePayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TableResponse' result object.
+        """
+        resp = self.query_patterns_table_with_http_info(
+            table_payload, index, request_options
+        )
+        return resp.deserialize(TableResponse, resp.raw_data)
+
+    def query_patterns_timeseries_with_http_info(
+        self,
+        timeseries_payload: Union[TimeseriesPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns one time series per `groupBy` combination, each with period `totals` and a per-day metric breakdown. `metrics` and `parameters` are required; `groupBy` and `filters` are optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param timeseries_payload: (required)
+        :type timeseries_payload: TimeseriesPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if timeseries_payload is None:
+            raise ValueError(
+                "Parameter `timeseries_payload` is required when calling `query_patterns_timeseries`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if index is not None:
+            _query_parameters["index"] = index
+
+        _data = {}
+        if timeseries_payload is not None:
+            _data = timeseries_payload
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/3/patterns/timeseries",
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def query_patterns_timeseries(
+        self,
+        timeseries_payload: Union[TimeseriesPayload, dict[str, Any]],
+        index: Annotated[
+            Optional[StrictStr],
+            Field(
+                description="Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys. "
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TimeseriesResponse:
+        """
+        **Beta**: this endpoint is under active development and may change without notice.  Returns one time series per `groupBy` combination, each with period `totals` and a per-day metric breakdown. `metrics` and `parameters` are required; `groupBy` and `filters` are optional. Discover valid field kinds per domain with `/3/patterns/fields`.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param timeseries_payload: (required)
+        :type timeseries_payload: TimeseriesPayload
+        :param index: Comma-separated list of indices the request runs on, used for authorization. Required for index-restricted API keys and must match the indices supplied in the request body's `indices` parameter; optional for unrestricted keys.
+        :type index: str
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TimeseriesResponse' result object.
+        """
+        resp = self.query_patterns_timeseries_with_http_info(
+            timeseries_payload, index, request_options
+        )
+        return resp.deserialize(TimeseriesResponse, resp.raw_data)
