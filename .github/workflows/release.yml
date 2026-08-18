@@ -23,7 +23,7 @@ jobs:
           # DO NOT upgrade to Python 3.14+: the PyPI release toolchain (poetry/twine)
           # is not compatible with it and publishing the package fails.
           # Keep this on the latest 3.13.x patch. See .agents/skills/renovate/SKILL.md.
-          python-version: 3.13.14
+          python-version: 3.13.15
 
       - name: install poetry
         shell: bash
