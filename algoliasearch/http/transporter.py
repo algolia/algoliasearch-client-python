@@ -13,6 +13,7 @@ from algoliasearch.http.exceptions import (
     RequestException,
 )
 from algoliasearch.http.hosts import Host
+from algoliasearch.http.request_id import get_correlation_id, with_request_id
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.retry import RetryOutcome, RetryStrategy
 from algoliasearch.http.sse import ServerSentEvent, aiter_sse_events
@@ -46,6 +47,8 @@ class Transporter(BaseTransporter):
                 connector=TCPConnector(use_dns_cache=False), trust_env=True
             )
 
+        request_options = with_request_id(request_options, self._config)
+
         query_parameters = self.prepare(
             request_options, verb == Verb.GET or use_read_transporter
         )
@@ -58,6 +61,8 @@ class Transporter(BaseTransporter):
         ):
             request_options.data = gzip_compress(request_options.data.encode("utf-8"))
             request_options.headers["content-encoding"] = "gzip"
+
+        last_correlation_id = None
 
         for host in self._retry_strategy.valid_hosts(self._hosts):
             url = self.build_url(host, path)
@@ -105,6 +110,9 @@ class Transporter(BaseTransporter):
                     is_timed_out_error=True,
                 )
 
+            correlation_id = get_correlation_id(response.headers)
+            last_correlation_id = correlation_id or last_correlation_id
+
             decision = self._retry_strategy.decide(host, response)
 
             if decision == RetryOutcome.SUCCESS:
@@ -114,10 +122,11 @@ class Transporter(BaseTransporter):
                 if response.data and "message" in response.data:
                     content = loads(response.data)["message"]
 
-                raise RequestException(content, response.status_code)
+                raise RequestException(content, response.status_code, correlation_id)
 
         raise AlgoliaUnreachableHostException(
-            "Unreachable hosts. If the error persists, please visit our help center https://alg.li/support-unreachable-hosts or reach out to the Algolia Support team: https://alg.li/support"
+            "Unreachable hosts. If the error persists, please visit our help center https://alg.li/support-unreachable-hosts or reach out to the Algolia Support team: https://alg.li/support",
+            last_correlation_id,
         )
 
     async def request_stream(
@@ -132,6 +141,7 @@ class Transporter(BaseTransporter):
                 connector=TCPConnector(use_dns_cache=False), trust_env=True
             )
 
+        request_options = with_request_id(request_options, self._config)
         request_options.headers["accept"] = "text/event-stream"
 
         query_parameters = self.prepare(
@@ -168,7 +178,11 @@ class Transporter(BaseTransporter):
         try:
             if resp.status >= 400:
                 error_text = await resp.text()
-                raise RequestException(error_text, resp.status)
+                raise RequestException(
+                    error_text,
+                    resp.status,
+                    get_correlation_id(resp.headers),  # pyright: ignore # insensitive dict is still a dict
+                )
 
             async for event in aiter_sse_events(resp.content.iter_any()):
                 yield event

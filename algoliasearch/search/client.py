@@ -36,6 +36,7 @@ from algoliasearch.http.helpers import (
     create_iterable,
     create_iterable_sync,
 )
+from algoliasearch.http.request_id import with_request_id
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import QueryParametersSerializer, body_serializer
 from algoliasearch.http.transporter import Transporter
@@ -233,6 +234,7 @@ class SearchClient:
         """
         Helper: Wait for a task to be published (completed) for a given `indexName` and `taskID`.
         """
+        request_options = with_request_id(request_options, self._config)
         _retry_count = 0
 
         async def _func(_: Optional[GetTaskResponse]) -> GetTaskResponse:
@@ -261,6 +263,7 @@ class SearchClient:
         """
         Helper: Wait for an application-level task to complete for a given `taskID`.
         """
+        request_options = with_request_id(request_options, self._config)
         _retry_count = 0
 
         async def _func(_: Optional[GetTaskResponse]) -> GetTaskResponse:
@@ -291,6 +294,7 @@ class SearchClient:
         """
         Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
         """
+        request_options = with_request_id(request_options, self._config)
         _retry_count = 0
 
         if operation == "update" and api_key is None:
@@ -357,6 +361,7 @@ class SearchClient:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
+        request_options = with_request_id(request_options, self._config)
         if isinstance(browse_params, dict):
             browse_params = BrowseParamsObject().from_dict(browse_params)
 
@@ -391,6 +396,7 @@ class SearchClient:
         """
         Helper: Iterate on the `search_rules` method of the client to allow aggregating rules of an index.
         """
+        request_options = with_request_id(request_options, self._config)
         if isinstance(search_rules_params, dict):
             search_rules_params = SearchRulesParams().from_dict(search_rules_params)
 
@@ -427,6 +433,7 @@ class SearchClient:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
+        request_options = with_request_id(request_options, self._config)
         if isinstance(search_synonyms_params, dict):
             search_synonyms_params = SearchSynonymsParams().from_dict(
                 search_synonyms_params
@@ -696,6 +703,7 @@ class SearchClient:
         """
         if batch_size < 1:
             raise ValueError("`batch_size` must be at least 1.")
+        request_options = with_request_id(request_options, self._config)
         chunked_options = chunked_options or ChunkedHelperOptions()
         responses: List[BatchResponse] = []
         it = iter(objects)
@@ -714,6 +722,7 @@ class SearchClient:
                     index_name=index_name,
                     task_id=response.task_id,
                     max_retries=chunked_options.max_retries,
+                    request_options=request_options,
                 )
         return responses
 
@@ -747,6 +756,7 @@ class SearchClient:
         chunked_options = chunked_options or ChunkedHelperOptions(
             max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
         )
+        search_request_options = with_request_id(request_options, self._config)
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -759,7 +769,7 @@ class SearchClient:
                         destination=tmp_index_name,
                         scope=scopes,
                     ),
-                    request_options=request_options,
+                    request_options=search_request_options,
                 )
 
             copy_operation_response = await _copy()
@@ -778,6 +788,7 @@ class SearchClient:
                 index_name=tmp_index_name,
                 task_id=copy_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=search_request_options,
             )
 
             copy_operation_response = await _copy()
@@ -785,6 +796,7 @@ class SearchClient:
                 index_name=tmp_index_name,
                 task_id=copy_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=search_request_options,
             )
 
             move_operation_response = await self.operation_index(
@@ -793,12 +805,13 @@ class SearchClient:
                     operation=OperationType.MOVE,
                     destination=index_name,
                 ),
-                request_options=request_options,
+                request_options=search_request_options,
             )
             await self.wait_for_task(
                 index_name=tmp_index_name,
                 task_id=move_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=search_request_options,
             )
 
             search_watch_responses: List[WatchResponse] = [
@@ -811,7 +824,9 @@ class SearchClient:
                 move_operation_response=move_operation_response,
             )
         except Exception as e:
-            await self.delete_index(tmp_index_name)
+            await self.delete_index(
+                tmp_index_name, request_options=search_request_options
+            )
 
             raise e
 
@@ -841,6 +856,7 @@ class SearchClient:
         chunked_options = chunked_options or ChunkedHelperOptions(
             max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
         )
+        request_options = with_request_id(request_options, self._config)
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -871,6 +887,7 @@ class SearchClient:
                 index_name=tmp_index_name,
                 task_id=copy_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=request_options,
             )
 
             copy_operation_response = await _copy()
@@ -878,6 +895,7 @@ class SearchClient:
                 index_name=tmp_index_name,
                 task_id=copy_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=request_options,
             )
 
             move_operation_response = await self.operation_index(
@@ -892,6 +910,7 @@ class SearchClient:
                 index_name=tmp_index_name,
                 task_id=move_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=request_options,
             )
 
             return ReplaceAllObjectsResponse(
@@ -900,16 +919,20 @@ class SearchClient:
                 move_operation_response=move_operation_response,
             )
         except Exception as e:
-            await self.delete_index(tmp_index_name)
+            await self.delete_index(tmp_index_name, request_options=request_options)
 
             raise e
 
-    async def index_exists(self, index_name: str) -> bool:
+    async def index_exists(
+        self,
+        index_name: str,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> bool:
         """
         Helper: Checks if the given `index_name` exists.
         """
         try:
-            await self.get_settings(index_name)
+            await self.get_settings(index_name, request_options=request_options)
         except Exception as e:
             if isinstance(e, RequestException) and e.status_code == 404:
                 return False
@@ -5827,6 +5850,7 @@ class SearchClientSync:
         """
         Helper: Wait for a task to be published (completed) for a given `indexName` and `taskID`.
         """
+        request_options = with_request_id(request_options, self._config)
         _retry_count = 0
 
         def _func(_: Optional[GetTaskResponse]) -> GetTaskResponse:
@@ -5855,6 +5879,7 @@ class SearchClientSync:
         """
         Helper: Wait for an application-level task to complete for a given `taskID`.
         """
+        request_options = with_request_id(request_options, self._config)
         _retry_count = 0
 
         def _func(_: Optional[GetTaskResponse]) -> GetTaskResponse:
@@ -5885,6 +5910,7 @@ class SearchClientSync:
         """
         Helper: Wait for an API key to be added, updated or deleted based on a given `operation`.
         """
+        request_options = with_request_id(request_options, self._config)
         _retry_count = 0
 
         if operation == "update" and api_key is None:
@@ -5951,6 +5977,7 @@ class SearchClientSync:
         """
         Helper: Iterate on the `browse` method of the client to allow aggregating objects of an index.
         """
+        request_options = with_request_id(request_options, self._config)
         if isinstance(browse_params, dict):
             browse_params = BrowseParamsObject().from_dict(browse_params)
 
@@ -5985,6 +6012,7 @@ class SearchClientSync:
         """
         Helper: Iterate on the `search_rules` method of the client to allow aggregating rules of an index.
         """
+        request_options = with_request_id(request_options, self._config)
         if isinstance(search_rules_params, dict):
             search_rules_params = SearchRulesParams().from_dict(search_rules_params)
 
@@ -6021,6 +6049,7 @@ class SearchClientSync:
         """
         Helper: Iterate on the `search_synonyms` method of the client to allow aggregating synonyms of an index.
         """
+        request_options = with_request_id(request_options, self._config)
         if isinstance(search_synonyms_params, dict):
             search_synonyms_params = SearchSynonymsParams().from_dict(
                 search_synonyms_params
@@ -6290,6 +6319,7 @@ class SearchClientSync:
         """
         if batch_size < 1:
             raise ValueError("`batch_size` must be at least 1.")
+        request_options = with_request_id(request_options, self._config)
         chunked_options = chunked_options or ChunkedHelperOptions()
         responses: List[BatchResponse] = []
         it = iter(objects)
@@ -6308,6 +6338,7 @@ class SearchClientSync:
                     index_name=index_name,
                     task_id=response.task_id,
                     max_retries=chunked_options.max_retries,
+                    request_options=request_options,
                 )
         return responses
 
@@ -6341,6 +6372,7 @@ class SearchClientSync:
         chunked_options = chunked_options or ChunkedHelperOptions(
             max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
         )
+        search_request_options = with_request_id(request_options, self._config)
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -6353,7 +6385,7 @@ class SearchClientSync:
                         destination=tmp_index_name,
                         scope=scopes,
                     ),
-                    request_options=request_options,
+                    request_options=search_request_options,
                 )
 
             copy_operation_response = _copy()
@@ -6372,6 +6404,7 @@ class SearchClientSync:
                 index_name=tmp_index_name,
                 task_id=copy_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=search_request_options,
             )
 
             copy_operation_response = _copy()
@@ -6379,6 +6412,7 @@ class SearchClientSync:
                 index_name=tmp_index_name,
                 task_id=copy_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=search_request_options,
             )
 
             move_operation_response = self.operation_index(
@@ -6387,12 +6421,13 @@ class SearchClientSync:
                     operation=OperationType.MOVE,
                     destination=index_name,
                 ),
-                request_options=request_options,
+                request_options=search_request_options,
             )
             self.wait_for_task(
                 index_name=tmp_index_name,
                 task_id=move_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=search_request_options,
             )
 
             search_watch_responses: List[WatchResponse] = [
@@ -6405,7 +6440,7 @@ class SearchClientSync:
                 move_operation_response=move_operation_response,
             )
         except Exception as e:
-            self.delete_index(tmp_index_name)
+            self.delete_index(tmp_index_name, request_options=search_request_options)
 
             raise e
 
@@ -6435,6 +6470,7 @@ class SearchClientSync:
         chunked_options = chunked_options or ChunkedHelperOptions(
             max_retries=ChunkedHelperOptions.DEFAULT_REPLACE_ALL_OBJECTS_MAX_RETRIES
         )
+        request_options = with_request_id(request_options, self._config)
         tmp_index_name = self.create_temporary_name(index_name)
 
         try:
@@ -6465,6 +6501,7 @@ class SearchClientSync:
                 index_name=tmp_index_name,
                 task_id=copy_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=request_options,
             )
 
             copy_operation_response = _copy()
@@ -6472,6 +6509,7 @@ class SearchClientSync:
                 index_name=tmp_index_name,
                 task_id=copy_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=request_options,
             )
 
             move_operation_response = self.operation_index(
@@ -6486,6 +6524,7 @@ class SearchClientSync:
                 index_name=tmp_index_name,
                 task_id=move_operation_response.task_id,
                 max_retries=chunked_options.max_retries,
+                request_options=request_options,
             )
 
             return ReplaceAllObjectsResponse(
@@ -6494,16 +6533,20 @@ class SearchClientSync:
                 move_operation_response=move_operation_response,
             )
         except Exception as e:
-            self.delete_index(tmp_index_name)
+            self.delete_index(tmp_index_name, request_options=request_options)
 
             raise e
 
-    def index_exists(self, index_name: str) -> bool:
+    def index_exists(
+        self,
+        index_name: str,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> bool:
         """
         Helper: Checks if the given `index_name` exists.
         """
         try:
-            self.get_settings(index_name)
+            self.get_settings(index_name, request_options=request_options)
         except Exception as e:
             if isinstance(e, RequestException) and e.status_code == 404:
                 return False

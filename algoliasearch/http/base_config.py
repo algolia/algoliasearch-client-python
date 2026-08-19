@@ -33,6 +33,8 @@ class BaseConfig:
         self.compression_type: Optional[Literal["gzip"]] = None
         self.compression_threshold: int = 750
 
+        self.request_id_enabled: bool = False
+
     def set_client_api_key(self, api_key: str) -> None:
         """Sets a new API key to authenticate requests."""
         self.api_key = api_key

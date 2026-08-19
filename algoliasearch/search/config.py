@@ -55,6 +55,8 @@ class SearchConfig(BaseConfig):
         self.write_timeout = 30000
         self.connect_timeout = 2000
 
+        self.request_id_enabled = True
+
         self._user_agent = UserAgent()
         self.add_user_agent("Search", __version__)
 

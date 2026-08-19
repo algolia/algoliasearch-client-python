@@ -12,10 +12,13 @@ class MissingObjectIdException(AlgoliaException):
 
 
 class RequestException(AlgoliaException):
-    def __init__(self, message, status_code):
+    def __init__(self, message, status_code, correlation_id=None):
+        if correlation_id:
+            message = "{0} (Correlation-ID: {1})".format(message, correlation_id)
         super(AlgoliaException, self).__init__(message)
         self.status_code = status_code
         self.message = message
+        self.correlation_id = correlation_id
 
     def __hash__(self):
         return id(self)
@@ -32,7 +35,12 @@ class RequestException(AlgoliaException):
 
 
 class AlgoliaUnreachableHostException(AlgoliaException):
-    pass
+    def __init__(self, message, correlation_id=None):
+        if correlation_id:
+            message = "{0} (Correlation-ID: {1})".format(message, correlation_id)
+        super().__init__(message)
+        self.message = message
+        self.correlation_id = correlation_id
 
 
 class ObjectNotFoundException(AlgoliaException):
