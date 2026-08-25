@@ -10,6 +10,7 @@ from json import dumps
 from sys import version_info
 from typing import Any, Dict, Optional, Union
 from urllib.parse import quote
+from warnings import warn
 
 from pydantic import Field, StrictInt, StrictStr
 from typing_extensions import Annotated
@@ -138,7 +139,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Creates a new A/B test.
+        (Deprecated) add_ab_tests
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests`.  Creates a new A/B test.
 
         Required API Key ACLs:
           - editSettings
@@ -148,6 +150,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /2/abtests is deprecated.", DeprecationWarning)
 
         if add_ab_tests_request is None:
             raise ValueError(
@@ -174,7 +178,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Creates a new A/B test.
+        (Deprecated) add_ab_tests
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests`.  Creates a new A/B test.
 
         Required API Key ACLs:
           - editSettings
@@ -527,7 +532,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Deletes an A/B test by its ID.
+        (Deprecated) delete_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `DELETE /3/abtests/{id}`.  Deletes an A/B test by its ID.
 
         Required API Key ACLs:
           - editSettings
@@ -537,6 +543,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("DELETE /2/abtests/{id} is deprecated.", DeprecationWarning)
 
         if id is None:
             raise ValueError(
@@ -558,7 +566,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Deletes an A/B test by its ID.
+        (Deprecated) delete_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `DELETE /3/abtests/{id}`.  Deletes an A/B test by its ID.
 
         Required API Key ACLs:
           - editSettings
@@ -577,7 +586,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
+        (Deprecated) estimate_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests/estimate`.  Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
 
         Required API Key ACLs:
           - analytics
@@ -587,6 +597,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /2/abtests/estimate is deprecated.", DeprecationWarning)
 
         if estimate_ab_test_request is None:
             raise ValueError(
@@ -613,7 +625,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> EstimateABTestResponse:
         """
-        Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
+        (Deprecated) estimate_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests/estimate`.  Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
 
         Required API Key ACLs:
           - analytics
@@ -634,7 +647,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieves the details for an A/B test by its ID.
+        (Deprecated) get_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `GET /3/abtests/{id}`.  Retrieves the details for an A/B test by its ID.
 
         Required API Key ACLs:
           - analytics
@@ -644,6 +658,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /2/abtests/{id} is deprecated.", DeprecationWarning)
 
         if id is None:
             raise ValueError("Parameter `id` is required when calling `get_ab_test`.")
@@ -663,7 +679,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTest:
         """
-        Retrieves the details for an A/B test by its ID.
+        (Deprecated) get_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `GET /3/abtests/{id}`.  Retrieves the details for an A/B test by its ID.
 
         Required API Key ACLs:
           - analytics
@@ -700,7 +717,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Lists all A/B tests you configured for this application.
+        (Deprecated) list_ab_tests
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `GET /3/abtests`.  Lists all A/B tests you configured for this application.
 
         Required API Key ACLs:
           - analytics
@@ -716,6 +734,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /2/abtests is deprecated.", DeprecationWarning)
 
         _query_parameters: Dict[str, Any] = {}
 
@@ -762,7 +782,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListABTestsResponse:
         """
-        Lists all A/B tests you configured for this application.
+        (Deprecated) list_ab_tests
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `GET /3/abtests`.  Lists all A/B tests you configured for this application.
 
         Required API Key ACLs:
           - analytics
@@ -789,7 +810,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Stops an A/B test by its ID.  You can't restart stopped A/B tests.
+        (Deprecated) stop_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests/{id}/stop`.  Stops an A/B test by its ID.  You can't restart stopped A/B tests.
 
         Required API Key ACLs:
           - editSettings
@@ -799,6 +821,8 @@ class AbtestingClient:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /2/abtests/{id}/stop is deprecated.", DeprecationWarning)
 
         if id is None:
             raise ValueError("Parameter `id` is required when calling `stop_ab_test`.")
@@ -818,7 +842,8 @@ class AbtestingClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Stops an A/B test by its ID.  You can't restart stopped A/B tests.
+        (Deprecated) stop_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests/{id}/stop`.  Stops an A/B test by its ID.  You can't restart stopped A/B tests.
 
         Required API Key ACLs:
           - editSettings
@@ -932,7 +957,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Creates a new A/B test.
+        (Deprecated) add_ab_tests
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests`.  Creates a new A/B test.
 
         Required API Key ACLs:
           - editSettings
@@ -942,6 +968,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /2/abtests is deprecated.", DeprecationWarning)
 
         if add_ab_tests_request is None:
             raise ValueError(
@@ -968,7 +996,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Creates a new A/B test.
+        (Deprecated) add_ab_tests
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests`.  Creates a new A/B test.
 
         Required API Key ACLs:
           - editSettings
@@ -1313,7 +1342,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Deletes an A/B test by its ID.
+        (Deprecated) delete_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `DELETE /3/abtests/{id}`.  Deletes an A/B test by its ID.
 
         Required API Key ACLs:
           - editSettings
@@ -1323,6 +1353,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("DELETE /2/abtests/{id} is deprecated.", DeprecationWarning)
 
         if id is None:
             raise ValueError(
@@ -1344,7 +1376,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Deletes an A/B test by its ID.
+        (Deprecated) delete_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `DELETE /3/abtests/{id}`.  Deletes an A/B test by its ID.
 
         Required API Key ACLs:
           - editSettings
@@ -1363,7 +1396,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
+        (Deprecated) estimate_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests/estimate`.  Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
 
         Required API Key ACLs:
           - analytics
@@ -1373,6 +1407,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /2/abtests/estimate is deprecated.", DeprecationWarning)
 
         if estimate_ab_test_request is None:
             raise ValueError(
@@ -1399,7 +1435,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> EstimateABTestResponse:
         """
-        Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
+        (Deprecated) estimate_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests/estimate`.  Given the traffic percentage and the expected effect size, this endpoint estimates the sample size and duration of an A/B test based on historical traffic.
 
         Required API Key ACLs:
           - analytics
@@ -1420,7 +1457,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Retrieves the details for an A/B test by its ID.
+        (Deprecated) get_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `GET /3/abtests/{id}`.  Retrieves the details for an A/B test by its ID.
 
         Required API Key ACLs:
           - analytics
@@ -1430,6 +1468,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /2/abtests/{id} is deprecated.", DeprecationWarning)
 
         if id is None:
             raise ValueError("Parameter `id` is required when calling `get_ab_test`.")
@@ -1449,7 +1489,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTest:
         """
-        Retrieves the details for an A/B test by its ID.
+        (Deprecated) get_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `GET /3/abtests/{id}`.  Retrieves the details for an A/B test by its ID.
 
         Required API Key ACLs:
           - analytics
@@ -1486,7 +1527,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Lists all A/B tests you configured for this application.
+        (Deprecated) list_ab_tests
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `GET /3/abtests`.  Lists all A/B tests you configured for this application.
 
         Required API Key ACLs:
           - analytics
@@ -1502,6 +1544,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("GET /2/abtests is deprecated.", DeprecationWarning)
 
         _query_parameters: Dict[str, Any] = {}
 
@@ -1548,7 +1592,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListABTestsResponse:
         """
-        Lists all A/B tests you configured for this application.
+        (Deprecated) list_ab_tests
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `GET /3/abtests`.  Lists all A/B tests you configured for this application.
 
         Required API Key ACLs:
           - analytics
@@ -1575,7 +1620,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Stops an A/B test by its ID.  You can't restart stopped A/B tests.
+        (Deprecated) stop_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests/{id}/stop`.  Stops an A/B test by its ID.  You can't restart stopped A/B tests.
 
         Required API Key ACLs:
           - editSettings
@@ -1585,6 +1631,8 @@ class AbtestingClientSync:
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
+
+        warn("POST /2/abtests/{id}/stop is deprecated.", DeprecationWarning)
 
         if id is None:
             raise ValueError("Parameter `id` is required when calling `stop_ab_test`.")
@@ -1604,7 +1652,8 @@ class AbtestingClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTestResponse:
         """
-        Stops an A/B test by its ID.  You can't restart stopped A/B tests.
+        (Deprecated) stop_ab_test
+        This endpoint is deprecated. Use the A/B Testing API v3 instead.  Replaced by `POST /3/abtests/{id}/stop`.  Stops an A/B test by its ID.  You can't restart stopped A/B tests.
 
         Required API Key ACLs:
           - editSettings
