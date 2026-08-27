@@ -33,7 +33,6 @@ _ALIASES = {
     "status": "status",
     "variants": "variants",
     "configuration": "configuration",
-    "migrated_ab_test_id": "migratedAbTestID",
     "decision": "decision",
 }
 
@@ -63,8 +62,6 @@ class ABTest(BaseModel):
     variants: List[Variant]
     """ A/B test variants.  The first variant is your _control_ index, typically your production index. All of the additional variants are indexes with changed settings that you want to test against the control.  """
     configuration: Optional[ABTestConfiguration] = None
-    migrated_ab_test_id: Optional[int] = None
-    """ Unique migrated A/B test identifier. """
     decision: Optional[Decision] = None
 
     model_config = ConfigDict(

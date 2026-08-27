@@ -21,6 +21,7 @@ else:
 from algoliasearch.search.models.log_query import LogQuery
 
 _ALIASES = {
+    "cid": "cid",
     "timestamp": "timestamp",
     "method": "method",
     "answer_code": "answer_code",
@@ -48,6 +49,8 @@ class Log(BaseModel):
     Log
     """
 
+    cid: Optional[str] = None
+    """ Correlation ID of the logged API request, also returned in that request's `Correlation-ID` response header. """
     timestamp: str
     """ Date and time of the API request, in RFC 3339 format. """
     method: str
