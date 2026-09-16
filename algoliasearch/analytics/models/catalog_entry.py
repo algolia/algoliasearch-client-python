@@ -42,7 +42,7 @@ class CatalogEntry(BaseModel):
     roots: List[str]
     """ Root stages the field depends on. Two fields are combinable in one query only when their roots intersect. """
     requires: List[str]
-    """ Public ACL identifiers required to read the field, for example `clickAnalyticsEnabled`. """
+    """ Public ACL identifiers required to read the field, for example `revenueAnalyticsEnabled`. """
 
     model_config = ConfigDict(
         strict=False,
