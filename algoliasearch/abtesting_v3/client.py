@@ -23,12 +23,14 @@ from algoliasearch.abtesting_v3.config import AbtestingV3Config
 from algoliasearch.abtesting_v3.models import (
     ABTest,
     ABTestResponse,
+    ABTestSettingsResponse,
     AddABTestsRequest,
     Direction,
     EstimateABTestRequest,
     EstimateABTestResponse,
     ListABTestsResponse,
     MetricName,
+    SaveSettingsRequest,
     Timeseries,
 )
 from algoliasearch.http.api_response import ApiResponse
@@ -191,6 +193,86 @@ class AbtestingV3Client:
             add_ab_tests_request, request_options
         )
         return resp.deserialize(ABTestResponse, resp.raw_data)
+
+    async def apply_variant_settings_with_http_info(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        variant_id: Annotated[
+            int,
+            Field(
+                strict=True,
+                ge=1,
+                description="One-based index of the A/B test variant. The control is variant 1.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Applies the captured settings of the given variant to the control index.  The settings must first be captured with the `saveVariantSettings` operation. To revert previously applied settings on the control index, use this operation with the control variant (variant 1).  Settings can be applied up to 14 days after the A/B test ends, and reverted up to 15 days after. Later requests return `400`.  Each set of captured settings can only be applied once, and settings that were reverted can't be applied again. Both cases return `400`.  The control index must not be in use by an active A/B test. Otherwise, the request returns `422`.
+
+        Required API Key ACLs:
+          - analytics
+                  - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param variant_id: One-based index of the A/B test variant. The control is variant 1. (required)
+        :type variant_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if id is None:
+            raise ValueError(
+                "Parameter `id` is required when calling `apply_variant_settings`."
+            )
+
+        if variant_id is None:
+            raise ValueError(
+                "Parameter `variant_id` is required when calling `apply_variant_settings`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/3/abtests/{id}/settings/{variantId}/apply".replace(
+                "{id}", quote(str(id), safe="")
+            ).replace("{variantId}", quote(str(variant_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def apply_variant_settings(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        variant_id: Annotated[
+            int,
+            Field(
+                strict=True,
+                ge=1,
+                description="One-based index of the A/B test variant. The control is variant 1.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> None:
+        """
+        Applies the captured settings of the given variant to the control index.  The settings must first be captured with the `saveVariantSettings` operation. To revert previously applied settings on the control index, use this operation with the control variant (variant 1).  Settings can be applied up to 14 days after the A/B test ends, and reverted up to 15 days after. Later requests return `400`.  Each set of captured settings can only be applied once, and settings that were reverted can't be applied again. Both cases return `400`.  The control index must not be in use by an active A/B test. Otherwise, the request returns `422`.
+
+        Required API Key ACLs:
+          - analytics
+                  - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param variant_id: One-based index of the A/B test variant. The control is variant 1. (required)
+        :type variant_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        """
+        resp = await self.apply_variant_settings_with_http_info(
+            id, variant_id, request_options
+        )
+        return resp.deserialize(None, resp.raw_data)
 
     async def custom_delete_with_http_info(
         self,
@@ -679,6 +761,56 @@ class AbtestingV3Client:
         resp = await self.get_ab_test_with_http_info(id, request_options)
         return resp.deserialize(ABTest, resp.raw_data)
 
+    async def get_ab_test_settings_with_http_info(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the settings captured for each variant of an A/B test, and whether another active A/B test is using the control index.  Settings are captured by the `saveVariantSettings` operation. The response includes an entry for the control (variant 1) alongside the captured variant, so the control's original configuration can be restored later.  Returns `404` if the A/B test doesn't exist or no settings have been captured for it.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if id is None:
+            raise ValueError(
+                "Parameter `id` is required when calling `get_ab_test_settings`."
+            )
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/3/abtests/{id}/settings".replace("{id}", quote(str(id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def get_ab_test_settings(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ABTestSettingsResponse:
+        """
+        Retrieves the settings captured for each variant of an A/B test, and whether another active A/B test is using the control index.  Settings are captured by the `saveVariantSettings` operation. The response includes an entry for the control (variant 1) alongside the captured variant, so the control's original configuration can be restored later.  Returns `404` if the A/B test doesn't exist or no settings have been captured for it.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ABTestSettingsResponse' result object.
+        """
+        resp = await self.get_ab_test_settings_with_http_info(id, request_options)
+        return resp.deserialize(ABTestSettingsResponse, resp.raw_data)
+
     async def get_timeseries_with_http_info(
         self,
         id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
@@ -926,6 +1058,102 @@ class AbtestingV3Client:
         )
         return resp.deserialize(ListABTestsResponse, resp.raw_data)
 
+    async def save_variant_settings_with_http_info(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        variant_id: Annotated[
+            int,
+            Field(
+                strict=True,
+                ge=1,
+                description="One-based index of the A/B test variant. The control is variant 1.",
+            ),
+        ],
+        save_settings_request: Union[SaveSettingsRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Captures the settings of the given variant and of the control, then stops the A/B test.  The captured settings can later be applied to the control index with the `applyVariantSettings` operation, and read back with the `getABTestSettings` operation.  The A/B test must have reached 80% of its planned duration. Earlier requests return `400`.  Settings can only be captured once per A/B test. A second request returns `409`.  `synonyms` and `enableRules` are not captured, so applying the captured settings never changes them on the control index.
+
+        Required API Key ACLs:
+          - analytics
+                  - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param variant_id: One-based index of the A/B test variant. The control is variant 1. (required)
+        :type variant_id: int
+        :param save_settings_request: (required)
+        :type save_settings_request: SaveSettingsRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if id is None:
+            raise ValueError(
+                "Parameter `id` is required when calling `save_variant_settings`."
+            )
+
+        if variant_id is None:
+            raise ValueError(
+                "Parameter `variant_id` is required when calling `save_variant_settings`."
+            )
+
+        if save_settings_request is None:
+            raise ValueError(
+                "Parameter `save_settings_request` is required when calling `save_variant_settings`."
+            )
+
+        _data = {}
+        if save_settings_request is not None:
+            _data = save_settings_request
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/3/abtests/{id}/settings/{variantId}".replace(
+                "{id}", quote(str(id), safe="")
+            ).replace("{variantId}", quote(str(variant_id), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def save_variant_settings(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        variant_id: Annotated[
+            int,
+            Field(
+                strict=True,
+                ge=1,
+                description="One-based index of the A/B test variant. The control is variant 1.",
+            ),
+        ],
+        save_settings_request: Union[SaveSettingsRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> None:
+        """
+        Captures the settings of the given variant and of the control, then stops the A/B test.  The captured settings can later be applied to the control index with the `applyVariantSettings` operation, and read back with the `getABTestSettings` operation.  The A/B test must have reached 80% of its planned duration. Earlier requests return `400`.  Settings can only be captured once per A/B test. A second request returns `409`.  `synonyms` and `enableRules` are not captured, so applying the captured settings never changes them on the control index.
+
+        Required API Key ACLs:
+          - analytics
+                  - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param variant_id: One-based index of the A/B test variant. The control is variant 1. (required)
+        :type variant_id: int
+        :param save_settings_request: (required)
+        :type save_settings_request: SaveSettingsRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        """
+        resp = await self.save_variant_settings_with_http_info(
+            id, variant_id, save_settings_request, request_options
+        )
+        return resp.deserialize(None, resp.raw_data)
+
     async def stop_ab_test_with_http_info(
         self,
         id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
@@ -1123,6 +1351,86 @@ class AbtestingV3ClientSync:
         """
         resp = self.add_ab_tests_with_http_info(add_ab_tests_request, request_options)
         return resp.deserialize(ABTestResponse, resp.raw_data)
+
+    def apply_variant_settings_with_http_info(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        variant_id: Annotated[
+            int,
+            Field(
+                strict=True,
+                ge=1,
+                description="One-based index of the A/B test variant. The control is variant 1.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Applies the captured settings of the given variant to the control index.  The settings must first be captured with the `saveVariantSettings` operation. To revert previously applied settings on the control index, use this operation with the control variant (variant 1).  Settings can be applied up to 14 days after the A/B test ends, and reverted up to 15 days after. Later requests return `400`.  Each set of captured settings can only be applied once, and settings that were reverted can't be applied again. Both cases return `400`.  The control index must not be in use by an active A/B test. Otherwise, the request returns `422`.
+
+        Required API Key ACLs:
+          - analytics
+                  - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param variant_id: One-based index of the A/B test variant. The control is variant 1. (required)
+        :type variant_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if id is None:
+            raise ValueError(
+                "Parameter `id` is required when calling `apply_variant_settings`."
+            )
+
+        if variant_id is None:
+            raise ValueError(
+                "Parameter `variant_id` is required when calling `apply_variant_settings`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/3/abtests/{id}/settings/{variantId}/apply".replace(
+                "{id}", quote(str(id), safe="")
+            ).replace("{variantId}", quote(str(variant_id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def apply_variant_settings(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        variant_id: Annotated[
+            int,
+            Field(
+                strict=True,
+                ge=1,
+                description="One-based index of the A/B test variant. The control is variant 1.",
+            ),
+        ],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> None:
+        """
+        Applies the captured settings of the given variant to the control index.  The settings must first be captured with the `saveVariantSettings` operation. To revert previously applied settings on the control index, use this operation with the control variant (variant 1).  Settings can be applied up to 14 days after the A/B test ends, and reverted up to 15 days after. Later requests return `400`.  Each set of captured settings can only be applied once, and settings that were reverted can't be applied again. Both cases return `400`.  The control index must not be in use by an active A/B test. Otherwise, the request returns `422`.
+
+        Required API Key ACLs:
+          - analytics
+                  - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param variant_id: One-based index of the A/B test variant. The control is variant 1. (required)
+        :type variant_id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        """
+        resp = self.apply_variant_settings_with_http_info(
+            id, variant_id, request_options
+        )
+        return resp.deserialize(None, resp.raw_data)
 
     def custom_delete_with_http_info(
         self,
@@ -1605,6 +1913,56 @@ class AbtestingV3ClientSync:
         resp = self.get_ab_test_with_http_info(id, request_options)
         return resp.deserialize(ABTest, resp.raw_data)
 
+    def get_ab_test_settings_with_http_info(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Retrieves the settings captured for each variant of an A/B test, and whether another active A/B test is using the control index.  Settings are captured by the `saveVariantSettings` operation. The response includes an entry for the control (variant 1) alongside the captured variant, so the control's original configuration can be restored later.  Returns `404` if the A/B test doesn't exist or no settings have been captured for it.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if id is None:
+            raise ValueError(
+                "Parameter `id` is required when calling `get_ab_test_settings`."
+            )
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/3/abtests/{id}/settings".replace("{id}", quote(str(id), safe="")),
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def get_ab_test_settings(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ABTestSettingsResponse:
+        """
+        Retrieves the settings captured for each variant of an A/B test, and whether another active A/B test is using the control index.  Settings are captured by the `saveVariantSettings` operation. The response includes an entry for the control (variant 1) alongside the captured variant, so the control's original configuration can be restored later.  Returns `404` if the A/B test doesn't exist or no settings have been captured for it.
+
+        Required API Key ACLs:
+          - analytics
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ABTestSettingsResponse' result object.
+        """
+        resp = self.get_ab_test_settings_with_http_info(id, request_options)
+        return resp.deserialize(ABTestSettingsResponse, resp.raw_data)
+
     def get_timeseries_with_http_info(
         self,
         id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
@@ -1851,6 +2209,102 @@ class AbtestingV3ClientSync:
             offset, limit, index_prefix, index_suffix, direction, request_options
         )
         return resp.deserialize(ListABTestsResponse, resp.raw_data)
+
+    def save_variant_settings_with_http_info(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        variant_id: Annotated[
+            int,
+            Field(
+                strict=True,
+                ge=1,
+                description="One-based index of the A/B test variant. The control is variant 1.",
+            ),
+        ],
+        save_settings_request: Union[SaveSettingsRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Captures the settings of the given variant and of the control, then stops the A/B test.  The captured settings can later be applied to the control index with the `applyVariantSettings` operation, and read back with the `getABTestSettings` operation.  The A/B test must have reached 80% of its planned duration. Earlier requests return `400`.  Settings can only be captured once per A/B test. A second request returns `409`.  `synonyms` and `enableRules` are not captured, so applying the captured settings never changes them on the control index.
+
+        Required API Key ACLs:
+          - analytics
+                  - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param variant_id: One-based index of the A/B test variant. The control is variant 1. (required)
+        :type variant_id: int
+        :param save_settings_request: (required)
+        :type save_settings_request: SaveSettingsRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if id is None:
+            raise ValueError(
+                "Parameter `id` is required when calling `save_variant_settings`."
+            )
+
+        if variant_id is None:
+            raise ValueError(
+                "Parameter `variant_id` is required when calling `save_variant_settings`."
+            )
+
+        if save_settings_request is None:
+            raise ValueError(
+                "Parameter `save_settings_request` is required when calling `save_variant_settings`."
+            )
+
+        _data = {}
+        if save_settings_request is not None:
+            _data = save_settings_request
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/3/abtests/{id}/settings/{variantId}".replace(
+                "{id}", quote(str(id), safe="")
+            ).replace("{variantId}", quote(str(variant_id), safe="")),
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def save_variant_settings(
+        self,
+        id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        variant_id: Annotated[
+            int,
+            Field(
+                strict=True,
+                ge=1,
+                description="One-based index of the A/B test variant. The control is variant 1.",
+            ),
+        ],
+        save_settings_request: Union[SaveSettingsRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> None:
+        """
+        Captures the settings of the given variant and of the control, then stops the A/B test.  The captured settings can later be applied to the control index with the `applyVariantSettings` operation, and read back with the `getABTestSettings` operation.  The A/B test must have reached 80% of its planned duration. Earlier requests return `400`.  Settings can only be captured once per A/B test. A second request returns `409`.  `synonyms` and `enableRules` are not captured, so applying the captured settings never changes them on the control index.
+
+        Required API Key ACLs:
+          - analytics
+                  - editSettings
+
+        :param id: Unique A/B test identifier. (required)
+        :type id: int
+        :param variant_id: One-based index of the A/B test variant. The control is variant 1. (required)
+        :type variant_id: int
+        :param save_settings_request: (required)
+        :type save_settings_request: SaveSettingsRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        """
+        resp = self.save_variant_settings_with_http_info(
+            id, variant_id, save_settings_request, request_options
+        )
+        return resp.deserialize(None, resp.raw_data)
 
     def stop_ab_test_with_http_info(
         self,

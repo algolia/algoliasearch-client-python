@@ -11,6 +11,7 @@ __version__ = "4.47.0"
 from .ab_test import ABTest
 from .ab_test_configuration import ABTestConfiguration
 from .ab_test_response import ABTestResponse
+from .ab_test_settings_response import ABTestSettingsResponse
 from .ab_tests_variant import AbTestsVariant
 from .ab_tests_variant_search_params import AbTestsVariantSearchParams
 from .add_ab_tests_request import AddABTestsRequest
@@ -25,6 +26,7 @@ from .error_correction_type import ErrorCorrectionType
 from .estimate_ab_test_request import EstimateABTestRequest
 from .estimate_ab_test_response import EstimateABTestResponse
 from .estimate_configuration import EstimateConfiguration
+from .feature_settings import FeatureSettings
 from .filter_effects import FilterEffects
 from .list_ab_tests_response import ListABTestsResponse
 from .metric_date import MetricDate
@@ -34,16 +36,19 @@ from .metric_result import MetricResult
 from .metrics_filter import MetricsFilter
 from .minimum_detectable_effect import MinimumDetectableEffect
 from .outliers_filter import OutliersFilter
+from .save_settings_request import SaveSettingsRequest
 from .status import Status
 from .timeseries import Timeseries
 from .timeseries_variant import TimeseriesVariant
 from .variant import Variant
 from .variant_metadata import VariantMetadata
+from .variant_settings import VariantSettings
 
 __all__ = (
     "ABTest",
     "ABTestConfiguration",
     "ABTestResponse",
+    "ABTestSettingsResponse",
     "AbTestsVariant",
     "AbTestsVariantSearchParams",
     "AddABTestsRequest",
@@ -58,6 +63,7 @@ __all__ = (
     "EstimateABTestRequest",
     "EstimateABTestResponse",
     "EstimateConfiguration",
+    "FeatureSettings",
     "FilterEffects",
     "ListABTestsResponse",
     "MetricDate",
@@ -67,9 +73,11 @@ __all__ = (
     "MetricsFilter",
     "MinimumDetectableEffect",
     "OutliersFilter",
+    "SaveSettingsRequest",
     "Status",
     "Timeseries",
     "TimeseriesVariant",
     "Variant",
     "VariantMetadata",
+    "VariantSettings",
 )
