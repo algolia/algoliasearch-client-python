@@ -18,7 +18,7 @@ else:
 
 class SearchTypeDefault(str, Enum):
     """
-    - `default`: perform a search query - `facet` [searches for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
+    - `default`: perform a search query. - `facet` [searches for facet values](https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#search-for-facet-values).
     """
 
     """

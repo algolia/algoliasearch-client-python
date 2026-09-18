@@ -19,6 +19,7 @@ from .around_precision import AroundPrecision
 from .around_radius import AroundRadius
 from .around_radius_all import AroundRadiusAll
 from .assign_user_id_params import AssignUserIdParams
+from .attribute_criteria_computed_by import AttributeCriteriaComputedBy
 from .attribute_to_update import AttributeToUpdate
 from .auto_filtering_filter_entry import AutoFilteringFilterEntry
 from .auto_filtering_result import AutoFilteringResult
@@ -210,6 +211,7 @@ __all__ = (
     "AroundRadius",
     "AroundRadiusAll",
     "AssignUserIdParams",
+    "AttributeCriteriaComputedBy",
     "AttributeToUpdate",
     "AutoFilteringFilterEntry",
     "AutoFilteringResult",

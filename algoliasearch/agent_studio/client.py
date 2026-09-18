@@ -512,7 +512,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result.
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result.
 
         Required API Key ACLs:
           - search
@@ -627,7 +627,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, object]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result.
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result.
 
         Required API Key ACLs:
           - search
@@ -699,7 +699,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AsyncIterator[ServerSentEvent]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result. (raw streaming version).
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result. (raw streaming version).
 
         Yields raw :class:`ServerSentEvent` objects. Each event's ``data`` field contains a JSON-encoded ``Dict[str, object]`` string.
 
@@ -809,7 +809,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AsyncIterator[StreamEvent[Dict[str, object]]]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result. (streaming version).
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result. (streaming version).
 
         Yields :class:`StreamEvent` objects wrapping parsed ``Dict[str, object]`` payloads.
 
@@ -3872,7 +3872,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result.
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result.
 
         Required API Key ACLs:
           - search
@@ -3987,7 +3987,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, object]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result.
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result.
 
         Required API Key ACLs:
           - search
@@ -4059,7 +4059,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Iterator[ServerSentEvent]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result. (raw streaming version).
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result. (raw streaming version).
 
         Yields raw :class:`ServerSentEvent` objects. Each event's ``data`` field contains a JSON-encoded ``Dict[str, object]`` string.
 
@@ -4169,7 +4169,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Iterator[StreamEvent[Dict[str, object]]]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result. (streaming version).
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result. (streaming version).
 
         Yields :class:`StreamEvent` objects wrapping parsed ``Dict[str, object]`` payloads.
 

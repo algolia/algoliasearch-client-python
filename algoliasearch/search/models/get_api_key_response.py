@@ -52,7 +52,7 @@ class GetApiKeyResponse(BaseModel):
     description: Optional[str] = None
     """ Description of an API key to help you identify this API key. """
     indexes: Optional[List[str]] = None
-    """ Index names or patterns that this API key can access. By default, an API key can access all indices in the same application.  You can use leading and trailing wildcard characters (`*`):  - `dev_*` matches all indices starting with \"dev_\" - `*_dev` matches all indices ending with \"_dev\" - `*_products_*` matches all indices containing \"_products_\".  """
+    """ Index names or patterns that this API key can access. By default, an API key can access all indices in the same application.  You can use leading and trailing wildcard characters (`*`):  - `dev_*` matches all indices starting with \"dev_\". - `*_dev` matches all indices ending with \"_dev\". - `*_products_*` matches all indices containing \"_products_\".  """
     max_hits_per_query: Optional[int] = None
     """ Maximum number of results this API key can retrieve in one query. By default, there's no limit.  """
     max_queries_per_ip_per_hour: Optional[int] = None
@@ -60,7 +60,7 @@ class GetApiKeyResponse(BaseModel):
     query_parameters: Optional[str] = None
     """ Query parameters to add when making API requests with this API key.  To restrict this API key to specific IP addresses, add the `restrictSources` parameter. You can only add a single source, but you can provide a range of IP addresses.  Creating an API key fails if the request is made from an IP address outside the restricted range.  """
     referers: Optional[List[str]] = None
-    """ Allowed HTTP referrers for this API key.  By default, all referrers are allowed. You can use leading and trailing wildcard characters (`*`):  - `https://algolia.com/*` allows all referrers starting with \"https://algolia.com/\" - `*.algolia.com` allows all referrers ending with \".algolia.com\" - `*algolia.com*` allows all referrers in the domain \"algolia.com\".  Like all HTTP headers, referrers can be spoofed. Don't rely on them to secure your data. For more information, see [HTTP referrer restrictions](https://www.algolia.com/doc/guides/security/security-best-practices/#http-referrers-restrictions).  """
+    """ Allowed HTTP referrers for this API key.  By default, all referrers are allowed. You can use leading and trailing wildcard characters (`*`):  - `https://algolia.com/*` allows all referrers starting with \"https://algolia.com/\". - `*.algolia.com` allows all referrers ending with \".algolia.com\". - `*algolia.com*` allows all referrers in the domain \"algolia.com\".  Like all HTTP headers, referrers can be spoofed. Don't rely on them to secure your data. For more information, see [HTTP referrer restrictions](https://www.algolia.com/doc/guides/security/security-best-practices/#http-referrers-restrictions).  """
     validity: Optional[int] = None
     """ Duration (in seconds) after which the API key expires. By default, API keys don't expire.  """
 
