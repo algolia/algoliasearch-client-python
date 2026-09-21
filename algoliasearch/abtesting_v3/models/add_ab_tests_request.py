@@ -24,6 +24,7 @@ from algoliasearch.abtesting_v3.models.create_metric import CreateMetric
 
 _ALIASES = {
     "name": "name",
+    "hypothesis": "hypothesis",
     "variants": "variants",
     "metrics": "metrics",
     "configuration": "configuration",
@@ -42,6 +43,8 @@ class AddABTestsRequest(BaseModel):
 
     name: str
     """ A/B test name. """
+    hypothesis: Optional[str] = None
+    """ Expected outcome of the A/B test. """
     variants: List[AddABTestsVariant]
     """ A/B test variants. """
     metrics: List[CreateMetric]

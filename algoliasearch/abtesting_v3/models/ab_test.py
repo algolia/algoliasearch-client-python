@@ -30,6 +30,7 @@ _ALIASES = {
     "end_at": "endAt",
     "stopped_at": "stoppedAt",
     "name": "name",
+    "hypothesis": "hypothesis",
     "status": "status",
     "variants": "variants",
     "configuration": "configuration",
@@ -58,6 +59,8 @@ class ABTest(BaseModel):
     """ Date and time when the A/B test was stopped, in RFC 3339 format. """
     name: str
     """ A/B test name. """
+    hypothesis: str
+    """ Expected outcome of the A/B test. """
     status: Status
     variants: List[Variant]
     """ A/B test variants.  The first variant is your _control_ index, typically your production index. All of the additional variants are indexes with changed settings that you want to test against the control.  """
