@@ -16,51 +16,25 @@ else:
     from typing_extensions import Self
 
 
-class MetricName(str, Enum):
+class PrimaryMetric(str, Enum):
     """
-    MetricName
+    Primary metric for Bayesian analysis. Required when `method` is `bayesian`. If the request includes a non-empty `metrics` list, this metric must be in that list. Revenue per search requires access to revenue analytics.
     """
 
     """
     allowed enum values
     """
-    SEARCH_COUNT = "search_count"
-
-    TRACKED_SEARCH_COUNT = "tracked_search_count"
-
-    USER_COUNT = "user_count"
-
-    TRACKED_USER_COUNT = "tracked_user_count"
-
-    NO_RESULT_COUNT = "no_result_count"
-
-    TRACKED_NO_RESULT_COUNT = "tracked_no_result_count"
-
-    ADD_TO_CART_COUNT = "add_to_cart_count"
-
-    PURCHASE_COUNT = "purchase_count"
-
-    CLICKED_SEARCH_COUNT = "clicked_search_count"
-
-    CONVERTED_SEARCH_COUNT = "converted_search_count"
+    ADD_TO_CART_RATE = "add_to_cart_rate"
 
     CLICK_THROUGH_RATE = "click_through_rate"
 
     CONVERSION_RATE = "conversion_rate"
 
-    ADD_TO_CART_RATE = "add_to_cart_rate"
-
     PURCHASE_RATE = "purchase_rate"
-
-    AVERAGE_CLICK_POSITION = "average_click_position"
-
-    REVENUE = "revenue"
 
     REVENUE_PER_SEARCH = "revenue_per_search"
 
-    AVERAGE_ORDER_VALUE = "average_order_value"
-
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of MetricName from a JSON string"""
+        """Create an instance of PrimaryMetric from a JSON string"""
         return cls(loads(json_str))

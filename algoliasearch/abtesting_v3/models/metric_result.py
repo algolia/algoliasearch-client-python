@@ -18,6 +18,9 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.abtesting_v3.models.bayesian_metric_result import (
+    BayesianMetricResult,
+)
 from algoliasearch.abtesting_v3.models.metric_metadata import MetricMetadata
 
 _ALIASES = {
@@ -31,6 +34,7 @@ _ALIASES = {
     "metadata": "metadata",
     "critical_value": "criticalValue",
     "significant": "significant",
+    "bayesian": "bayesian",
 }
 
 
@@ -44,22 +48,25 @@ class MetricResult(BaseModel):
     """
 
     name: str
+    """ Metric name. Revenue per search results use `revenue_per_search`. """
     updated_at: str
     """ Date and time when the metric was last updated, in RFC 3339 format. """
     value: float
+    """ Metric value. For `revenue_per_search`, this is the winsorized mean revenue per search in the specified currency. """
     value_ci_high: Optional[float] = None
     """ The upper bound of the 95% confidence interval for the metric value. The confidence interval is calculated using either the relative ratio or relative difference between the metric values for the control and the variant. Relative ratio is used for metrics that are ratios (e.g., click-through rate, conversion rate), while relative difference is used for continuous metrics (e.g., revenue).  """
     value_ci_low: Optional[float] = None
     """ The lower bound of the 95% confidence interval for the metric value. The confidence interval is calculated using either the relative ratio or relative difference between the metric values for the control and the variant. Relative ratio is used for metrics that are ratios (e.g., click-through rate, conversion rate), while relative difference is used for continuous metrics (e.g., revenue).  """
-    p_value: float
-    """ PValue for the first variant (control) will always be 0. For the other variants, pValue is calculated for the current variant based on the control. """
+    p_value: Optional[float] = None
+    """ P-value for this variant compared to the control. Omitted when no p-value is available for this metric.  """
     dimension: Optional[str] = None
-    """ Dimension defined during test creation. """
+    """ Dimension defined during test creation. For revenue metrics, including `revenue_per_search`, this is the currency. """
     metadata: Optional[MetricMetadata] = None
     critical_value: Optional[float] = None
     """ The value that was computed during error correction. It is used to determine significance of the metric pValue. The critical value is calculated using Bonferroni or Benjamini-Hochberg corrections, based on the given configuration during the A/B test creation.  """
     significant: Optional[bool] = None
     """ Whether the pValue is significant or not based on the critical value and the error correction algorithm used.  """
+    bayesian: Optional[BayesianMetricResult] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -99,6 +106,11 @@ class MetricResult(BaseModel):
         obj["metadata"] = (
             MetricMetadata.from_dict(obj["metadata"])
             if obj.get("metadata") is not None
+            else None
+        )
+        obj["bayesian"] = (
+            BayesianMetricResult.from_dict(obj["bayesian"])
+            if obj.get("bayesian") is not None
             else None
         )
 

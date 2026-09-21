@@ -18,11 +18,10 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.abtesting_v3.models.effect_metric import EffectMetric
+from algoliasearch.abtesting_v3.models.evidence_status import EvidenceStatus
 
 _ALIASES = {
-    "size": "size",
-    "metric": "metric",
+    "status": "status",
 }
 
 
@@ -30,14 +29,12 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class MinimumDetectableEffect(BaseModel):
+class MetricEvidence(BaseModel):
     """
-    Configuration for the smallest difference between test variants you want to detect, used to estimate the required sample size.
+    Evidence status for this variant metric's comparison with the control. Only present when the API has an evidence status for the comparison. Omitted when evidence isn't applicable or no status exists.
     """
 
-    size: float
-    """ Smallest difference in an observable metric between variants. For example, to detect a 10% difference between variants, set this value to 0.1.  """
-    metric: EffectMetric
+    status: EvidenceStatus
 
     model_config = ConfigDict(
         strict=False,
@@ -54,7 +51,7 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a JSON string"""
+        """Create an instance of MetricEvidence from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -67,13 +64,13 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a dict"""
+        """Create an instance of MetricEvidence from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["metric"] = obj.get("metric")
+        obj["status"] = obj.get("status")
 
         return cls.model_validate(obj)

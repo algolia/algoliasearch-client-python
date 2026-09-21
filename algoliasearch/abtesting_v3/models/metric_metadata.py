@@ -34,7 +34,7 @@ class MetricMetadata(BaseModel):
     """
 
     winsorized_value: Optional[float] = None
-    """ Only present in case the metric is 'revenue'. It is the amount exceeding the 95th percentile of global revenue transactions involved in the AB Test. This amount is not considered when calculating statistical significance. It is tied to a per revenue-currency pair contrary to other global filter effects (such as outliers and empty search count).  """
+    """ Only present for `revenue` metrics. It is the amount exceeding the 95th percentile of global revenue transactions involved in the AB Test. This amount is not considered when calculating statistical significance. It is tied to a per revenue-currency pair contrary to other global filter effects (such as outliers and empty search count).  """
     mean: Optional[float] = None
     """ Mean value for this metric. """
 

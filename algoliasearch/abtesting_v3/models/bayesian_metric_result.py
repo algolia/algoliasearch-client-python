@@ -18,11 +18,13 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.abtesting_v3.models.effect_metric import EffectMetric
+from algoliasearch.abtesting_v3.models.metric_evidence import MetricEvidence
 
 _ALIASES = {
-    "size": "size",
-    "metric": "metric",
+    "probability_to_be_better": "probabilityToBeBetter",
+    "relative_effect_ci_low": "relativeEffectCILow",
+    "relative_effect_ci_high": "relativeEffectCIHigh",
+    "evidence": "evidence",
 }
 
 
@@ -30,14 +32,18 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class MinimumDetectableEffect(BaseModel):
+class BayesianMetricResult(BaseModel):
     """
-    Configuration for the smallest difference between test variants you want to detect, used to estimate the required sample size.
+    Bayesian inference results for this variant metric. Omitted when Bayesian results aren't requested or no Bayesian result is available for this metric. Individual inference fields can be omitted when their values aren't available.
     """
 
-    size: float
-    """ Smallest difference in an observable metric between variants. For example, to detect a 10% difference between variants, set this value to 0.1.  """
-    metric: EffectMetric
+    probability_to_be_better: Optional[float] = None
+    """ Probability that this variant is better than the control. """
+    relative_effect_ci_low: Optional[float] = None
+    """ Lower bound of the 95% credible interval for the relative effect (variant/control minus 1). """
+    relative_effect_ci_high: Optional[float] = None
+    """ Upper bound of the 95% credible interval for the relative effect (variant/control minus 1). """
+    evidence: Optional[MetricEvidence] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -54,7 +60,7 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a JSON string"""
+        """Create an instance of BayesianMetricResult from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -67,13 +73,17 @@ class MinimumDetectableEffect(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MinimumDetectableEffect from a dict"""
+        """Create an instance of BayesianMetricResult from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["metric"] = obj.get("metric")
+        obj["evidence"] = (
+            MetricEvidence.from_dict(obj["evidence"])
+            if obj.get("evidence") is not None
+            else None
+        )
 
         return cls.model_validate(obj)

@@ -18,16 +18,20 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.abtesting_v3.models.analysis_method import AnalysisMethod
 from algoliasearch.abtesting_v3.models.error_correction_type import ErrorCorrectionType
 from algoliasearch.abtesting_v3.models.metrics_filter import MetricsFilter
 from algoliasearch.abtesting_v3.models.minimum_detectable_effect import (
     MinimumDetectableEffect,
 )
+from algoliasearch.abtesting_v3.models.primary_metric import PrimaryMetric
 
 _ALIASES = {
     "minimum_detectable_effect": "minimumDetectableEffect",
     "filters": "filters",
     "error_correction": "errorCorrection",
+    "method": "method",
+    "primary_metric": "primaryMetric",
 }
 
 
@@ -44,6 +48,8 @@ class ABTestConfiguration(BaseModel):
     filters: Optional[List[MetricsFilter]] = None
     """ List of metric filters applied to the test population. """
     error_correction: Optional[ErrorCorrectionType] = None
+    method: Optional[AnalysisMethod] = None
+    primary_metric: Optional[PrimaryMetric] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -91,5 +97,7 @@ class ABTestConfiguration(BaseModel):
             else None
         )
         obj["errorCorrection"] = obj.get("errorCorrection")
+        obj["method"] = obj.get("method")
+        obj["primaryMetric"] = obj.get("primaryMetric")
 
         return cls.model_validate(obj)

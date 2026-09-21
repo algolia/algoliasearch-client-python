@@ -25,6 +25,7 @@ from algoliasearch.abtesting_v3.models import (
     ABTestResponse,
     ABTestSettingsResponse,
     AddABTestsRequest,
+    AnalysisMethod,
     Direction,
     EstimateABTestRequest,
     EstimateABTestResponse,
@@ -716,6 +717,15 @@ class AbtestingV3Client:
     async def get_ab_test_with_http_info(
         self,
         id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -726,6 +736,8 @@ class AbtestingV3Client:
 
         :param id: Unique A/B test identifier. (required)
         :type id: int
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -733,10 +745,16 @@ class AbtestingV3Client:
         if id is None:
             raise ValueError("Parameter `id` is required when calling `get_ab_test`.")
 
+        _query_parameters: Dict[str, Any] = {}
+
+        if methods is not None:
+            _query_parameters["methods"] = methods
+
         return await self._transporter.request(
             verb=Verb.GET,
             path="/3/abtests/{id}".replace("{id}", quote(str(id), safe="")),
             request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -745,6 +763,15 @@ class AbtestingV3Client:
     async def get_ab_test(
         self,
         id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTest:
         """
@@ -755,10 +782,12 @@ class AbtestingV3Client:
 
         :param id: Unique A/B test identifier. (required)
         :type id: int
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTest' result object.
         """
-        resp = await self.get_ab_test_with_http_info(id, request_options)
+        resp = await self.get_ab_test_with_http_info(id, methods, request_options)
         return resp.deserialize(ABTest, resp.raw_data)
 
     async def get_ab_test_settings_with_http_info(
@@ -835,6 +864,15 @@ class AbtestingV3Client:
                 ),
             ],
         ] = None,
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -851,6 +889,8 @@ class AbtestingV3Client:
         :type end_date: str
         :param metric: List of metrics to retrieve. If not specified, all metrics are returned.
         :type metric: List[MetricName]
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -868,6 +908,8 @@ class AbtestingV3Client:
             _query_parameters["endDate"] = end_date
         if metric is not None:
             _query_parameters["metric"] = metric
+        if methods is not None:
+            _query_parameters["methods"] = methods
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -903,6 +945,15 @@ class AbtestingV3Client:
                 ),
             ],
         ] = None,
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Timeseries:
         """
@@ -919,11 +970,13 @@ class AbtestingV3Client:
         :type end_date: str
         :param metric: List of metrics to retrieve. If not specified, all metrics are returned.
         :type metric: List[MetricName]
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Timeseries' result object.
         """
         resp = await self.get_timeseries_with_http_info(
-            id, start_date, end_date, metric, request_options
+            id, start_date, end_date, metric, methods, request_options
         )
         return resp.deserialize(Timeseries, resp.raw_data)
 
@@ -957,6 +1010,15 @@ class AbtestingV3Client:
             ],
             str,
         ] = None,
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -975,6 +1037,8 @@ class AbtestingV3Client:
         :type index_suffix: str
         :param direction: Sort order for A/B tests by start date. Use 'asc' for ascending or 'desc' for descending. Active A/B tests are always listed first.
         :type direction: Direction
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -991,6 +1055,8 @@ class AbtestingV3Client:
             _query_parameters["indexSuffix"] = index_suffix
         if direction is not None:
             _query_parameters["direction"] = direction
+        if methods is not None:
+            _query_parameters["methods"] = methods
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -1032,6 +1098,15 @@ class AbtestingV3Client:
             ],
             str,
         ] = None,
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListABTestsResponse:
         """
@@ -1050,11 +1125,19 @@ class AbtestingV3Client:
         :type index_suffix: str
         :param direction: Sort order for A/B tests by start date. Use 'asc' for ascending or 'desc' for descending. Active A/B tests are always listed first.
         :type direction: Direction
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListABTestsResponse' result object.
         """
         resp = await self.list_ab_tests_with_http_info(
-            offset, limit, index_prefix, index_suffix, direction, request_options
+            offset,
+            limit,
+            index_prefix,
+            index_suffix,
+            direction,
+            methods,
+            request_options,
         )
         return resp.deserialize(ListABTestsResponse, resp.raw_data)
 
@@ -1868,6 +1951,15 @@ class AbtestingV3ClientSync:
     def get_ab_test_with_http_info(
         self,
         id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1878,6 +1970,8 @@ class AbtestingV3ClientSync:
 
         :param id: Unique A/B test identifier. (required)
         :type id: int
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -1885,10 +1979,16 @@ class AbtestingV3ClientSync:
         if id is None:
             raise ValueError("Parameter `id` is required when calling `get_ab_test`.")
 
+        _query_parameters: Dict[str, Any] = {}
+
+        if methods is not None:
+            _query_parameters["methods"] = methods
+
         return self._transporter.request(
             verb=Verb.GET,
             path="/3/abtests/{id}".replace("{id}", quote(str(id), safe="")),
             request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
                 user_request_options=request_options,
             ),
             use_read_transporter=False,
@@ -1897,6 +1997,15 @@ class AbtestingV3ClientSync:
     def get_ab_test(
         self,
         id: Annotated[StrictInt, Field(description="Unique A/B test identifier.")],
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ABTest:
         """
@@ -1907,10 +2016,12 @@ class AbtestingV3ClientSync:
 
         :param id: Unique A/B test identifier. (required)
         :type id: int
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ABTest' result object.
         """
-        resp = self.get_ab_test_with_http_info(id, request_options)
+        resp = self.get_ab_test_with_http_info(id, methods, request_options)
         return resp.deserialize(ABTest, resp.raw_data)
 
     def get_ab_test_settings_with_http_info(
@@ -1987,6 +2098,15 @@ class AbtestingV3ClientSync:
                 ),
             ],
         ] = None,
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -2003,6 +2123,8 @@ class AbtestingV3ClientSync:
         :type end_date: str
         :param metric: List of metrics to retrieve. If not specified, all metrics are returned.
         :type metric: List[MetricName]
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -2020,6 +2142,8 @@ class AbtestingV3ClientSync:
             _query_parameters["endDate"] = end_date
         if metric is not None:
             _query_parameters["metric"] = metric
+        if methods is not None:
+            _query_parameters["methods"] = methods
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -2055,6 +2179,15 @@ class AbtestingV3ClientSync:
                 ),
             ],
         ] = None,
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Timeseries:
         """
@@ -2071,11 +2204,13 @@ class AbtestingV3ClientSync:
         :type end_date: str
         :param metric: List of metrics to retrieve. If not specified, all metrics are returned.
         :type metric: List[MetricName]
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Timeseries' result object.
         """
         resp = self.get_timeseries_with_http_info(
-            id, start_date, end_date, metric, request_options
+            id, start_date, end_date, metric, methods, request_options
         )
         return resp.deserialize(Timeseries, resp.raw_data)
 
@@ -2109,6 +2244,15 @@ class AbtestingV3ClientSync:
             ],
             str,
         ] = None,
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -2127,6 +2271,8 @@ class AbtestingV3ClientSync:
         :type index_suffix: str
         :param direction: Sort order for A/B tests by start date. Use 'asc' for ascending or 'desc' for descending. Active A/B tests are always listed first.
         :type direction: Direction
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -2143,6 +2289,8 @@ class AbtestingV3ClientSync:
             _query_parameters["indexSuffix"] = index_suffix
         if direction is not None:
             _query_parameters["direction"] = direction
+        if methods is not None:
+            _query_parameters["methods"] = methods
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -2184,6 +2332,15 @@ class AbtestingV3ClientSync:
             ],
             str,
         ] = None,
+        methods: Union[
+            list[str],
+            Annotated[
+                Optional[Annotated[List[AnalysisMethod], Field(min_length=1)]],
+                Field(
+                    description="Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed. "
+                ),
+            ],
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ListABTestsResponse:
         """
@@ -2202,11 +2359,19 @@ class AbtestingV3ClientSync:
         :type index_suffix: str
         :param direction: Sort order for A/B tests by start date. Use 'asc' for ascending or 'desc' for descending. Active A/B tests are always listed first.
         :type direction: Direction
+        :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
+        :type methods: List[AnalysisMethod]
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'ListABTestsResponse' result object.
         """
         resp = self.list_ab_tests_with_http_info(
-            offset, limit, index_prefix, index_suffix, direction, request_options
+            offset,
+            limit,
+            index_prefix,
+            index_suffix,
+            direction,
+            methods,
+            request_options,
         )
         return resp.deserialize(ListABTestsResponse, resp.raw_data)
 
