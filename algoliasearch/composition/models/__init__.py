@@ -46,6 +46,8 @@ from .exhaustive import Exhaustive
 from .external_injected_item import ExternalInjectedItem
 from .external_injection import ExternalInjection
 from .external_ordering import ExternalOrdering
+from .external_provider import ExternalProvider
+from .external_provider_ordering import ExternalProviderOrdering
 from .facet_filters import FacetFilters
 from .facet_hits import FacetHits
 from .facet_ordering import FacetOrdering
@@ -60,6 +62,8 @@ from .hit_ranking_info import HitRankingInfo
 from .ignore_plurals import IgnorePlurals
 from .index_settings_facets import IndexSettingsFacets
 from .injected_item_external import InjectedItemExternal
+from .injected_item_external_provider import InjectedItemExternalProvider
+from .injected_item_external_provider_source import InjectedItemExternalProviderSource
 from .injected_item_external_source import InjectedItemExternalSource
 from .injected_item_hits_metadata import InjectedItemHitsMetadata
 from .injected_item_metadata import InjectedItemMetadata
@@ -70,11 +74,13 @@ from .injected_item_source import InjectedItemSource
 from .injection import Injection
 from .injection_injected_item import InjectionInjectedItem
 from .injection_main import InjectionMain
+from .injection_main_external_provider_source import InjectionMainExternalProviderSource
 from .injection_main_recommend_source import InjectionMainRecommendSource
 from .injection_main_search_source import InjectionMainSearchSource
 from .injection_main_source import InjectionMainSource
 from .inside_bounding_box import InsideBoundingBox
 from .list_compositions_response import ListCompositionsResponse
+from .main_external_provider import MainExternalProvider
 from .main_injection_query_parameters import MainInjectionQueryParameters
 from .main_recommend import MainRecommend
 from .main_search import MainSearch
@@ -89,6 +95,7 @@ from .optional_filters import OptionalFilters
 from .optional_words import OptionalWords
 from .params import Params
 from .personalization import Personalization
+from .processing_error import ProcessingError
 from .query_type import QueryType
 from .range import Range
 from .recommend import Recommend
@@ -167,6 +174,8 @@ __all__ = (
     "ExternalInjectedItem",
     "ExternalInjection",
     "ExternalOrdering",
+    "ExternalProvider",
+    "ExternalProviderOrdering",
     "FacetFilters",
     "FacetHits",
     "FacetOrdering",
@@ -181,6 +190,8 @@ __all__ = (
     "IgnorePlurals",
     "IndexSettingsFacets",
     "InjectedItemExternal",
+    "InjectedItemExternalProvider",
+    "InjectedItemExternalProviderSource",
     "InjectedItemExternalSource",
     "InjectedItemHitsMetadata",
     "InjectedItemMetadata",
@@ -191,11 +202,13 @@ __all__ = (
     "Injection",
     "InjectionInjectedItem",
     "InjectionMain",
+    "InjectionMainExternalProviderSource",
     "InjectionMainRecommendSource",
     "InjectionMainSearchSource",
     "InjectionMainSource",
     "InsideBoundingBox",
     "ListCompositionsResponse",
+    "MainExternalProvider",
     "MainInjectionQueryParameters",
     "MainRecommend",
     "MainSearch",
@@ -210,6 +223,7 @@ __all__ = (
     "OptionalWords",
     "Params",
     "Personalization",
+    "ProcessingError",
     "QueryType",
     "Range",
     "Recommend",

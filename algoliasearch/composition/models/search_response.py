@@ -21,11 +21,13 @@ else:
 from algoliasearch.composition.models.compositions_search_response import (
     CompositionsSearchResponse,
 )
+from algoliasearch.composition.models.processing_error import ProcessingError
 from algoliasearch.composition.models.search_results_item import SearchResultsItem
 
 _ALIASES = {
     "compositions": "compositions",
     "results": "results",
+    "errors": "errors",
 }
 
 
@@ -41,6 +43,8 @@ class SearchResponse(BaseModel):
     compositions: Optional[CompositionsSearchResponse] = None
     results: List[SearchResultsItem]
     """ Search results. """
+    errors: Optional[List[ProcessingError]] = None
+    """ Non-critical errors encountered while processing the request that may have affected the returned results (for example, an external provider failure that fell back to another result set). """
 
     model_config = ConfigDict(
         strict=False,
@@ -85,6 +89,11 @@ class SearchResponse(BaseModel):
         obj["results"] = (
             [SearchResultsItem.from_dict(_item) for _item in obj["results"]]
             if obj.get("results") is not None
+            else None
+        )
+        obj["errors"] = (
+            [ProcessingError.from_dict(_item) for _item in obj["errors"]]
+            if obj.get("errors") is not None
             else None
         )
 

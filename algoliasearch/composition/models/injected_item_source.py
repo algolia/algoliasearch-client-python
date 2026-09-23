@@ -18,6 +18,9 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.composition.models.injected_item_external_provider_source import (
+    InjectedItemExternalProviderSource,
+)
 from algoliasearch.composition.models.injected_item_external_source import (
     InjectedItemExternalSource,
 )
@@ -42,13 +45,19 @@ class InjectedItemSource(BaseModel):
         default=None
     )
 
+    oneof_schema_4_validator: Optional[InjectedItemExternalProviderSource] = Field(
+        default=None
+    )
+
     actual_instance: Union[
+        InjectedItemExternalProviderSource,
         InjectedItemExternalSource,
         InjectedItemRecommendSource,
         InjectedItemSearchSource,
         None,
     ] = None
     one_of_schemas: Set[str] = {
+        "InjectedItemExternalProviderSource",
         "InjectedItemExternalSource",
         "InjectedItemRecommendSource",
         "InjectedItemSearchSource",
@@ -72,6 +81,7 @@ class InjectedItemSource(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Union[
+        InjectedItemExternalProviderSource,
         InjectedItemExternalSource,
         InjectedItemRecommendSource,
         InjectedItemSearchSource,
@@ -112,9 +122,17 @@ class InjectedItemSource(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = InjectedItemExternalProviderSource.from_json(
+                json_str
+            )
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into InjectedItemSource with oneOf schemas: InjectedItemExternalSource, InjectedItemRecommendSource, InjectedItemSearchSource. Details: "
+            "No match found when deserializing the JSON string into InjectedItemSource with oneOf schemas: InjectedItemExternalProviderSource, InjectedItemExternalSource, InjectedItemRecommendSource, InjectedItemSearchSource. Details: "
             + ", ".join(error_messages)
         )
 
@@ -135,6 +153,7 @@ class InjectedItemSource(BaseModel):
     ) -> Optional[
         Union[
             Dict[str, Any],
+            InjectedItemExternalProviderSource,
             InjectedItemExternalSource,
             InjectedItemRecommendSource,
             InjectedItemSearchSource,

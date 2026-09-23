@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,13 +18,8 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.external_provider import ExternalProvider
-from algoliasearch.composition.models.params import Params
-
 _ALIASES = {
-    "params": "params",
-    "feeds_order": "feedsOrder",
-    "external_provider": "externalProvider",
+    "configuration_params": "configurationParams",
 }
 
 
@@ -32,15 +27,13 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class RequestBody(BaseModel):
+class ExternalProvider(BaseModel):
     """
-    RequestBody
+    ExternalProvider
     """
 
-    params: Optional[Params] = None
-    feeds_order: Optional[List[str]] = None
-    """ A list of Feed IDs that specifies the order in which to order the results in the response.  The IDs should be a subset of those in the `feeds` object of the targeted `multifeed` Composition / Composition Rule, and only those specified will be processed.   The value overrides the value in the defined behavior, and when unspecified, the value defined in the behavior is used. When neither value is present, all feeds are processed.  """
-    external_provider: Optional[ExternalProvider] = None
+    configuration_params: Optional[Dict[str, object]] = None
+    """ Values for non-prefixed configuration placeholders, overriding the composition source's `configurationParams` and the configuration's `defaults`. """
 
     model_config = ConfigDict(
         strict=False,
@@ -57,7 +50,7 @@ class RequestBody(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of RequestBody from a JSON string"""
+        """Create an instance of ExternalProvider from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -70,20 +63,11 @@ class RequestBody(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of RequestBody from a dict"""
+        """Create an instance of ExternalProvider from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
-
-        obj["params"] = (
-            Params.from_dict(obj["params"]) if obj.get("params") is not None else None
-        )
-        obj["externalProvider"] = (
-            ExternalProvider.from_dict(obj["externalProvider"])
-            if obj.get("externalProvider") is not None
-            else None
-        )
 
         return cls.model_validate(obj)
