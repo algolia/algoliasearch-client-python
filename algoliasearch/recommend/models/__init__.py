@@ -72,6 +72,7 @@ from .related_query import RelatedQuery
 from .remove_stop_words import RemoveStopWords
 from .remove_words_if_no_results import RemoveWordsIfNoResults
 from .rendering_content import RenderingContent
+from .result_card import ResultCard
 from .rule_metadata import RuleMetadata
 from .search_recommend_rules_params import SearchRecommendRulesParams
 from .search_recommend_rules_response import SearchRecommendRulesResponse
@@ -157,6 +158,7 @@ __all__ = (
     "RemoveStopWords",
     "RemoveWordsIfNoResults",
     "RenderingContent",
+    "ResultCard",
     "RuleMetadata",
     "SearchRecommendRulesParams",
     "SearchRecommendRulesResponse",

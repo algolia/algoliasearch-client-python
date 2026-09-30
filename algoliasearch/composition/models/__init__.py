@@ -107,6 +107,7 @@ from .remove_stop_words import RemoveStopWords
 from .remove_words_if_no_results import RemoveWordsIfNoResults
 from .rendering_content import RenderingContent
 from .request_body import RequestBody
+from .result_card import ResultCard
 from .results_composition_info_response import ResultsCompositionInfoResponse
 from .results_injected_item_applied_rules_info_response import (
     ResultsInjectedItemAppliedRulesInfoResponse,
@@ -235,6 +236,7 @@ __all__ = (
     "RemoveWordsIfNoResults",
     "RenderingContent",
     "RequestBody",
+    "ResultCard",
     "ResultsCompositionInfoResponse",
     "ResultsInjectedItemAppliedRulesInfoResponse",
     "ResultsInjectedItemInfoResponse",

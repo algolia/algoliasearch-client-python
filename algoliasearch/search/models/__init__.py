@@ -140,6 +140,7 @@ from .replace_all_objects_with_transformation_response import (
 )
 from .replace_source_response import ReplaceSourceResponse
 from .response_extensions import ResponseExtensions
+from .result_card import ResultCard
 from .rule import Rule
 from .save_object_response import SaveObjectResponse
 from .save_synonym_response import SaveSynonymResponse
@@ -328,6 +329,7 @@ __all__ = (
     "RenderingContent",
     "ReplaceSourceResponse",
     "ResponseExtensions",
+    "ResultCard",
     "Rule",
     "SaveObjectResponse",
     "SaveSynonymResponse",

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,12 +18,8 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.search.models.banner import Banner
-from algoliasearch.search.models.result_card import ResultCard
-
 _ALIASES = {
-    "banners": "banners",
-    "result_card": "resultCard",
+    "enabled": "enabled",
 }
 
 
@@ -31,14 +27,13 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class Widgets(BaseModel):
+class ResultCard(BaseModel):
     """
-    Widgets returned from any rules that are applied to the current search.
+    Agent Studio Result Card to display for a given search.
     """
 
-    banners: Optional[List[Banner]] = None
-    """ Banners defined in the Merchandising Studio for a given search. """
-    result_card: Optional[ResultCard] = None
+    enabled: Optional[bool] = None
+    """ Whether to show the Result Card for the current search. """
 
     model_config = ConfigDict(
         strict=False,
@@ -55,7 +50,7 @@ class Widgets(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Widgets from a JSON string"""
+        """Create an instance of ResultCard from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -68,22 +63,11 @@ class Widgets(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Widgets from a dict"""
+        """Create an instance of ResultCard from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
-
-        obj["banners"] = (
-            [Banner.from_dict(_item) for _item in obj["banners"]]
-            if obj.get("banners") is not None
-            else None
-        )
-        obj["resultCard"] = (
-            ResultCard.from_dict(obj["resultCard"])
-            if obj.get("resultCard") is not None
-            else None
-        )
 
         return cls.model_validate(obj)

@@ -19,9 +19,11 @@ else:
 
 
 from algoliasearch.composition.models.banner import Banner
+from algoliasearch.composition.models.result_card import ResultCard
 
 _ALIASES = {
     "banners": "banners",
+    "result_card": "resultCard",
 }
 
 
@@ -36,6 +38,7 @@ class Widgets(BaseModel):
 
     banners: Optional[List[Banner]] = None
     """ Banners defined in the Merchandising Studio for a given search. """
+    result_card: Optional[ResultCard] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -75,6 +78,11 @@ class Widgets(BaseModel):
         obj["banners"] = (
             [Banner.from_dict(_item) for _item in obj["banners"]]
             if obj.get("banners") is not None
+            else None
+        )
+        obj["resultCard"] = (
+            ResultCard.from_dict(obj["resultCard"])
+            if obj.get("resultCard") is not None
             else None
         )
 
