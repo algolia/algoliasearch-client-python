@@ -18,19 +18,13 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.external_provider_ordering import (
-    ExternalProviderOrdering,
-)
 from algoliasearch.composition.models.main_injection_query_parameters import (
     MainInjectionQueryParameters,
 )
 
 _ALIASES = {
     "index": "index",
-    "configuration_id": "configurationID",
-    "configuration_params": "configurationParams",
     "params": "params",
-    "ordering": "ordering",
 }
 
 
@@ -38,19 +32,14 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class MainExternalProvider(BaseModel):
+class InjectionMainSearch(BaseModel):
     """
-    MainExternalProvider
+    InjectionMainSearch
     """
 
     index: str
-    """ Algolia index used to fetch the records. """
-    configuration_id: str
-    """ Identifier of the external provider configuration. """
-    configuration_params: Optional[Dict[str, object]] = None
-    """ Default values for the configuration placeholders that are not reserved Composition placeholders. """
+    """ Algolia index used to retrieve records. """
     params: Optional[MainInjectionQueryParameters] = None
-    ordering: Optional[ExternalProviderOrdering] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -67,7 +56,7 @@ class MainExternalProvider(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MainExternalProvider from a JSON string"""
+        """Create an instance of InjectionMainSearch from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -80,7 +69,7 @@ class MainExternalProvider(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MainExternalProvider from a dict"""
+        """Create an instance of InjectionMainSearch from a dict"""
         if obj is None:
             return None
 
@@ -92,6 +81,5 @@ class MainExternalProvider(BaseModel):
             if obj.get("params") is not None
             else None
         )
-        obj["ordering"] = obj.get("ordering")
 
         return cls.model_validate(obj)

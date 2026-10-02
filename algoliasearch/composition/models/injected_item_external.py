@@ -25,8 +25,8 @@ from algoliasearch.composition.models.external_ordering import ExternalOrdering
 
 _ALIASES = {
     "index": "index",
-    "params": "params",
     "ordering": "ordering",
+    "params": "params",
 }
 
 
@@ -40,9 +40,9 @@ class InjectedItemExternal(BaseModel):
     """
 
     index: str
-    """ Composition Index name. """
-    params: Optional[BaseInjectionQueryParameters] = None
+    """ Algolia index used to retrieve records. """
     ordering: Optional[ExternalOrdering] = None
+    params: Optional[BaseInjectionQueryParameters] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -79,11 +79,11 @@ class InjectedItemExternal(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
+        obj["ordering"] = obj.get("ordering")
         obj["params"] = (
             BaseInjectionQueryParameters.from_dict(obj["params"])
             if obj.get("params") is not None
             else None
         )
-        obj["ordering"] = obj.get("ordering")
 
         return cls.model_validate(obj)

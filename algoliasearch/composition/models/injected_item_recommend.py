@@ -18,13 +18,17 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.main_injection_query_parameters import (
-    MainInjectionQueryParameters,
+from algoliasearch.composition.models.base_injection_query_parameters import (
+    BaseInjectionQueryParameters,
 )
+from algoliasearch.composition.models.model import Model
 
 _ALIASES = {
-    "index": "index",
-    "params": "params",
+    "index_name": "indexName",
+    "model": "model",
+    "threshold": "threshold",
+    "query_parameters": "queryParameters",
+    "fallback_parameters": "fallbackParameters",
 }
 
 
@@ -32,14 +36,18 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class MainSearch(BaseModel):
+class InjectedItemRecommend(BaseModel):
     """
-    MainSearch
+    InjectedItemRecommend
     """
 
-    index: str
-    """ Index to retrieve search results from. """
-    params: Optional[MainInjectionQueryParameters] = None
+    index_name: str
+    """ Index to retrieve recommendations from. """
+    model: Model
+    threshold: int
+    """ Minimum score a recommendation must have to be included. """
+    query_parameters: Optional[BaseInjectionQueryParameters] = None
+    fallback_parameters: Optional[BaseInjectionQueryParameters] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -56,7 +64,7 @@ class MainSearch(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MainSearch from a JSON string"""
+        """Create an instance of InjectedItemRecommend from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,16 +77,22 @@ class MainSearch(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MainSearch from a dict"""
+        """Create an instance of InjectedItemRecommend from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        obj["params"] = (
-            MainInjectionQueryParameters.from_dict(obj["params"])
-            if obj.get("params") is not None
+        obj["model"] = obj.get("model")
+        obj["queryParameters"] = (
+            BaseInjectionQueryParameters.from_dict(obj["queryParameters"])
+            if obj.get("queryParameters") is not None
+            else None
+        )
+        obj["fallbackParameters"] = (
+            BaseInjectionQueryParameters.from_dict(obj["fallbackParameters"])
+            if obj.get("fallbackParameters") is not None
             else None
         )
 

@@ -67,6 +67,7 @@ from .injected_item_external_provider_source import InjectedItemExternalProvider
 from .injected_item_external_source import InjectedItemExternalSource
 from .injected_item_hits_metadata import InjectedItemHitsMetadata
 from .injected_item_metadata import InjectedItemMetadata
+from .injected_item_recommend import InjectedItemRecommend
 from .injected_item_recommend_source import InjectedItemRecommendSource
 from .injected_item_search import InjectedItemSearch
 from .injected_item_search_source import InjectedItemSearchSource
@@ -74,16 +75,16 @@ from .injected_item_source import InjectedItemSource
 from .injection import Injection
 from .injection_injected_item import InjectionInjectedItem
 from .injection_main import InjectionMain
+from .injection_main_external_provider import InjectionMainExternalProvider
 from .injection_main_external_provider_source import InjectionMainExternalProviderSource
+from .injection_main_recommend import InjectionMainRecommend
 from .injection_main_recommend_source import InjectionMainRecommendSource
+from .injection_main_search import InjectionMainSearch
 from .injection_main_search_source import InjectionMainSearchSource
 from .injection_main_source import InjectionMainSource
 from .inside_bounding_box import InsideBoundingBox
 from .list_compositions_response import ListCompositionsResponse
-from .main_external_provider import MainExternalProvider
 from .main_injection_query_parameters import MainInjectionQueryParameters
-from .main_recommend import MainRecommend
-from .main_search import MainSearch
 from .match_level import MatchLevel
 from .matched_geo_location import MatchedGeoLocation
 from .model import Model
@@ -98,7 +99,6 @@ from .personalization import Personalization
 from .processing_error import ProcessingError
 from .query_type import QueryType
 from .range import Range
-from .recommend import Recommend
 from .redirect import Redirect
 from .redirect_rule_index_data import RedirectRuleIndexData
 from .redirect_rule_index_metadata import RedirectRuleIndexMetadata
@@ -196,6 +196,7 @@ __all__ = (
     "InjectedItemExternalSource",
     "InjectedItemHitsMetadata",
     "InjectedItemMetadata",
+    "InjectedItemRecommend",
     "InjectedItemRecommendSource",
     "InjectedItemSearch",
     "InjectedItemSearchSource",
@@ -203,16 +204,16 @@ __all__ = (
     "Injection",
     "InjectionInjectedItem",
     "InjectionMain",
+    "InjectionMainExternalProvider",
     "InjectionMainExternalProviderSource",
+    "InjectionMainRecommend",
     "InjectionMainRecommendSource",
+    "InjectionMainSearch",
     "InjectionMainSearchSource",
     "InjectionMainSource",
     "InsideBoundingBox",
     "ListCompositionsResponse",
-    "MainExternalProvider",
     "MainInjectionQueryParameters",
-    "MainRecommend",
-    "MainSearch",
     "MatchLevel",
     "MatchedGeoLocation",
     "Model",
@@ -227,7 +228,6 @@ __all__ = (
     "ProcessingError",
     "QueryType",
     "Range",
-    "Recommend",
     "Redirect",
     "RedirectRuleIndexData",
     "RedirectRuleIndexMetadata",

@@ -29,8 +29,8 @@ _ALIASES = {
     "index": "index",
     "configuration_id": "configurationID",
     "configuration_params": "configurationParams",
-    "params": "params",
     "ordering": "ordering",
+    "params": "params",
 }
 
 
@@ -49,8 +49,8 @@ class InjectedItemExternalProvider(BaseModel):
     """ Identifier of the external provider configuration. """
     configuration_params: Optional[Dict[str, object]] = None
     """ Default values for the configuration placeholders that are not reserved Composition placeholders. """
-    params: Optional[BaseInjectionQueryParameters] = None
     ordering: Optional[ExternalProviderOrdering] = None
+    params: Optional[BaseInjectionQueryParameters] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -87,11 +87,11 @@ class InjectedItemExternalProvider(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
+        obj["ordering"] = obj.get("ordering")
         obj["params"] = (
             BaseInjectionQueryParameters.from_dict(obj["params"])
             if obj.get("params") is not None
             else None
         )
-        obj["ordering"] = obj.get("ordering")
 
         return cls.model_validate(obj)

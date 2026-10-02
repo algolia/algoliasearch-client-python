@@ -18,7 +18,7 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.main_search import MainSearch
+from algoliasearch.composition.models.injection_main_search import InjectionMainSearch
 
 _ALIASES = {
     "search": "search",
@@ -34,7 +34,7 @@ class InjectionMainSearchSource(BaseModel):
     Organic result set will originate from a search request performed on the specified index.
     """
 
-    search: MainSearch
+    search: InjectionMainSearch
 
     model_config = ConfigDict(
         strict=False,
@@ -72,7 +72,7 @@ class InjectionMainSearchSource(BaseModel):
             return cls.model_validate(obj)
 
         obj["search"] = (
-            MainSearch.from_dict(obj["search"])
+            InjectionMainSearch.from_dict(obj["search"])
             if obj.get("search") is not None
             else None
         )

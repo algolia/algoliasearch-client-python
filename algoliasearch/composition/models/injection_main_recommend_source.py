@@ -18,7 +18,9 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.main_recommend import MainRecommend
+from algoliasearch.composition.models.injection_main_recommend import (
+    InjectionMainRecommend,
+)
 
 _ALIASES = {
     "recommend": "recommend",
@@ -34,7 +36,7 @@ class InjectionMainRecommendSource(BaseModel):
     Organic result set will originate from a recommend request.
     """
 
-    recommend: MainRecommend
+    recommend: InjectionMainRecommend
 
     model_config = ConfigDict(
         strict=False,
@@ -72,7 +74,7 @@ class InjectionMainRecommendSource(BaseModel):
             return cls.model_validate(obj)
 
         obj["recommend"] = (
-            MainRecommend.from_dict(obj["recommend"])
+            InjectionMainRecommend.from_dict(obj["recommend"])
             if obj.get("recommend") is not None
             else None
         )

@@ -18,7 +18,9 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.main_external_provider import MainExternalProvider
+from algoliasearch.composition.models.injection_main_external_provider import (
+    InjectionMainExternalProvider,
+)
 
 _ALIASES = {
     "external_provider": "externalProvider",
@@ -34,7 +36,7 @@ class InjectionMainExternalProviderSource(BaseModel):
     Organic result set will originate from a request to an external provider configuration.
     """
 
-    external_provider: MainExternalProvider
+    external_provider: InjectionMainExternalProvider
 
     model_config = ConfigDict(
         strict=False,
@@ -72,7 +74,7 @@ class InjectionMainExternalProviderSource(BaseModel):
             return cls.model_validate(obj)
 
         obj["externalProvider"] = (
-            MainExternalProvider.from_dict(obj["externalProvider"])
+            InjectionMainExternalProvider.from_dict(obj["externalProvider"])
             if obj.get("externalProvider") is not None
             else None
         )

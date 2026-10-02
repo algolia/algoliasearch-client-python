@@ -18,7 +18,9 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.composition.models.recommend import Recommend
+from algoliasearch.composition.models.injected_item_recommend import (
+    InjectedItemRecommend,
+)
 
 _ALIASES = {
     "recommend": "recommend",
@@ -34,7 +36,7 @@ class InjectedItemRecommendSource(BaseModel):
     Injected items will originate from a recommendation request performed on the specified index.
     """
 
-    recommend: Recommend
+    recommend: InjectedItemRecommend
 
     model_config = ConfigDict(
         strict=False,
@@ -72,7 +74,7 @@ class InjectedItemRecommendSource(BaseModel):
             return cls.model_validate(obj)
 
         obj["recommend"] = (
-            Recommend.from_dict(obj["recommend"])
+            InjectedItemRecommend.from_dict(obj["recommend"])
             if obj.get("recommend") is not None
             else None
         )

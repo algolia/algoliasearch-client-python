@@ -38,7 +38,7 @@ class InjectedItemSearch(BaseModel):
     """
 
     index: str
-    """ Composition Index name. """
+    """ Algolia index used to retrieve records. """
     params: Optional[BaseInjectionQueryParameters] = None
 
     model_config = ConfigDict(
