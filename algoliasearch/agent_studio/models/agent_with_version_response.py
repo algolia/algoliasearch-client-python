@@ -19,7 +19,7 @@ else:
 
 
 from algoliasearch.agent_studio.models.agent_status import AgentStatus
-from algoliasearch.agent_studio.models.tool_config_input import ToolConfigInput
+from algoliasearch.agent_studio.models.tool_config_output import ToolConfigOutput
 
 _ALIASES = {
     "id": "id",
@@ -57,7 +57,7 @@ class AgentWithVersionResponse(BaseModel):
     instructions: str
     system_prompt: Optional[str] = None
     config: Dict[str, object]
-    tools: Optional[List[ToolConfigInput]] = None
+    tools: Optional[List[ToolConfigOutput]] = None
     template_type: Optional[str] = None
     created_at: str
     updated_at: Union[str, None]
@@ -100,7 +100,7 @@ class AgentWithVersionResponse(BaseModel):
 
         obj["status"] = obj.get("status")
         obj["tools"] = (
-            [ToolConfigInput.from_dict(_item) for _item in obj["tools"]]
+            [ToolConfigOutput.from_dict(_item) for _item in obj["tools"]]
             if obj.get("tools") is not None
             else None
         )

@@ -21,11 +21,14 @@ else:
 from algoliasearch.agent_studio.models.algolia_search_tool_index_config import (
     AlgoliaSearchToolIndexConfig,
 )
+from algoliasearch.agent_studio.models.mode_enum import ModeEnum
 
 _ALIASES = {
     "name": "name",
     "type": "type",
     "indices": "indices",
+    "mode": "mode",
+    "allow_unlisted_indices": "allowUnlistedIndices",
 }
 
 
@@ -41,6 +44,8 @@ class AlgoliaSearchToolConfig(BaseModel):
     name: str
     type: str
     indices: List[AlgoliaSearchToolIndexConfig]
+    mode: Optional[ModeEnum] = None
+    allow_unlisted_indices: Optional[bool] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -82,5 +87,6 @@ class AlgoliaSearchToolConfig(BaseModel):
             if obj.get("indices") is not None
             else None
         )
+        obj["mode"] = obj.get("mode")
 
         return cls.model_validate(obj)

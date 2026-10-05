@@ -21,9 +21,9 @@ else:
 from algoliasearch.agent_studio.models.mcp_tool_config import McpToolConfig
 
 
-class ToolConfig(BaseModel):
+class ToolConfigOrBooleanUnion(BaseModel):
     """
-    ToolConfig
+    ToolConfigOrBooleanUnion
     """
 
     oneof_schema_1_validator: Optional[McpToolConfig] = Field(default=None)
@@ -56,7 +56,7 @@ class ToolConfig(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
-        """Create an instance of ToolConfig from a JSON string"""
+        """Create an instance of ToolConfigOrBooleanUnion from a JSON string"""
         return cls.from_json(dumps(obj))
 
     @classmethod
@@ -80,7 +80,7 @@ class ToolConfig(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into ToolConfig with oneOf schemas: McpToolConfig, bool. Details: "
+            "No match found when deserializing the JSON string into ToolConfigOrBooleanUnion with oneOf schemas: McpToolConfig, bool. Details: "
             + ", ".join(error_messages)
         )
 

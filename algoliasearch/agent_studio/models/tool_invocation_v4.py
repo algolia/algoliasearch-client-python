@@ -38,7 +38,7 @@ def _alias_generator(name: str) -> str:
 
 class ToolInvocationV4(BaseModel):
     """
-    Model for tool invocation in a Message.
+    A tool invocation in a message.
     """
 
     tool_call_id: str

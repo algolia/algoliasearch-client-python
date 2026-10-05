@@ -18,6 +18,7 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.agent_studio.models.boolean_param import BooleanParam
 from algoliasearch.agent_studio.models.facets_param import FacetsParam
 from algoliasearch.agent_studio.models.number_param import NumberParam
 from algoliasearch.agent_studio.models.string_array_param import StringArrayParam
@@ -29,6 +30,7 @@ _ALIASES = {
     "page": "page",
     "attributes_to_retrieve": "attributesToRetrieve",
     "response_fields": "responseFields",
+    "distinct": "distinct",
     "facets": "facets",
     "custom": "custom",
 }
@@ -48,6 +50,7 @@ class IndexSearchParameters(BaseModel):
     page: Optional[NumberParam] = None
     attributes_to_retrieve: Optional[StringArrayParam] = None
     response_fields: Optional[StringArrayParam] = None
+    distinct: Optional[BooleanParam] = None
     facets: Optional[FacetsParam] = None
     custom: Optional[Dict[str, object]] = None
 
@@ -105,6 +108,11 @@ class IndexSearchParameters(BaseModel):
         obj["responseFields"] = (
             StringArrayParam.from_dict(obj["responseFields"])
             if obj.get("responseFields") is not None
+            else None
+        )
+        obj["distinct"] = (
+            BooleanParam.from_dict(obj["distinct"])
+            if obj.get("distinct") is not None
             else None
         )
         obj["facets"] = (

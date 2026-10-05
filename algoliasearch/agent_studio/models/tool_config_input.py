@@ -18,11 +18,8 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.agent_studio.models.algolia_display_results_tool_config import (
-    AlgoliaDisplayResultsToolConfig,
-)
-from algoliasearch.agent_studio.models.algolia_recommend_tool_config_input import (
-    AlgoliaRecommendToolConfigInput,
+from algoliasearch.agent_studio.models.algolia_recommend_tool_config import (
+    AlgoliaRecommendToolConfig,
 )
 from algoliasearch.agent_studio.models.algolia_search_tool_config import (
     AlgoliaSearchToolConfig,
@@ -43,21 +40,14 @@ class ToolConfigInput(BaseModel):
 
     oneof_schema_2_validator: Optional[AlgoliaSearchToolConfig] = Field(default=None)
 
-    oneof_schema_3_validator: Optional[AlgoliaRecommendToolConfigInput] = Field(
-        default=None
-    )
+    oneof_schema_3_validator: Optional[AlgoliaRecommendToolConfig] = Field(default=None)
 
-    oneof_schema_4_validator: Optional[AlgoliaDisplayResultsToolConfig] = Field(
-        default=None
-    )
+    oneof_schema_4_validator: Optional[McpServerToolConfig] = Field(default=None)
 
-    oneof_schema_5_validator: Optional[McpServerToolConfig] = Field(default=None)
-
-    oneof_schema_6_validator: Optional[UnknownToolConfig] = Field(default=None)
+    oneof_schema_5_validator: Optional[UnknownToolConfig] = Field(default=None)
 
     actual_instance: Union[
-        AlgoliaDisplayResultsToolConfig,
-        AlgoliaRecommendToolConfigInput,
+        AlgoliaRecommendToolConfig,
         AlgoliaSearchToolConfig,
         ClientSideToolConfig,
         McpServerToolConfig,
@@ -65,8 +55,7 @@ class ToolConfigInput(BaseModel):
         None,
     ] = None
     one_of_schemas: Set[str] = {
-        "AlgoliaDisplayResultsToolConfig",
-        "AlgoliaRecommendToolConfigInput",
+        "AlgoliaRecommendToolConfig",
         "AlgoliaSearchToolConfig",
         "ClientSideToolConfig",
         "McpServerToolConfig",
@@ -91,8 +80,7 @@ class ToolConfigInput(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Union[
-        AlgoliaDisplayResultsToolConfig,
-        AlgoliaRecommendToolConfigInput,
+        AlgoliaRecommendToolConfig,
         AlgoliaSearchToolConfig,
         ClientSideToolConfig,
         McpServerToolConfig,
@@ -118,15 +106,8 @@ class ToolConfigInput(BaseModel):
 
         _json_dict = loads(json_str)
         _discriminator_value = _json_dict.get("type")
-        if _discriminator_value == "algolia_display_results":
-            instance.actual_instance = AlgoliaDisplayResultsToolConfig.from_json(
-                json_str
-            )
-            return instance
         if _discriminator_value == "algolia_recommend":
-            instance.actual_instance = AlgoliaRecommendToolConfigInput.from_json(
-                json_str
-            )
+            instance.actual_instance = AlgoliaRecommendToolConfig.from_json(json_str)
             return instance
         if _discriminator_value == "algolia_search_index":
             instance.actual_instance = AlgoliaSearchToolConfig.from_json(json_str)
@@ -154,17 +135,7 @@ class ToolConfigInput(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.actual_instance = AlgoliaRecommendToolConfigInput.from_json(
-                json_str
-            )
-
-            return instance
-        except (ValidationError, ValueError) as e:
-            error_messages.append(str(e))
-        try:
-            instance.actual_instance = AlgoliaDisplayResultsToolConfig.from_json(
-                json_str
-            )
+            instance.actual_instance = AlgoliaRecommendToolConfig.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
@@ -183,7 +154,7 @@ class ToolConfigInput(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into ToolConfigInput with oneOf schemas: AlgoliaDisplayResultsToolConfig, AlgoliaRecommendToolConfigInput, AlgoliaSearchToolConfig, ClientSideToolConfig, McpServerToolConfig, UnknownToolConfig. Details: "
+            "No match found when deserializing the JSON string into ToolConfigInput with oneOf schemas: AlgoliaRecommendToolConfig, AlgoliaSearchToolConfig, ClientSideToolConfig, McpServerToolConfig, UnknownToolConfig. Details: "
             + ", ".join(error_messages)
         )
 
@@ -204,8 +175,7 @@ class ToolConfigInput(BaseModel):
     ) -> Optional[
         Union[
             Dict[str, Any],
-            AlgoliaDisplayResultsToolConfig,
-            AlgoliaRecommendToolConfigInput,
+            AlgoliaRecommendToolConfig,
             AlgoliaSearchToolConfig,
             ClientSideToolConfig,
             McpServerToolConfig,

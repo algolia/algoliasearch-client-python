@@ -18,13 +18,17 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.agent_studio.models.agent_completion_algolia_params import (
+    AgentCompletionAlgoliaParams,
+)
+from algoliasearch.agent_studio.models.agent_test_configuration import (
+    AgentTestConfiguration,
+)
+
 _ALIASES = {
-    "name": "name",
-    "type": "type",
-    "min_groups": "minGroups",
-    "max_groups": "maxGroups",
-    "min_results_per_group": "minResultsPerGroup",
-    "max_results_per_group": "maxResultsPerGroup",
+    "algolia": "algolia",
+    "tool_approvals": "toolApprovals",
+    "configuration": "configuration",
 }
 
 
@@ -32,17 +36,14 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class AlgoliaDisplayResultsToolConfig(BaseModel):
+class ForwardedProps(BaseModel):
     """
-    Configuration for the algolia_display_results tool.
+    ForwardedProps
     """
 
-    name: Optional[str] = None
-    type: str
-    min_groups: Optional[int] = None
-    max_groups: Optional[int] = None
-    min_results_per_group: Optional[int] = None
-    max_results_per_group: Optional[int] = None
+    algolia: Optional[AgentCompletionAlgoliaParams] = None
+    tool_approvals: Optional[Dict[str, Dict[str, object]]] = None
+    configuration: Optional[AgentTestConfiguration] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -59,7 +60,7 @@ class AlgoliaDisplayResultsToolConfig(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of AlgoliaDisplayResultsToolConfig from a JSON string"""
+        """Create an instance of ForwardedProps from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -72,11 +73,22 @@ class AlgoliaDisplayResultsToolConfig(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of AlgoliaDisplayResultsToolConfig from a dict"""
+        """Create an instance of ForwardedProps from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
+
+        obj["algolia"] = (
+            AgentCompletionAlgoliaParams.from_dict(obj["algolia"])
+            if obj.get("algolia") is not None
+            else None
+        )
+        obj["configuration"] = (
+            AgentTestConfiguration.from_dict(obj["configuration"])
+            if obj.get("configuration") is not None
+            else None
+        )
 
         return cls.model_validate(obj)

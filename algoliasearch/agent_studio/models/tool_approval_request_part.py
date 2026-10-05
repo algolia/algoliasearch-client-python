@@ -27,6 +27,7 @@ _ALIASES = {
     "provider_options": "providerOptions",
     "args_hash": "argsHash",
     "app_id": "appId",
+    "conversation_id": "conversationId",
 }
 
 
@@ -47,6 +48,7 @@ class ToolApprovalRequestPart(BaseModel):
     provider_options: Optional[Dict[str, object]] = None
     args_hash: Optional[str] = None
     app_id: Optional[str] = None
+    conversation_id: Optional[str] = None
 
     model_config = ConfigDict(
         strict=False,

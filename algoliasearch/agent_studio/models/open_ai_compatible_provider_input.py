@@ -31,7 +31,7 @@ def _alias_generator(name: str) -> str:
 
 class OpenAICompatibleProviderInput(BaseModel):
     """
-    OpenAI-compatible provider input. Contrary to the OpenAIProviderInput, the base_url is required. A model is required to verify connectivity and get saved as the default model. This can later be changed at the Agent level.
+    Input for a provider with an OpenAI-compatible API.
     """
 
     api_key: str

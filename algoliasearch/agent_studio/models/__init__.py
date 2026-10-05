@@ -11,14 +11,20 @@ __version__ = "4.47.0"
 from .advanced_syntax_features import AdvancedSyntaxFeatures
 from .agent_completion_algolia_params import AgentCompletionAlgoliaParams
 from .agent_completion_request import AgentCompletionRequest
+from .agent_completion_request_union import AgentCompletionRequestUnion
 from .agent_config_create import AgentConfigCreate
 from .agent_config_update import AgentConfigUpdate
 from .agent_status import AgentStatus
 from .agent_studio_validation_error import AgentStudioValidationError
 from .agent_test_configuration import AgentTestConfiguration
 from .agent_with_version_response import AgentWithVersionResponse
-from .algolia_display_results_tool_config import AlgoliaDisplayResultsToolConfig
-from .algolia_recommend_tool_config_input import AlgoliaRecommendToolConfigInput
+from .agui_completion_request import AguiCompletionRequest
+from .agui_resume import AguiResume
+from .algolia_grouped_results_compat_tool_config import (
+    AlgoliaGroupedResultsCompatToolConfig,
+)
+from .algolia_grouped_results_tool_config import AlgoliaGroupedResultsToolConfig
+from .algolia_recommend_tool_config import AlgoliaRecommendToolConfig
 from .algolia_recommend_tool_index_config import AlgoliaRecommendToolIndexConfig
 from .algolia_search_tool_config import AlgoliaSearchToolConfig
 from .algolia_search_tool_index_config import AlgoliaSearchToolIndexConfig
@@ -33,18 +39,27 @@ from .application_config_patch import ApplicationConfigPatch
 from .application_config_response import ApplicationConfigResponse
 from .around_precision_union import AroundPrecisionUnion
 from .around_radius_union import AroundRadiusUnion
+from .assistant_message_agui import AssistantMessageAGUI
 from .assistant_message_v4 import AssistantMessageV4
 from .assistant_message_v5 import AssistantMessageV5
 from .assistant_part_v4 import AssistantPartV4
 from .assistant_part_v5 import AssistantPartV5
 from .azure_open_ai_provider_input import AzureOpenAIProviderInput
 from .base_provider_input import BaseProviderInput
+from .boolean_param import BooleanParam
 from .client_side_tool_config import ClientSideToolConfig
 from .client_tools_args_schema import ClientToolsArgsSchema
+from .compaction_stats import CompactionStats
 from .compatibility_mode import CompatibilityMode
+from .context_compact_request import ContextCompactRequest
+from .context_response import ContextResponse
+from .context_stats import ContextStats
+from .context_trim_request import ContextTrimRequest
 from .conversation_base_response import ConversationBaseResponse
 from .conversation_full_response import ConversationFullResponse
 from .conversation_metadata import ConversationMetadata
+from .data_guardrail_violation_part_v5 import DataGuardrailViolationPartV5
+from .data_part_v5 import DataPartV5
 from .distinct_union import DistinctUnion
 from .episode import Episode
 from .error_base import ErrorBase
@@ -55,24 +70,38 @@ from .facets_param import FacetsParam
 from .facets_union import FacetsUnion
 from .feedback_creation_request import FeedbackCreationRequest
 from .feedback_response import FeedbackResponse
+from .feedback_update_request import FeedbackUpdateRequest
+from .forwarded_props import ForwardedProps
+from .function_call_agui import FunctionCallAGUI
+from .guardrail_outcome import GuardrailOutcome
+from .guardrail_violation_data_v5 import GuardrailViolationDataV5
 from .ignore_plurals_union import IgnorePluralsUnion
+from .impact_analytics import ImpactAnalytics
 from .index_search_parameters import IndexSearchParameters
+from .input_union import InputUnion
 from .inside_bounding_box_union import InsideBoundingBoxUnion
 from .inside_polygon_union import InsidePolygonUnion
+from .items_union import ItemsUnion
+from .items_union_agui_completion_request import ItemsUnionAguiCompletionRequest
 from .location_item_union import LocationItemUnion
+from .managed_provider_response_input import ManagedProviderResponseInput
 from .mcp_server_tool_config import McpServerToolConfig
 from .mcp_tool_config import McpToolConfig
 from .memory_record import MemoryRecord
 from .memory_type import MemoryType
+from .message_event import MessageEvent
 from .message_part import MessagePart
+from .message_part_assistant_message_agui import MessagePartAssistantMessageAGUI
 from .message_response import MessageResponse
 from .message_role import MessageRole
 from .message_v4 import MessageV4
 from .message_v5 import MessageV5
 from .messages_union import MessagesUnion
+from .mode_enum import ModeEnum
 from .number_param import NumberParam
 from .number_param_constraint import NumberParamConstraint
 from .numeric_filters_union import NumericFiltersUnion
+from .one_of_enum import OneOfEnum
 from .open_ai_compatible_provider_input import OpenAICompatibleProviderInput
 from .open_ai_provider_input import OpenAIProviderInput
 from .optional_filters_union import OptionalFiltersUnion
@@ -92,7 +121,9 @@ from .provider_input_nullable import ProviderInputNullable
 from .provider_name import ProviderName
 from .query_type import QueryType
 from .re_ranking_apply_filter_union import ReRankingApplyFilterUnion
+from .reasoning_message_agui import ReasoningMessageAGUI
 from .reasoning_part import ReasoningPart
+from .reasoning_part_agui import ReasoningPartAGUI
 from .reasoning_part_v4 import ReasoningPartV4
 from .reasoning_part_v5 import ReasoningPartV5
 from .remove_stop_words_union import RemoveStopWordsUnion
@@ -104,22 +135,33 @@ from .secret_key_patch import SecretKeyPatch
 from .secret_key_response import SecretKeyResponse
 from .start_part import StartPart
 from .start_step_part import StartStepPart
+from .status_enum import StatusEnum
 from .step_start_part_v4 import StepStartPartV4
 from .step_start_part_v5 import StepStartPartV5
 from .string_array_param import StringArrayParam
 from .string_array_param_constraint import StringArrayParamConstraint
 from .supported_language import SupportedLanguage
 from .tag_filters_union import TagFiltersUnion
+from .task_kind import TaskKind
+from .task_request import TaskRequest
+from .task_response import TaskResponse
 from .text_param import TextParam
 from .text_part import TextPart
+from .text_part_agui import TextPartAGUI
 from .text_part_v4 import TextPartV4
 from .text_part_v5 import TextPartV5
+from .tool_approval_agui import ToolApprovalAGUI
 from .tool_approval_request_part import ToolApprovalRequestPart
+from .tool_call_agui import ToolCallAGUI
 from .tool_call_part import ToolCallPart
-from .tool_config import ToolConfig
+from .tool_call_part_agui import ToolCallPartAGUI
+from .tool_call_result_part_agui import ToolCallResultPartAGUI
 from .tool_config_input import ToolConfigInput
+from .tool_config_or_boolean_union import ToolConfigOrBooleanUnion
+from .tool_config_output import ToolConfigOutput
 from .tool_invocation_part_v4 import ToolInvocationPartV4
 from .tool_invocation_v4 import ToolInvocationV4
+from .tool_message_agui import ToolMessageAGUI
 from .tool_part_v5 import ToolPartV5
 from .tool_result_output import ToolResultOutput
 from .tool_result_output_type import ToolResultOutputType
@@ -129,23 +171,30 @@ from .typo_tolerance_enum import TypoToleranceEnum
 from .typo_tolerance_union import TypoToleranceUnion
 from .unknown_tool_config import UnknownToolConfig
 from .user_data_response import UserDataResponse
+from .user_message_agui import UserMessageAGUI
+from .user_message_metadata_agui import UserMessageMetadataAGUI
 from .user_message_metadata_v5 import UserMessageMetadataV5
 from .user_message_v4 import UserMessageV4
 from .user_message_v5 import UserMessageV5
 from .vote_enum import VoteEnum
+from .xai_provider_input import XAIProviderInput
 
 __all__ = (
     "AdvancedSyntaxFeatures",
     "AgentCompletionAlgoliaParams",
     "AgentCompletionRequest",
+    "AgentCompletionRequestUnion",
     "AgentConfigCreate",
     "AgentConfigUpdate",
     "AgentStatus",
     "AgentStudioValidationError",
     "AgentTestConfiguration",
     "AgentWithVersionResponse",
-    "AlgoliaDisplayResultsToolConfig",
-    "AlgoliaRecommendToolConfigInput",
+    "AguiCompletionRequest",
+    "AguiResume",
+    "AlgoliaGroupedResultsCompatToolConfig",
+    "AlgoliaGroupedResultsToolConfig",
+    "AlgoliaRecommendToolConfig",
     "AlgoliaRecommendToolIndexConfig",
     "AlgoliaSearchToolConfig",
     "AlgoliaSearchToolIndexConfig",
@@ -160,18 +209,27 @@ __all__ = (
     "ApplicationConfigResponse",
     "AroundPrecisionUnion",
     "AroundRadiusUnion",
+    "AssistantMessageAGUI",
     "AssistantMessageV4",
     "AssistantMessageV5",
     "AssistantPartV4",
     "AssistantPartV5",
     "AzureOpenAIProviderInput",
     "BaseProviderInput",
+    "BooleanParam",
     "ClientSideToolConfig",
     "ClientToolsArgsSchema",
+    "CompactionStats",
     "CompatibilityMode",
+    "ContextCompactRequest",
+    "ContextResponse",
+    "ContextStats",
+    "ContextTrimRequest",
     "ConversationBaseResponse",
     "ConversationFullResponse",
     "ConversationMetadata",
+    "DataGuardrailViolationPartV5",
+    "DataPartV5",
     "DistinctUnion",
     "Episode",
     "ErrorBase",
@@ -182,24 +240,38 @@ __all__ = (
     "FacetsUnion",
     "FeedbackCreationRequest",
     "FeedbackResponse",
+    "FeedbackUpdateRequest",
+    "ForwardedProps",
+    "FunctionCallAGUI",
+    "GuardrailOutcome",
+    "GuardrailViolationDataV5",
     "IgnorePluralsUnion",
+    "ImpactAnalytics",
     "IndexSearchParameters",
+    "InputUnion",
     "InsideBoundingBoxUnion",
     "InsidePolygonUnion",
+    "ItemsUnion",
+    "ItemsUnionAguiCompletionRequest",
     "LocationItemUnion",
+    "ManagedProviderResponseInput",
     "McpServerToolConfig",
     "McpToolConfig",
     "MemoryRecord",
     "MemoryType",
+    "MessageEvent",
     "MessagePart",
+    "MessagePartAssistantMessageAGUI",
     "MessageResponse",
     "MessageRole",
     "MessageV4",
     "MessageV5",
     "MessagesUnion",
+    "ModeEnum",
     "NumberParam",
     "NumberParamConstraint",
     "NumericFiltersUnion",
+    "OneOfEnum",
     "OpenAICompatibleProviderInput",
     "OpenAIProviderInput",
     "OptionalFiltersUnion",
@@ -217,7 +289,9 @@ __all__ = (
     "ProviderName",
     "QueryType",
     "ReRankingApplyFilterUnion",
+    "ReasoningMessageAGUI",
     "ReasoningPart",
+    "ReasoningPartAGUI",
     "ReasoningPartV4",
     "ReasoningPartV5",
     "RemoveStopWordsUnion",
@@ -229,22 +303,33 @@ __all__ = (
     "SecretKeyResponse",
     "StartPart",
     "StartStepPart",
+    "StatusEnum",
     "StepStartPartV4",
     "StepStartPartV5",
     "StringArrayParam",
     "StringArrayParamConstraint",
     "SupportedLanguage",
     "TagFiltersUnion",
+    "TaskKind",
+    "TaskRequest",
+    "TaskResponse",
     "TextParam",
     "TextPart",
+    "TextPartAGUI",
     "TextPartV4",
     "TextPartV5",
+    "ToolApprovalAGUI",
     "ToolApprovalRequestPart",
+    "ToolCallAGUI",
     "ToolCallPart",
-    "ToolConfig",
+    "ToolCallPartAGUI",
+    "ToolCallResultPartAGUI",
     "ToolConfigInput",
+    "ToolConfigOrBooleanUnion",
+    "ToolConfigOutput",
     "ToolInvocationPartV4",
     "ToolInvocationV4",
+    "ToolMessageAGUI",
     "ToolPartV5",
     "ToolResultOutput",
     "ToolResultOutputType",
@@ -254,8 +339,11 @@ __all__ = (
     "TypoToleranceUnion",
     "UnknownToolConfig",
     "UserDataResponse",
+    "UserMessageAGUI",
+    "UserMessageMetadataAGUI",
     "UserMessageMetadataV5",
     "UserMessageV4",
     "UserMessageV5",
     "VoteEnum",
+    "XAIProviderInput",
 )

@@ -28,6 +28,8 @@ class CompatibilityMode(str, Enum):
 
     AI_SDK_5 = "ai-sdk-5"
 
+    AG_UI = "ag-ui"
+
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of CompatibilityMode from a JSON string"""

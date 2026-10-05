@@ -25,7 +25,7 @@ else:
 
 from algoliasearch.agent_studio.config import AgentStudioConfig
 from algoliasearch.agent_studio.models import (
-    AgentCompletionRequest,
+    AgentCompletionRequestUnion,
     AgentConfigCreate,
     AgentConfigUpdate,
     AgentWithVersionResponse,
@@ -37,9 +37,13 @@ from algoliasearch.agent_studio.models import (
     ApplicationConfigPatch,
     ApplicationConfigResponse,
     CompatibilityMode,
+    ContextCompactRequest,
+    ContextResponse,
+    ContextTrimRequest,
     ConversationFullResponse,
     FeedbackCreationRequest,
     FeedbackResponse,
+    FeedbackUpdateRequest,
     PaginatedAgentsResponse,
     PaginatedConversationsResponse,
     PaginatedProviderAuthenticationsResponse,
@@ -50,6 +54,8 @@ from algoliasearch.agent_studio.models import (
     SecretKeyCreate,
     SecretKeyPatch,
     SecretKeyResponse,
+    TaskRequest,
+    TaskResponse,
     UserDataResponse,
 )
 from algoliasearch.http.api_response import ApiResponse
@@ -345,6 +351,63 @@ class AgentStudioClient:
         )
         return resp.deserialize(None, resp.raw_data)
 
+    async def compact_context_with_http_info(
+        self,
+        context_compact_request: Union[ContextCompactRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Summarize the older part of a conversation into a single user message via the caller's LLM.  Everything except the trailing `keepLastMessages` messages is summarized; the summary is returned as a user-role message followed by the kept tail verbatim. Your provider runs the summary, so the provider adds the cost to your account.  A conversation too large for the summarizer's context window is split into chunks that each fit, summarized concurrently, then merged in a reduce pass - so payload size alone does not fail the request. When the conversation still cannot be summarized (it needs more chunks than the server allows, or the chunk summaries will not converge), the response is a `400`, not a `500`.  Two optional controls shape the output. `instructions` adds caller guidance inside the server-owned prompt frame, so it steers the summary without the model echoing the wording back. `targetTokensEstimate` sets a desired summary size, translated into word-count guidance.  The `compaction` block reports what happened: `compacted` is `false` when the payload passed through untouched (nothing older than the kept tail), alongside chunk/pass counts and the summarizer's own token usage.
+
+        Required API Key ACLs:
+          - search
+
+        :param context_compact_request: (required)
+        :type context_compact_request: ContextCompactRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if context_compact_request is None:
+            raise ValueError(
+                "Parameter `context_compact_request` is required when calling `compact_context`."
+            )
+
+        _data = {}
+        if context_compact_request is not None:
+            _data = context_compact_request
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/agent-studio/1/unstable/context/compact",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def compact_context(
+        self,
+        context_compact_request: Union[ContextCompactRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ContextResponse:
+        """
+        Summarize the older part of a conversation into a single user message via the caller's LLM.  Everything except the trailing `keepLastMessages` messages is summarized; the summary is returned as a user-role message followed by the kept tail verbatim. Your provider runs the summary, so the provider adds the cost to your account.  A conversation too large for the summarizer's context window is split into chunks that each fit, summarized concurrently, then merged in a reduce pass - so payload size alone does not fail the request. When the conversation still cannot be summarized (it needs more chunks than the server allows, or the chunk summaries will not converge), the response is a `400`, not a `500`.  Two optional controls shape the output. `instructions` adds caller guidance inside the server-owned prompt frame, so it steers the summary without the model echoing the wording back. `targetTokensEstimate` sets a desired summary size, translated into word-count guidance.  The `compaction` block reports what happened: `compacted` is `false` when the payload passed through untouched (nothing older than the kept tail), alongside chunk/pass counts and the summarizer's own token usage.
+
+        Required API Key ACLs:
+          - search
+
+        :param context_compact_request: (required)
+        :type context_compact_request: ContextCompactRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ContextResponse' result object.
+        """
+        resp = await self.compact_context_with_http_info(
+            context_compact_request, request_options
+        )
+        return resp.deserialize(ContextResponse, resp.raw_data)
+
     async def create_agent_with_http_info(
         self,
         agent_config_create: Union[AgentConfigCreate, dict[str, Any]],
@@ -487,7 +550,7 @@ class AgentStudioClient:
             ],
             str,
         ],
-        agent_completion_request: Union[AgentCompletionRequest, dict[str, Any]],
+        agent_completion_request: Union[AgentCompletionRequestUnion, dict[str, Any]],
         stream: Annotated[
             Optional[StrictBool],
             Field(description="Whether to stream the response or not."),
@@ -512,7 +575,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result.
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result.
 
         Required API Key ACLs:
           - search
@@ -522,7 +585,7 @@ class AgentStudioClient:
         :param compatibility_mode: Compatibility mode for the completion API. (required)
         :type compatibility_mode: CompatibilityMode
         :param agent_completion_request: (required)
-        :type agent_completion_request: AgentCompletionRequest
+        :type agent_completion_request: AgentCompletionRequestUnion
         :param stream: Whether to stream the response or not.
         :type stream: bool
         :param cache: Use cached responses if available.
@@ -602,7 +665,7 @@ class AgentStudioClient:
             ],
             str,
         ],
-        agent_completion_request: Union[AgentCompletionRequest, dict[str, Any]],
+        agent_completion_request: Union[AgentCompletionRequestUnion, dict[str, Any]],
         stream: Annotated[
             Optional[StrictBool],
             Field(description="Whether to stream the response or not."),
@@ -627,7 +690,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, object]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result.
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result.
 
         Required API Key ACLs:
           - search
@@ -637,7 +700,7 @@ class AgentStudioClient:
         :param compatibility_mode: Compatibility mode for the completion API. (required)
         :type compatibility_mode: CompatibilityMode
         :param agent_completion_request: (required)
-        :type agent_completion_request: AgentCompletionRequest
+        :type agent_completion_request: AgentCompletionRequestUnion
         :param stream: Whether to stream the response or not.
         :type stream: bool
         :param cache: Use cached responses if available.
@@ -674,7 +737,7 @@ class AgentStudioClient:
             ],
             str,
         ],
-        agent_completion_request: Union[AgentCompletionRequest, dict[str, Any]],
+        agent_completion_request: Union[AgentCompletionRequestUnion, dict[str, Any]],
         stream: Annotated[
             Optional[StrictBool],
             Field(description="Whether to stream the response or not."),
@@ -699,7 +762,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AsyncIterator[ServerSentEvent]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result. (raw streaming version).
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result. (raw streaming version).
 
         Yields raw :class:`ServerSentEvent` objects. Each event's ``data`` field contains a JSON-encoded ``Dict[str, object]`` string.
 
@@ -708,7 +771,7 @@ class AgentStudioClient:
         :param compatibility_mode: Compatibility mode for the completion API. (required)
         :type compatibility_mode: CompatibilityMode
         :param agent_completion_request: (required)
-        :type agent_completion_request: AgentCompletionRequest
+        :type agent_completion_request: AgentCompletionRequestUnion
         :param stream: Whether to stream the response or not.
         :type stream: bool
         :param cache: Use cached responses if available.
@@ -784,7 +847,7 @@ class AgentStudioClient:
             ],
             str,
         ],
-        agent_completion_request: Union[AgentCompletionRequest, dict[str, Any]],
+        agent_completion_request: Union[AgentCompletionRequestUnion, dict[str, Any]],
         stream: Annotated[
             Optional[StrictBool],
             Field(description="Whether to stream the response or not."),
@@ -809,7 +872,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AsyncIterator[StreamEvent[Dict[str, object]]]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result. (streaming version).
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result. (streaming version).
 
         Yields :class:`StreamEvent` objects wrapping parsed ``Dict[str, object]`` payloads.
 
@@ -818,7 +881,7 @@ class AgentStudioClient:
         :param compatibility_mode: Compatibility mode for the completion API. (required)
         :type compatibility_mode: CompatibilityMode
         :param agent_completion_request: (required)
-        :type agent_completion_request: AgentCompletionRequest
+        :type agent_completion_request: AgentCompletionRequestUnion
         :param stream: Whether to stream the response or not.
         :type stream: bool
         :param cache: Use cached responses if available.
@@ -846,6 +909,255 @@ class AgentStudioClient:
         ):
             try:
                 _parsed = ApiResponse.deserialize(Dict[str, object], event.data)
+                yield StreamEvent(data=_parsed, raw=event)
+            except Exception as e:
+                yield StreamEvent(data=None, raw=event, error=e)
+
+    async def create_agent_task_with_http_info(
+        self,
+        agent_id: Annotated[StrictStr, Field(description="The agentId.")],
+        task_request: Union[TaskRequest, dict[str, Any]],
+        stream: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to stream the response or not."),
+        ] = None,
+        cache: Annotated[
+            Optional[StrictBool],
+            Field(description="Use cached responses if available."),
+        ] = None,
+        analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Run a configured task and return the generated object as ``{ output }``.  With ``?stream=true``, returns the raw partial JSON text stream expected by AI SDK v5 ``useObject``. The streamed JSON is the task output itself.
+
+        Required API Key ACLs:
+          - search
+
+        :param agent_id: The agentId. (required)
+        :type agent_id: str
+        :param task_request: (required)
+        :type task_request: TaskRequest
+        :param stream: Whether to stream the response or not.
+        :type stream: bool
+        :param cache: Use cached responses if available.
+        :type cache: bool
+        :param analytics: Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted.
+        :type analytics: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if agent_id is None:
+            raise ValueError(
+                "Parameter `agent_id` is required when calling `create_agent_task`."
+            )
+
+        if not agent_id:
+            raise ValueError(
+                "Parameter `agent_id` is required when calling `create_agent_task`."
+            )
+
+        if task_request is None:
+            raise ValueError(
+                "Parameter `task_request` is required when calling `create_agent_task`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if stream is not None:
+            _query_parameters["stream"] = stream
+        if cache is not None:
+            _query_parameters["cache"] = cache
+        if analytics is not None:
+            _query_parameters["analytics"] = analytics
+
+        _data = {}
+        if task_request is not None:
+            _data = task_request
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/agent-studio/1/agents/{agentId}/tasks".replace(
+                "{agentId}", quote(str(agent_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def create_agent_task(
+        self,
+        agent_id: Annotated[StrictStr, Field(description="The agentId.")],
+        task_request: Union[TaskRequest, dict[str, Any]],
+        stream: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to stream the response or not."),
+        ] = None,
+        cache: Annotated[
+            Optional[StrictBool],
+            Field(description="Use cached responses if available."),
+        ] = None,
+        analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskResponse:
+        """
+        Run a configured task and return the generated object as ``{ output }``.  With ``?stream=true``, returns the raw partial JSON text stream expected by AI SDK v5 ``useObject``. The streamed JSON is the task output itself.
+
+        Required API Key ACLs:
+          - search
+
+        :param agent_id: The agentId. (required)
+        :type agent_id: str
+        :param task_request: (required)
+        :type task_request: TaskRequest
+        :param stream: Whether to stream the response or not.
+        :type stream: bool
+        :param cache: Use cached responses if available.
+        :type cache: bool
+        :param analytics: Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted.
+        :type analytics: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskResponse' result object.
+        """
+        resp = await self.create_agent_task_with_http_info(
+            agent_id, task_request, stream, cache, analytics, request_options
+        )
+        return resp.deserialize(TaskResponse, resp.raw_data)
+
+    async def create_agent_task_stream_raw(
+        self,
+        agent_id: Annotated[StrictStr, Field(description="The agentId.")],
+        task_request: Union[TaskRequest, dict[str, Any]],
+        stream: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to stream the response or not."),
+        ] = None,
+        cache: Annotated[
+            Optional[StrictBool],
+            Field(description="Use cached responses if available."),
+        ] = None,
+        analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> AsyncIterator[ServerSentEvent]:
+        """
+        Run a configured task and return the generated object as ``{ output }``.  With ``?stream=true``, returns the raw partial JSON text stream expected by AI SDK v5 ``useObject``. The streamed JSON is the task output itself. (raw streaming version).
+
+        Yields raw :class:`ServerSentEvent` objects. Each event's ``data`` field contains a JSON-encoded ``TaskResponse`` string.
+
+        :param agent_id: The agentId. (required)
+        :type agent_id: str
+        :param task_request: (required)
+        :type task_request: TaskRequest
+        :param stream: Whether to stream the response or not.
+        :type stream: bool
+        :param cache: Use cached responses if available.
+        :type cache: bool
+        :param analytics: Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted.
+        :type analytics: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns an iterator of ServerSentEvent objects. Each event's ``data`` field contains JSON-encoded ``TaskResponse``.
+        """
+
+        if agent_id is None:
+            raise ValueError(
+                "Parameter `agent_id` is required when calling `create_agent_task_stream_raw`."
+            )
+
+        if task_request is None:
+            raise ValueError(
+                "Parameter `task_request` is required when calling `create_agent_task_stream_raw`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if stream is not None:
+            _query_parameters["stream"] = stream
+        if cache is not None:
+            _query_parameters["cache"] = cache
+        if analytics is not None:
+            _query_parameters["analytics"] = analytics
+
+        _data = {}
+        if task_request is not None:
+            _data = task_request
+
+        async for event in self._transporter.request_stream(
+            verb=Verb.POST,
+            path="/agent-studio/1/agents/{agentId}/tasks".replace(
+                "{agentId}", quote(str(agent_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        ):
+            yield event
+
+    async def create_agent_task_stream(
+        self,
+        agent_id: Annotated[StrictStr, Field(description="The agentId.")],
+        task_request: Union[TaskRequest, dict[str, Any]],
+        stream: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to stream the response or not."),
+        ] = None,
+        cache: Annotated[
+            Optional[StrictBool],
+            Field(description="Use cached responses if available."),
+        ] = None,
+        analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> AsyncIterator[StreamEvent[TaskResponse]]:
+        """
+        Run a configured task and return the generated object as ``{ output }``.  With ``?stream=true``, returns the raw partial JSON text stream expected by AI SDK v5 ``useObject``. The streamed JSON is the task output itself. (streaming version).
+
+        Yields :class:`StreamEvent` objects wrapping parsed ``TaskResponse`` payloads.
+
+        :param agent_id: The agentId. (required)
+        :type agent_id: str
+        :param task_request: (required)
+        :type task_request: TaskRequest
+        :param stream: Whether to stream the response or not.
+        :type stream: bool
+        :param cache: Use cached responses if available.
+        :type cache: bool
+        :param analytics: Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted.
+        :type analytics: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns an iterator of :class:`StreamEvent[TaskResponse]` objects.
+        """
+
+        async for event in self.create_agent_task_stream_raw(
+            agent_id, task_request, stream, cache, analytics, request_options
+        ):
+            try:
+                _parsed = ApiResponse.deserialize(TaskResponse, event.data)
                 yield StreamEvent(data=_parsed, raw=event)
             except Exception as e:
                 yield StreamEvent(data=None, raw=event, error=e)
@@ -1431,7 +1743,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Deletes the conversations matching the given filers.
+        Deletes the conversations matching the given filters.
 
         Required API Key ACLs:
           - logs
@@ -1493,7 +1805,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> None:
         """
-        Deletes the conversations matching the given filers.
+        Deletes the conversations matching the given filters.
 
         Required API Key ACLs:
           - logs
@@ -2105,6 +2417,18 @@ class AgentStudioClient:
             Optional[StrictBool],
             Field(description="Include feedback for the conversation."),
         ] = None,
+        include_message_events: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include Insights events attributed to each assistant message."
+            ),
+        ] = None,
+        include_impact_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include outcome signals (hasView, hasClick, hasConversion) for the conversation."
+            ),
+        ] = None,
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
@@ -2122,6 +2446,10 @@ class AgentStudioClient:
         :type agent_id: str
         :param include_feedback: Include feedback for the conversation.
         :type include_feedback: bool
+        :param include_message_events: Include Insights events attributed to each assistant message.
+        :type include_message_events: bool
+        :param include_impact_analytics: Include outcome signals (hasView, hasClick, hasConversion) for the conversation.
+        :type include_impact_analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -2153,6 +2481,10 @@ class AgentStudioClient:
 
         if include_feedback is not None:
             _query_parameters["includeFeedback"] = include_feedback
+        if include_message_events is not None:
+            _query_parameters["includeMessageEvents"] = include_message_events
+        if include_impact_analytics is not None:
+            _query_parameters["includeImpactAnalytics"] = include_impact_analytics
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -2178,6 +2510,18 @@ class AgentStudioClient:
             Optional[StrictBool],
             Field(description="Include feedback for the conversation."),
         ] = None,
+        include_message_events: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include Insights events attributed to each assistant message."
+            ),
+        ] = None,
+        include_impact_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include outcome signals (hasView, hasClick, hasConversion) for the conversation."
+            ),
+        ] = None,
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
@@ -2195,6 +2539,10 @@ class AgentStudioClient:
         :type agent_id: str
         :param include_feedback: Include feedback for the conversation.
         :type include_feedback: bool
+        :param include_message_events: Include Insights events attributed to each assistant message.
+        :type include_message_events: bool
+        :param include_impact_analytics: Include outcome signals (hasView, hasClick, hasConversion) for the conversation.
+        :type include_impact_analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -2204,6 +2552,8 @@ class AgentStudioClient:
             conversation_id,
             agent_id,
             include_feedback,
+            include_message_events,
+            include_impact_analytics,
             x_algolia_secure_user_token,
             request_options,
         )
@@ -2392,7 +2742,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Invalidate cached completions for this agent. Filter with `before` (exclusive).
+        Invalidate cached completions and task outputs for this agent. Filter with `before` (exclusive).
 
         Required API Key ACLs:
           - editSettings
@@ -2444,7 +2794,7 @@ class AgentStudioClient:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> None:
         """
-        Invalidate cached completions for this agent. Filter with `before` (exclusive).
+        Invalidate cached completions and task outputs for this agent. Filter with `before` (exclusive).
 
         Required API Key ACLs:
           - editSettings
@@ -2552,6 +2902,26 @@ class AgentStudioClient:
             Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
             Field(description="Items per page."),
         ] = None,
+        include_impact_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include impact analytics (hasView, hasClick, hasConversion) per conversation."
+            ),
+        ] = None,
+        clicked: Annotated[
+            Optional[StrictBool],
+            Field(description="Filter by conversations with at least one item click."),
+        ] = None,
+        converted: Annotated[
+            Optional[StrictBool],
+            Field(description="Filter by conversations with at least one conversion."),
+        ] = None,
+        has_algolia_search: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by conversations where the search tool was used."
+            ),
+        ] = None,
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
@@ -2577,6 +2947,14 @@ class AgentStudioClient:
         :type page: int
         :param limit: Items per page.
         :type limit: int
+        :param include_impact_analytics: Include impact analytics (hasView, hasClick, hasConversion) per conversation.
+        :type include_impact_analytics: bool
+        :param clicked: Filter by conversations with at least one item click.
+        :type clicked: bool
+        :param converted: Filter by conversations with at least one conversion.
+        :type converted: bool
+        :param has_algolia_search: Filter by conversations where the search tool was used.
+        :type has_algolia_search: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -2608,6 +2986,14 @@ class AgentStudioClient:
             _query_parameters["page"] = page
         if limit is not None:
             _query_parameters["limit"] = limit
+        if include_impact_analytics is not None:
+            _query_parameters["includeImpactAnalytics"] = include_impact_analytics
+        if clicked is not None:
+            _query_parameters["clicked"] = clicked
+        if converted is not None:
+            _query_parameters["converted"] = converted
+        if has_algolia_search is not None:
+            _query_parameters["hasAlgoliaSearch"] = has_algolia_search
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -2658,6 +3044,26 @@ class AgentStudioClient:
             Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
             Field(description="Items per page."),
         ] = None,
+        include_impact_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include impact analytics (hasView, hasClick, hasConversion) per conversation."
+            ),
+        ] = None,
+        clicked: Annotated[
+            Optional[StrictBool],
+            Field(description="Filter by conversations with at least one item click."),
+        ] = None,
+        converted: Annotated[
+            Optional[StrictBool],
+            Field(description="Filter by conversations with at least one conversion."),
+        ] = None,
+        has_algolia_search: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by conversations where the search tool was used."
+            ),
+        ] = None,
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
@@ -2683,6 +3089,14 @@ class AgentStudioClient:
         :type page: int
         :param limit: Items per page.
         :type limit: int
+        :param include_impact_analytics: Include impact analytics (hasView, hasClick, hasConversion) per conversation.
+        :type include_impact_analytics: bool
+        :param clicked: Filter by conversations with at least one item click.
+        :type clicked: bool
+        :param converted: Filter by conversations with at least one conversion.
+        :type converted: bool
+        :param has_algolia_search: Filter by conversations where the search tool was used.
+        :type has_algolia_search: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -2696,6 +3110,10 @@ class AgentStudioClient:
             feedback_vote,
             page,
             limit,
+            include_impact_analytics,
+            clicked,
+            converted,
+            has_algolia_search,
             x_algolia_secure_user_token,
             request_options,
         )
@@ -3081,6 +3499,63 @@ class AgentStudioClient:
         resp = await self.publish_agent_with_http_info(agent_id, request_options)
         return resp.deserialize(AgentWithVersionResponse, resp.raw_data)
 
+    async def trim_context_with_http_info(
+        self,
+        context_trim_request: Union[ContextTrimRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deterministically trim a conversation payload (no LLM calls).  Keep the last N messages and/or fit a heuristic token budget, optionally dropping tool parts from what is kept (tool parts are stripped before the budget is applied). Returns the trimmed messages plus before/after stats.  With no constraints set, the messages are returned unchanged and only the stats are computed - a deliberate, cheap \"how big is my context?\" probe (no LLM call, no mutation).
+
+        Required API Key ACLs:
+          - search
+
+        :param context_trim_request: (required)
+        :type context_trim_request: ContextTrimRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if context_trim_request is None:
+            raise ValueError(
+                "Parameter `context_trim_request` is required when calling `trim_context`."
+            )
+
+        _data = {}
+        if context_trim_request is not None:
+            _data = context_trim_request
+
+        return await self._transporter.request(
+            verb=Verb.POST,
+            path="/agent-studio/1/unstable/context/trim",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def trim_context(
+        self,
+        context_trim_request: Union[ContextTrimRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ContextResponse:
+        """
+        Deterministically trim a conversation payload (no LLM calls).  Keep the last N messages and/or fit a heuristic token budget, optionally dropping tool parts from what is kept (tool parts are stripped before the budget is applied). Returns the trimmed messages plus before/after stats.  With no constraints set, the messages are returned unchanged and only the stats are computed - a deliberate, cheap \"how big is my context?\" probe (no LLM call, no mutation).
+
+        Required API Key ACLs:
+          - search
+
+        :param context_trim_request: (required)
+        :type context_trim_request: ContextTrimRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ContextResponse' result object.
+        """
+        resp = await self.trim_context_with_http_info(
+            context_trim_request, request_options
+        )
+        return resp.deserialize(ContextResponse, resp.raw_data)
+
     async def unpublish_agent_with_http_info(
         self,
         agent_id: Annotated[StrictStr, Field(description="The agentId.")],
@@ -3269,6 +3744,63 @@ class AgentStudioClient:
             application_config_patch, request_options
         )
         return resp.deserialize(ApplicationConfigResponse, resp.raw_data)
+
+    async def update_feedback_with_http_info(
+        self,
+        feedback_update_request: Union[FeedbackUpdateRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Update an existing feedback entry.
+
+        Required API Key ACLs:
+          - search
+
+        :param feedback_update_request: (required)
+        :type feedback_update_request: FeedbackUpdateRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if feedback_update_request is None:
+            raise ValueError(
+                "Parameter `feedback_update_request` is required when calling `update_feedback`."
+            )
+
+        _data = {}
+        if feedback_update_request is not None:
+            _data = feedback_update_request
+
+        return await self._transporter.request(
+            verb=Verb.PATCH,
+            path="/agent-studio/1/feedback",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def update_feedback(
+        self,
+        feedback_update_request: Union[FeedbackUpdateRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> FeedbackResponse:
+        """
+        Update an existing feedback entry.
+
+        Required API Key ACLs:
+          - search
+
+        :param feedback_update_request: (required)
+        :type feedback_update_request: FeedbackUpdateRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'FeedbackResponse' result object.
+        """
+        resp = await self.update_feedback_with_http_info(
+            feedback_update_request, request_options
+        )
+        return resp.deserialize(FeedbackResponse, resp.raw_data)
 
     async def update_provider_with_http_info(
         self,
@@ -3707,6 +4239,63 @@ class AgentStudioClientSync:
         )
         return resp.deserialize(None, resp.raw_data)
 
+    def compact_context_with_http_info(
+        self,
+        context_compact_request: Union[ContextCompactRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Summarize the older part of a conversation into a single user message via the caller's LLM.  Everything except the trailing `keepLastMessages` messages is summarized; the summary is returned as a user-role message followed by the kept tail verbatim. Your provider runs the summary, so the provider adds the cost to your account.  A conversation too large for the summarizer's context window is split into chunks that each fit, summarized concurrently, then merged in a reduce pass - so payload size alone does not fail the request. When the conversation still cannot be summarized (it needs more chunks than the server allows, or the chunk summaries will not converge), the response is a `400`, not a `500`.  Two optional controls shape the output. `instructions` adds caller guidance inside the server-owned prompt frame, so it steers the summary without the model echoing the wording back. `targetTokensEstimate` sets a desired summary size, translated into word-count guidance.  The `compaction` block reports what happened: `compacted` is `false` when the payload passed through untouched (nothing older than the kept tail), alongside chunk/pass counts and the summarizer's own token usage.
+
+        Required API Key ACLs:
+          - search
+
+        :param context_compact_request: (required)
+        :type context_compact_request: ContextCompactRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if context_compact_request is None:
+            raise ValueError(
+                "Parameter `context_compact_request` is required when calling `compact_context`."
+            )
+
+        _data = {}
+        if context_compact_request is not None:
+            _data = context_compact_request
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/agent-studio/1/unstable/context/compact",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def compact_context(
+        self,
+        context_compact_request: Union[ContextCompactRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ContextResponse:
+        """
+        Summarize the older part of a conversation into a single user message via the caller's LLM.  Everything except the trailing `keepLastMessages` messages is summarized; the summary is returned as a user-role message followed by the kept tail verbatim. Your provider runs the summary, so the provider adds the cost to your account.  A conversation too large for the summarizer's context window is split into chunks that each fit, summarized concurrently, then merged in a reduce pass - so payload size alone does not fail the request. When the conversation still cannot be summarized (it needs more chunks than the server allows, or the chunk summaries will not converge), the response is a `400`, not a `500`.  Two optional controls shape the output. `instructions` adds caller guidance inside the server-owned prompt frame, so it steers the summary without the model echoing the wording back. `targetTokensEstimate` sets a desired summary size, translated into word-count guidance.  The `compaction` block reports what happened: `compacted` is `false` when the payload passed through untouched (nothing older than the kept tail), alongside chunk/pass counts and the summarizer's own token usage.
+
+        Required API Key ACLs:
+          - search
+
+        :param context_compact_request: (required)
+        :type context_compact_request: ContextCompactRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ContextResponse' result object.
+        """
+        resp = self.compact_context_with_http_info(
+            context_compact_request, request_options
+        )
+        return resp.deserialize(ContextResponse, resp.raw_data)
+
     def create_agent_with_http_info(
         self,
         agent_config_create: Union[AgentConfigCreate, dict[str, Any]],
@@ -3847,7 +4436,7 @@ class AgentStudioClientSync:
             ],
             str,
         ],
-        agent_completion_request: Union[AgentCompletionRequest, dict[str, Any]],
+        agent_completion_request: Union[AgentCompletionRequestUnion, dict[str, Any]],
         stream: Annotated[
             Optional[StrictBool],
             Field(description="Whether to stream the response or not."),
@@ -3872,7 +4461,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result.
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result.
 
         Required API Key ACLs:
           - search
@@ -3882,7 +4471,7 @@ class AgentStudioClientSync:
         :param compatibility_mode: Compatibility mode for the completion API. (required)
         :type compatibility_mode: CompatibilityMode
         :param agent_completion_request: (required)
-        :type agent_completion_request: AgentCompletionRequest
+        :type agent_completion_request: AgentCompletionRequestUnion
         :param stream: Whether to stream the response or not.
         :type stream: bool
         :param cache: Use cached responses if available.
@@ -3962,7 +4551,7 @@ class AgentStudioClientSync:
             ],
             str,
         ],
-        agent_completion_request: Union[AgentCompletionRequest, dict[str, Any]],
+        agent_completion_request: Union[AgentCompletionRequestUnion, dict[str, Any]],
         stream: Annotated[
             Optional[StrictBool],
             Field(description="Whether to stream the response or not."),
@@ -3987,7 +4576,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, object]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result.
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result.
 
         Required API Key ACLs:
           - search
@@ -3997,7 +4586,7 @@ class AgentStudioClientSync:
         :param compatibility_mode: Compatibility mode for the completion API. (required)
         :type compatibility_mode: CompatibilityMode
         :param agent_completion_request: (required)
-        :type agent_completion_request: AgentCompletionRequest
+        :type agent_completion_request: AgentCompletionRequestUnion
         :param stream: Whether to stream the response or not.
         :type stream: bool
         :param cache: Use cached responses if available.
@@ -4034,7 +4623,7 @@ class AgentStudioClientSync:
             ],
             str,
         ],
-        agent_completion_request: Union[AgentCompletionRequest, dict[str, Any]],
+        agent_completion_request: Union[AgentCompletionRequestUnion, dict[str, Any]],
         stream: Annotated[
             Optional[StrictBool],
             Field(description="Whether to stream the response or not."),
@@ -4059,7 +4648,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Iterator[ServerSentEvent]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result. (raw streaming version).
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result. (raw streaming version).
 
         Yields raw :class:`ServerSentEvent` objects. Each event's ``data`` field contains a JSON-encoded ``Dict[str, object]`` string.
 
@@ -4068,7 +4657,7 @@ class AgentStudioClientSync:
         :param compatibility_mode: Compatibility mode for the completion API. (required)
         :type compatibility_mode: CompatibilityMode
         :param agent_completion_request: (required)
-        :type agent_completion_request: AgentCompletionRequest
+        :type agent_completion_request: AgentCompletionRequestUnion
         :param stream: Whether to stream the response or not.
         :type stream: bool
         :param cache: Use cached responses if available.
@@ -4144,7 +4733,7 @@ class AgentStudioClientSync:
             ],
             str,
         ],
-        agent_completion_request: Union[AgentCompletionRequest, dict[str, Any]],
+        agent_completion_request: Union[AgentCompletionRequestUnion, dict[str, Any]],
         stream: Annotated[
             Optional[StrictBool],
             Field(description="Whether to stream the response or not."),
@@ -4169,7 +4758,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Iterator[StreamEvent[Dict[str, object]]]:
         """
-        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request. - Request 2: User approves -> Execute tool -> Agent continues with result. (streaming version).
+        Create a completion for the specified agent.  This endpoint handles two types of requests: 1. Normal completion request: User message -> Agent response 2. Tool approval response: User approval -> Execute tool -> Agent response  Tool Approval Flow (for MCP tools with requiresApproval: true): - Request 1: User sends message -> Agent requests tool call -> Return approval request - Request 2: User approves -> Execute tool -> Agent continues with result. (streaming version).
 
         Yields :class:`StreamEvent` objects wrapping parsed ``Dict[str, object]`` payloads.
 
@@ -4178,7 +4767,7 @@ class AgentStudioClientSync:
         :param compatibility_mode: Compatibility mode for the completion API. (required)
         :type compatibility_mode: CompatibilityMode
         :param agent_completion_request: (required)
-        :type agent_completion_request: AgentCompletionRequest
+        :type agent_completion_request: AgentCompletionRequestUnion
         :param stream: Whether to stream the response or not.
         :type stream: bool
         :param cache: Use cached responses if available.
@@ -4206,6 +4795,255 @@ class AgentStudioClientSync:
         ):
             try:
                 _parsed = ApiResponse.deserialize(Dict[str, object], event.data)
+                yield StreamEvent(data=_parsed, raw=event)
+            except Exception as e:
+                yield StreamEvent(data=None, raw=event, error=e)
+
+    def create_agent_task_with_http_info(
+        self,
+        agent_id: Annotated[StrictStr, Field(description="The agentId.")],
+        task_request: Union[TaskRequest, dict[str, Any]],
+        stream: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to stream the response or not."),
+        ] = None,
+        cache: Annotated[
+            Optional[StrictBool],
+            Field(description="Use cached responses if available."),
+        ] = None,
+        analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Run a configured task and return the generated object as ``{ output }``.  With ``?stream=true``, returns the raw partial JSON text stream expected by AI SDK v5 ``useObject``. The streamed JSON is the task output itself.
+
+        Required API Key ACLs:
+          - search
+
+        :param agent_id: The agentId. (required)
+        :type agent_id: str
+        :param task_request: (required)
+        :type task_request: TaskRequest
+        :param stream: Whether to stream the response or not.
+        :type stream: bool
+        :param cache: Use cached responses if available.
+        :type cache: bool
+        :param analytics: Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted.
+        :type analytics: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if agent_id is None:
+            raise ValueError(
+                "Parameter `agent_id` is required when calling `create_agent_task`."
+            )
+
+        if not agent_id:
+            raise ValueError(
+                "Parameter `agent_id` is required when calling `create_agent_task`."
+            )
+
+        if task_request is None:
+            raise ValueError(
+                "Parameter `task_request` is required when calling `create_agent_task`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if stream is not None:
+            _query_parameters["stream"] = stream
+        if cache is not None:
+            _query_parameters["cache"] = cache
+        if analytics is not None:
+            _query_parameters["analytics"] = analytics
+
+        _data = {}
+        if task_request is not None:
+            _data = task_request
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/agent-studio/1/agents/{agentId}/tasks".replace(
+                "{agentId}", quote(str(agent_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def create_agent_task(
+        self,
+        agent_id: Annotated[StrictStr, Field(description="The agentId.")],
+        task_request: Union[TaskRequest, dict[str, Any]],
+        stream: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to stream the response or not."),
+        ] = None,
+        cache: Annotated[
+            Optional[StrictBool],
+            Field(description="Use cached responses if available."),
+        ] = None,
+        analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> TaskResponse:
+        """
+        Run a configured task and return the generated object as ``{ output }``.  With ``?stream=true``, returns the raw partial JSON text stream expected by AI SDK v5 ``useObject``. The streamed JSON is the task output itself.
+
+        Required API Key ACLs:
+          - search
+
+        :param agent_id: The agentId. (required)
+        :type agent_id: str
+        :param task_request: (required)
+        :type task_request: TaskRequest
+        :param stream: Whether to stream the response or not.
+        :type stream: bool
+        :param cache: Use cached responses if available.
+        :type cache: bool
+        :param analytics: Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted.
+        :type analytics: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'TaskResponse' result object.
+        """
+        resp = self.create_agent_task_with_http_info(
+            agent_id, task_request, stream, cache, analytics, request_options
+        )
+        return resp.deserialize(TaskResponse, resp.raw_data)
+
+    def create_agent_task_stream_raw(
+        self,
+        agent_id: Annotated[StrictStr, Field(description="The agentId.")],
+        task_request: Union[TaskRequest, dict[str, Any]],
+        stream: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to stream the response or not."),
+        ] = None,
+        cache: Annotated[
+            Optional[StrictBool],
+            Field(description="Use cached responses if available."),
+        ] = None,
+        analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Iterator[ServerSentEvent]:
+        """
+        Run a configured task and return the generated object as ``{ output }``.  With ``?stream=true``, returns the raw partial JSON text stream expected by AI SDK v5 ``useObject``. The streamed JSON is the task output itself. (raw streaming version).
+
+        Yields raw :class:`ServerSentEvent` objects. Each event's ``data`` field contains a JSON-encoded ``TaskResponse`` string.
+
+        :param agent_id: The agentId. (required)
+        :type agent_id: str
+        :param task_request: (required)
+        :type task_request: TaskRequest
+        :param stream: Whether to stream the response or not.
+        :type stream: bool
+        :param cache: Use cached responses if available.
+        :type cache: bool
+        :param analytics: Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted.
+        :type analytics: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns an iterator of ServerSentEvent objects. Each event's ``data`` field contains JSON-encoded ``TaskResponse``.
+        """
+
+        if agent_id is None:
+            raise ValueError(
+                "Parameter `agent_id` is required when calling `create_agent_task_stream_raw`."
+            )
+
+        if task_request is None:
+            raise ValueError(
+                "Parameter `task_request` is required when calling `create_agent_task_stream_raw`."
+            )
+
+        _query_parameters: Dict[str, Any] = {}
+
+        if stream is not None:
+            _query_parameters["stream"] = stream
+        if cache is not None:
+            _query_parameters["cache"] = cache
+        if analytics is not None:
+            _query_parameters["analytics"] = analytics
+
+        _data = {}
+        if task_request is not None:
+            _data = task_request
+
+        for event in self._transporter.request_stream(
+            verb=Verb.POST,
+            path="/agent-studio/1/agents/{agentId}/tasks".replace(
+                "{agentId}", quote(str(agent_id), safe="")
+            ),
+            request_options=self._request_options.merge(
+                query_parameters=_query_parameters,
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        ):
+            yield event
+
+    def create_agent_task_stream(
+        self,
+        agent_id: Annotated[StrictStr, Field(description="The agentId.")],
+        task_request: Union[TaskRequest, dict[str, Any]],
+        stream: Annotated[
+            Optional[StrictBool],
+            Field(description="Whether to stream the response or not."),
+        ] = None,
+        cache: Annotated[
+            Optional[StrictBool],
+            Field(description="Use cached responses if available."),
+        ] = None,
+        analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted."
+            ),
+        ] = None,
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> Iterator[StreamEvent[TaskResponse]]:
+        """
+        Run a configured task and return the generated object as ``{ output }``.  With ``?stream=true``, returns the raw partial JSON text stream expected by AI SDK v5 ``useObject``. The streamed JSON is the task output itself. (streaming version).
+
+        Yields :class:`StreamEvent` objects wrapping parsed ``TaskResponse`` payloads.
+
+        :param agent_id: The agentId. (required)
+        :type agent_id: str
+        :param task_request: (required)
+        :type task_request: TaskRequest
+        :param stream: Whether to stream the response or not.
+        :type stream: bool
+        :param cache: Use cached responses if available.
+        :type cache: bool
+        :param analytics: Set to false to skip endpoint-specific analytics for this task call (default: true). Disables the task analytics event; operational metrics and traces are always emitted.
+        :type analytics: bool
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns an iterator of :class:`StreamEvent[TaskResponse]` objects.
+        """
+
+        for event in self.create_agent_task_stream_raw(
+            agent_id, task_request, stream, cache, analytics, request_options
+        ):
+            try:
+                _parsed = ApiResponse.deserialize(TaskResponse, event.data)
                 yield StreamEvent(data=_parsed, raw=event)
             except Exception as e:
                 yield StreamEvent(data=None, raw=event, error=e)
@@ -4783,7 +5621,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Deletes the conversations matching the given filers.
+        Deletes the conversations matching the given filters.
 
         Required API Key ACLs:
           - logs
@@ -4845,7 +5683,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> None:
         """
-        Deletes the conversations matching the given filers.
+        Deletes the conversations matching the given filters.
 
         Required API Key ACLs:
           - logs
@@ -5455,6 +6293,18 @@ class AgentStudioClientSync:
             Optional[StrictBool],
             Field(description="Include feedback for the conversation."),
         ] = None,
+        include_message_events: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include Insights events attributed to each assistant message."
+            ),
+        ] = None,
+        include_impact_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include outcome signals (hasView, hasClick, hasConversion) for the conversation."
+            ),
+        ] = None,
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
@@ -5472,6 +6322,10 @@ class AgentStudioClientSync:
         :type agent_id: str
         :param include_feedback: Include feedback for the conversation.
         :type include_feedback: bool
+        :param include_message_events: Include Insights events attributed to each assistant message.
+        :type include_message_events: bool
+        :param include_impact_analytics: Include outcome signals (hasView, hasClick, hasConversion) for the conversation.
+        :type include_impact_analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -5503,6 +6357,10 @@ class AgentStudioClientSync:
 
         if include_feedback is not None:
             _query_parameters["includeFeedback"] = include_feedback
+        if include_message_events is not None:
+            _query_parameters["includeMessageEvents"] = include_message_events
+        if include_impact_analytics is not None:
+            _query_parameters["includeImpactAnalytics"] = include_impact_analytics
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -5528,6 +6386,18 @@ class AgentStudioClientSync:
             Optional[StrictBool],
             Field(description="Include feedback for the conversation."),
         ] = None,
+        include_message_events: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include Insights events attributed to each assistant message."
+            ),
+        ] = None,
+        include_impact_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include outcome signals (hasView, hasClick, hasConversion) for the conversation."
+            ),
+        ] = None,
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
@@ -5545,6 +6415,10 @@ class AgentStudioClientSync:
         :type agent_id: str
         :param include_feedback: Include feedback for the conversation.
         :type include_feedback: bool
+        :param include_message_events: Include Insights events attributed to each assistant message.
+        :type include_message_events: bool
+        :param include_impact_analytics: Include outcome signals (hasView, hasClick, hasConversion) for the conversation.
+        :type include_impact_analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -5554,6 +6428,8 @@ class AgentStudioClientSync:
             conversation_id,
             agent_id,
             include_feedback,
+            include_message_events,
+            include_impact_analytics,
             x_algolia_secure_user_token,
             request_options,
         )
@@ -5742,7 +6618,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
-        Invalidate cached completions for this agent. Filter with `before` (exclusive).
+        Invalidate cached completions and task outputs for this agent. Filter with `before` (exclusive).
 
         Required API Key ACLs:
           - editSettings
@@ -5794,7 +6670,7 @@ class AgentStudioClientSync:
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> None:
         """
-        Invalidate cached completions for this agent. Filter with `before` (exclusive).
+        Invalidate cached completions and task outputs for this agent. Filter with `before` (exclusive).
 
         Required API Key ACLs:
           - editSettings
@@ -5900,6 +6776,26 @@ class AgentStudioClientSync:
             Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
             Field(description="Items per page."),
         ] = None,
+        include_impact_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include impact analytics (hasView, hasClick, hasConversion) per conversation."
+            ),
+        ] = None,
+        clicked: Annotated[
+            Optional[StrictBool],
+            Field(description="Filter by conversations with at least one item click."),
+        ] = None,
+        converted: Annotated[
+            Optional[StrictBool],
+            Field(description="Filter by conversations with at least one conversion."),
+        ] = None,
+        has_algolia_search: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by conversations where the search tool was used."
+            ),
+        ] = None,
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
@@ -5925,6 +6821,14 @@ class AgentStudioClientSync:
         :type page: int
         :param limit: Items per page.
         :type limit: int
+        :param include_impact_analytics: Include impact analytics (hasView, hasClick, hasConversion) per conversation.
+        :type include_impact_analytics: bool
+        :param clicked: Filter by conversations with at least one item click.
+        :type clicked: bool
+        :param converted: Filter by conversations with at least one conversion.
+        :type converted: bool
+        :param has_algolia_search: Filter by conversations where the search tool was used.
+        :type has_algolia_search: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -5956,6 +6860,14 @@ class AgentStudioClientSync:
             _query_parameters["page"] = page
         if limit is not None:
             _query_parameters["limit"] = limit
+        if include_impact_analytics is not None:
+            _query_parameters["includeImpactAnalytics"] = include_impact_analytics
+        if clicked is not None:
+            _query_parameters["clicked"] = clicked
+        if converted is not None:
+            _query_parameters["converted"] = converted
+        if has_algolia_search is not None:
+            _query_parameters["hasAlgoliaSearch"] = has_algolia_search
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -6006,6 +6918,26 @@ class AgentStudioClientSync:
             Optional[Annotated[int, Field(le=100, strict=True, ge=1)]],
             Field(description="Items per page."),
         ] = None,
+        include_impact_analytics: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Include impact analytics (hasView, hasClick, hasConversion) per conversation."
+            ),
+        ] = None,
+        clicked: Annotated[
+            Optional[StrictBool],
+            Field(description="Filter by conversations with at least one item click."),
+        ] = None,
+        converted: Annotated[
+            Optional[StrictBool],
+            Field(description="Filter by conversations with at least one conversion."),
+        ] = None,
+        has_algolia_search: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by conversations where the search tool was used."
+            ),
+        ] = None,
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
@@ -6031,6 +6963,14 @@ class AgentStudioClientSync:
         :type page: int
         :param limit: Items per page.
         :type limit: int
+        :param include_impact_analytics: Include impact analytics (hasView, hasClick, hasConversion) per conversation.
+        :type include_impact_analytics: bool
+        :param clicked: Filter by conversations with at least one item click.
+        :type clicked: bool
+        :param converted: Filter by conversations with at least one conversion.
+        :type converted: bool
+        :param has_algolia_search: Filter by conversations where the search tool was used.
+        :type has_algolia_search: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
@@ -6044,6 +6984,10 @@ class AgentStudioClientSync:
             feedback_vote,
             page,
             limit,
+            include_impact_analytics,
+            clicked,
+            converted,
+            has_algolia_search,
             x_algolia_secure_user_token,
             request_options,
         )
@@ -6427,6 +7371,61 @@ class AgentStudioClientSync:
         resp = self.publish_agent_with_http_info(agent_id, request_options)
         return resp.deserialize(AgentWithVersionResponse, resp.raw_data)
 
+    def trim_context_with_http_info(
+        self,
+        context_trim_request: Union[ContextTrimRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Deterministically trim a conversation payload (no LLM calls).  Keep the last N messages and/or fit a heuristic token budget, optionally dropping tool parts from what is kept (tool parts are stripped before the budget is applied). Returns the trimmed messages plus before/after stats.  With no constraints set, the messages are returned unchanged and only the stats are computed - a deliberate, cheap \"how big is my context?\" probe (no LLM call, no mutation).
+
+        Required API Key ACLs:
+          - search
+
+        :param context_trim_request: (required)
+        :type context_trim_request: ContextTrimRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if context_trim_request is None:
+            raise ValueError(
+                "Parameter `context_trim_request` is required when calling `trim_context`."
+            )
+
+        _data = {}
+        if context_trim_request is not None:
+            _data = context_trim_request
+
+        return self._transporter.request(
+            verb=Verb.POST,
+            path="/agent-studio/1/unstable/context/trim",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def trim_context(
+        self,
+        context_trim_request: Union[ContextTrimRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ContextResponse:
+        """
+        Deterministically trim a conversation payload (no LLM calls).  Keep the last N messages and/or fit a heuristic token budget, optionally dropping tool parts from what is kept (tool parts are stripped before the budget is applied). Returns the trimmed messages plus before/after stats.  With no constraints set, the messages are returned unchanged and only the stats are computed - a deliberate, cheap \"how big is my context?\" probe (no LLM call, no mutation).
+
+        Required API Key ACLs:
+          - search
+
+        :param context_trim_request: (required)
+        :type context_trim_request: ContextTrimRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ContextResponse' result object.
+        """
+        resp = self.trim_context_with_http_info(context_trim_request, request_options)
+        return resp.deserialize(ContextResponse, resp.raw_data)
+
     def unpublish_agent_with_http_info(
         self,
         agent_id: Annotated[StrictStr, Field(description="The agentId.")],
@@ -6615,6 +7614,63 @@ class AgentStudioClientSync:
             application_config_patch, request_options
         )
         return resp.deserialize(ApplicationConfigResponse, resp.raw_data)
+
+    def update_feedback_with_http_info(
+        self,
+        feedback_update_request: Union[FeedbackUpdateRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> ApiResponse[str]:
+        """
+        Update an existing feedback entry.
+
+        Required API Key ACLs:
+          - search
+
+        :param feedback_update_request: (required)
+        :type feedback_update_request: FeedbackUpdateRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        if feedback_update_request is None:
+            raise ValueError(
+                "Parameter `feedback_update_request` is required when calling `update_feedback`."
+            )
+
+        _data = {}
+        if feedback_update_request is not None:
+            _data = feedback_update_request
+
+        return self._transporter.request(
+            verb=Verb.PATCH,
+            path="/agent-studio/1/feedback",
+            request_options=self._request_options.merge(
+                data=dumps(body_serializer(_data)),
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def update_feedback(
+        self,
+        feedback_update_request: Union[FeedbackUpdateRequest, dict[str, Any]],
+        request_options: Optional[Union[dict, RequestOptions]] = None,
+    ) -> FeedbackResponse:
+        """
+        Update an existing feedback entry.
+
+        Required API Key ACLs:
+          - search
+
+        :param feedback_update_request: (required)
+        :type feedback_update_request: FeedbackUpdateRequest
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'FeedbackResponse' result object.
+        """
+        resp = self.update_feedback_with_http_info(
+            feedback_update_request, request_options
+        )
+        return resp.deserialize(FeedbackResponse, resp.raw_data)
 
     def update_provider_with_http_info(
         self,

@@ -24,8 +24,6 @@ _ALIASES = {
     "loc": "loc",
     "msg": "msg",
     "type": "type",
-    "input": "input",
-    "ctx": "ctx",
 }
 
 
@@ -41,8 +39,6 @@ class AgentStudioValidationError(BaseModel):
     loc: List[LocationItemUnion]
     msg: str
     type: str
-    input: Optional[object] = None
-    ctx: Optional[object] = None
 
     model_config = ConfigDict(
         strict=False,

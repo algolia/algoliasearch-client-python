@@ -34,6 +34,8 @@ class ProviderName(str, Enum):
 
     OPENAI_COMPATIBLE = "openai_compatible"
 
+    XAI = "xai"
+
     ANTHROPIC = "anthropic"
 
     @classmethod

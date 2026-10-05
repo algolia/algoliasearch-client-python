@@ -29,6 +29,7 @@ from algoliasearch.agent_studio.models.open_ai_compatible_provider_input import 
     OpenAICompatibleProviderInput,
 )
 from algoliasearch.agent_studio.models.open_ai_provider_input import OpenAIProviderInput
+from algoliasearch.agent_studio.models.xai_provider_input import XAIProviderInput
 
 
 class ProviderInputNullable(BaseModel):
@@ -48,12 +49,15 @@ class ProviderInputNullable(BaseModel):
 
     oneof_schema_5_validator: Optional[AnthropicProviderInput] = Field(default=None)
 
+    oneof_schema_6_validator: Optional[XAIProviderInput] = Field(default=None)
+
     actual_instance: Union[
         AnthropicProviderInput,
         AzureOpenAIProviderInput,
         BaseProviderInput,
         OpenAICompatibleProviderInput,
         OpenAIProviderInput,
+        XAIProviderInput,
         None,
     ] = None
     one_of_schemas: Set[str] = {
@@ -62,6 +66,7 @@ class ProviderInputNullable(BaseModel):
         "BaseProviderInput",
         "OpenAICompatibleProviderInput",
         "OpenAIProviderInput",
+        "XAIProviderInput",
     }
 
     def __init__(self, *args, **kwargs) -> None:
@@ -87,6 +92,7 @@ class ProviderInputNullable(BaseModel):
         BaseProviderInput,
         OpenAICompatibleProviderInput,
         OpenAIProviderInput,
+        XAIProviderInput,
         Self,
         None,
     ]:
@@ -139,9 +145,15 @@ class ProviderInputNullable(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = XAIProviderInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into ProviderInputNullable with oneOf schemas: AnthropicProviderInput, AzureOpenAIProviderInput, BaseProviderInput, OpenAICompatibleProviderInput, OpenAIProviderInput. Details: "
+            "No match found when deserializing the JSON string into ProviderInputNullable with oneOf schemas: AnthropicProviderInput, AzureOpenAIProviderInput, BaseProviderInput, OpenAICompatibleProviderInput, OpenAIProviderInput, XAIProviderInput. Details: "
             + ", ".join(error_messages)
         )
 
@@ -167,6 +179,7 @@ class ProviderInputNullable(BaseModel):
             BaseProviderInput,
             OpenAICompatibleProviderInput,
             OpenAIProviderInput,
+            XAIProviderInput,
         ]
     ]:
         """Returns the dict representation of the actual instance"""

@@ -18,7 +18,7 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.agent_studio.models.tool_config_input import ToolConfigInput
+from algoliasearch.agent_studio.models.items_union import ItemsUnion
 
 _ALIASES = {
     "id": "id",
@@ -46,7 +46,7 @@ class AgentTestConfiguration(BaseModel):
     instructions: str
     system_prompt: Optional[str] = None
     config: Dict[str, object]
-    tools: List[ToolConfigInput]
+    tools: List[ItemsUnion]
 
     model_config = ConfigDict(
         strict=False,
@@ -84,7 +84,7 @@ class AgentTestConfiguration(BaseModel):
             return cls.model_validate(obj)
 
         obj["tools"] = (
-            [ToolConfigInput.from_dict(_item) for _item in obj["tools"]]
+            [ItemsUnion.from_dict(_item) for _item in obj["tools"]]
             if obj.get("tools") is not None
             else None
         )

@@ -38,7 +38,7 @@ class AzureOpenAIProviderInput(BaseModel):
     api_key: str
     azure_endpoint: str
     azure_deployment: str
-    """ Azure model deployment name is required. """
+    """ Azure model deployment name. """
     api_version: Optional[str] = None
 
     model_config = ConfigDict(

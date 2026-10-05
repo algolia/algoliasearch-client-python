@@ -18,6 +18,8 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.agent_studio.models.guardrail_outcome import GuardrailOutcome
+from algoliasearch.agent_studio.models.message_event import MessageEvent
 from algoliasearch.agent_studio.models.message_part import MessagePart
 from algoliasearch.agent_studio.models.message_role import MessageRole
 
@@ -31,7 +33,13 @@ _ALIASES = {
     "model": "model",
     "input_tokens": "inputTokens",
     "output_tokens": "outputTokens",
+    "reasoning_tokens": "reasoningTokens",
+    "input_token_details": "inputTokenDetails",
+    "output_token_details": "outputTokenDetails",
+    "is_cache_hit": "isCacheHit",
     "turn_context": "turnContext",
+    "events": "events",
+    "guardrail": "guardrail",
 }
 
 
@@ -53,7 +61,13 @@ class MessageResponse(BaseModel):
     model: Optional[str] = None
     input_tokens: Optional[int] = None
     output_tokens: Optional[int] = None
-    turn_context: Optional[Dict[str, str]] = None
+    reasoning_tokens: Optional[int] = None
+    input_token_details: Optional[Dict[str, int]] = None
+    output_token_details: Optional[Dict[str, int]] = None
+    is_cache_hit: Optional[bool] = None
+    turn_context: Optional[Dict[str, object]] = None
+    events: Optional[List[MessageEvent]] = None
+    guardrail: Optional[GuardrailOutcome] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -94,6 +108,16 @@ class MessageResponse(BaseModel):
         obj["parts"] = (
             [MessagePart.from_dict(_item) for _item in obj["parts"]]
             if obj.get("parts") is not None
+            else None
+        )
+        obj["events"] = (
+            [MessageEvent.from_dict(_item) for _item in obj["events"]]
+            if obj.get("events") is not None
+            else None
+        )
+        obj["guardrail"] = (
+            GuardrailOutcome.from_dict(obj["guardrail"])
+            if obj.get("guardrail") is not None
             else None
         )
 

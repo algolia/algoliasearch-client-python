@@ -20,6 +20,7 @@ else:
 
 from algoliasearch.agent_studio.models.conversation_metadata import ConversationMetadata
 from algoliasearch.agent_studio.models.feedback_response import FeedbackResponse
+from algoliasearch.agent_studio.models.impact_analytics import ImpactAnalytics
 
 _ALIASES = {
     "id": "id",
@@ -36,6 +37,7 @@ _ALIASES = {
     "total_tokens": "totalTokens",
     "conversation_metadata": "conversationMetadata",
     "feedback": "feedback",
+    "impact_analytics": "impactAnalytics",
 }
 
 
@@ -62,6 +64,7 @@ class ConversationBaseResponse(BaseModel):
     total_tokens: Optional[int] = None
     conversation_metadata: Optional[ConversationMetadata] = None
     feedback: Optional[List[FeedbackResponse]] = None
+    impact_analytics: Optional[ImpactAnalytics] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -106,6 +109,11 @@ class ConversationBaseResponse(BaseModel):
         obj["feedback"] = (
             [FeedbackResponse.from_dict(_item) for _item in obj["feedback"]]
             if obj.get("feedback") is not None
+            else None
+        )
+        obj["impactAnalytics"] = (
+            ImpactAnalytics.from_dict(obj["impactAnalytics"])
+            if obj.get("impactAnalytics") is not None
             else None
         )
 

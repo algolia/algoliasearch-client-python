@@ -26,6 +26,10 @@ _ALIASES = {
     "tool_name": "toolName",
     "output": "output",
     "provider_options": "providerOptions",
+    "mcp_config_id": "mcpConfigId",
+    "mcp_config_name": "mcpConfigName",
+    "is_terminal": "isTerminal",
+    "output_metadata": "outputMetadata",
 }
 
 
@@ -43,6 +47,10 @@ class ToolResultPart(BaseModel):
     tool_name: str
     output: ToolResultOutput
     provider_options: Optional[Dict[str, object]] = None
+    mcp_config_id: Optional[str] = None
+    mcp_config_name: Optional[str] = None
+    is_terminal: Optional[bool] = None
+    output_metadata: Optional[Dict[str, object]] = None
 
     model_config = ConfigDict(
         strict=False,

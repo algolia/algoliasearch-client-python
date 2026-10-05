@@ -18,6 +18,10 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.agent_studio.models.data_guardrail_violation_part_v5 import (
+    DataGuardrailViolationPartV5,
+)
+from algoliasearch.agent_studio.models.data_part_v5 import DataPartV5
 from algoliasearch.agent_studio.models.reasoning_part_v5 import ReasoningPartV5
 from algoliasearch.agent_studio.models.step_start_part_v5 import StepStartPartV5
 from algoliasearch.agent_studio.models.text_part_v5 import TextPartV5
@@ -35,12 +39,26 @@ class AssistantPartV5(BaseModel):
 
     oneof_schema_3_validator: Optional[ReasoningPartV5] = Field(default=None)
 
-    oneof_schema_4_validator: Optional[ToolPartV5] = Field(default=None)
+    oneof_schema_4_validator: Optional[DataGuardrailViolationPartV5] = Field(
+        default=None
+    )
+
+    oneof_schema_5_validator: Optional[DataPartV5] = Field(default=None)
+
+    oneof_schema_6_validator: Optional[ToolPartV5] = Field(default=None)
 
     actual_instance: Union[
-        ReasoningPartV5, StepStartPartV5, TextPartV5, ToolPartV5, None
+        DataGuardrailViolationPartV5,
+        DataPartV5,
+        ReasoningPartV5,
+        StepStartPartV5,
+        TextPartV5,
+        ToolPartV5,
+        None,
     ] = None
     one_of_schemas: Set[str] = {
+        "DataGuardrailViolationPartV5",
+        "DataPartV5",
         "ReasoningPartV5",
         "StepStartPartV5",
         "TextPartV5",
@@ -64,7 +82,16 @@ class AssistantPartV5(BaseModel):
     @model_serializer
     def unwrap_actual_instance(
         self,
-    ) -> Union[ReasoningPartV5, StepStartPartV5, TextPartV5, ToolPartV5, Self, None]:
+    ) -> Union[
+        DataGuardrailViolationPartV5,
+        DataPartV5,
+        ReasoningPartV5,
+        StepStartPartV5,
+        TextPartV5,
+        ToolPartV5,
+        Self,
+        None,
+    ]:
         """
         Unwraps the `actual_instance` when calling the `to_json` method.
         """
@@ -100,6 +127,18 @@ class AssistantPartV5(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
+            instance.actual_instance = DataGuardrailViolationPartV5.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = DataPartV5.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
             instance.actual_instance = ToolPartV5.from_json(json_str)
 
             return instance
@@ -107,7 +146,7 @@ class AssistantPartV5(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into AssistantPartV5 with oneOf schemas: ReasoningPartV5, StepStartPartV5, TextPartV5, ToolPartV5. Details: "
+            "No match found when deserializing the JSON string into AssistantPartV5 with oneOf schemas: DataGuardrailViolationPartV5, DataPartV5, ReasoningPartV5, StepStartPartV5, TextPartV5, ToolPartV5. Details: "
             + ", ".join(error_messages)
         )
 
@@ -126,7 +165,15 @@ class AssistantPartV5(BaseModel):
     def to_dict(
         self,
     ) -> Optional[
-        Union[Dict[str, Any], ReasoningPartV5, StepStartPartV5, TextPartV5, ToolPartV5]
+        Union[
+            Dict[str, Any],
+            DataGuardrailViolationPartV5,
+            DataPartV5,
+            ReasoningPartV5,
+            StepStartPartV5,
+            TextPartV5,
+            ToolPartV5,
+        ]
     ]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:

@@ -18,7 +18,7 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.agent_studio.models.provider_input import ProviderInput
+from algoliasearch.agent_studio.models.input_union import InputUnion
 
 _ALIASES = {
     "id": "id",
@@ -28,6 +28,7 @@ _ALIASES = {
     "created_at": "createdAt",
     "updated_at": "updatedAt",
     "last_used_at": "lastUsedAt",
+    "is_algolia_managed": "isAlgoliaManaged",
 }
 
 
@@ -43,10 +44,11 @@ class ProviderAuthenticationResponse(BaseModel):
     id: str
     name: str
     provider_name: str
-    input: ProviderInput
+    input: InputUnion
     created_at: str
     updated_at: str
     last_used_at: Optional[str] = None
+    is_algolia_managed: Optional[bool] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -84,9 +86,7 @@ class ProviderAuthenticationResponse(BaseModel):
             return cls.model_validate(obj)
 
         obj["input"] = (
-            ProviderInput.from_dict(obj["input"])
-            if obj.get("input") is not None
-            else None
+            InputUnion.from_dict(obj["input"]) if obj.get("input") is not None else None
         )
 
         return cls.model_validate(obj)

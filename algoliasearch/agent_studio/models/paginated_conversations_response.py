@@ -26,6 +26,7 @@ from algoliasearch.agent_studio.models.pagination_metadata import PaginationMeta
 _ALIASES = {
     "data": "data",
     "pagination": "pagination",
+    "analytics_degraded": "analyticsDegraded",
 }
 
 
@@ -40,6 +41,7 @@ class PaginatedConversationsResponse(BaseModel):
 
     data: List[ConversationBaseResponse]
     pagination: PaginationMetadata
+    analytics_degraded: Optional[bool] = None
 
     model_config = ConfigDict(
         strict=False,

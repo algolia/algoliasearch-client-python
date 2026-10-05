@@ -23,6 +23,7 @@ _ALIASES = {
     "tool_call_id": "toolCallId",
     "tool_name": "toolName",
     "args": "args",
+    "raw_args": "rawArgs",
     "requires_approval": "requiresApproval",
     "provider_options": "providerOptions",
 }
@@ -41,6 +42,7 @@ class ToolCallPart(BaseModel):
     tool_call_id: str
     tool_name: str
     args: Union[object, None]
+    raw_args: Optional[Dict[str, object]] = None
     requires_approval: Optional[bool] = None
     provider_options: Optional[Dict[str, object]] = None
 

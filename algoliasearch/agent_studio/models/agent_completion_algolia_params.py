@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -25,6 +25,7 @@ from algoliasearch.agent_studio.models.search_parameters_overrides import (
 _ALIASES = {
     "mcp_servers": "mcpServers",
     "search_parameters": "searchParameters",
+    "indices": "indices",
 }
 
 
@@ -39,6 +40,8 @@ class AgentCompletionAlgoliaParams(BaseModel):
 
     mcp_servers: Optional[Dict[str, Dict[str, Dict[str, str]]]] = None
     search_parameters: Optional[Dict[str, SearchParametersOverrides]] = None
+    indices: Optional[List[str]] = None
+    """ Per-request override for the Algolia Search tool's indices, honored only when the tool is configured with `mode=\"dynamic\"`. A list of index names; the API looks up each name in the agent's static `tool.indices` and reuses that entry, including its description and access-control fields. A name the agent configuration does not list is rejected with HTTP 422 (`index_not_listed_on_tool`) unless the tool sets `allowUnlistedIndices`, in which case the API synthesizes a minimal entry carrying the index name only. Capped at 10 entries. Sending this field against an agent whose tool is in `mode=\"static\"` (the default) is rejected with HTTP 422 — change the tool's `mode` in the agent configuration first. Defaults to `null`, which preserves the existing static behavior. """
 
     model_config = ConfigDict(
         strict=False,

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from json import loads
 from sys import version_info
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -18,15 +18,11 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.agent_studio.models.algolia_recommend_tool_index_config import (
-    AlgoliaRecommendToolIndexConfig,
-)
-
 _ALIASES = {
-    "name": "name",
-    "type": "type",
-    "allowed_configs": "allowedConfigs",
-    "predefined_recommend_parameters": "predefinedRecommendParameters",
+    "id": "id",
+    "role": "role",
+    "content": "content",
+    "encrypted_value": "encryptedValue",
 }
 
 
@@ -34,15 +30,15 @@ def _alias_generator(name: str) -> str:
     return _ALIASES.get(name, name)
 
 
-class AlgoliaRecommendToolConfigInput(BaseModel):
+class ReasoningMessageAGUI(BaseModel):
     """
-    Configuration for the Algolia Recommend tool. Allows specifying recommend models and related parameters.
+    ReasoningMessageAGUI
     """
 
-    name: str
-    type: str
-    allowed_configs: Optional[List[AlgoliaRecommendToolIndexConfig]] = None
-    predefined_recommend_parameters: Optional[Dict[str, object]] = None
+    id: str
+    role: str
+    content: str
+    encrypted_value: Optional[str] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -59,7 +55,7 @@ class AlgoliaRecommendToolConfigInput(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of AlgoliaRecommendToolConfigInput from a JSON string"""
+        """Create an instance of ReasoningMessageAGUI from a JSON string"""
         return cls.from_dict(loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -72,20 +68,11 @@ class AlgoliaRecommendToolConfigInput(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of AlgoliaRecommendToolConfigInput from a dict"""
+        """Create an instance of ReasoningMessageAGUI from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
-
-        obj["allowedConfigs"] = (
-            [
-                AlgoliaRecommendToolIndexConfig.from_dict(_item)
-                for _item in obj["allowedConfigs"]
-            ]
-            if obj.get("allowedConfigs") is not None
-            else None
-        )
 
         return cls.model_validate(obj)

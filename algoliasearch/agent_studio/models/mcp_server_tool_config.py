@@ -18,7 +18,9 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.agent_studio.models.tool_config import ToolConfig
+from algoliasearch.agent_studio.models.tool_config_or_boolean_union import (
+    ToolConfigOrBooleanUnion,
+)
 
 _ALIASES = {
     "url": "url",
@@ -47,7 +49,7 @@ class McpServerToolConfig(BaseModel):
     type: str
     id: Optional[str] = None
     """ Stable unique identifier for this MCP tool. """
-    allowed_tools: Optional[Dict[str, ToolConfig]] = None
+    allowed_tools: Optional[Dict[str, ToolConfigOrBooleanUnion]] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -86,7 +88,8 @@ class McpServerToolConfig(BaseModel):
 
         obj["allowedTools"] = (
             dict(
-                (_k, ToolConfig.from_dict(_v)) for _k, _v in obj["allowedTools"].items()
+                (_k, ToolConfigOrBooleanUnion.from_dict(_v))
+                for _k, _v in obj["allowedTools"].items()
             )
             if obj.get("allowedTools") is not None
             else None

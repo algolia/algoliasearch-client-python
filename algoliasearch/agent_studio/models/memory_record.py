@@ -45,7 +45,7 @@ def _alias_generator(name: str) -> str:
 
 class MemoryRecord(BaseModel):
     """
-    Universal storage model for all memory types (semantic, episodic).  This is the ONLY model that touches storage (Algolia). Domain models (SemanticMemory, EpisodicMemory) are used for LLM extraction and converted to MemoryRecord before saving.  See https://langchain-ai.github.io/langmem/concepts/conceptual_guide/#memory-types for memory type definitions.
+    A stored memory record.
     """
 
     memory_type: Optional[MemoryType] = None
@@ -55,13 +55,13 @@ class MemoryRecord(BaseModel):
     raw_extract: str
     """ Verbatim conversation extract, not paraphrased. """
     keywords: Optional[List[str]] = None
-    """ 5-20 free-form keywords: entities, context, search terms (any words). """
+    """ Keywords for retrieval: entities, context, search terms. """
     topics: Optional[List[str]] = None
-    """ 2-4 topics ONLY from this list: [complaints, entertainment, family, feedback, finance, food, goals, health, history, hobbies, learning, praise, preferences, schedule, shopping, technical, travel, work]. """
+    """ Topics that classify the memory. Each must be one of: [complaints, entertainment, family, feedback, finance, food, goals, health, history, hobbies, learning, praise, preferences, schedule, shopping, technical, travel, work]. """
     tags: Optional[List[str]] = None
     """ Arbitrary labels/themes for flexible categorization (e.g., 'Q1-goals', 'paris-trip', 'vip-customer'). """
     recall_triggers: Optional[List[str]] = None
-    """ 3-5 natural phrases that should trigger this memory. """
+    """ Phrases that cause the API to recall this memory. """
     object_id: Optional[str] = None
     """ ObjectID of existing memory to update. Leave empty for new memory. """
     app_id: Optional[str] = None
