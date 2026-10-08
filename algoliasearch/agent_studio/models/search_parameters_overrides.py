@@ -23,6 +23,9 @@ from algoliasearch.agent_studio.models.around_precision_union import (
 )
 from algoliasearch.agent_studio.models.around_radius_union import AroundRadiusUnion
 from algoliasearch.agent_studio.models.distinct_union import DistinctUnion
+from algoliasearch.agent_studio.models.facet_filters_union_search_parameters_overrides import (
+    FacetFiltersUnionSearchParametersOverrides,
+)
 from algoliasearch.agent_studio.models.inside_bounding_box_union import (
     InsideBoundingBoxUnion,
 )
@@ -40,6 +43,7 @@ _ALIASES = {
     "enable_personalization": "enablePersonalization",
     "personalization_impact": "personalizationImpact",
     "optional_filters": "optionalFilters",
+    "facet_filters": "facetFilters",
     "around_lat_lng": "aroundLatLng",
     "around_radius": "aroundRadius",
     "around_precision": "aroundPrecision",
@@ -66,6 +70,7 @@ class SearchParametersOverrides(BaseModel):
     enable_personalization: Optional[bool] = None
     personalization_impact: Optional[int] = None
     optional_filters: Optional[OptionalFiltersUnion] = None
+    facet_filters: Optional[FacetFiltersUnionSearchParametersOverrides] = None
     around_lat_lng: Optional[str] = None
     around_radius: Optional[AroundRadiusUnion] = None
     around_precision: Optional[AroundPrecisionUnion] = None
@@ -116,6 +121,11 @@ class SearchParametersOverrides(BaseModel):
         obj["optionalFilters"] = (
             OptionalFiltersUnion.from_dict(obj["optionalFilters"])
             if obj.get("optionalFilters") is not None
+            else None
+        )
+        obj["facetFilters"] = (
+            FacetFiltersUnionSearchParametersOverrides.from_dict(obj["facetFilters"])
+            if obj.get("facetFilters") is not None
             else None
         )
         obj["aroundRadius"] = (

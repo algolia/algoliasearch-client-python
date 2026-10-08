@@ -29,6 +29,7 @@ _ALIASES = {
     "output": "output",
     "output_metadata": "outputMetadata",
     "error_text": "errorText",
+    "terminal": "terminal",
     "provider_options": "providerOptions",
     "requires_approval": "requiresApproval",
     "description": "description",
@@ -53,6 +54,7 @@ class ToolPartV5(BaseModel):
     output: Optional[Dict[str, object]] = None
     output_metadata: Optional[Dict[str, object]] = None
     error_text: Optional[str] = None
+    terminal: Optional[bool] = None
     provider_options: Optional[Dict[str, object]] = None
     requires_approval: Optional[bool] = None
     description: Optional[str] = None

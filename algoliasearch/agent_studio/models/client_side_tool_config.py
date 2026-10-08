@@ -27,6 +27,7 @@ _ALIASES = {
     "type": "type",
     "description": "description",
     "input_schema": "inputSchema",
+    "is_terminal": "isTerminal",
 }
 
 
@@ -43,6 +44,8 @@ class ClientSideToolConfig(BaseModel):
     type: str
     description: str
     input_schema: ClientToolsArgsSchema
+    is_terminal: Optional[bool] = None
+    """ Server-side declaration that this tool is display/render-only: a resolved result ends the turn and the model is not re-invoked on it (CR-11753). The client's terminal claim on a tool result is honored only when this agrees; leave false for data tools whose result the model must reason about. """
 
     model_config = ConfigDict(
         strict=False,

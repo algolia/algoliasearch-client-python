@@ -65,6 +65,9 @@ from .episode import Episode
 from .error_base import ErrorBase
 from .exact_on_single_word_query import ExactOnSingleWordQuery
 from .facet_filters_union import FacetFiltersUnion
+from .facet_filters_union_search_parameters_overrides import (
+    FacetFiltersUnionSearchParametersOverrides,
+)
 from .facets import Facets
 from .facets_param import FacetsParam
 from .facets_union import FacetsUnion
@@ -235,6 +238,7 @@ __all__ = (
     "ErrorBase",
     "ExactOnSingleWordQuery",
     "FacetFiltersUnion",
+    "FacetFiltersUnionSearchParametersOverrides",
     "Facets",
     "FacetsParam",
     "FacetsUnion",
