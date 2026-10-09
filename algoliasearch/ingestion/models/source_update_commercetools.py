@@ -29,6 +29,7 @@ _ALIASES = {
     "fallback_is_in_stock_value": "fallbackIsInStockValue",
     "product_query_predicate": "productQueryPredicate",
     "use_images_objects": "useImagesObjects",
+    "categories_custom_fields_full_path": "categoriesCustomFieldsFullPath",
     "custom_fields": "customFields",
 }
 
@@ -52,6 +53,8 @@ class SourceUpdateCommercetools(BaseModel):
     """ Predicate to filter out specific products when indexing. For more information, see [Query Predicate](https://docs.commercetools.com/api/predicates/query).  """
     use_images_objects: Optional[bool] = None
     """ When set to true, the connector indexes objects with all images attributes instead of only the URLs.  """
+    categories_custom_fields_full_path: Optional[bool] = None
+    """ When set to true, the connector uses the complete category path (e.g. \"Root > Level 1 > Category name\") in `categoriesCustomFields`.  """
     custom_fields: Optional[CommercetoolsCustomFields] = None
 
     model_config = ConfigDict(

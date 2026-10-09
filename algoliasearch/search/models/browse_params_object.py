@@ -147,7 +147,7 @@ class BrowseParamsObject(BaseModel):
     numeric_filters: Optional[NumericFilters] = None
     tag_filters: Optional[TagFilters] = None
     sum_or_filters_scores: Optional[bool] = None
-    """ Whether to sum all filter scores. If true, all filter scores are summed. Otherwise, the maximum filter score is kept. For more information, see [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores).  """
+    """ Whether to sum all filter scores. If true, all filter scores are summed. Otherwise, the maximum filter score is kept. For more information, see [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulate-scores-with-sumorfiltersscores).  """
     restrict_searchable_attributes: Optional[List[str]] = None
     """ Restricts a search to a subset of your searchable attributes. Attribute names are case-sensitive.  """
     facets: Optional[List[str]] = None
@@ -174,7 +174,7 @@ class BrowseParamsObject(BaseModel):
     natural_languages: Optional[List[SupportedLanguage]] = None
     """ ISO language codes that adjust settings that are useful for processing natural language queries (as opposed to keyword searches). - Sets `removeStopWords` and `ignorePlurals` to the list of provided languages. - Sets `removeWordsIfNoResults` to `allOptional`. - Adds a `natural_language` attribute to `ruleContexts` and `analyticsTags`.  """
     rule_contexts: Optional[List[str]] = None
-    """ Assigns a rule context to the search query. [Rule contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context) are strings that you can use to trigger matching rules.  """
+    """ Assigns a rule context to the search query. [Rule contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#assign-context) are strings that you can use to trigger matching rules.  """
     personalization_impact: Optional[int] = None
     """ Impact that Personalization should have on this search. The higher this value is, the more Personalization determines the ranking compared to other factors. For more information, see [Understanding Personalization impact](https://www.algolia.com/doc/guides/personalization/personalizing-results/in-depth/configuring-personalization/#understanding-personalization-impact).  """
     user_token: Optional[str] = None
@@ -198,7 +198,7 @@ class BrowseParamsObject(BaseModel):
     ranking: Optional[List[str]] = None
     """ Determines the order in which Algolia returns your results.  By default, each entry corresponds to a [ranking criteria](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria). The tie-breaking algorithm sequentially applies each criterion in the order they're specified. If you configure a replica index for [sorting by an attribute](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/how-to/sort-by-attribute), you put the sorting attribute at the top of the list.  **Modifiers**  - `asc(\"ATTRIBUTE\")`.   Sort the index by the values of an attribute, in ascending order. - `desc(\"ATTRIBUTE\")`.   Sort the index by the values of an attribute, in descending order.  Before you modify the default setting, test your changes in the dashboard, and by [A/B testing](https://www.algolia.com/doc/guides/ab-testing/what-is-ab-testing).  """
     relevancy_strictness: Optional[int] = None
-    """ Relevancy threshold below which less relevant results aren't included in the results. You can only set `relevancyStrictness` on [virtual replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/#what-are-virtual-replicas). Use this setting to strike a balance between the relevance and number of returned results.  """
+    """ Relevancy threshold below which less relevant results aren't included in the results. You can only set `relevancyStrictness` on [virtual replica indices](https://www.algolia.com/doc/guides/managing-results/refine-results/sorting/in-depth/replicas/#standard-and-virtual-replicas). Use this setting to strike a balance between the relevance and number of returned results.  """
     attributes_to_highlight: Optional[List[str]] = None
     """ Attributes to highlight. By default, all searchable attributes are highlighted. Use `*` to highlight all attributes or use an empty array `[]` to turn off highlighting. Attribute names are case-sensitive With highlighting, strings that match the search query are surrounded by HTML tags defined by `highlightPreTag` and `highlightPostTag`. You can use this to visually highlight matching parts of a search query in your UI For more information, see [Highlighting and snippeting](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/highlighting-snippeting/js).  """
     attributes_to_snippet: Optional[List[str]] = None
@@ -214,9 +214,9 @@ class BrowseParamsObject(BaseModel):
     hits_per_page: Optional[int] = None
     """ Number of hits per page. """
     min_word_sizefor1_typo: Optional[int] = None
-    """ Minimum number of characters a word in the search query must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos). """
+    """ Minimum number of characters a word in the search query must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configure-word-size-threshold-for-typos). """
     min_word_sizefor2_typos: Optional[int] = None
-    """ Minimum number of characters a word in the search query must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos). """
+    """ Minimum number of characters a word in the search query must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configure-word-size-threshold-for-typos). """
     typo_tolerance: Optional[TypoTolerance] = None
     allow_typos_on_numeric_tokens: Optional[bool] = None
     """ Whether to allow typos on numbers in the search query. Turn off this setting to reduce the number of irrelevant matches when searching in large sets of similar numbers.  """
@@ -227,7 +227,7 @@ class BrowseParamsObject(BaseModel):
     query_languages: Optional[List[SupportedLanguage]] = None
     """ Languages for language-specific query processing steps such as plurals, stop-word removal, and word-detection dictionaries. This setting sets a default list of languages used by the `removeStopWords` and `ignorePlurals` settings. This setting also sets a dictionary for word detection in the logogram-based [CJK](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/normalization/#normalization-for-logogram-based-languages-cjk) languages. To support this, place the CJK language **first**. **Always specify a query language.** If you don't specify an indexing language, the search engine uses all [supported languages](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages), or the languages you specified with the `ignorePlurals` or `removeStopWords` parameters. This can lead to unexpected search results. For more information, see [Language-specific configuration](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations).  """
     decompound_query: Optional[bool] = None
-    """ Whether to split compound words in the query into their building blocks. For more information, see [Word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#splitting-compound-words). Word segmentation is supported for these languages: German, Dutch, Finnish, Swedish, and Norwegian. Decompounding doesn't work for words with [non-spacing mark Unicode characters](https://www.charactercodes.net/category/non-spacing_mark). For example, `Gartenstühle` won't be decompounded if the `ü` consists of `u` (U+0075) and `◌̈` (U+0308).  """
+    """ Whether to split compound words in the query into their building blocks. For more information, see [Word segmentation](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/language-specific-configurations/#split-compound-words). Word segmentation is supported for these languages: German, Dutch, Finnish, Swedish, and Norwegian. Decompounding doesn't work for words with [non-spacing mark Unicode characters](https://www.charactercodes.net/category/non-spacing_mark). For example, `Gartenstühle` won't be decompounded if the `ü` consists of `u` (U+0075) and `◌̈` (U+0308).  """
     enable_rules: Optional[bool] = None
     """ Whether to enable rules. """
     enable_personalization: Optional[bool] = None

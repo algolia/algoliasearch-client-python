@@ -149,9 +149,9 @@ class MainInjectionQueryParameters(BaseModel):
     min_proximity: Optional[int] = None
     """ Minimum proximity score for two matching words. This adjusts the [Proximity ranking criterion](https://www.algolia.com/doc/guides/managing-results/relevance-overview/in-depth/ranking-criteria/#proximity) by equally scoring matches that are farther apart For example, if `minProximity` is 2, neighboring matches and matches with one word between them would have the same score.  """
     min_word_sizefor1_typo: Optional[int] = None
-    """ Minimum number of characters a word in the search query must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos). """
+    """ Minimum number of characters a word in the search query must contain to accept matches with [one typo](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configure-word-size-threshold-for-typos). """
     min_word_sizefor2_typos: Optional[int] = None
-    """ Minimum number of characters a word in the search query must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configuring-word-length-for-typos). """
+    """ Minimum number of characters a word in the search query must contain to accept matches with [two typos](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/typo-tolerance/in-depth/configuring-typo-tolerance/#configure-word-size-threshold-for-typos). """
     natural_languages: Optional[List[SupportedLanguage]] = None
     """ ISO language codes that adjust settings that are useful for processing natural language queries (as opposed to keyword searches). - Sets `removeStopWords` and `ignorePlurals` to the list of provided languages. - Sets `removeWordsIfNoResults` to `allOptional`. - Adds a `natural_language` attribute to `ruleContexts` and `analyticsTags`.  """
     numeric_filters: Optional[NumericFilters] = None
@@ -175,7 +175,7 @@ class MainInjectionQueryParameters(BaseModel):
     restrict_searchable_attributes: Optional[List[str]] = None
     """ Restricts a search to a subset of your searchable attributes. Attribute names are case-sensitive.  """
     rule_contexts: Optional[List[str]] = None
-    """ Assigns a rule context to the search query. [Rule contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#whats-a-context) are strings that you can use to trigger matching rules.  """
+    """ Assigns a rule context to the search query. [Rule contexts](https://www.algolia.com/doc/guides/managing-results/rules/rules-overview/how-to/customize-search-results-by-platform/#assign-context) are strings that you can use to trigger matching rules.  """
     snippet_ellipsis_text: Optional[str] = None
     """ String used as an ellipsis indicator when a snippet is truncated. """
     synonyms: Optional[bool] = None
@@ -193,7 +193,7 @@ class MainInjectionQueryParameters(BaseModel):
     sort_facet_values_by: Optional[str] = None
     """ Order in which to retrieve facet values. - `count`.   Facet values are retrieved by decreasing count.   The count is the number of matching records containing this facet value. - `alpha`.   Retrieve facet values alphabetically. This setting doesn't influence how facet values are displayed in your UI (see `renderingContent`). For more information, see [facet value display](https://www.algolia.com/doc/guides/building-search-ui/ui-and-ux-patterns/facet-display/js).  """
     sum_or_filters_scores: Optional[bool] = None
-    """ Whether to sum all filter scores. If true, all filter scores are summed. Otherwise, the maximum filter score is kept. For more information, see [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulating-scores-with-sumorfiltersscores).  """
+    """ Whether to sum all filter scores. If true, all filter scores are summed. Otherwise, the maximum filter score is kept. For more information, see [filter scores](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/in-depth/filter-scoring/#accumulate-scores-with-sumorfiltersscores).  """
 
     model_config = ConfigDict(
         strict=False,
