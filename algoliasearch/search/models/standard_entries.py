@@ -31,7 +31,7 @@ def _alias_generator(name: str) -> str:
 
 class StandardEntries(BaseModel):
     """
-    Key-value pairs of [supported language ISO codes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages) and boolean values.
+    Turn off the built-in Algolia stop words for specific languages. Only `stopwords` is supported. The keys of the `stopwords` object are [language ISO codes](https://www.algolia.com/doc/guides/managing-results/optimize-search-results/handling-natural-languages-nlp/in-depth/supported-languages) of languages with a built-in stop-word dictionary.
     """
 
     plurals: Optional[Dict[str, bool]] = None
