@@ -860,7 +860,7 @@ class AbtestingV3Client:
             Annotated[
                 Optional[List[MetricName]],
                 Field(
-                    description="List of metrics to retrieve. If not specified, all metrics are returned."
+                    description="Metrics to retrieve, as a comma-separated list. If not specified, all metrics are returned."
                 ),
             ],
         ] = None,
@@ -887,7 +887,7 @@ class AbtestingV3Client:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param metric: List of metrics to retrieve. If not specified, all metrics are returned.
+        :param metric: Metrics to retrieve, as a comma-separated list. If not specified, all metrics are returned.
         :type metric: List[MetricName]
         :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
         :type methods: List[AnalysisMethod]
@@ -941,7 +941,7 @@ class AbtestingV3Client:
             Annotated[
                 Optional[List[MetricName]],
                 Field(
-                    description="List of metrics to retrieve. If not specified, all metrics are returned."
+                    description="Metrics to retrieve, as a comma-separated list. If not specified, all metrics are returned."
                 ),
             ],
         ] = None,
@@ -968,7 +968,7 @@ class AbtestingV3Client:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param metric: List of metrics to retrieve. If not specified, all metrics are returned.
+        :param metric: Metrics to retrieve, as a comma-separated list. If not specified, all metrics are returned.
         :type metric: List[MetricName]
         :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
         :type methods: List[AnalysisMethod]
@@ -2094,7 +2094,7 @@ class AbtestingV3ClientSync:
             Annotated[
                 Optional[List[MetricName]],
                 Field(
-                    description="List of metrics to retrieve. If not specified, all metrics are returned."
+                    description="Metrics to retrieve, as a comma-separated list. If not specified, all metrics are returned."
                 ),
             ],
         ] = None,
@@ -2121,7 +2121,7 @@ class AbtestingV3ClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param metric: List of metrics to retrieve. If not specified, all metrics are returned.
+        :param metric: Metrics to retrieve, as a comma-separated list. If not specified, all metrics are returned.
         :type metric: List[MetricName]
         :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
         :type methods: List[AnalysisMethod]
@@ -2175,7 +2175,7 @@ class AbtestingV3ClientSync:
             Annotated[
                 Optional[List[MetricName]],
                 Field(
-                    description="List of metrics to retrieve. If not specified, all metrics are returned."
+                    description="Metrics to retrieve, as a comma-separated list. If not specified, all metrics are returned."
                 ),
             ],
         ] = None,
@@ -2202,7 +2202,7 @@ class AbtestingV3ClientSync:
         :type start_date: str
         :param end_date: End date of the period to analyze, in `YYYY-MM-DD` format.
         :type end_date: str
-        :param metric: List of metrics to retrieve. If not specified, all metrics are returned.
+        :param metric: Metrics to retrieve, as a comma-separated list. If not specified, all metrics are returned.
         :type metric: List[MetricName]
         :param methods: Statistical analysis results to include, as a comma-separated list. When omitted, each test uses its configured method, or `frequentist` if no method is configured. Request both methods to include both sets of available results. This doesn't change the test configuration or compute missing results. Duplicate values aren't allowed.
         :type methods: List[AnalysisMethod]

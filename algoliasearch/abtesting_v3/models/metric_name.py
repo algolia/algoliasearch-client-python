@@ -60,6 +60,38 @@ class MetricName(str, Enum):
 
     AVERAGE_ORDER_VALUE = "average_order_value"
 
+    CLICKED_USERS_COUNT = "clicked_users_count"
+
+    CONVERTED_USERS_COUNT = "converted_users_count"
+
+    ADD_TO_CART_USERS_COUNT = "add_to_cart_users_count"
+
+    PURCHASE_USERS_COUNT = "purchase_users_count"
+
+    USERS_WITH_NO_RESULTS_COUNT = "users_with_no_results_count"
+
+    CLICKED_USERS_RATE = "clicked_users_rate"
+
+    CONVERTED_USERS_RATE = "converted_users_rate"
+
+    ADD_TO_CART_USERS_RATE = "add_to_cart_users_rate"
+
+    PURCHASE_USERS_RATE = "purchase_users_rate"
+
+    AVG_CLICK_THROUGH_RATE_PER_USER = "avg_click_through_rate_per_user"
+
+    AVG_CONVERSION_RATE_PER_USER = "avg_conversion_rate_per_user"
+
+    AVG_PURCHASE_RATE_PER_USER = "avg_purchase_rate_per_user"
+
+    AVG_ADD_TO_CART_RATE_PER_USER = "avg_add_to_cart_rate_per_user"
+
+    AVG_CLICK_POSITION_PER_USER = "avg_click_position_per_user"
+
+    WINSORIZED_REVENUE_PER_USER = "winsorized_revenue_per_user"
+
+    WINSORIZED_REVENUE_PER_PURCHASER = "winsorized_revenue_per_purchaser"
+
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of MetricName from a JSON string"""
