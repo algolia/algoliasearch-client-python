@@ -36,7 +36,7 @@ class EstimateABTestResponse(BaseModel):
     duration_days: Optional[int] = None
     """ Estimated number of days needed to reach the sample sizes required for detecting the configured effect. This value is based on historical traffic. """
     sample_sizes: Optional[List[int]] = None
-    """ Sample size estimates for each variant. The first element is the control variant. Each element is the estimated number of searches required to achieve the desired statistical significance.  """
+    """ Sample size estimates for each variant. The first element is the control variant. Each element is the estimated number of searches, or users for user-level rates (metrics ending in `UsersRate`), required to achieve the desired statistical significance.  """
 
     model_config = ConfigDict(
         strict=False,

@@ -44,7 +44,7 @@ class Variant(BaseModel):
     description: str
     """ Description for this variant. """
     estimated_sample_size: Optional[int] = None
-    """ Estimated number of searches required to achieve the desired statistical significance.  The A/B test configuration must include a `minimumDetectableEffect` setting for this number to be included in the response.  """
+    """ Estimated number of searches, or users for user-level rates (metrics ending in `UsersRate`), required to achieve the desired statistical significance.  The A/B test configuration must include a `minimumDetectableEffect` setting for this number to be included in the response.  """
     index: str
     """ Index name of the A/B test variant (case-sensitive). """
     traffic_percentage: int

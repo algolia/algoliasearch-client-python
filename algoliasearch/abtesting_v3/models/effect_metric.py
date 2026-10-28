@@ -18,7 +18,7 @@ else:
 
 class EffectMetric(str, Enum):
     """
-    Metric for which you want to detect the smallest relative difference.
+    Metric for which you want to detect the smallest relative difference. Metrics ending in `UsersRate` are user-level rates: the share of tracked users with at least one search with a click, conversion, add-to-cart, or purchase. For these metrics, sample sizes count users instead of searches.
     """
 
     """
@@ -33,6 +33,14 @@ class EffectMetric(str, Enum):
     PURCHASERATE = "purchaseRate"
 
     NORESULTSRATE = "noResultsRate"
+
+    ADDTOCARTUSERSRATE = "addToCartUsersRate"
+
+    CLICKEDUSERSRATE = "clickedUsersRate"
+
+    CONVERTEDUSERSRATE = "convertedUsersRate"
+
+    PURCHASEUSERSRATE = "purchaseUsersRate"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
