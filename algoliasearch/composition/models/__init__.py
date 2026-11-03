@@ -53,6 +53,8 @@ from .facet_hits import FacetHits
 from .facet_ordering import FacetOrdering
 from .facet_stats import FacetStats
 from .feed_injection import FeedInjection
+from .feed_params import FeedParams
+from .feed_request import FeedRequest
 from .get_task_response import GetTaskResponse
 from .highlight_result import HighlightResult
 from .highlight_result_option import HighlightResultOption
@@ -182,6 +184,8 @@ __all__ = (
     "FacetOrdering",
     "FacetStats",
     "FeedInjection",
+    "FeedParams",
+    "FeedRequest",
     "GetTaskResponse",
     "HighlightResult",
     "HighlightResultOption",

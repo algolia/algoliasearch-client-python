@@ -19,12 +19,14 @@ else:
 
 
 from algoliasearch.composition.models.external_provider import ExternalProvider
+from algoliasearch.composition.models.feed_request import FeedRequest
 from algoliasearch.composition.models.params import Params
 
 _ALIASES = {
     "params": "params",
     "feeds_order": "feedsOrder",
     "external_provider": "externalProvider",
+    "feeds": "feeds",
 }
 
 
@@ -41,6 +43,8 @@ class RequestBody(BaseModel):
     feeds_order: Optional[List[str]] = None
     """ A list of Feed IDs that specifies the order in which to order the results in the response.  The IDs should be a subset of those in the `feeds` object of the targeted `multifeed` Composition / Composition Rule, and only those specified will be processed.   The value overrides the value in the defined behavior, and when unspecified, the value defined in the behavior is used. When neither value is present, all feeds are processed.  """
     external_provider: Optional[ExternalProvider] = None
+    feeds: Optional[Dict[str, FeedRequest]] = None
+    """ Per-feed parameters for `multifeed` compositions. Each key is a feed ID.  Feed `params` take precedence over the root `params`. A feed inherits every root key it doesn't set. A feed value replaces the root value instead of combining with it. This applies to every key, including `filters`, `facetFilters`, `optionalFilters`, and `analyticsTags`. For example, `filters` must repeat the common values. An empty value such as `filters: \"\"` discards the root value.  The API validates feed `params` like the root `params`. An unsupported parameter returns a 400 error.  A feed ID may not exist in the composition (for example, because a rule removed it). The response reports it in the `errors` field but request still succeeds.  Rules match once per request, against the root `params` only.  """
 
     model_config = ConfigDict(
         strict=False,
@@ -83,6 +87,11 @@ class RequestBody(BaseModel):
         obj["externalProvider"] = (
             ExternalProvider.from_dict(obj["externalProvider"])
             if obj.get("externalProvider") is not None
+            else None
+        )
+        obj["feeds"] = (
+            dict((_k, FeedRequest.from_dict(_v)) for _k, _v in obj["feeds"].items())
+            if obj.get("feeds") is not None
             else None
         )
 
