@@ -1,3 +1,9 @@
+## [4.50.0](https://github.com/algolia/algoliasearch-client-python/compare/4.49.0...4.50.0)
+
+- [e6933da012](https://github.com/algolia/api-clients-automation/commit/e6933da012) fix(specs): clarify maxHitsPerQuery is a per-page limit ([#7210](https://github.com/algolia/api-clients-automation/pull/7210)) by [@kai687](https://github.com/kai687/)
+- [0a3cbbb29b](https://github.com/algolia/api-clients-automation/commit/0a3cbbb29b) feat(specs): add per-feed params to Composition run request ([#7199](https://github.com/algolia/api-clients-automation/pull/7199)) by [@ben-kalmus](https://github.com/ben-kalmus/)
+- [8456d9eb14](https://github.com/algolia/api-clients-automation/commit/8456d9eb14) feat(specs): support `algoliaDefined` ordering in external sources ([#7212](https://github.com/algolia/api-clients-automation/pull/7212)) by [@aiordache](https://github.com/aiordache/)
+
 ## [4.49.0](https://github.com/algolia/algoliasearch-client-python/compare/4.48.0...4.49.0)
 
 - [c2153f09a5](https://github.com/algolia/api-clients-automation/commit/c2153f09a5) fix(specs): remove obsolete index-key copy note ([#7177](https://github.com/algolia/api-clients-automation/pull/7177)) by [@xroche](https://github.com/xroche/)
