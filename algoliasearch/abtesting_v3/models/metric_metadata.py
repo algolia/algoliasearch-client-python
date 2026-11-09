@@ -21,6 +21,7 @@ else:
 _ALIASES = {
     "winsorized_value": "winsorizedValue",
     "mean": "mean",
+    "user_count": "userCount",
 }
 
 
@@ -37,6 +38,8 @@ class MetricMetadata(BaseModel):
     """ Only present for `revenue` metrics. It is the amount exceeding the 95th percentile of global revenue transactions involved in the AB Test. This amount is not considered when calculating statistical significance. It is tied to a per revenue-currency pair contrary to other global filter effects (such as outliers and empty search count).  """
     mean: Optional[float] = None
     """ Mean value for this metric. """
+    user_count: Optional[int] = None
+    """ Only present for `winsorized_revenue_per_user`. Number of tracked users in this variant with a tracked purchase in the metric's currency (`dimension`), plus tracked users with no tracked purchase in any currency. Users who purchased only in other currencies are excluded. It's the sample size behind the mean, p-value, and intervals, and differs from the overall `user_count` metric. Omitted when the variant has no record for that currency.  """
 
     model_config = ConfigDict(
         strict=False,

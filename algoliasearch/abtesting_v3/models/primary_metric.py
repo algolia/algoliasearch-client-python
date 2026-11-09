@@ -18,7 +18,7 @@ else:
 
 class PrimaryMetric(str, Enum):
     """
-    Primary metric for Bayesian analysis. Required when `method` is `bayesian`. When `method` is omitted and the test defaults to `bayesian`, the default primary metric is `conversion_rate`, or the first metric in `metrics` that supports Bayesian analysis if `metrics` doesn't include conversion rate. If the request includes a non-empty `metrics` list, this metric must be in that list. User-level rates (`*_users_rate`) are the share of tracked users with at least one such search. Add-to-cart rates, purchase rates, and revenue per search require access to revenue analytics.
+    Primary metric for Bayesian analysis. Required when `method` is `bayesian`. When `method` is omitted and the test defaults to `bayesian`, the default primary metric is `conversion_rate`, or the first metric in `metrics` that supports Bayesian analysis if `metrics` doesn't include conversion rate. If the request includes a non-empty `metrics` list, this metric must be in that list. User-level rates (`*_users_rate`) are the share of tracked users with at least one such search. For `users_with_no_results_rate`, this is the share of tracked users with at least one search returning no results. Lower values are better. Add-to-cart rates, purchase rates, and revenue per search require access to revenue analytics.
     """
 
     """
@@ -41,6 +41,8 @@ class PrimaryMetric(str, Enum):
     CONVERTED_USERS_RATE = "converted_users_rate"
 
     PURCHASE_USERS_RATE = "purchase_users_rate"
+
+    USERS_WITH_NO_RESULTS_RATE = "users_with_no_results_rate"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

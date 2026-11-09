@@ -78,6 +78,8 @@ class MetricName(str, Enum):
 
     PURCHASE_USERS_RATE = "purchase_users_rate"
 
+    USERS_WITH_NO_RESULTS_RATE = "users_with_no_results_rate"
+
     AVG_CLICK_THROUGH_RATE_PER_USER = "avg_click_through_rate_per_user"
 
     AVG_CONVERSION_RATE_PER_USER = "avg_conversion_rate_per_user"

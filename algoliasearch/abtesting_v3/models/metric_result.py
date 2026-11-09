@@ -60,7 +60,7 @@ class MetricResult(BaseModel):
     p_value: Optional[float] = None
     """ P-value for this variant compared to the control. Omitted when no p-value is available for this metric.  """
     dimension: Optional[str] = None
-    """ Dimension defined during test creation. For revenue metrics, including `revenue_per_search`, this is the currency. """
+    """ Dimension defined during test creation. For revenue metrics, including `revenue_per_search` and `winsorized_revenue_per_user`, this is the currency. """
     metadata: Optional[MetricMetadata] = None
     critical_value: Optional[float] = None
     """ The value that was computed during error correction. It is used to determine significance of the metric pValue. The critical value is calculated using Bonferroni or Benjamini-Hochberg corrections, based on the given configuration during the A/B test creation.  """
