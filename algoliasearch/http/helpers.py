@@ -32,7 +32,8 @@ async def create_iterable(
     Helper: Iterates until the given `func` until `timeout` or `validate`.
     """
 
-    async def retry(prev: Optional[T] = None) -> T:
+    prev: Optional[T] = None
+    while True:
         resp = await func(prev)
 
         if aggregator:
@@ -47,9 +48,7 @@ async def create_iterable(
             raise Exception(error_message(resp))
 
         await asyncio.sleep(timeout())
-        return await retry(resp)
-
-    return await retry()
+        prev = resp
 
 
 def create_iterable_sync(
@@ -64,7 +63,8 @@ def create_iterable_sync(
     Helper: Iterates until the given `func` until `timeout` or `validate`.
     """
 
-    def retry(prev: Optional[T] = None) -> T:
+    prev: Optional[T] = None
+    while True:
         resp = func(prev)
 
         if aggregator:
@@ -79,6 +79,4 @@ def create_iterable_sync(
             raise Exception(error_message(resp))
 
         time.sleep(timeout())
-        return retry(resp)
-
-    return retry()
+        prev = resp
