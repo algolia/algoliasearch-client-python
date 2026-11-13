@@ -33,7 +33,7 @@ def _alias_generator(name: str) -> str:
 
 class CompositionsSearchResponse(BaseModel):
     """
-    CompositionsSearchResponse
+    Information about the compositions processed by the run request. Only present when `getRankingInfo` is `true`.
     """
 
     run: List[CompositionRunSearchResponse]
