@@ -19,9 +19,12 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.recommend.models.request_scope import RequestScope
+
 _ALIASES = {
     "filters": "filters",
     "context": "context",
+    "request_scope": "requestScope",
 }
 
 
@@ -38,6 +41,7 @@ class Condition(BaseModel):
     """ Filter expression to only include items that match the filter criteria in the response.  You can use these filter expressions:  - **Numeric filters.** `<facet> <op> <number>`, where `<op>` is one of `<`, `<=`, `=`, `!=`, `>`, `>=`. - **Ranges.** `<facet>:<lower> TO <upper>`, where `<lower>` and `<upper>` are the lower and upper limits of the range (inclusive). - **Facet filters.** `<facet>:<value>`, where `<facet>` is a facet attribute (case-sensitive) and `<value>` a facet value. - **Tag filters.** `_tags:<value>` or just `<value>` (case-sensitive). - **Boolean filters.** `<facet>: true | false`.  You can combine filters with `AND`, `OR`, and `NOT` operators with the following restrictions:  - You can only combine filters of the same type with `OR`.   **Not supported:** `facet:value OR num > 3`. - You can't use `NOT` with combinations of filters.   **Not supported:** `NOT(facet:value OR facet:value)` - You can't combine conjunctions (`AND`) with `OR`.   **Not supported:** `facet:value OR (facet:value AND facet:value)`  Use quotes if the facet attribute name or facet value contains spaces, keywords (`OR`, `AND`, `NOT`), or quotes. If a facet attribute is an array, the filter matches if it matches at least one element of the array.  For more information, see [Filters](https://www.algolia.com/doc/guides/managing-results/refine-results/filtering).  """
     context: Optional[str] = None
     """ An additional restriction that only triggers the rule, when the search has the same value as `ruleContexts` parameter. For example, if `context: mobile`, the rule is only triggered when the search request has a matching `ruleContexts: mobile`. A rule context must only contain alphanumeric characters.  """
+    request_scope: Optional[RequestScope] = None
 
     @field_validator("context")
     def context_validate_regular_expression(cls, value):
@@ -83,5 +87,11 @@ class Condition(BaseModel):
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
+
+        obj["requestScope"] = (
+            RequestScope.from_dict(obj["requestScope"])
+            if obj.get("requestScope") is not None
+            else None
+        )
 
         return cls.model_validate(obj)

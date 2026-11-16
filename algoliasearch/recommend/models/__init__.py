@@ -29,12 +29,14 @@ from .exact_on_single_word_query import ExactOnSingleWordQuery
 from .exhaustive import Exhaustive
 from .facet_filters import FacetFilters
 from .facet_ordering import FacetOrdering
+from .facet_request_scope import FacetRequestScope
 from .facet_stats import FacetStats
 from .fallback_params import FallbackParams
 from .fbt_model import FbtModel
 from .get_recommend_task_response import GetRecommendTaskResponse
 from .get_recommendations_params import GetRecommendationsParams
 from .get_recommendations_response import GetRecommendationsResponse
+from .global_request_scope import GlobalRequestScope
 from .hide_consequence_object import HideConsequenceObject
 from .highlight_result import HighlightResult
 from .highlight_result_option import HighlightResultOption
@@ -72,6 +74,7 @@ from .related_query import RelatedQuery
 from .remove_stop_words import RemoveStopWords
 from .remove_words_if_no_results import RemoveWordsIfNoResults
 from .rendering_content import RenderingContent
+from .request_scope import RequestScope
 from .result_card import ResultCard
 from .rule_metadata import RuleMetadata
 from .search_recommend_rules_params import SearchRecommendRulesParams
@@ -115,12 +118,14 @@ __all__ = (
     "Exhaustive",
     "FacetFilters",
     "FacetOrdering",
+    "FacetRequestScope",
     "FacetStats",
     "FallbackParams",
     "FbtModel",
     "GetRecommendTaskResponse",
     "GetRecommendationsParams",
     "GetRecommendationsResponse",
+    "GlobalRequestScope",
     "HideConsequenceObject",
     "HighlightResult",
     "HighlightResultOption",
@@ -158,6 +163,7 @@ __all__ = (
     "RemoveStopWords",
     "RemoveWordsIfNoResults",
     "RenderingContent",
+    "RequestScope",
     "ResultCard",
     "RuleMetadata",
     "SearchRecommendRulesParams",

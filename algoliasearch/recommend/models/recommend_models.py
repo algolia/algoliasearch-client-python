@@ -28,9 +28,9 @@ class RecommendModels(str, Enum):
 
     BOUGHT_TOGETHER = "bought-together"
 
-    TRENDING_FACETS = "trending-facets"
-
     TRENDING_ITEMS = "trending-items"
+
+    LOOKING_SIMILAR = "looking-similar"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
