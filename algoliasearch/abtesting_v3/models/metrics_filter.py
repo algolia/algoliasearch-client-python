@@ -18,11 +18,16 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.abtesting_v3.models.metrics_filter_parameters import (
+    MetricsFilterParameters,
+)
+
 _ALIASES = {
     "domain": "domain",
     "name": "name",
     "track_effects": "trackEffects",
     "includes": "includes",
+    "parameters": "parameters",
 }
 
 
@@ -36,13 +41,14 @@ class MetricsFilter(BaseModel):
     """
 
     domain: str
-    """ Metric domain (for example `abtesting`, `personalization`). """
+    """ Metric domain (for example `abtesting`, `core`, `personalization`). """
     name: str
     """ Public metric name. """
     track_effects: Optional[bool] = None
-    """ Whether the experiment should record the effects of this filter. """
+    """ Whether the experiment should record the effects of this filter. Not supported by `core.hasExactCategoryFilter`. """
     includes: Optional[bool] = None
-    """ If true, keep items that match the filter; if false, exclude them. """
+    """ If true, keep items that match the filter; if false, exclude them. Defaults to false. """
+    parameters: Optional[MetricsFilterParameters] = None
 
     model_config = ConfigDict(
         strict=False,
@@ -78,5 +84,11 @@ class MetricsFilter(BaseModel):
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
+
+        obj["parameters"] = (
+            MetricsFilterParameters.from_dict(obj["parameters"])
+            if obj.get("parameters") is not None
+            else None
+        )
 
         return cls.model_validate(obj)

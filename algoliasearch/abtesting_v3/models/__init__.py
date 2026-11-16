@@ -38,6 +38,7 @@ from .metric_metadata import MetricMetadata
 from .metric_name import MetricName
 from .metric_result import MetricResult
 from .metrics_filter import MetricsFilter
+from .metrics_filter_parameters import MetricsFilterParameters
 from .minimum_detectable_effect import MinimumDetectableEffect
 from .outliers_filter import OutliersFilter
 from .primary_metric import PrimaryMetric
@@ -80,6 +81,7 @@ __all__ = (
     "MetricName",
     "MetricResult",
     "MetricsFilter",
+    "MetricsFilterParameters",
     "MinimumDetectableEffect",
     "OutliersFilter",
     "PrimaryMetric",
