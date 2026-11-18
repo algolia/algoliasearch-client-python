@@ -32,7 +32,7 @@ class ManagedProviderResponseInput(BaseModel):
     Response input for the Algolia-hosted provider. Limited by design.
     """
 
-    default_model: Optional[str] = None
+    default_model: str
 
     model_config = ConfigDict(
         strict=False,

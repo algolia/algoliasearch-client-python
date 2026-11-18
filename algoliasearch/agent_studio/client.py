@@ -2249,7 +2249,7 @@ class AgentStudioClient:
         Retrieve details of the specified agent.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param agent_id: The agentId. (required)
         :type agent_id: str
@@ -2287,7 +2287,7 @@ class AgentStudioClient:
         Retrieve details of the specified agent.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param agent_id: The agentId. (required)
         :type agent_id: str
@@ -2307,7 +2307,7 @@ class AgentStudioClient:
         Get a single allowed domain by id.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param domain_id: The domainId. (required)
         :type domain_id: str
@@ -2358,7 +2358,7 @@ class AgentStudioClient:
         Get a single allowed domain by id.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param domain_id: The domainId. (required)
         :type domain_id: str
@@ -2568,7 +2568,7 @@ class AgentStudioClient:
         Get Provider.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param provider_id: The providerId. (required)
         :type provider_id: str
@@ -2606,7 +2606,7 @@ class AgentStudioClient:
         Get Provider.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param provider_id: The providerId. (required)
         :type provider_id: str
@@ -2819,7 +2819,7 @@ class AgentStudioClient:
         List all allowed domain patterns for this agent.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param agent_id: The agentId. (required)
         :type agent_id: str
@@ -2857,7 +2857,7 @@ class AgentStudioClient:
         List all allowed domain patterns for this agent.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param agent_id: The agentId. (required)
         :type agent_id: str
@@ -3138,7 +3138,7 @@ class AgentStudioClient:
         List all agents with pagination and filtering.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param page: Page number.
         :type page: int
@@ -3188,7 +3188,7 @@ class AgentStudioClient:
         List all agents with pagination and filtering.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param page: Page number.
         :type page: int
@@ -3250,7 +3250,7 @@ class AgentStudioClient:
         Get available models for a specific provider.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param provider_id: The providerId. (required)
         :type provider_id: str
@@ -3288,7 +3288,7 @@ class AgentStudioClient:
         Get available models for a specific provider.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param provider_id: The providerId. (required)
         :type provider_id: str
@@ -3316,7 +3316,7 @@ class AgentStudioClient:
         List Providers.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param page: Page number.
         :type page: int
@@ -3359,7 +3359,7 @@ class AgentStudioClient:
         List Providers.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param page: Page number.
         :type page: int
@@ -6125,7 +6125,7 @@ class AgentStudioClientSync:
         Retrieve details of the specified agent.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param agent_id: The agentId. (required)
         :type agent_id: str
@@ -6163,7 +6163,7 @@ class AgentStudioClientSync:
         Retrieve details of the specified agent.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param agent_id: The agentId. (required)
         :type agent_id: str
@@ -6183,7 +6183,7 @@ class AgentStudioClientSync:
         Get a single allowed domain by id.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param domain_id: The domainId. (required)
         :type domain_id: str
@@ -6234,7 +6234,7 @@ class AgentStudioClientSync:
         Get a single allowed domain by id.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param domain_id: The domainId. (required)
         :type domain_id: str
@@ -6444,7 +6444,7 @@ class AgentStudioClientSync:
         Get Provider.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param provider_id: The providerId. (required)
         :type provider_id: str
@@ -6482,7 +6482,7 @@ class AgentStudioClientSync:
         Get Provider.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param provider_id: The providerId. (required)
         :type provider_id: str
@@ -6695,7 +6695,7 @@ class AgentStudioClientSync:
         List all allowed domain patterns for this agent.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param agent_id: The agentId. (required)
         :type agent_id: str
@@ -6733,7 +6733,7 @@ class AgentStudioClientSync:
         List all allowed domain patterns for this agent.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param agent_id: The agentId. (required)
         :type agent_id: str
@@ -7012,7 +7012,7 @@ class AgentStudioClientSync:
         List all agents with pagination and filtering.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param page: Page number.
         :type page: int
@@ -7062,7 +7062,7 @@ class AgentStudioClientSync:
         List all agents with pagination and filtering.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param page: Page number.
         :type page: int
@@ -7124,7 +7124,7 @@ class AgentStudioClientSync:
         Get available models for a specific provider.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param provider_id: The providerId. (required)
         :type provider_id: str
@@ -7162,7 +7162,7 @@ class AgentStudioClientSync:
         Get available models for a specific provider.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param provider_id: The providerId. (required)
         :type provider_id: str
@@ -7188,7 +7188,7 @@ class AgentStudioClientSync:
         List Providers.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param page: Page number.
         :type page: int
@@ -7231,7 +7231,7 @@ class AgentStudioClientSync:
         List Providers.
 
         Required API Key ACLs:
-          - settings
+          - editSettings
 
         :param page: Page number.
         :type page: int

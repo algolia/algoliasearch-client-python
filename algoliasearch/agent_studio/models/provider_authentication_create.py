@@ -18,7 +18,7 @@ else:
     from typing_extensions import Self
 
 
-from algoliasearch.agent_studio.models.provider_input import ProviderInput
+from algoliasearch.agent_studio.models.input_union import InputUnion
 from algoliasearch.agent_studio.models.provider_name import ProviderName
 
 _ALIASES = {
@@ -39,7 +39,7 @@ class ProviderAuthenticationCreate(BaseModel):
 
     name: str
     provider_name: ProviderName
-    input: ProviderInput
+    input: InputUnion
 
     model_config = ConfigDict(
         strict=False,
@@ -78,9 +78,7 @@ class ProviderAuthenticationCreate(BaseModel):
 
         obj["providerName"] = obj.get("providerName")
         obj["input"] = (
-            ProviderInput.from_dict(obj["input"])
-            if obj.get("input") is not None
-            else None
+            InputUnion.from_dict(obj["input"]) if obj.get("input") is not None else None
         )
 
         return cls.model_validate(obj)

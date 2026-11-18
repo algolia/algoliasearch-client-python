@@ -18,10 +18,13 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.agent_studio.models.api_mode_enum import ApiModeEnum
+
 _ALIASES = {
     "api_key": "apiKey",
     "azure_endpoint": "azureEndpoint",
     "azure_deployment": "azureDeployment",
+    "api_mode": "apiMode",
     "api_version": "apiVersion",
 }
 
@@ -39,6 +42,7 @@ class AzureOpenAIProviderInput(BaseModel):
     azure_endpoint: str
     azure_deployment: str
     """ Azure model deployment name. """
+    api_mode: Optional[ApiModeEnum] = None
     api_version: Optional[str] = None
 
     model_config = ConfigDict(
@@ -75,5 +79,7 @@ class AzureOpenAIProviderInput(BaseModel):
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
+
+        obj["apiMode"] = obj.get("apiMode")
 
         return cls.model_validate(obj)

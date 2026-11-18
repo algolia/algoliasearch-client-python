@@ -24,6 +24,7 @@ from .algolia_grouped_results_compat_tool_config import (
     AlgoliaGroupedResultsCompatToolConfig,
 )
 from .algolia_grouped_results_tool_config import AlgoliaGroupedResultsToolConfig
+from .algolia_managed_llm_create_input import AlgoliaManagedLLMCreateInput
 from .algolia_recommend_tool_config import AlgoliaRecommendToolConfig
 from .algolia_recommend_tool_index_config import AlgoliaRecommendToolIndexConfig
 from .algolia_search_tool_config import AlgoliaSearchToolConfig
@@ -35,6 +36,7 @@ from .allowed_domain_list_response import AllowedDomainListResponse
 from .allowed_domain_response import AllowedDomainResponse
 from .alternatives_as_exact import AlternativesAsExact
 from .anthropic_provider_input import AnthropicProviderInput
+from .api_mode_enum import ApiModeEnum
 from .application_config_patch import ApplicationConfigPatch
 from .application_config_response import ApplicationConfigResponse
 from .around_precision_union import AroundPrecisionUnion
@@ -44,6 +46,7 @@ from .assistant_message_v4 import AssistantMessageV4
 from .assistant_message_v5 import AssistantMessageV5
 from .assistant_part_v4 import AssistantPartV4
 from .assistant_part_v5 import AssistantPartV5
+from .azure_open_ai_provider_create_input import AzureOpenAIProviderCreateInput
 from .azure_open_ai_provider_input import AzureOpenAIProviderInput
 from .base_provider_input import BaseProviderInput
 from .boolean_param import BooleanParam
@@ -76,12 +79,16 @@ from .feedback_response import FeedbackResponse
 from .feedback_update_request import FeedbackUpdateRequest
 from .forwarded_props import ForwardedProps
 from .function_call_agui import FunctionCallAGUI
+from .google_service_account_key import GoogleServiceAccountKey
 from .guardrail_outcome import GuardrailOutcome
 from .guardrail_violation_data_v5 import GuardrailViolationDataV5
 from .ignore_plurals_union import IgnorePluralsUnion
 from .impact_analytics import ImpactAnalytics
 from .index_search_parameters import IndexSearchParameters
 from .input_union import InputUnion
+from .input_union_provider_authentication_response import (
+    InputUnionProviderAuthenticationResponse,
+)
 from .inside_bounding_box_union import InsideBoundingBoxUnion
 from .inside_polygon_union import InsidePolygonUnion
 from .items_union import ItemsUnion
@@ -100,6 +107,7 @@ from .message_role import MessageRole
 from .message_v4 import MessageV4
 from .message_v5 import MessageV5
 from .messages_union import MessagesUnion
+from .mistral_provider_input import MistralProviderInput
 from .mode_enum import ModeEnum
 from .number_param import NumberParam
 from .number_param_constraint import NumberParamConstraint
@@ -119,7 +127,6 @@ from .pagination_metadata import PaginationMetadata
 from .provider_authentication_create import ProviderAuthenticationCreate
 from .provider_authentication_patch import ProviderAuthenticationPatch
 from .provider_authentication_response import ProviderAuthenticationResponse
-from .provider_input import ProviderInput
 from .provider_input_nullable import ProviderInputNullable
 from .provider_name import ProviderName
 from .query_type import QueryType
@@ -179,6 +186,7 @@ from .user_message_metadata_agui import UserMessageMetadataAGUI
 from .user_message_metadata_v5 import UserMessageMetadataV5
 from .user_message_v4 import UserMessageV4
 from .user_message_v5 import UserMessageV5
+from .vertex_ai_provider_input import VertexAIProviderInput
 from .vote_enum import VoteEnum
 from .xai_provider_input import XAIProviderInput
 
@@ -197,6 +205,7 @@ __all__ = (
     "AguiResume",
     "AlgoliaGroupedResultsCompatToolConfig",
     "AlgoliaGroupedResultsToolConfig",
+    "AlgoliaManagedLLMCreateInput",
     "AlgoliaRecommendToolConfig",
     "AlgoliaRecommendToolIndexConfig",
     "AlgoliaSearchToolConfig",
@@ -208,6 +217,7 @@ __all__ = (
     "AllowedDomainResponse",
     "AlternativesAsExact",
     "AnthropicProviderInput",
+    "ApiModeEnum",
     "ApplicationConfigPatch",
     "ApplicationConfigResponse",
     "AroundPrecisionUnion",
@@ -217,6 +227,7 @@ __all__ = (
     "AssistantMessageV5",
     "AssistantPartV4",
     "AssistantPartV5",
+    "AzureOpenAIProviderCreateInput",
     "AzureOpenAIProviderInput",
     "BaseProviderInput",
     "BooleanParam",
@@ -247,12 +258,14 @@ __all__ = (
     "FeedbackUpdateRequest",
     "ForwardedProps",
     "FunctionCallAGUI",
+    "GoogleServiceAccountKey",
     "GuardrailOutcome",
     "GuardrailViolationDataV5",
     "IgnorePluralsUnion",
     "ImpactAnalytics",
     "IndexSearchParameters",
     "InputUnion",
+    "InputUnionProviderAuthenticationResponse",
     "InsideBoundingBoxUnion",
     "InsidePolygonUnion",
     "ItemsUnion",
@@ -271,6 +284,7 @@ __all__ = (
     "MessageV4",
     "MessageV5",
     "MessagesUnion",
+    "MistralProviderInput",
     "ModeEnum",
     "NumberParam",
     "NumberParamConstraint",
@@ -288,7 +302,6 @@ __all__ = (
     "ProviderAuthenticationCreate",
     "ProviderAuthenticationPatch",
     "ProviderAuthenticationResponse",
-    "ProviderInput",
     "ProviderInputNullable",
     "ProviderName",
     "QueryType",
@@ -348,6 +361,7 @@ __all__ = (
     "UserMessageMetadataV5",
     "UserMessageV4",
     "UserMessageV5",
+    "VertexAIProviderInput",
     "VoteEnum",
     "XAIProviderInput",
 )

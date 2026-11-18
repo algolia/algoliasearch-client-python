@@ -18,20 +18,29 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.agent_studio.models.algolia_managed_llm_create_input import (
+    AlgoliaManagedLLMCreateInput,
+)
 from algoliasearch.agent_studio.models.anthropic_provider_input import (
     AnthropicProviderInput,
+)
+from algoliasearch.agent_studio.models.azure_open_ai_provider_create_input import (
+    AzureOpenAIProviderCreateInput,
 )
 from algoliasearch.agent_studio.models.azure_open_ai_provider_input import (
     AzureOpenAIProviderInput,
 )
 from algoliasearch.agent_studio.models.base_provider_input import BaseProviderInput
-from algoliasearch.agent_studio.models.managed_provider_response_input import (
-    ManagedProviderResponseInput,
+from algoliasearch.agent_studio.models.mistral_provider_input import (
+    MistralProviderInput,
 )
 from algoliasearch.agent_studio.models.open_ai_compatible_provider_input import (
     OpenAICompatibleProviderInput,
 )
 from algoliasearch.agent_studio.models.open_ai_provider_input import OpenAIProviderInput
+from algoliasearch.agent_studio.models.vertex_ai_provider_input import (
+    VertexAIProviderInput,
+)
 from algoliasearch.agent_studio.models.xai_provider_input import XAIProviderInput
 
 
@@ -40,41 +49,55 @@ class InputUnion(BaseModel):
     InputUnion
     """
 
-    oneof_schema_1_validator: Optional[OpenAIProviderInput] = Field(default=None)
-
-    oneof_schema_2_validator: Optional[AzureOpenAIProviderInput] = Field(default=None)
-
-    oneof_schema_3_validator: Optional[OpenAICompatibleProviderInput] = Field(
+    oneof_schema_1_validator: Optional[AzureOpenAIProviderCreateInput] = Field(
         default=None
     )
 
-    oneof_schema_4_validator: Optional[BaseProviderInput] = Field(default=None)
+    oneof_schema_2_validator: Optional[OpenAIProviderInput] = Field(default=None)
 
-    oneof_schema_5_validator: Optional[AnthropicProviderInput] = Field(default=None)
+    oneof_schema_3_validator: Optional[AzureOpenAIProviderInput] = Field(default=None)
 
-    oneof_schema_6_validator: Optional[XAIProviderInput] = Field(default=None)
+    oneof_schema_4_validator: Optional[OpenAICompatibleProviderInput] = Field(
+        default=None
+    )
 
-    oneof_schema_7_validator: Optional[ManagedProviderResponseInput] = Field(
+    oneof_schema_5_validator: Optional[BaseProviderInput] = Field(default=None)
+
+    oneof_schema_6_validator: Optional[AnthropicProviderInput] = Field(default=None)
+
+    oneof_schema_7_validator: Optional[XAIProviderInput] = Field(default=None)
+
+    oneof_schema_8_validator: Optional[MistralProviderInput] = Field(default=None)
+
+    oneof_schema_9_validator: Optional[VertexAIProviderInput] = Field(default=None)
+
+    oneof_schema_10_validator: Optional[AlgoliaManagedLLMCreateInput] = Field(
         default=None
     )
 
     actual_instance: Union[
+        AlgoliaManagedLLMCreateInput,
         AnthropicProviderInput,
+        AzureOpenAIProviderCreateInput,
         AzureOpenAIProviderInput,
         BaseProviderInput,
-        ManagedProviderResponseInput,
+        MistralProviderInput,
         OpenAICompatibleProviderInput,
         OpenAIProviderInput,
+        VertexAIProviderInput,
         XAIProviderInput,
         None,
     ] = None
     one_of_schemas: Set[str] = {
+        "AlgoliaManagedLLMCreateInput",
         "AnthropicProviderInput",
+        "AzureOpenAIProviderCreateInput",
         "AzureOpenAIProviderInput",
         "BaseProviderInput",
-        "ManagedProviderResponseInput",
+        "MistralProviderInput",
         "OpenAICompatibleProviderInput",
         "OpenAIProviderInput",
+        "VertexAIProviderInput",
         "XAIProviderInput",
     }
 
@@ -96,12 +119,15 @@ class InputUnion(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Union[
+        AlgoliaManagedLLMCreateInput,
         AnthropicProviderInput,
+        AzureOpenAIProviderCreateInput,
         AzureOpenAIProviderInput,
         BaseProviderInput,
-        ManagedProviderResponseInput,
+        MistralProviderInput,
         OpenAICompatibleProviderInput,
         OpenAIProviderInput,
+        VertexAIProviderInput,
         XAIProviderInput,
         Self,
         None,
@@ -122,6 +148,14 @@ class InputUnion(BaseModel):
         instance = cls.model_construct()
         error_messages = []
 
+        try:
+            instance.actual_instance = AzureOpenAIProviderCreateInput.from_json(
+                json_str
+            )
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
         try:
             instance.actual_instance = OpenAIProviderInput.from_json(json_str)
 
@@ -159,14 +193,26 @@ class InputUnion(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
-            instance.actual_instance = ManagedProviderResponseInput.from_json(json_str)
+            instance.actual_instance = MistralProviderInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = VertexAIProviderInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = AlgoliaManagedLLMCreateInput.from_json(json_str)
 
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into InputUnion with oneOf schemas: AnthropicProviderInput, AzureOpenAIProviderInput, BaseProviderInput, ManagedProviderResponseInput, OpenAICompatibleProviderInput, OpenAIProviderInput, XAIProviderInput. Details: "
+            "No match found when deserializing the JSON string into InputUnion with oneOf schemas: AlgoliaManagedLLMCreateInput, AnthropicProviderInput, AzureOpenAIProviderCreateInput, AzureOpenAIProviderInput, BaseProviderInput, MistralProviderInput, OpenAICompatibleProviderInput, OpenAIProviderInput, VertexAIProviderInput, XAIProviderInput. Details: "
             + ", ".join(error_messages)
         )
 
@@ -187,12 +233,15 @@ class InputUnion(BaseModel):
     ) -> Optional[
         Union[
             Dict[str, Any],
+            AlgoliaManagedLLMCreateInput,
             AnthropicProviderInput,
+            AzureOpenAIProviderCreateInput,
             AzureOpenAIProviderInput,
             BaseProviderInput,
-            ManagedProviderResponseInput,
+            MistralProviderInput,
             OpenAICompatibleProviderInput,
             OpenAIProviderInput,
+            VertexAIProviderInput,
             XAIProviderInput,
         ]
     ]:

@@ -25,10 +25,16 @@ from algoliasearch.agent_studio.models.azure_open_ai_provider_input import (
     AzureOpenAIProviderInput,
 )
 from algoliasearch.agent_studio.models.base_provider_input import BaseProviderInput
+from algoliasearch.agent_studio.models.mistral_provider_input import (
+    MistralProviderInput,
+)
 from algoliasearch.agent_studio.models.open_ai_compatible_provider_input import (
     OpenAICompatibleProviderInput,
 )
 from algoliasearch.agent_studio.models.open_ai_provider_input import OpenAIProviderInput
+from algoliasearch.agent_studio.models.vertex_ai_provider_input import (
+    VertexAIProviderInput,
+)
 from algoliasearch.agent_studio.models.xai_provider_input import XAIProviderInput
 
 
@@ -51,12 +57,18 @@ class ProviderInputNullable(BaseModel):
 
     oneof_schema_6_validator: Optional[XAIProviderInput] = Field(default=None)
 
+    oneof_schema_7_validator: Optional[MistralProviderInput] = Field(default=None)
+
+    oneof_schema_8_validator: Optional[VertexAIProviderInput] = Field(default=None)
+
     actual_instance: Union[
         AnthropicProviderInput,
         AzureOpenAIProviderInput,
         BaseProviderInput,
+        MistralProviderInput,
         OpenAICompatibleProviderInput,
         OpenAIProviderInput,
+        VertexAIProviderInput,
         XAIProviderInput,
         None,
     ] = None
@@ -64,8 +76,10 @@ class ProviderInputNullable(BaseModel):
         "AnthropicProviderInput",
         "AzureOpenAIProviderInput",
         "BaseProviderInput",
+        "MistralProviderInput",
         "OpenAICompatibleProviderInput",
         "OpenAIProviderInput",
+        "VertexAIProviderInput",
         "XAIProviderInput",
     }
 
@@ -90,8 +104,10 @@ class ProviderInputNullable(BaseModel):
         AnthropicProviderInput,
         AzureOpenAIProviderInput,
         BaseProviderInput,
+        MistralProviderInput,
         OpenAICompatibleProviderInput,
         OpenAIProviderInput,
+        VertexAIProviderInput,
         XAIProviderInput,
         Self,
         None,
@@ -151,9 +167,21 @@ class ProviderInputNullable(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = MistralProviderInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = VertexAIProviderInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into ProviderInputNullable with oneOf schemas: AnthropicProviderInput, AzureOpenAIProviderInput, BaseProviderInput, OpenAICompatibleProviderInput, OpenAIProviderInput, XAIProviderInput. Details: "
+            "No match found when deserializing the JSON string into ProviderInputNullable with oneOf schemas: AnthropicProviderInput, AzureOpenAIProviderInput, BaseProviderInput, MistralProviderInput, OpenAICompatibleProviderInput, OpenAIProviderInput, VertexAIProviderInput, XAIProviderInput. Details: "
             + ", ".join(error_messages)
         )
 
@@ -177,8 +205,10 @@ class ProviderInputNullable(BaseModel):
             AnthropicProviderInput,
             AzureOpenAIProviderInput,
             BaseProviderInput,
+            MistralProviderInput,
             OpenAICompatibleProviderInput,
             OpenAIProviderInput,
+            VertexAIProviderInput,
             XAIProviderInput,
         ]
     ]:

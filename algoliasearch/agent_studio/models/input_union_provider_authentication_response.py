@@ -25,16 +25,25 @@ from algoliasearch.agent_studio.models.azure_open_ai_provider_input import (
     AzureOpenAIProviderInput,
 )
 from algoliasearch.agent_studio.models.base_provider_input import BaseProviderInput
+from algoliasearch.agent_studio.models.managed_provider_response_input import (
+    ManagedProviderResponseInput,
+)
+from algoliasearch.agent_studio.models.mistral_provider_input import (
+    MistralProviderInput,
+)
 from algoliasearch.agent_studio.models.open_ai_compatible_provider_input import (
     OpenAICompatibleProviderInput,
 )
 from algoliasearch.agent_studio.models.open_ai_provider_input import OpenAIProviderInput
+from algoliasearch.agent_studio.models.vertex_ai_provider_input import (
+    VertexAIProviderInput,
+)
 from algoliasearch.agent_studio.models.xai_provider_input import XAIProviderInput
 
 
-class ProviderInput(BaseModel):
+class InputUnionProviderAuthenticationResponse(BaseModel):
     """
-    ProviderInput
+    InputUnionProviderAuthenticationResponse
     """
 
     oneof_schema_1_validator: Optional[OpenAIProviderInput] = Field(default=None)
@@ -51,12 +60,23 @@ class ProviderInput(BaseModel):
 
     oneof_schema_6_validator: Optional[XAIProviderInput] = Field(default=None)
 
+    oneof_schema_7_validator: Optional[MistralProviderInput] = Field(default=None)
+
+    oneof_schema_8_validator: Optional[VertexAIProviderInput] = Field(default=None)
+
+    oneof_schema_9_validator: Optional[ManagedProviderResponseInput] = Field(
+        default=None
+    )
+
     actual_instance: Union[
         AnthropicProviderInput,
         AzureOpenAIProviderInput,
         BaseProviderInput,
+        ManagedProviderResponseInput,
+        MistralProviderInput,
         OpenAICompatibleProviderInput,
         OpenAIProviderInput,
+        VertexAIProviderInput,
         XAIProviderInput,
         None,
     ] = None
@@ -64,8 +84,11 @@ class ProviderInput(BaseModel):
         "AnthropicProviderInput",
         "AzureOpenAIProviderInput",
         "BaseProviderInput",
+        "ManagedProviderResponseInput",
+        "MistralProviderInput",
         "OpenAICompatibleProviderInput",
         "OpenAIProviderInput",
+        "VertexAIProviderInput",
         "XAIProviderInput",
     }
 
@@ -90,8 +113,11 @@ class ProviderInput(BaseModel):
         AnthropicProviderInput,
         AzureOpenAIProviderInput,
         BaseProviderInput,
+        ManagedProviderResponseInput,
+        MistralProviderInput,
         OpenAICompatibleProviderInput,
         OpenAIProviderInput,
+        VertexAIProviderInput,
         XAIProviderInput,
         Self,
         None,
@@ -103,7 +129,7 @@ class ProviderInput(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Union[str, Dict[str, Any]]) -> Self:
-        """Create an instance of ProviderInput from a JSON string"""
+        """Create an instance of InputUnionProviderAuthenticationResponse from a JSON string"""
         return cls.from_json(dumps(obj))
 
     @classmethod
@@ -148,9 +174,27 @@ class ProviderInput(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        try:
+            instance.actual_instance = MistralProviderInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = VertexAIProviderInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
+            instance.actual_instance = ManagedProviderResponseInput.from_json(json_str)
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into ProviderInput with oneOf schemas: AnthropicProviderInput, AzureOpenAIProviderInput, BaseProviderInput, OpenAICompatibleProviderInput, OpenAIProviderInput, XAIProviderInput. Details: "
+            "No match found when deserializing the JSON string into InputUnionProviderAuthenticationResponse with oneOf schemas: AnthropicProviderInput, AzureOpenAIProviderInput, BaseProviderInput, ManagedProviderResponseInput, MistralProviderInput, OpenAICompatibleProviderInput, OpenAIProviderInput, VertexAIProviderInput, XAIProviderInput. Details: "
             + ", ".join(error_messages)
         )
 
@@ -174,8 +218,11 @@ class ProviderInput(BaseModel):
             AnthropicProviderInput,
             AzureOpenAIProviderInput,
             BaseProviderInput,
+            ManagedProviderResponseInput,
+            MistralProviderInput,
             OpenAICompatibleProviderInput,
             OpenAIProviderInput,
+            VertexAIProviderInput,
             XAIProviderInput,
         ]
     ]:

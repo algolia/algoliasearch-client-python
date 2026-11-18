@@ -21,6 +21,7 @@ else:
 _ALIASES = {
     "api_key": "apiKey",
     "base_url": "baseUrl",
+    "workspace_id": "workspaceId",
 }
 
 
@@ -35,6 +36,8 @@ class AnthropicProviderInput(BaseModel):
 
     api_key: str
     base_url: Optional[str] = None
+    workspace_id: Optional[str] = None
+    """ Required for API keys not scoped to a single workspace (sk-ant-usr-...). Sent as the anthropic-workspace-id header on every request. """
 
     model_config = ConfigDict(
         strict=False,

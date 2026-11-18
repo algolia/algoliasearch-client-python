@@ -40,6 +40,7 @@ _ALIASES = {
     "turn_context": "turnContext",
     "events": "events",
     "guardrail": "guardrail",
+    "metadata": "metadata",
 }
 
 
@@ -68,6 +69,7 @@ class MessageResponse(BaseModel):
     turn_context: Optional[Dict[str, object]] = None
     events: Optional[List[MessageEvent]] = None
     guardrail: Optional[GuardrailOutcome] = None
+    metadata: Optional[Dict[str, object]] = None
 
     model_config = ConfigDict(
         strict=False,

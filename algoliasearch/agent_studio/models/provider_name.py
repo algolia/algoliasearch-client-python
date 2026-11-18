@@ -30,13 +30,19 @@ class ProviderName(str, Enum):
 
     GOOGLE_GENAI = "google_genai"
 
+    GOOGLE_VERTEXAI = "google_vertexai"
+
     DEEPSEEK = "deepseek"
 
     OPENAI_COMPATIBLE = "openai_compatible"
 
+    ALGOLIA_MANAGED_LLM = "algolia_managed_llm"
+
     XAI = "xai"
 
     ANTHROPIC = "anthropic"
+
+    MISTRALAI = "mistralai"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
