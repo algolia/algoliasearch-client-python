@@ -123,6 +123,7 @@ _ALIASES = {
     "rendering_content": "renderingContent",
     "enable_re_ranking": "enableReRanking",
     "re_ranking_apply_filter": "reRankingApplyFilter",
+    "allow_re_ranking_on_personalization": "allowReRankingOnPersonalization",
     "cursor": "cursor",
 }
 
@@ -264,6 +265,8 @@ class BrowseParamsObject(BaseModel):
     enable_re_ranking: Optional[bool] = None
     """ Whether this search will use [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking). This setting only has an effect if you activated Dynamic Re-Ranking for this index in the Algolia dashboard.  """
     re_ranking_apply_filter: Optional[ReRankingApplyFilter] = None
+    allow_re_ranking_on_personalization: Optional[bool] = None
+    """ Whether [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking) runs concurrently with Personalization.  Dynamic Re-Ranking isn't applied when `distinct` > 1, even if `allowReRankingOnPersonalization` is `true`.  """
     cursor: Optional[str] = None
     """ Cursor to get the next page of the response.  The parameter must match the value returned in the response of a previous request. The last page of the response does not return a `cursor` attribute.  """
 

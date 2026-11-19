@@ -127,6 +127,7 @@ _ALIASES = {
     "query": "query",
     "automatic_facet_filters": "automaticFacetFilters",
     "automatic_optional_facet_filters": "automaticOptionalFacetFilters",
+    "allow_re_ranking_on_personalization": "allowReRankingOnPersonalization",
 }
 
 
@@ -268,6 +269,8 @@ class ConsequenceParams(BaseModel):
     query: Optional[ConsequenceQuery] = None
     automatic_facet_filters: Optional[AutomaticFacetFilters] = None
     automatic_optional_facet_filters: Optional[AutomaticFacetFilters] = None
+    allow_re_ranking_on_personalization: Optional[bool] = None
+    """ Whether [Dynamic Re-Ranking](https://www.algolia.com/doc/guides/algolia-ai/re-ranking) runs concurrently with Personalization.  Dynamic Re-Ranking isn't applied when `distinct` > 1, even if `allowReRankingOnPersonalization` is `true`.  """
 
     model_config = ConfigDict(
         strict=False,
