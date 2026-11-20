@@ -18,6 +18,9 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.agent_studio.models.algolia_compare_products_tool_config import (
+    AlgoliaCompareProductsToolConfig,
+)
 from algoliasearch.agent_studio.models.algolia_grouped_results_compat_tool_config import (
     AlgoliaGroupedResultsCompatToolConfig,
 )
@@ -56,11 +59,16 @@ class ItemsUnion(BaseModel):
         default=None
     )
 
-    oneof_schema_6_validator: Optional[McpServerToolConfig] = Field(default=None)
+    oneof_schema_6_validator: Optional[AlgoliaCompareProductsToolConfig] = Field(
+        default=None
+    )
 
-    oneof_schema_7_validator: Optional[UnknownToolConfig] = Field(default=None)
+    oneof_schema_7_validator: Optional[McpServerToolConfig] = Field(default=None)
+
+    oneof_schema_8_validator: Optional[UnknownToolConfig] = Field(default=None)
 
     actual_instance: Union[
+        AlgoliaCompareProductsToolConfig,
         AlgoliaGroupedResultsCompatToolConfig,
         AlgoliaGroupedResultsToolConfig,
         AlgoliaRecommendToolConfig,
@@ -71,6 +79,7 @@ class ItemsUnion(BaseModel):
         None,
     ] = None
     one_of_schemas: Set[str] = {
+        "AlgoliaCompareProductsToolConfig",
         "AlgoliaGroupedResultsCompatToolConfig",
         "AlgoliaGroupedResultsToolConfig",
         "AlgoliaRecommendToolConfig",
@@ -98,6 +107,7 @@ class ItemsUnion(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Union[
+        AlgoliaCompareProductsToolConfig,
         AlgoliaGroupedResultsCompatToolConfig,
         AlgoliaGroupedResultsToolConfig,
         AlgoliaRecommendToolConfig,
@@ -126,6 +136,11 @@ class ItemsUnion(BaseModel):
 
         _json_dict = loads(json_str)
         _discriminator_value = _json_dict.get("type")
+        if _discriminator_value == "algolia_compare_products":
+            instance.actual_instance = AlgoliaCompareProductsToolConfig.from_json(
+                json_str
+            )
+            return instance
         if _discriminator_value == "algolia_display_results":
             instance.actual_instance = AlgoliaGroupedResultsCompatToolConfig.from_json(
                 json_str
@@ -187,6 +202,14 @@ class ItemsUnion(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
+            instance.actual_instance = AlgoliaCompareProductsToolConfig.from_json(
+                json_str
+            )
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
             instance.actual_instance = McpServerToolConfig.from_json(json_str)
 
             return instance
@@ -200,7 +223,7 @@ class ItemsUnion(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into ItemsUnion with oneOf schemas: AlgoliaGroupedResultsCompatToolConfig, AlgoliaGroupedResultsToolConfig, AlgoliaRecommendToolConfig, AlgoliaSearchToolConfig, ClientSideToolConfig, McpServerToolConfig, UnknownToolConfig. Details: "
+            "No match found when deserializing the JSON string into ItemsUnion with oneOf schemas: AlgoliaCompareProductsToolConfig, AlgoliaGroupedResultsCompatToolConfig, AlgoliaGroupedResultsToolConfig, AlgoliaRecommendToolConfig, AlgoliaSearchToolConfig, ClientSideToolConfig, McpServerToolConfig, UnknownToolConfig. Details: "
             + ", ".join(error_messages)
         )
 
@@ -221,6 +244,7 @@ class ItemsUnion(BaseModel):
     ) -> Optional[
         Union[
             Dict[str, Any],
+            AlgoliaCompareProductsToolConfig,
             AlgoliaGroupedResultsCompatToolConfig,
             AlgoliaGroupedResultsToolConfig,
             AlgoliaRecommendToolConfig,

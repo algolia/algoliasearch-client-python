@@ -20,6 +20,7 @@ from .agent_test_configuration import AgentTestConfiguration
 from .agent_with_version_response import AgentWithVersionResponse
 from .agui_completion_request import AguiCompletionRequest
 from .agui_resume import AguiResume
+from .algolia_compare_products_tool_config import AlgoliaCompareProductsToolConfig
 from .algolia_grouped_results_compat_tool_config import (
     AlgoliaGroupedResultsCompatToolConfig,
 )
@@ -61,6 +62,7 @@ from .context_trim_request import ContextTrimRequest
 from .conversation_base_response import ConversationBaseResponse
 from .conversation_full_response import ConversationFullResponse
 from .conversation_metadata import ConversationMetadata
+from .conversation_usage_response import ConversationUsageResponse
 from .data_guardrail_violation_part_v5 import DataGuardrailViolationPartV5
 from .data_part_v5 import DataPartV5
 from .distinct_union import DistinctUnion
@@ -203,6 +205,7 @@ __all__ = (
     "AgentWithVersionResponse",
     "AguiCompletionRequest",
     "AguiResume",
+    "AlgoliaCompareProductsToolConfig",
     "AlgoliaGroupedResultsCompatToolConfig",
     "AlgoliaGroupedResultsToolConfig",
     "AlgoliaManagedLLMCreateInput",
@@ -242,6 +245,7 @@ __all__ = (
     "ConversationBaseResponse",
     "ConversationFullResponse",
     "ConversationMetadata",
+    "ConversationUsageResponse",
     "DataGuardrailViolationPartV5",
     "DataPartV5",
     "DistinctUnion",

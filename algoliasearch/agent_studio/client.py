@@ -41,6 +41,7 @@ from algoliasearch.agent_studio.models import (
     ContextResponse,
     ContextTrimRequest,
     ConversationFullResponse,
+    ConversationUsageResponse,
     FeedbackCreationRequest,
     FeedbackResponse,
     FeedbackUpdateRequest,
@@ -572,6 +573,12 @@ class AgentStudioClient:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -596,6 +603,8 @@ class AgentStudioClient:
         :type analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -633,6 +642,8 @@ class AgentStudioClient:
             _query_parameters["memory"] = memory
         if analytics is not None:
             _query_parameters["analytics"] = analytics
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -687,6 +698,12 @@ class AgentStudioClient:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, object]:
         """
@@ -711,6 +728,8 @@ class AgentStudioClient:
         :type analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Dict[str, object]' result object.
         """
@@ -723,6 +742,7 @@ class AgentStudioClient:
             memory,
             analytics,
             x_algolia_secure_user_token,
+            ephemeral,
             request_options,
         )
         return resp.deserialize(Dict[str, object], resp.raw_data)
@@ -759,6 +779,12 @@ class AgentStudioClient:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AsyncIterator[ServerSentEvent]:
         """
@@ -782,6 +808,8 @@ class AgentStudioClient:
         :type analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns an iterator of ServerSentEvent objects. Each event's ``data`` field contains JSON-encoded ``Dict[str, object]``.
         """
@@ -814,6 +842,8 @@ class AgentStudioClient:
             _query_parameters["memory"] = memory
         if analytics is not None:
             _query_parameters["analytics"] = analytics
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -869,6 +899,12 @@ class AgentStudioClient:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> AsyncIterator[StreamEvent[Dict[str, object]]]:
         """
@@ -892,6 +928,8 @@ class AgentStudioClient:
         :type analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns an iterator of :class:`StreamEvent[Dict[str, object]]` objects.
         """
@@ -905,6 +943,7 @@ class AgentStudioClient:
             memory,
             analytics,
             x_algolia_secure_user_token,
+            ephemeral,
             request_options,
         ):
             try:
@@ -1740,6 +1779,12 @@ class AgentStudioClient:
                 description="Filter conversations created before this date (format: YYYY-MM-DD)."
             ),
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -1754,6 +1799,8 @@ class AgentStudioClient:
         :type start_date: str
         :param end_date: Filter conversations created before this date (format: YYYY-MM-DD).
         :type end_date: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -1774,6 +1821,8 @@ class AgentStudioClient:
             _query_parameters["startDate"] = start_date
         if end_date is not None:
             _query_parameters["endDate"] = end_date
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         return await self._transporter.request(
             verb=Verb.DELETE,
@@ -1802,6 +1851,12 @@ class AgentStudioClient:
                 description="Filter conversations created before this date (format: YYYY-MM-DD)."
             ),
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> None:
         """
@@ -1816,10 +1871,12 @@ class AgentStudioClient:
         :type start_date: str
         :param end_date: Filter conversations created before this date (format: YYYY-MM-DD).
         :type end_date: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         """
         resp = await self.delete_agent_conversations_with_http_info(
-            agent_id, start_date, end_date, request_options
+            agent_id, start_date, end_date, ephemeral, request_options
         )
         return resp.deserialize(None, resp.raw_data)
 
@@ -2156,6 +2213,12 @@ class AgentStudioClient:
                 description="Filter conversations created before this date (format: YYYY-MM-DD)."
             ),
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -2170,6 +2233,8 @@ class AgentStudioClient:
         :type start_date: str
         :param end_date: Filter conversations created before this date (format: YYYY-MM-DD).
         :type end_date: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -2190,6 +2255,8 @@ class AgentStudioClient:
             _query_parameters["startDate"] = start_date
         if end_date is not None:
             _query_parameters["endDate"] = end_date
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         return await self._transporter.request(
             verb=Verb.GET,
@@ -2218,6 +2285,12 @@ class AgentStudioClient:
                 description="Filter conversations created before this date (format: YYYY-MM-DD)."
             ),
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[ConversationFullResponse]:
         """
@@ -2232,11 +2305,13 @@ class AgentStudioClient:
         :type start_date: str
         :param end_date: Filter conversations created before this date (format: YYYY-MM-DD).
         :type end_date: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'List[ConversationFullResponse]' result object.
         """
         resp = await self.export_conversations_with_http_info(
-            agent_id, start_date, end_date, request_options
+            agent_id, start_date, end_date, ephemeral, request_options
         )
         return resp.deserialize(List[ConversationFullResponse], resp.raw_data)
 
@@ -2925,6 +3000,12 @@ class AgentStudioClient:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -2957,6 +3038,8 @@ class AgentStudioClient:
         :type has_algolia_search: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -2994,6 +3077,8 @@ class AgentStudioClient:
             _query_parameters["converted"] = converted
         if has_algolia_search is not None:
             _query_parameters["hasAlgoliaSearch"] = has_algolia_search
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -3067,6 +3152,12 @@ class AgentStudioClient:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> PaginatedConversationsResponse:
         """
@@ -3099,6 +3190,8 @@ class AgentStudioClient:
         :type has_algolia_search: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'PaginatedConversationsResponse' result object.
         """
@@ -3115,6 +3208,7 @@ class AgentStudioClient:
             converted,
             has_algolia_search,
             x_algolia_secure_user_token,
+            ephemeral,
             request_options,
         )
         return resp.deserialize(PaginatedConversationsResponse, resp.raw_data)
@@ -3203,6 +3297,43 @@ class AgentStudioClient:
             page, limit, provider_id, request_options
         )
         return resp.deserialize(PaginatedAgentsResponse, resp.raw_data)
+
+    async def list_conversation_usage_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Live conversations counted against the per-application limit.
+
+        Required API Key ACLs:
+          - logs
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return await self._transporter.request(
+            verb=Verb.GET,
+            path="/agent-studio/1/configuration/conversation-usage",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    async def list_conversation_usage(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ConversationUsageResponse:
+        """
+        Live conversations counted against the per-application limit.
+
+        Required API Key ACLs:
+          - logs
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ConversationUsageResponse' result object.
+        """
+        resp = await self.list_conversation_usage_with_http_info(request_options)
+        return resp.deserialize(ConversationUsageResponse, resp.raw_data)
 
     async def list_models_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None
@@ -4458,6 +4589,12 @@ class AgentStudioClientSync:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -4482,6 +4619,8 @@ class AgentStudioClientSync:
         :type analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -4519,6 +4658,8 @@ class AgentStudioClientSync:
             _query_parameters["memory"] = memory
         if analytics is not None:
             _query_parameters["analytics"] = analytics
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -4573,6 +4714,12 @@ class AgentStudioClientSync:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Dict[str, object]:
         """
@@ -4597,6 +4744,8 @@ class AgentStudioClientSync:
         :type analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'Dict[str, object]' result object.
         """
@@ -4609,6 +4758,7 @@ class AgentStudioClientSync:
             memory,
             analytics,
             x_algolia_secure_user_token,
+            ephemeral,
             request_options,
         )
         return resp.deserialize(Dict[str, object], resp.raw_data)
@@ -4645,6 +4795,12 @@ class AgentStudioClientSync:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Iterator[ServerSentEvent]:
         """
@@ -4668,6 +4824,8 @@ class AgentStudioClientSync:
         :type analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns an iterator of ServerSentEvent objects. Each event's ``data`` field contains JSON-encoded ``Dict[str, object]``.
         """
@@ -4700,6 +4858,8 @@ class AgentStudioClientSync:
             _query_parameters["memory"] = memory
         if analytics is not None:
             _query_parameters["analytics"] = analytics
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -4755,6 +4915,12 @@ class AgentStudioClientSync:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> Iterator[StreamEvent[Dict[str, object]]]:
         """
@@ -4778,6 +4944,8 @@ class AgentStudioClientSync:
         :type analytics: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Set to true to not retain the conversation: it is processed and analyzed like any other, but removed by the next cleanup run instead of being kept in the history. Overrides the agent's ephemeralConversations setting; omit to use it.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns an iterator of :class:`StreamEvent[Dict[str, object]]` objects.
         """
@@ -4791,6 +4959,7 @@ class AgentStudioClientSync:
             memory,
             analytics,
             x_algolia_secure_user_token,
+            ephemeral,
             request_options,
         ):
             try:
@@ -5618,6 +5787,12 @@ class AgentStudioClientSync:
                 description="Filter conversations created before this date (format: YYYY-MM-DD)."
             ),
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -5632,6 +5807,8 @@ class AgentStudioClientSync:
         :type start_date: str
         :param end_date: Filter conversations created before this date (format: YYYY-MM-DD).
         :type end_date: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -5652,6 +5829,8 @@ class AgentStudioClientSync:
             _query_parameters["startDate"] = start_date
         if end_date is not None:
             _query_parameters["endDate"] = end_date
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         return self._transporter.request(
             verb=Verb.DELETE,
@@ -5680,6 +5859,12 @@ class AgentStudioClientSync:
                 description="Filter conversations created before this date (format: YYYY-MM-DD)."
             ),
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> None:
         """
@@ -5694,10 +5879,12 @@ class AgentStudioClientSync:
         :type start_date: str
         :param end_date: Filter conversations created before this date (format: YYYY-MM-DD).
         :type end_date: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         """
         resp = self.delete_agent_conversations_with_http_info(
-            agent_id, start_date, end_date, request_options
+            agent_id, start_date, end_date, ephemeral, request_options
         )
         return resp.deserialize(None, resp.raw_data)
 
@@ -6032,6 +6219,12 @@ class AgentStudioClientSync:
                 description="Filter conversations created before this date (format: YYYY-MM-DD)."
             ),
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -6046,6 +6239,8 @@ class AgentStudioClientSync:
         :type start_date: str
         :param end_date: Filter conversations created before this date (format: YYYY-MM-DD).
         :type end_date: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -6066,6 +6261,8 @@ class AgentStudioClientSync:
             _query_parameters["startDate"] = start_date
         if end_date is not None:
             _query_parameters["endDate"] = end_date
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         return self._transporter.request(
             verb=Verb.GET,
@@ -6094,6 +6291,12 @@ class AgentStudioClientSync:
                 description="Filter conversations created before this date (format: YYYY-MM-DD)."
             ),
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> List[ConversationFullResponse]:
         """
@@ -6108,11 +6311,13 @@ class AgentStudioClientSync:
         :type start_date: str
         :param end_date: Filter conversations created before this date (format: YYYY-MM-DD).
         :type end_date: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'List[ConversationFullResponse]' result object.
         """
         resp = self.export_conversations_with_http_info(
-            agent_id, start_date, end_date, request_options
+            agent_id, start_date, end_date, ephemeral, request_options
         )
         return resp.deserialize(List[ConversationFullResponse], resp.raw_data)
 
@@ -6799,6 +7004,12 @@ class AgentStudioClientSync:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> ApiResponse[str]:
         """
@@ -6831,6 +7042,8 @@ class AgentStudioClientSync:
         :type has_algolia_search: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the raw algoliasearch 'APIResponse' object.
         """
@@ -6868,6 +7081,8 @@ class AgentStudioClientSync:
             _query_parameters["converted"] = converted
         if has_algolia_search is not None:
             _query_parameters["hasAlgoliaSearch"] = has_algolia_search
+        if ephemeral is not None:
+            _query_parameters["ephemeral"] = ephemeral
 
         if x_algolia_secure_user_token is not None:
             _headers["x-algolia-secure-user-token"] = x_algolia_secure_user_token
@@ -6941,6 +7156,12 @@ class AgentStudioClientSync:
         x_algolia_secure_user_token: Annotated[
             Optional[StrictStr], Field(description="The X-Algolia-Secure-User-Token.")
         ] = None,
+        ephemeral: Annotated[
+            Optional[StrictBool],
+            Field(
+                description="Filter by ephemeral (not retained) conversations; omit to include both."
+            ),
+        ] = None,
         request_options: Optional[Union[dict, RequestOptions]] = None,
     ) -> PaginatedConversationsResponse:
         """
@@ -6973,6 +7194,8 @@ class AgentStudioClientSync:
         :type has_algolia_search: bool
         :param x_algolia_secure_user_token: The X-Algolia-Secure-User-Token.
         :type x_algolia_secure_user_token: str
+        :param ephemeral: Filter by ephemeral (not retained) conversations; omit to include both.
+        :type ephemeral: bool
         :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
         :return: Returns the deserialized response in a 'PaginatedConversationsResponse' result object.
         """
@@ -6989,6 +7212,7 @@ class AgentStudioClientSync:
             converted,
             has_algolia_search,
             x_algolia_secure_user_token,
+            ephemeral,
             request_options,
         )
         return resp.deserialize(PaginatedConversationsResponse, resp.raw_data)
@@ -7077,6 +7301,43 @@ class AgentStudioClientSync:
             page, limit, provider_id, request_options
         )
         return resp.deserialize(PaginatedAgentsResponse, resp.raw_data)
+
+    def list_conversation_usage_with_http_info(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ApiResponse[str]:
+        """
+        Live conversations counted against the per-application limit.
+
+        Required API Key ACLs:
+          - logs
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the raw algoliasearch 'APIResponse' object.
+        """
+
+        return self._transporter.request(
+            verb=Verb.GET,
+            path="/agent-studio/1/configuration/conversation-usage",
+            request_options=self._request_options.merge(
+                user_request_options=request_options,
+            ),
+            use_read_transporter=False,
+        )
+
+    def list_conversation_usage(
+        self, request_options: Optional[Union[dict, RequestOptions]] = None
+    ) -> ConversationUsageResponse:
+        """
+        Live conversations counted against the per-application limit.
+
+        Required API Key ACLs:
+          - logs
+
+        :param request_options: The request options to send along with the query, they will be merged with the transporter base parameters (headers, query params, timeouts, etc.). (optional)
+        :return: Returns the deserialized response in a 'ConversationUsageResponse' result object.
+        """
+        resp = self.list_conversation_usage_with_http_info(request_options)
+        return resp.deserialize(ConversationUsageResponse, resp.raw_data)
 
     def list_models_with_http_info(
         self, request_options: Optional[Union[dict, RequestOptions]] = None

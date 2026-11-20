@@ -41,6 +41,7 @@ _ALIASES = {
     "impact_analytics": "impactAnalytics",
     "messages": "messages",
     "analytics_degraded": "analyticsDegraded",
+    "is_ephemeral": "isEphemeral",
 }
 
 
@@ -70,6 +71,7 @@ class ConversationFullResponse(BaseModel):
     impact_analytics: Optional[ImpactAnalytics] = None
     messages: List[MessageResponse]
     analytics_degraded: Optional[bool] = None
+    is_ephemeral: Optional[bool] = None
 
     model_config = ConfigDict(
         strict=False,

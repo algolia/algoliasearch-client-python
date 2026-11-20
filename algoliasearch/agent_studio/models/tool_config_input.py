@@ -18,6 +18,9 @@ else:
     from typing_extensions import Self
 
 
+from algoliasearch.agent_studio.models.algolia_compare_products_tool_config import (
+    AlgoliaCompareProductsToolConfig,
+)
 from algoliasearch.agent_studio.models.algolia_recommend_tool_config import (
     AlgoliaRecommendToolConfig,
 )
@@ -42,11 +45,16 @@ class ToolConfigInput(BaseModel):
 
     oneof_schema_3_validator: Optional[AlgoliaRecommendToolConfig] = Field(default=None)
 
-    oneof_schema_4_validator: Optional[McpServerToolConfig] = Field(default=None)
+    oneof_schema_4_validator: Optional[AlgoliaCompareProductsToolConfig] = Field(
+        default=None
+    )
 
-    oneof_schema_5_validator: Optional[UnknownToolConfig] = Field(default=None)
+    oneof_schema_5_validator: Optional[McpServerToolConfig] = Field(default=None)
+
+    oneof_schema_6_validator: Optional[UnknownToolConfig] = Field(default=None)
 
     actual_instance: Union[
+        AlgoliaCompareProductsToolConfig,
         AlgoliaRecommendToolConfig,
         AlgoliaSearchToolConfig,
         ClientSideToolConfig,
@@ -55,6 +63,7 @@ class ToolConfigInput(BaseModel):
         None,
     ] = None
     one_of_schemas: Set[str] = {
+        "AlgoliaCompareProductsToolConfig",
         "AlgoliaRecommendToolConfig",
         "AlgoliaSearchToolConfig",
         "ClientSideToolConfig",
@@ -80,6 +89,7 @@ class ToolConfigInput(BaseModel):
     def unwrap_actual_instance(
         self,
     ) -> Union[
+        AlgoliaCompareProductsToolConfig,
         AlgoliaRecommendToolConfig,
         AlgoliaSearchToolConfig,
         ClientSideToolConfig,
@@ -106,6 +116,11 @@ class ToolConfigInput(BaseModel):
 
         _json_dict = loads(json_str)
         _discriminator_value = _json_dict.get("type")
+        if _discriminator_value == "algolia_compare_products":
+            instance.actual_instance = AlgoliaCompareProductsToolConfig.from_json(
+                json_str
+            )
+            return instance
         if _discriminator_value == "algolia_recommend":
             instance.actual_instance = AlgoliaRecommendToolConfig.from_json(json_str)
             return instance
@@ -141,6 +156,14 @@ class ToolConfigInput(BaseModel):
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
         try:
+            instance.actual_instance = AlgoliaCompareProductsToolConfig.from_json(
+                json_str
+            )
+
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        try:
             instance.actual_instance = McpServerToolConfig.from_json(json_str)
 
             return instance
@@ -154,7 +177,7 @@ class ToolConfigInput(BaseModel):
             error_messages.append(str(e))
 
         raise ValueError(
-            "No match found when deserializing the JSON string into ToolConfigInput with oneOf schemas: AlgoliaRecommendToolConfig, AlgoliaSearchToolConfig, ClientSideToolConfig, McpServerToolConfig, UnknownToolConfig. Details: "
+            "No match found when deserializing the JSON string into ToolConfigInput with oneOf schemas: AlgoliaCompareProductsToolConfig, AlgoliaRecommendToolConfig, AlgoliaSearchToolConfig, ClientSideToolConfig, McpServerToolConfig, UnknownToolConfig. Details: "
             + ", ".join(error_messages)
         )
 
@@ -175,6 +198,7 @@ class ToolConfigInput(BaseModel):
     ) -> Optional[
         Union[
             Dict[str, Any],
+            AlgoliaCompareProductsToolConfig,
             AlgoliaRecommendToolConfig,
             AlgoliaSearchToolConfig,
             ClientSideToolConfig,

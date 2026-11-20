@@ -38,6 +38,7 @@ _ALIASES = {
     "conversation_metadata": "conversationMetadata",
     "feedback": "feedback",
     "impact_analytics": "impactAnalytics",
+    "is_ephemeral": "isEphemeral",
 }
 
 
@@ -65,6 +66,7 @@ class ConversationBaseResponse(BaseModel):
     conversation_metadata: Optional[ConversationMetadata] = None
     feedback: Optional[List[FeedbackResponse]] = None
     impact_analytics: Optional[ImpactAnalytics] = None
+    is_ephemeral: Optional[bool] = None
 
     model_config = ConfigDict(
         strict=False,
