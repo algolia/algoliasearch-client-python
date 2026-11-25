@@ -22,6 +22,7 @@ from algoliasearch.search.models.task_status import TaskStatus
 
 _ALIASES = {
     "status": "status",
+    "pending_task": "pendingTask",
 }
 
 
@@ -35,6 +36,8 @@ class GetTaskResponse(BaseModel):
     """
 
     status: TaskStatus
+    pending_task: Optional[bool] = None
+    """ Indicates whether the index has pending tasks. This value is deprecated and always `false`. Don't use it. """
 
     model_config = ConfigDict(
         strict=False,
