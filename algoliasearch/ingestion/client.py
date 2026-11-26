@@ -24,7 +24,7 @@ else:
 from algoliasearch.http.api_response import ApiResponse
 from algoliasearch.http.base_config import BaseConfig
 from algoliasearch.http.chunked_helper_options import ChunkedHelperOptions
-from algoliasearch.http.exceptions import RequestException
+from algoliasearch.http.exceptions import AlgoliaException, RequestException
 from algoliasearch.http.helpers import create_iterable, create_iterable_sync
 from algoliasearch.http.request_options import RequestOptions
 from algoliasearch.http.serializer import body_serializer
@@ -252,7 +252,19 @@ class IngestionClient:
                     _retry_count += 1
 
                 def _validate(_resp: Event | None) -> bool:
-                    return _resp is not None
+                    if _resp is None or _resp.status in (
+                        "created",
+                        "started",
+                        "retried",
+                    ):
+                        return False
+                    if _resp.status is not None and _resp.status != "succeeded":
+                        _message = (_resp.data or {}).get("message")
+                        _reason = f": {_message}" if _message else ""
+                        raise AlgoliaException(
+                            f"ingestion push to index {index_name} did not succeed: event {response.event_id} of run {response.run_id} has status {_resp.status}{_reason}"
+                        )
+                    return True
 
                 await create_iterable(
                     func=_func,
@@ -5725,7 +5737,19 @@ class IngestionClientSync:
                     _retry_count += 1
 
                 def _validate(_resp: Event | None) -> bool:
-                    return _resp is not None
+                    if _resp is None or _resp.status in (
+                        "created",
+                        "started",
+                        "retried",
+                    ):
+                        return False
+                    if _resp.status is not None and _resp.status != "succeeded":
+                        _message = (_resp.data or {}).get("message")
+                        _reason = f": {_message}" if _message else ""
+                        raise AlgoliaException(
+                            f"ingestion push to index {index_name} did not succeed: event {response.event_id} of run {response.run_id} has status {_resp.status}{_reason}"
+                        )
+                    return True
 
                 create_iterable_sync(
                     func=_func,

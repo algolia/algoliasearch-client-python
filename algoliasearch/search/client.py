@@ -824,9 +824,12 @@ class SearchClient:
                 move_operation_response=move_operation_response,
             )
         except Exception as e:
-            await self.delete_index(
-                tmp_index_name, request_options=search_request_options
-            )
+            try:
+                await self.delete_index(
+                    tmp_index_name, request_options=search_request_options
+                )
+            except Exception:
+                pass
 
             raise e
 
@@ -6440,7 +6443,12 @@ class SearchClientSync:
                 move_operation_response=move_operation_response,
             )
         except Exception as e:
-            self.delete_index(tmp_index_name, request_options=search_request_options)
+            try:
+                self.delete_index(
+                    tmp_index_name, request_options=search_request_options
+                )
+            except Exception:
+                pass
 
             raise e
 
