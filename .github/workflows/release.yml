@@ -8,7 +8,7 @@ on:
 jobs:
   release:
     name: Publish
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-26.04
     if: "startsWith(github.event.head_commit.message, 'chore: release')"
     environment:
       name: pypi
@@ -18,12 +18,12 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           # DO NOT upgrade to Python 3.14+: the PyPI release toolchain (poetry/twine)
           # is not compatible with it and publishing the package fails.
           # Keep this on the latest 3.13.x patch. See .agents/skills/renovate/SKILL.md.
-          python-version: 3.13.16
+          python-version: 3.13.18
 
       - name: install poetry
         shell: bash
@@ -38,4 +38,4 @@ jobs:
         shell: bash
 
       - name: Publish algoliasearch package to PyPI
-        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
