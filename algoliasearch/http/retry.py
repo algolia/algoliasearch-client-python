@@ -40,7 +40,16 @@ class RetryStrategy:
             if not host.up and time.time() - host.last_use > Host.TTL:
                 host.up = True
 
-        return [host for host in hosts if host.up]
+        hosts_up = [host for host in hosts if host.up]
+        if hosts_up:
+            return hosts_up
+
+        # When every host is down, try them all again rather than
+        # failing without sending anything until Host.TTL expires
+        for host in hosts:
+            host.reset()
+
+        return hosts
 
     def _now(self) -> float:
         return time.time()
